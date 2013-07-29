@@ -6,7 +6,7 @@ import java.util.List;
 import com.facebook.SessionDefaultAudience;
 import com.facebook.SessionLoginBehavior;
 
-public class FacebookToolsConfiguration
+public class SimpleFacebookConfiguration
 {
 	private String mAppId;
 	private String mNamespace;
@@ -16,7 +16,7 @@ public class FacebookToolsConfiguration
 	private SessionLoginBehavior mLoginBehavior = SessionLoginBehavior.SSO_WITH_FALLBACK;
 	private boolean mHasPublishPermissions = false;
 
-	private FacebookToolsConfiguration(Builder builder)
+	private SimpleFacebookConfiguration(Builder builder)
 	{
 		this.mAppId = builder.mAppId;
 		this.mNamespace = builder.mNamespace;
@@ -164,9 +164,9 @@ public class FacebookToolsConfiguration
 		 * 
 		 * @return
 		 */
-		public FacebookToolsConfiguration build()
+		public SimpleFacebookConfiguration build()
 		{
-			return new FacebookToolsConfiguration(this);
+			return new SimpleFacebookConfiguration(this);
 		}
 	}
 }
