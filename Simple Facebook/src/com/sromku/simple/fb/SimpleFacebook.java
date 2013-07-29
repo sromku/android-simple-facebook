@@ -44,12 +44,12 @@ import com.facebook.widget.WebDialog;
  * 
  * @author sromku
  */
-public class FacebookTools
+public class SimpleFacebook
 {
-	private static final String TAG = FacebookTools.class.getName();
+	private static final String TAG = SimpleFacebook.class.getName();
 
-	private static FacebookTools mInstance = null;
-	private static FacebookToolsConfiguration mConfiguration = new FacebookToolsConfiguration.Builder().build();
+	private static SimpleFacebook mInstance = null;
+	private static SimpleFacebookConfiguration mConfiguration = new SimpleFacebookConfiguration.Builder().build();
 
 	private final Context mContext;
 	private SessionTracker mSessionTracker = null;
@@ -58,17 +58,17 @@ public class FacebookTools
 
 	private WebDialog dialog = null;
 
-	private FacebookTools(Context context)
+	private SimpleFacebook(Context context)
 	{
 		mContext = context;
 		mSessionStatusCallback = new SessionStatusCallback();
 	}
 
-	public static FacebookTools getInstance(Context context)
+	public static SimpleFacebook getInstance(Context context)
 	{
 		if (mInstance == null)
 		{
-			mInstance = new FacebookTools(context);
+			mInstance = new SimpleFacebook(context);
 		}
 		return mInstance;
 	}
@@ -78,7 +78,7 @@ public class FacebookTools
 	 * 
 	 * @param facebookToolsConfiguration
 	 */
-	public void setConfiguration(FacebookToolsConfiguration facebookToolsConfiguration)
+	public void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
 	{
 		mConfiguration = facebookToolsConfiguration;
 	}
