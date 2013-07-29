@@ -27,7 +27,8 @@ import com.facebook.internal.SessionTracker;
 import com.facebook.widget.WebDialog;
 
 /**
- * https://developers.facebook.com/docs/tutorials/androidsdk/3.0/scrumptious/publish-open-graph-story/#step2 <br>
+ * Simple API which wraps Facebook SDK 3.0
+ * 
  * <br>
  * <b>Features:</b>
  * <ul>
