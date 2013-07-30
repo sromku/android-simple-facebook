@@ -11,8 +11,11 @@ Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for 
 * [Login](https://github.com/sromku/android-simple-facebook#login-1)
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
+	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
+	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 *And,*
@@ -119,8 +122,11 @@ SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContex
 * [Login](https://github.com/sromku/android-simple-facebook#login-1)
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
+	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
+	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 #### 3.	Override `onActivityResult` method and add this line:
@@ -251,19 +257,104 @@ mSimpleFacebook.publish(feed, onPublishListener);
 *TBE (to be explained)*
 
 ### Invite
-*TBE (to be explained)*
+
+Facebook supports three kind of dialogs for invite friends. One dialog shows all your friends and user can select who he/she
+wants to invite. In other dialog you set suggested friends only and the last one, you set concrete one friend.
+
+For all options, set `OnInviteListener`:
+
+``` java
+OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
+{
+
+	@Override
+	public void onFail()
+	{
+		// insure that you are logged in before inviting
+		Log.w(TAG, "Failed to invite");
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onComplete()
+	{
+		Log.i(TAG, "Invitation was sent");
+	}
+};
+```
 
 #### All
-*TBE (to be explained)*
+Show dialog with a list of all your friends. Call for `invite(Activity, String, OnInviteListener)`
+The `String` is the message to be shown in the invintation. 
+``` java
+mSimpleFacebook.invite(MainActivity.this, "I invite you to use this app", onInviteListener);
+```
 
 #### Suggested friends
-*TBE (to be explained)*
+Show dialog with a list of suggested friends. Set array of user ids.
+
+``` java
+String[] friends = new String[]
+{
+	"630243197",
+	"584419361",
+	"1456233371",
+	"100000490891462"
+};
+mSimpleFacebook.invite(MainActivity.this, friends, "I invite you to use this app", onInviteListener);
+```
 
 #### One friend only
-*TBE (to be explained)*
+Show dialog with only one friend to invite.
+
+``` java
+String friend = "630243197";
+mSimpleFacebook.invite(MainActivity.this, friend, "I invite you to use this app", onInviteListener);
+```
 
 ### Get my profile
-*TBE (to be explained)*
+
+Set `OnProfileRequestListener` and call for `getMyProfile(OnProfileRequestListener)`
+
+``` java
+OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
+{
+	
+	@Override
+	public void onFail()
+	{
+		// insure that you are logged in before getting the profile
+		Log.w(TAG, "Failed to get profile");
+	}
+			
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+			
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while fetching profile
+		Log.i(TAG, "Thinking...");
+	}
+			
+	@Override
+	public void onComplete(String userId)
+	{
+		Log.i(TAG, "My profile id = " + userId);
+	}
+			
+};
+
+mSimpleFacebook.getMyProfile(onProfileRequestListener);
+```
 
 ## More options
 
