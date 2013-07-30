@@ -1,24 +1,25 @@
 android-simple-facebook
 =======================
 
-Simple Facebook API for Android which wraps original **Facebook SDK 3.0**
+Simple Facebook API for Android which wraps original [**Facebook SDK 3.0**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, share feeds and open graph stories, invite friends and more. 
 
 Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, share feeds and more I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 ## Features
-* Simple login/logout
-*	Publish feeds and simple Feed builder
-*	Publish open graph stories and simple Story builder
-*	Invite friends
-*	Get my profile data
-*	Permissions are predefined
-*	No need to use LoginButton view for being able to login/logout. You can use any View.
-*	No need to care for correct login with READ and PUBLISH permissions. Just mention the permissions you need and this library will care for the rest.
+* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
+* Permissions are predefined
+* No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
+* No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
 ## Few Examples
-Just to give you the feeling, how simple it is. For all options and follow the **usage** paragraph.
+Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](https://github.com/sromku/android-simple-facebook/edit/master/README.md#usage) paragraph.
 
 ### Login
 You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
@@ -90,12 +91,12 @@ simpleFacebook.setConfiguration(configuration);
 SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
 ```
 #### 2.	Do an action like:
-*	Login
-*	Logout
-*	Publish feed
-* Publish story
-* Invite friend/s
-* Get profile
+* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
