@@ -47,12 +47,11 @@ String[] friends = new String[]
 mSimpleFacebook.invite(MainActivity.this, friends, "Some free text", null);
 ```
 
-## More Examples
+### More Examples
 More API actions is in the same simplicity. Just follow the explanation and examples below.
 
 ## Usage
 
-### One time configuration in 3 steps
 Just add next lines in your `Application` class or any other place (like `Activity`) that has `Context` instance.
 
 #### 1.	Define and select permissions you need:
