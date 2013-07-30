@@ -14,7 +14,10 @@ Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for 
 * [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
 * [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
-* Permissions are predefined
+
+*And,*
+* Based on latest Facebook SDK
+* Permission strings are predefined
 * No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
