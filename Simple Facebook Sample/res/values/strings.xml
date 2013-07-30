@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple Facebook Sample</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="publish_feed">Publish Feed</string>
+    <string name="publish_story">Publish Story</string>
+
+</resources>
