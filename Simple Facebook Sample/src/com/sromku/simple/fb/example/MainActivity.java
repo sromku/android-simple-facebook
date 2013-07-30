@@ -20,7 +20,9 @@ import android.widget.Toast;
 import com.sromku.simple.fb.Feed;
 import com.sromku.simple.fb.Permissions;
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebook.OnInviteListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLoginOutListener;
+import com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnPublishListener;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
 
@@ -202,7 +204,7 @@ public class MainActivity extends Activity
 					@Override
 					public void onThinking()
 					{
-						// show progress bar or something to the user while login is happening
+						// show progress bar or something to the user while publishing
 						toast("Thinking...");
 					}
 
@@ -241,8 +243,69 @@ public class MainActivity extends Activity
 	 */
 	private void inviteExamples()
 	{
-		// TODO Auto-generated method stub
+		final OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
+		{
 
+			@Override
+			public void onFail()
+			{
+				// insure that you are logged in before inviting
+				Log.w(TAG, "Failed to invite");
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onComplete()
+			{
+				toast("Invitation was sent");
+			}
+		};
+
+		// invite all
+		mButtonInviteAll.setOnClickListener(new View.OnClickListener()
+		{
+
+			@Override
+			public void onClick(View arg0)
+			{
+				// will open dialog with all my friends
+				mSimpleFacebook.invite(MainActivity.this, "I invite you to use this app", onInviteListener);
+			}
+		});
+
+		// invite suggested
+		mButtonInviteSuggested.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				String[] friends = new String[]
+				{
+					"630243197",
+					"584419361",
+					"1456233371",
+					"100000490891462"
+				};
+				mSimpleFacebook.invite(MainActivity.this, friends, "I invite you to use this app", onInviteListener);
+			}
+		});
+
+		// invite one
+		mButtonInviteOne.setOnClickListener(new View.OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				String friend = "630243197";
+				mSimpleFacebook.invite(MainActivity.this, friend, "I invite you to use this app", onInviteListener);
+			}
+		});
 	}
 
 	/**
@@ -250,8 +313,37 @@ public class MainActivity extends Activity
 	 */
 	private void getMyProfileExample()
 	{
-		// TODO Auto-generated method stub
+		OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
+		{
 
+			@Override
+			public void onFail()
+			{
+				// insure that you are logged in before getting the profile
+				Log.w(TAG, "Failed to get profile");
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking()
+			{
+				// show progress bar or something to the user while fetching profile
+				Log.i(TAG, "Thinking...");
+			}
+
+			@Override
+			public void onComplete(String userId)
+			{
+				Log.i(TAG, "My profile id = " + userId);
+			}
+
+		};
+		mSimpleFacebook.getMyProfile(onProfileRequestListener);
 	}
 
 	private void initUI()
