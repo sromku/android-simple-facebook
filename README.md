@@ -8,12 +8,12 @@ This is a library project which makes the life much easier by coding less code f
 Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 ## Features
-* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
-* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
+* [Login](https://github.com/sromku/android-simple-facebook#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 *And,*
 * Based on latest Facebook SDK
@@ -103,12 +103,12 @@ simpleFacebook.setConfiguration(configuration);
 SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
 ```
 #### 2.	Do an action like:
-* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
-* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
+* [Login](https://github.com/sromku/android-simple-facebook#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
