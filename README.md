@@ -121,7 +121,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 ```
 
 ## Actions (Examples)
-..soon will be committed
 
 ### Login
 
@@ -181,6 +180,55 @@ mSimpleFacebook.logout();
 ```
 
 ### Publish feed
+
+Set `OnPublishListener` and call for `publish(Feed, OnPublishListener)`.
+You can also publish without setting the listener by calling for `publish(Feed)` method.
+
+``` java
+// create publish listener
+OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+{
+
+	@Override
+	public void onFail()
+	{
+		// insure that you are logged in before publishing
+		Log.w(TAG, "Failed to publish");
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while publishing
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onComplete(String postId)
+	{
+		Log.i(TAG, "Published successfully. The new post id = " + postId);
+	}
+};
+
+// build feed
+Feed feed = new Feed.Builder()
+	.setMessage("Clone it out...")
+	.setName("Simple Facebook for Android")
+	.setCaption("Code less, do the same.")
+	.setDescription("The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
+	.setLink("https://github.com/sromku/android-simple-facebook")
+	.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
+	.build();
+
+// publish the feed
+mSimpleFacebook.publish(feed, onPublishListener);
+```
 
 ### Publish story (open graph)
 
