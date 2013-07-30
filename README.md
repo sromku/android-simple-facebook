@@ -248,21 +248,29 @@ mSimpleFacebook.publish(feed, onPublishListener);
   ![Screenshot](https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed.png)
 
 ### Publish story (open graph)
+*TBE (to be explained)*
 
 ### Invite
+*TBE (to be explained)*
 
 #### All
+*TBE (to be explained)*
+
 #### Suggested friends
+*TBE (to be explained)*
+
 #### One friend only
+*TBE (to be explained)*
 
 ### Get my profile
+*TBE (to be explained)*
 
 ## More options
 
 * `isLogin()` – check if you are logged in
 
 ## Sample Application
-..soon will be committed
+*TBE (to be explained)*
 
 ## License
 
