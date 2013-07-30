@@ -67,14 +67,14 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 4. Now, you can add reference from **your app** to `Simple Facebook` project.
 5. Update the `manifest.xml` of your application and add next lines:
 
-``` java
+	``` java
 	<uses-permission android:name="android.permission.INTERNET" />
 
 	<activity
 		android:name="com.facebook.LoginActivity"
 		android:label="@string/app_name"
 		android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-```
+	```
 
 ## Usage
 
