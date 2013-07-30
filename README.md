@@ -5,7 +5,7 @@ Simple Facebook API for Android which wraps original [**Facebook SDK 3.0**](http
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
-Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, publish feeds and more I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
+Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 ## Features
 * [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
