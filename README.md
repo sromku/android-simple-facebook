@@ -8,12 +8,12 @@ This is a library project which makes the life much easier by coding less code f
 Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 ## Features
-* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
-* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
+* [Login](https://github.com/sromku/android-simple-facebook#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 *And,*
 * Based on latest Facebook SDK
@@ -42,11 +42,11 @@ mSimpleFacebook.logout();
 
 ``` java
 String[] friends = new String[]
-		{
-			"630243197",
-			"787878788",
-			"751875181"
-		};
+{
+	"630243197",
+	"787878788",
+	"751875181"
+};
 
 mSimpleFacebook.invite(MainActivity.this, friends, "Some free text", null);
 ```
@@ -59,8 +59,8 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 1. Clone [Facebook SDK 3.0](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 2. Clone and import this (Simple Facebook) project to your workspace.
 3. Add reference from `Simple Facebook` project to `FacebookSDK` project.
-    ![Screenshot](http://romkuapps.com/Apps/Refs/simple_polygon.png)
-
+    ![Screenshot](https://raw.github.com/sromku/android-simple-facebook/master/Refs/reference_to_sdk.png)
+4. Now, you can add reference from **your app** to `Simple Facebook` project.
 
 
 ## Usage
@@ -71,21 +71,21 @@ Just add next lines in your `Application` class or any other place (like `Activi
 
 ``` java
 Permissions[] permissions = new Permissions[]
-		{
-			Permissions.USER_PHOTOS,
-			Permissions.FRIENDS_PHOTOS,
-			Permissions.PUBLISH_ACTION
-		};
+{
+	Permissions.USER_PHOTOS,
+	Permissions.FRIENDS_PHOTOS,
+	Permissions.PUBLISH_ACTION
+};
 ``` 
 
 #### 2.	Build and define the configuration by putting `app_id`, `namespace` and `permissions`:
 
 ``` java
 SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-			.setAppId("234555990008855")
-			.setNamespace("appnamespace")
-			.setPermissions(permissions)
-			.build();
+	.setAppId("625994234086470")
+	.setNamespace("sromkuapp")
+	.setPermissions(permissions)
+	.build();
 ``` 	
 
 #### 3.	And, set this configuration: 
@@ -103,12 +103,12 @@ simpleFacebook.setConfiguration(configuration);
 SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
 ```
 #### 2.	Do an action like:
-* [Login](https://github.com/sromku/android-simple-facebook/edit/master/README.md#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook/edit/master/README.md#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-feed)
-* [Publish story](https://github.com/sromku/android-simple-facebook/edit/master/README.md#publish-story-open-graph)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook/edit/master/README.md#invite)
-* [Get profile](https://github.com/sromku/android-simple-facebook/edit/master/README.md#get-my-profile)
+* [Login](https://github.com/sromku/android-simple-facebook#login-1)
+* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
+* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
+* [Publish story](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -125,7 +125,60 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 
 ### Login
 
+Set `OnLoginOutListener` and call for `login(Activity)`
+
+``` java
+// login / logout listener
+OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
+{
+
+	@Override
+	public void onFail()
+	{
+		Log.w(TAG, "Failed to login");
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while login is happening
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onLogout()
+	{
+		// change the state of the button or do whatever you want
+		Log.i(TAG, "Logged out");
+	}
+
+	@Override
+	public void onLogin()
+	{
+		// change the state of the button or do whatever you want
+		Log.i(TAG, "Logged in");
+	}
+};
+
+// login
+mSimpleFacebook.setLogInOutListener(onLoginOutListener);
+mSimpleFacebook.login(MainActivity.this);
+```
+
 ### Logout
+
+Same `OnLoginOutListener` that you defined for login action will trigger the `onLogout()` callback method while doing the logout action. 
+Call `logout()` to disconnect from facebook
+
+``` java
+mSimpleFacebook.logout();
+```
 
 ### Publish feed
 
