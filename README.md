@@ -22,7 +22,7 @@ Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for 
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
 ## Few Examples
-Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](https://github.com/sromku/android-simple-facebook/edit/master/README.md#usage) paragraph.
+Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](https://github.com/sromku/android-simple-facebook#usage) paragraph.
 
 ### Login
 You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
