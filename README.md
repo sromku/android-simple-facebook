@@ -56,8 +56,11 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 
 
 ## Setup Project
-1. Just clone Facebook SDK 3.0 and clone Simple Facebook projects
-2. Add reference from this project to Facebook SDK 3.0
+1. Clone [Facebook SDK 3.0](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+2. Clone and import this (Simple Facebook) project to your workspace.
+3. Add reference from `Simple Facebook` project to `FacebookSDK` project.
+    ![Screenshot](http://romkuapps.com/Apps/Refs/simple_polygon.png)
+
 
 
 ## Usage
