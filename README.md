@@ -125,7 +125,60 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 
 ### Login
 
+Set `OnLoginOutListener` and call for `login(Activity)`
+
+``` java
+// login / logout listener
+OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
+{
+
+	@Override
+	public void onFail()
+	{
+		Log.w(TAG, "Failed to login");
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while login is happening
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onLogout()
+	{
+		// change the state of the button or do whatever you want
+		Log.i(TAG, "Logged out");
+	}
+
+	@Override
+	public void onLogin()
+	{
+		// change the state of the button or do whatever you want
+		Log.i(TAG, "Logged in");
+	}
+};
+
+// login
+mSimpleFacebook.setLogInOutListener(onLoginOutListener);
+mSimpleFacebook.login(MainActivity.this);
+```
+
 ### Logout
+
+Same `OnLoginOutListener` that you defined for login action will trigger the `onLogout()` callback method while doing the logout action. 
+Call `logout()` to disconnect from facebook
+
+``` java
+mSimpleFacebook.logout();
+```
 
 ### Publish feed
 
