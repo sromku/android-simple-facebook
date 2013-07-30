@@ -235,13 +235,17 @@ Feed feed = new Feed.Builder()
 	.setName("Simple Facebook for Android")
 	.setCaption("Code less, do the same.")
 	.setDescription("The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
-	.setLink("https://github.com/sromku/android-simple-facebook")
 	.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
+	.setLink("https://github.com/sromku/android-simple-facebook")
 	.build();
 
 // publish the feed
 mSimpleFacebook.publish(feed, onPublishListener);
 ```
+
+* And, the result is:
+
+  ![Screenshot](https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed.png)
 
 ### Publish story (open graph)
 
