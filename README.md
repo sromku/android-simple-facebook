@@ -42,11 +42,11 @@ mSimpleFacebook.logout();
 
 ``` java
 String[] friends = new String[]
-		{
-			"630243197",
-			"787878788",
-			"751875181"
-		};
+{
+	"630243197",
+	"787878788",
+	"751875181"
+};
 
 mSimpleFacebook.invite(MainActivity.this, friends, "Some free text", null);
 ```
@@ -71,21 +71,21 @@ Just add next lines in your `Application` class or any other place (like `Activi
 
 ``` java
 Permissions[] permissions = new Permissions[]
-		{
-			Permissions.USER_PHOTOS,
-			Permissions.FRIENDS_PHOTOS,
-			Permissions.PUBLISH_ACTION
-		};
+{
+	Permissions.USER_PHOTOS,
+	Permissions.FRIENDS_PHOTOS,
+	Permissions.PUBLISH_ACTION
+};
 ``` 
 
 #### 2.	Build and define the configuration by putting `app_id`, `namespace` and `permissions`:
 
 ``` java
 SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-			.setAppId("234555990008855")
-			.setNamespace("appnamespace")
-			.setPermissions(permissions)
-			.build();
+	.setAppId("625994234086470")
+	.setNamespace("sromkuapp")
+	.setPermissions(permissions)
+	.build();
 ``` 	
 
 #### 3.	And, set this configuration: 
