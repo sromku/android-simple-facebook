@@ -237,13 +237,16 @@ public class SimpleFacebook
 	 */
 	public boolean isLogin()
 	{
-		initSessionTracker();
-
-		if (mSessionTracker != null && mSessionTracker.getOpenSession() != null)
+		Session.openActiveSessionFromCache(mContext);
+		Session session = Session.getActiveSession();
+		if (session != null && session.isOpened())
 		{
 			return true;
 		}
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
 	public void publish(Feed feed)
