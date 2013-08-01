@@ -249,9 +249,11 @@ Feed feed = new Feed.Builder()
 mSimpleFacebook.publish(feed, onPublishListener);
 ```
 
-* And, the result is:
+And, the **result** is:
 
-  ![Screenshot](https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed.png)
+<p align="center">
+  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed.png" alt="Published feed"/>
+</p>
 
 ### Publish story (open graph)
 *TBE (to be explained)*
