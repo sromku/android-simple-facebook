@@ -237,7 +237,8 @@ public class SimpleFacebook
 	 */
 	public boolean isLogin()
 	{
-		Session.openActiveSessionFromCache(mContext);
+		initSessionTracker();
+		
 		Session session = Session.getActiveSession();
 		if (session != null && session.isOpened())
 		{
