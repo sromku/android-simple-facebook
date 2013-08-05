@@ -51,12 +51,14 @@ public class MainActivity extends Activity
 		@Override
 		public void onFail()
 		{
+			mTextStatus.setText("Failed to login"); 
 			Log.w(TAG, "Failed to login");
 		}
 
 		@Override
 		public void onException(Throwable throwable)
 		{
+			mTextStatus.setText("Exception: " + throwable.getMessage());
 			Log.e(TAG, "Bad thing happened", throwable);
 		}
 
@@ -264,6 +266,12 @@ public class MainActivity extends Activity
 			{
 				toast("Invitation was sent");
 			}
+
+			@Override
+			public void onCancel()
+			{
+				toast("Canceled the dialog");
+			}
 		};
 
 		// invite all
@@ -421,8 +429,8 @@ public class MainActivity extends Activity
 			{
 				MessageDigest md = MessageDigest.getInstance("SHA");
 				md.update(signature.toByteArray());
-				Log.d("YOURHASH KEY:",
-					Base64.encodeToString(md.digest(), Base64.DEFAULT));
+				String keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+				Log.d(TAG, "keyHash: " + keyHash);
 			}
 		}
 		catch (NameNotFoundException e)
