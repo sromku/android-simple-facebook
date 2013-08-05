@@ -287,6 +287,13 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 	{
 		Log.i(TAG, "Invitation was sent");
 	}
+	
+	@Override
+	public void onCancel()
+	{
+		Log.i(TAG, "Canceled the dialog");
+	}
+	
 };
 ```
 
