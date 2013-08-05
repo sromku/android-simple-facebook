@@ -238,7 +238,7 @@ public class SimpleFacebook
 	public boolean isLogin()
 	{
 		initSessionTracker();
-		
+
 		Session session = Session.getActiveSession();
 		if (session != null && session.isOpened())
 		{
@@ -505,11 +505,18 @@ public class SimpleFacebook
 				@Override
 				public void onComplete(Bundle values, FacebookException error)
 				{
-					if (error != null && !(error instanceof FacebookOperationCanceledException))
+					if (error != null)
 					{
-						if (onInviteListener != null)
+						if (error instanceof FacebookOperationCanceledException)
 						{
-							onInviteListener.onException(error);
+							onInviteListener.onCancel();
+						}
+						else
+						{
+							if (onInviteListener != null)
+							{
+								onInviteListener.onException(error);
+							}
 						}
 					}
 					else
@@ -672,6 +679,8 @@ public class SimpleFacebook
 	public interface OnInviteListener extends OnErrorListener
 	{
 		void onComplete();
+		
+		void onCancel();
 	}
 
 	/**
