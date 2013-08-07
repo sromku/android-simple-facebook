@@ -1,6 +1,7 @@
 package com.sromku.simple.fb;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +25,10 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.internal.SessionTracker;
+import com.facebook.model.GraphMultiResult;
+import com.facebook.model.GraphObject;
+import com.facebook.model.GraphObjectList;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 
 /**
@@ -39,6 +44,7 @@ import com.facebook.widget.WebDialog;
  * <li>Publish open graph story</li>
  * <li>Invite friends</li>
  * <li>Fetch my profile</li>
+ * <li>Fetch friends</li>
  * <li>Predefined all possible permissions. See {@link Permissions}</li>
  * <li>No need to care for correct sequence logging with READ and PUBLISH permissions</li>
  * </ul>
@@ -105,32 +111,18 @@ public class SimpleFacebook
 	 * 
 	 * @param onProfileRequestListener
 	 */
-	public void getMyProfile(final OnProfileRequestListener onProfileRequestListener)
+	public void getProfile(final OnProfileRequestListener onProfileRequestListener)
 	{
 		// if we are logged in
 		if (isLogin())
 		{
-			// move these params to method call parameters
-			Bundle params = new Bundle();
-			params.putString("fields", "id"); // params.putString("fields", "id,name,...");
-
-			// TODO - check this also: http://stackoverflow.com/a/13341550/334522
 			Session session = getOpenSession();
-			Request request = new Request(session, "me", params, HttpMethod.GET, new Request.Callback()
+			Request request = new Request(session, "me", null, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
 				{
-					JSONObject graphResponse = response.getGraphObject().getInnerJSONObject();
-					String userId = null;
-					try
-					{
-						userId = graphResponse.getString("id");
-					}
-					catch (JSONException e)
-					{
-						Log.i(TAG, "JSON error " + e.getMessage());
-					}
+					GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
 
 					FacebookRequestError error = response.getError();
 					if (error != null)
@@ -146,7 +138,7 @@ public class SimpleFacebook
 						// callback with 'complete'
 						if (onProfileRequestListener != null)
 						{
-							onProfileRequestListener.onComplete(userId);
+							onProfileRequestListener.onComplete(graphUser);
 						}
 					}
 
@@ -165,7 +157,58 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Login with Facebook
+	 * Get my friends from facebook
+	 * 
+	 * @param onFriendsRequestListener
+	 */
+	public void getFriends(final OnFriendsRequestListener onFriendsRequestListener)
+	{
+		// if we are logged in
+		if (isLogin())
+		{
+			// move these params to method call parameters
+			Session session = getOpenSession();
+			Request request = new Request(session, "me/friends", null, HttpMethod.GET, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					List<GraphUser> friends = typedListFromResponse(response, GraphUser.class);
+
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// callback with 'exception'
+						if (onFriendsRequestListener != null)
+						{
+							onFriendsRequestListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onFriendsRequestListener != null)
+						{
+							onFriendsRequestListener.onComplete(friends);
+						}
+					}
+
+				}
+			});
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+
+			// callback with 'thinking'
+			if (onFriendsRequestListener != null)
+			{
+				onFriendsRequestListener.onThinking();
+			}
+		}
+	}
+
+	/**
+	 * Login to Facebook
 	 * 
 	 * @param onLoginListener
 	 */
@@ -212,7 +255,7 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Logout with Facebook
+	 * Logout from Facebook
 	 */
 	public void logout()
 	{
@@ -231,9 +274,9 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Return <code>True</code> if the session exist and open, otherwise return <code>False</code>
+	 * Indicate if you are logged in or not.
 	 * 
-	 * @return
+	 * @return <code>True</code> if you is logged in, otherwise return <code>False</code>
 	 */
 	public boolean isLogin()
 	{
@@ -250,15 +293,24 @@ public class SimpleFacebook
 		}
 	}
 
+	/**
+	 * Publish {@link Feed} on the wall.
+	 * 
+	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
+	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
+	 */
 	public void publish(Feed feed)
 	{
 		publish(feed, null);
 	}
 
 	/**
-	 * https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
 	 * 
-	 * @param feed
+	 * Publish {@link Feed} on the wall.
+	 * 
+	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
+	 * @param onPublishListener The listener for publishing action
+	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
 	 */
 	public void publish(Feed feed, final OnPublishListener onPublishListener)
 	{
@@ -499,7 +551,7 @@ public class SimpleFacebook
 
 	private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener)
 	{
-		dialog = new WebDialog.Builder(activity, Session.getActiveSession(), "apprequests", params).
+		dialog = new WebDialog.RequestsDialogBuilder(activity, Session.getActiveSession(), params).
 			setOnCompleteListener(new WebDialog.OnCompleteListener()
 			{
 				@Override
@@ -585,6 +637,26 @@ public class SimpleFacebook
 		session.requestNewPublishPermissions(request);
 	}
 
+	/**
+	 * Helper method
+	 */
+	private static <T extends GraphObject> List<T> typedListFromResponse(Response response, Class<T> clazz)
+	{
+		GraphMultiResult multiResult = response.getGraphObjectAs(GraphMultiResult.class);
+		if (multiResult == null)
+		{
+			return null;
+		}
+
+		GraphObjectList<GraphObject> data = multiResult.getData();
+		if (data == null)
+		{
+			return null;
+		}
+
+		return data.castToListOf(clazz);
+	}
+
 	private class SessionStatusCallback implements Session.StatusCallback
 	{
 		private boolean mAskPublishPermissions = false;
@@ -654,18 +726,41 @@ public class SimpleFacebook
 		}
 	}
 
+	/**
+	 * On my profile request listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
 	public interface OnProfileRequestListener extends OnActionListener
 	{
-		void onComplete(String userId);
+		void onComplete(GraphUser profile);
 	}
 
+	/**
+	 * On friends request listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
+	public interface OnFriendsRequestListener extends OnActionListener
+	{
+		void onComplete(List<GraphUser> friends);
+	}
+
+	/**
+	 * On publishing action listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
 	public interface OnPublishListener extends OnActionListener
 	{
 		void onComplete(String postId);
 	}
 
 	/**
-	 * On login/logout listener
+	 * On login/logout actions listener
 	 * 
 	 * @author sromku
 	 */
@@ -676,17 +771,23 @@ public class SimpleFacebook
 		void onLogout();
 	}
 
+	/**
+	 * On invite action listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
 	public interface OnInviteListener extends OnErrorListener
 	{
 		void onComplete();
-		
+
 		void onCancel();
 	}
 
 	/**
 	 * General interface in this simple sdk
 	 * 
-	 * @author Romku
+	 * @author sromku
 	 * 
 	 */
 	public interface OnActionListener extends OnErrorListener
