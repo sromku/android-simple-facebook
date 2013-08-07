@@ -17,6 +17,7 @@ Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for 
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
+* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 
 *And,*
 * Based on latest Facebook SDK
@@ -128,6 +129,7 @@ SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContex
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
+* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -299,7 +301,7 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 
 #### All
 Show dialog with a list of all your friends. Call for `invite(Activity, String, OnInviteListener)`
-The `String` is the message to be shown in the invintation. 
+The `String` is the message to be shown in the invitation. 
 ``` java
 mSimpleFacebook.invite(MainActivity.this, "I invite you to use this app", onInviteListener);
 ```
@@ -362,12 +364,12 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 			
 };
 
-mSimpleFacebook.getMyProfile(onProfileRequestListener);
+mSimpleFacebook.getProfile(onProfileRequestListener);
 ```
 
 ### Get Friends
 
-Set `OnProfileRequestListener` and call for `getMyProfile(OnProfileRequestListener)`
+Set `OnFriendsRequestListener` and call for `getFriends(OnFriendsRequestListener)`
 
 ``` java
 OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriendsRequestListener()
