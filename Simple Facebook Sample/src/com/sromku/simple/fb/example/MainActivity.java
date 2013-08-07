@@ -2,6 +2,7 @@ package com.sromku.simple.fb.example;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.Feed;
 import com.sromku.simple.fb.Permissions;
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnInviteListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLoginOutListener;
 import com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener;
@@ -43,6 +46,8 @@ public class MainActivity extends Activity
 	private Button mButtonInviteAll;
 	private Button mButtonInviteSuggested;
 	private Button mButtonInviteOne;
+	private Button mButtonGetProfile;
+	private Button mButtonGetFriends;
 
 	// Login / Logout listener
 	private OnLoginOutListener mOnLoginOutListener = new SimpleFacebook.OnLoginOutListener()
@@ -51,7 +56,7 @@ public class MainActivity extends Activity
 		@Override
 		public void onFail()
 		{
-			mTextStatus.setText("Failed to login"); 
+			mTextStatus.setText("Failed to login");
 			Log.w(TAG, "Failed to login");
 		}
 
@@ -122,7 +127,10 @@ public class MainActivity extends Activity
 		inviteExamples();
 
 		// 6. Get my profile example
-		getMyProfileExample();
+		getProfileExample();
+
+		// 7. Get friends example
+		getFriendsExample();
 	}
 
 	/**
@@ -182,50 +190,53 @@ public class MainActivity extends Activity
 	 */
 	private void publishFeedExample()
 	{
+		// listener for publishing action
+		final OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+		{
+
+			@Override
+			public void onFail()
+			{
+				// insure that you are logged in before publishing
+				Log.w(TAG, "Failed to publish");
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking()
+			{
+				// show progress bar or something to the user while publishing
+				toast("Thinking...");
+			}
+
+			@Override
+			public void onComplete(String postId)
+			{
+				toast("Published successfully. The new post id = " + postId);
+			}
+		};
+
+		// feed builder
+		final Feed feed = new Feed.Builder()
+			.setMessage("Clone it out...")
+			.setName("Simple Facebook for Android")
+			.setCaption("Code less, do the same.")
+			.setDescription("The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
+			.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
+			.setLink("https://github.com/sromku/android-simple-facebook")
+			.build();
+
+		// click on button and publish
 		mButtonPublishFeed.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
-				{
-
-					@Override
-					public void onFail()
-					{
-						// insure that you are logged in before publishing
-						Log.w(TAG, "Failed to publish");
-					}
-
-					@Override
-					public void onException(Throwable throwable)
-					{
-						Log.e(TAG, "Bad thing happened", throwable);
-					}
-
-					@Override
-					public void onThinking()
-					{
-						// show progress bar or something to the user while publishing
-						toast("Thinking...");
-					}
-
-					@Override
-					public void onComplete(String postId)
-					{
-						toast("Published successfully. The new post id = " + postId);
-					}
-				};
-
-				Feed feed = new Feed.Builder()
-					.setMessage("Clone it out...")
-					.setName("Simple Facebook for Android")
-					.setCaption("Code less, do the same.")
-					.setDescription("The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
-					.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
-					.setLink("https://github.com/sromku/android-simple-facebook")
-					.build();
-
 				mSimpleFacebook.publish(feed, onPublishListener);
 			}
 		});
@@ -245,6 +256,7 @@ public class MainActivity extends Activity
 	 */
 	private void inviteExamples()
 	{
+		// listener for invite action
 		final OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 		{
 
@@ -319,9 +331,10 @@ public class MainActivity extends Activity
 	/**
 	 * Get my profile example
 	 */
-	private void getMyProfileExample()
+	private void getProfileExample()
 	{
-		OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
+		// listener for profile request
+		final OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
 		{
 
 			@Override
@@ -345,13 +358,74 @@ public class MainActivity extends Activity
 			}
 
 			@Override
-			public void onComplete(String userId)
+			public void onComplete(GraphUser profile)
 			{
-				Log.i(TAG, "My profile id = " + userId);
+				Log.i(TAG, "My profile id = " + profile.getId());
+				toast("My profile id = " + profile.getId());
+			}
+		};
+
+		// set on click button
+		mButtonGetProfile.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				mSimpleFacebook.getProfile(onProfileRequestListener);
+			}
+		});
+
+	}
+
+	/**
+	 * Get my profile example
+	 */
+	private void getFriendsExample()
+	{
+		// listener for friends request
+		final OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriendsRequestListener()
+		{
+
+			@Override
+			public void onFail()
+			{
+				// insure that you are logged in before getting the profile
+				Log.w(TAG, "Failed to get profile");
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking()
+			{
+				// show progress bar or something to the user while fetching profile
+				Log.i(TAG, "Thinking...");
+			}
+
+			@Override
+			public void onComplete(List<GraphUser> friends)
+			{
+				Log.i(TAG, "Number of friends = " + friends.size());
+				toast("Number of friends = " + friends.size());
 			}
 
 		};
-		mSimpleFacebook.getMyProfile(onProfileRequestListener);
+
+		// set button
+		mButtonGetFriends.setOnClickListener(new View.OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				mSimpleFacebook.getFriends(onFriendsRequestListener);
+			}
+		});
+
 	}
 
 	private void initUI()
@@ -364,6 +438,8 @@ public class MainActivity extends Activity
 		mButtonInviteAll = (Button)findViewById(R.id.button_invite_all);
 		mButtonInviteSuggested = (Button)findViewById(R.id.button_invite_suggested);
 		mButtonInviteOne = (Button)findViewById(R.id.button_invite_one);
+		mButtonGetProfile = (Button)findViewById(R.id.button_get_profile);
+		mButtonGetFriends = (Button)findViewById(R.id.button_get_friends);
 
 		if (mSimpleFacebook.isLogin())
 		{
@@ -394,6 +470,8 @@ public class MainActivity extends Activity
 		mButtonInviteAll.setEnabled(true);
 		mButtonInviteSuggested.setEnabled(true);
 		mButtonInviteOne.setEnabled(true);
+		mButtonGetProfile.setEnabled(true);
+		mButtonGetFriends.setEnabled(true);
 		mTextStatus.setText("Logged in");
 	}
 
@@ -406,6 +484,8 @@ public class MainActivity extends Activity
 		mButtonInviteAll.setEnabled(false);
 		mButtonInviteSuggested.setEnabled(false);
 		mButtonInviteOne.setEnabled(false);
+		mButtonGetProfile.setEnabled(false);
+		mButtonGetFriends.setEnabled(false);
 		mTextStatus.setText("Logged out");
 	}
 
