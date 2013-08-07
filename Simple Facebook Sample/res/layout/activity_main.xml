@@ -1,85 +1,120 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!-- Login to facebook -->
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:text="@string/login" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <!-- Logout to facebook -->
-    <Button
-        android:id="@+id/button_logout"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:text="@string/logout" />
+        <!-- Login to facebook -->
 
-    <!-- Status of login/logout -->
-    <TextView
-        android:id="@+id/text_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_login"
-        android:layout_centerHorizontal="true"
-        android:text="" />
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:text="@string/login" />
 
-    <!-- Publish Feed -->
-    <Button
-        android:id="@+id/button_publish_feed"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_login"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:text="@string/publish_feed" />
+        <!-- Logout to facebook -->
 
-    <!-- Publish Story -->>
-    <Button
-        android:id="@+id/button_publish_story"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_publish_feed"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:text="@string/publish_story" />
-    
-    <!-- Invite all -->
-    <Button
-        android:id="@+id/button_invite_all"
-        android:layout_width="100dp"
-        android:layout_height="55dp"
-        android:layout_below="@id/button_publish_story"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="10dp"
-        android:text="Invite All" />
-    
-    <!-- Invite one -->
-    <Button
-        android:id="@+id/button_invite_one"
-        android:layout_width="100dp"
-        android:layout_height="55dp"
-        android:layout_below="@id/button_publish_story"
-        android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
-        android:text="Invite One" />
-    
-    <!-- Invite suggested -->
-    <Button
-        android:id="@+id/button_invite_suggested"
-        android:layout_width="100dp"
-        android:layout_height="55dp"
-        android:layout_below="@id/button_publish_story"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:text="Invite Suggested" />
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:text="@string/logout" />
 
-</RelativeLayout>
+        <!-- Status of login/logout -->
+
+        <TextView
+            android:id="@+id/text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button_login"
+            android:layout_centerHorizontal="true"
+            android:text="" />
+
+        <!-- Publish Feed -->
+
+        <Button
+            android:id="@+id/button_publish_feed"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_login"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/publish_feed" />
+
+        <!-- Publish Story -->
+
+        <Button
+            android:id="@+id/button_publish_story"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_publish_feed"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/publish_story" />
+
+        <!-- Invite all -->
+
+        <Button
+            android:id="@+id/button_invite_all"
+            android:layout_width="100dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/button_publish_story"
+            android:layout_margin="10dp"
+            android:text="@string/invite_all" />
+
+        <!-- Invite one -->
+
+        <Button
+            android:id="@+id/button_invite_one"
+            android:layout_width="100dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/button_publish_story"
+            android:layout_margin="10dp"
+            android:text="@string/invite_one" />
+
+        <!-- Invite suggested -->
+
+        <Button
+            android:id="@+id/button_invite_suggested"
+            android:layout_width="100dp"
+            android:layout_height="55dp"
+            android:layout_below="@id/button_publish_story"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/invite_suggested" />
+
+        <!-- Get my profile -->
+
+        <Button
+            android:id="@+id/button_get_profile"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_invite_suggested"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/get_my_profile" />
+
+        <!-- Get friends -->
+
+        <Button
+            android:id="@+id/button_get_friends"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/get_friends" />
+    </RelativeLayout>
+
+</ScrollView>

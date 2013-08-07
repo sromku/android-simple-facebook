@@ -8,5 +8,10 @@
     <string name="login">Login</string>
     <string name="publish_feed">Publish Feed</string>
     <string name="publish_story">Publish Story</string>
+    <string name="invite_all">Invite All</string>
+    <string name="invite_one">Invite One</string>
+    <string name="invite_suggested">Invite Suggested</string>
+    <string name="get_my_profile">Get my profile</string>
+    <string name="get_friends">Get friends</string>
 
 </resources>
