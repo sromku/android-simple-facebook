@@ -355,14 +355,53 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 	}
 			
 	@Override
-	public void onComplete(String userId)
+	public void onComplete(GraphUser profile)
 	{
-		Log.i(TAG, "My profile id = " + userId);
+		Log.i(TAG, "My profile id = " + profile.getId());
 	}
 			
 };
 
 mSimpleFacebook.getMyProfile(onProfileRequestListener);
+```
+
+### Get Friends
+
+Set `OnProfileRequestListener` and call for `getMyProfile(OnProfileRequestListener)`
+
+``` java
+OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriendsRequestListener()
+{
+	
+	@Override
+	public void onFail()
+	{
+		// insure that you are logged in before getting the friends
+		Log.w(TAG, "Failed to get friends");
+	}
+			
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+			
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while fetching profile
+		Log.i(TAG, "Thinking...");
+	}
+			
+	@Override
+	public void onComplete(List<GraphUser> friends)
+	{
+		Log.i(TAG, "Number of friends = " + friends.size());
+	}
+			
+};
+
+mSimpleFacebook.getFriends(onFriendsRequestListener);
 ```
 
 ## More options
