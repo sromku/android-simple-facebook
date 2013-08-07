@@ -391,7 +391,7 @@ OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriends
 	@Override
 	public void onThinking()
 	{
-		// show progress bar or something to the user while fetching profile
+		// show progress bar or something to the user while fetching friends
 		Log.i(TAG, "Thinking...");
 	}
 			
@@ -409,6 +409,7 @@ mSimpleFacebook.getFriends(onFriendsRequestListener);
 ## More options
 
 * `isLogin()` – check if you are logged in
+* `getAccessToken()` - get current access token
 
 ## Sample Application
 *TBE (to be explained)*
