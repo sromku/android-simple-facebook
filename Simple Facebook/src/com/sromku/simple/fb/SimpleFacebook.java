@@ -580,7 +580,15 @@ public class SimpleFacebook
 					}
 					else
 					{
-						onInviteListener.onComplete();
+						Object object = values.get("request");
+						if (object == null)
+						{
+							onInviteListener.onCancel();
+						}
+						else
+						{
+							onInviteListener.onComplete();
+						}
 					}
 					dialog = null;
 				}
