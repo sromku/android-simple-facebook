@@ -1,6 +1,7 @@
 package com.sromku.simple.fb;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
@@ -138,7 +139,8 @@ public class SimpleFacebook
 						// callback with 'complete'
 						if (onProfileRequestListener != null)
 						{
-							onProfileRequestListener.onComplete(graphUser);
+							Profile profile = Profile.create(graphUser);
+							onProfileRequestListener.onComplete(profile);
 						}
 					}
 
@@ -173,7 +175,7 @@ public class SimpleFacebook
 				@Override
 				public void onCompleted(Response response)
 				{
-					List<GraphUser> friends = typedListFromResponse(response, GraphUser.class);
+					List<GraphUser> graphUsers = typedListFromResponse(response, GraphUser.class);
 
 					FacebookRequestError error = response.getError();
 					if (error != null)
@@ -189,6 +191,11 @@ public class SimpleFacebook
 						// callback with 'complete'
 						if (onFriendsRequestListener != null)
 						{
+							List<Profile> friends = new ArrayList<Profile>(graphUsers.size());
+							for (GraphUser graphUser: graphUsers)
+							{
+								friends.add(Profile.create(graphUser));
+							}
 							onFriendsRequestListener.onComplete(friends);
 						}
 					}
@@ -734,7 +741,7 @@ public class SimpleFacebook
 	 */
 	public interface OnProfileRequestListener extends OnActionListener
 	{
-		void onComplete(GraphUser profile);
+		void onComplete(Profile profile);
 	}
 
 	/**
@@ -745,7 +752,7 @@ public class SimpleFacebook
 	 */
 	public interface OnFriendsRequestListener extends OnActionListener
 	{
-		void onComplete(List<GraphUser> friends);
+		void onComplete(List<Profile> friends);
 	}
 
 	/**
