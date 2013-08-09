@@ -18,9 +18,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.Feed;
 import com.sromku.simple.fb.Permissions;
+import com.sromku.simple.fb.Profile;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnInviteListener;
@@ -141,6 +141,8 @@ public class MainActivity extends Activity
 		Permissions[] permissions = new Permissions[]
 		{
 			Permissions.BASIC_INFO,
+			Permissions.EMAIL,
+			Permissions.USER_BIRTHDAY,
 			Permissions.PUBLISH_ACTION
 		};
 
@@ -358,10 +360,10 @@ public class MainActivity extends Activity
 			}
 
 			@Override
-			public void onComplete(GraphUser profile)
+			public void onComplete(Profile profile)
 			{
 				Log.i(TAG, "My profile id = " + profile.getId());
-				toast("My profile id = " + profile.getId());
+				toast("My profile id = " + profile.getId() + ", " + profile.getEmail());
 			}
 		};
 
@@ -389,8 +391,8 @@ public class MainActivity extends Activity
 			@Override
 			public void onFail()
 			{
-				// insure that you are logged in before getting the profile
-				Log.w(TAG, "Failed to get profile");
+				// insure that you are logged in before getting the friends
+				Log.w(TAG, "Failed to get friends");
 			}
 
 			@Override
@@ -407,7 +409,7 @@ public class MainActivity extends Activity
 			}
 
 			@Override
-			public void onComplete(List<GraphUser> friends)
+			public void onComplete(List<Profile> friends)
 			{
 				Log.i(TAG, "Number of friends = " + friends.size());
 				toast("Number of friends = " + friends.size());
