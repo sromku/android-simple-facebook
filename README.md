@@ -357,7 +357,7 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 	}
 			
 	@Override
-	public void onComplete(GraphUser profile)
+	public void onComplete(Profile profile)
 	{
 		Log.i(TAG, "My profile id = " + profile.getId());
 	}
@@ -396,7 +396,7 @@ OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriends
 	}
 			
 	@Override
-	public void onComplete(List<GraphUser> friends)
+	public void onComplete(List<Profile> friends)
 	{
 		Log.i(TAG, "Number of friends = " + friends.size());
 	}
