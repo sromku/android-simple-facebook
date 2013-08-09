@@ -55,6 +55,25 @@ String[] friends = new String[]
 mSimpleFacebook.invite(MainActivity.this, friends, "Some free text", null);
 ```
 
+### Get my profile
+
+``` java
+mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
+{
+	@Override
+	public void onComplete(Profile profile)
+	{
+		String id = profile.getId();
+		String firstName = profile.getFirstName();
+		String birthday = profile.getBirthday();
+		String email = profile.getEmail();
+		String bio = profile.getBio();
+		// ... and many more properties of profile ...
+	}
+});
+
+```
+
 ### More examples
 More API actions is in the same simplicity. Just follow the explanation and examples below.
 
