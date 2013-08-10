@@ -3,6 +3,7 @@ package com.sromku.simple.fb.example;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		// test local language
+		updateLanguage("en");
 		setContentView(R.layout.activity_main);
 
 		/*
@@ -131,6 +135,13 @@ public class MainActivity extends Activity
 
 		// 7. Get friends example
 		getFriendsExample();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
@@ -373,7 +384,24 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
+				// example 1
 				mSimpleFacebook.getProfile(onProfileRequestListener);
+
+//				// - example 2
+//				mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
+//				{
+//					@Override
+//					public void onComplete(Profile profile)
+//					{
+//						String id = profile.getId();
+//						String firstName = profile.getFirstName();
+//						String birthday = profile.getBirthday();
+//						String email = profile.getEmail();
+//						String bio = profile.getBio();
+//						// ... and many more properties of profile ...
+//					}
+//
+//				});
 			}
 		});
 
@@ -491,13 +519,6 @@ public class MainActivity extends Activity
 		mTextStatus.setText("Logged out");
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
 	/**
 	 * Print hash
 	 */
@@ -523,6 +544,45 @@ public class MainActivity extends Activity
 		{
 
 		}
+	}
+	
+	/**
+	 * Update language
+	 * 
+	 * @param code The language code. Like: en, cz, iw, ...
+	 */
+	private void updateLanguage(String code)
+	{
+		Locale locale = new Locale(code);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+	}
+
+	public class OnProfileRequestAdapter implements OnProfileRequestListener
+	{
+
+		@Override
+		public void onThinking()
+		{
+		}
+
+		@Override
+		public void onException(Throwable throwable)
+		{
+		}
+
+		@Override
+		public void onFail()
+		{
+		}
+
+		@Override
+		public void onComplete(Profile profile)
+		{
+		}
+
 	}
 
 }
