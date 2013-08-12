@@ -77,7 +77,7 @@ mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
 ### More examples
 More API actions is in the same simplicity. Just follow the explanation and examples below.
 
-
+--------------------
 ## Setup Project
 1. Clone [Facebook SDK 3.0](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
