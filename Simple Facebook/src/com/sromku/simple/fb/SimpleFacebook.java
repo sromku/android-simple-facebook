@@ -676,6 +676,7 @@ public class SimpleFacebook
 	{
 		private boolean mAskPublishPermissions = false;
 		private WeakReference<Activity> mWeakReference = null;
+		private boolean mDoOnLogin = false;
 
 		@Override
 		public void call(Session session, SessionState state, Exception exception)
@@ -710,18 +711,25 @@ public class SimpleFacebook
 					break;
 
 				case OPENED:
-					mLogInOutListener.onLogin();
-
 					if (mAskPublishPermissions && mWeakReference != null && session.getState().equals(SessionState.OPENED))
 					{
+						mDoOnLogin = true;
 						extendPublishPermissions(mWeakReference.get());
 						mAskPublishPermissions = false;
 						mWeakReference = null;
 					}
+					else
+					{
+						mLogInOutListener.onLogin();
+					}
 					break;
 
 				case OPENED_TOKEN_UPDATED:
-					Log.i(TAG, state.name());
+					if (mDoOnLogin)
+					{
+						mDoOnLogin = false;
+						mLogInOutListener.onLogin();
+					}
 					break;
 
 				default:
