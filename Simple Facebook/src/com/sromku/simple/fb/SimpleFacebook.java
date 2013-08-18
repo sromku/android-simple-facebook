@@ -66,6 +66,9 @@ public class SimpleFacebook
 
 	private WebDialog dialog = null;
 
+	private static final String FAIL_LOGIN = "You are not logged in";
+	private static final String FAIL_PERMISSIONS_PUBLISH = "You didn't set 'publish_action' permission in configuration";
+
 	private SimpleFacebook(Context context)
 	{
 		mContext = context;
@@ -289,15 +292,11 @@ public class SimpleFacebook
 	{
 		initSessionTracker();
 
-		Session session = Session.getActiveSession();
-		if (session != null && session.isOpened())
+		if (mSessionTracker != null && mSessionTracker.getOpenSession() != null)
 		{
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	/**
@@ -327,51 +326,71 @@ public class SimpleFacebook
 			// if we defined the publish permission
 			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
 			{
-				Session session = getOpenSession();
-				Request request = new Request(session, "me/feed", feed.getBundle(), HttpMethod.POST, new Request.Callback()
+				/*
+				 * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+				 * this permission.
+				 */
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
 				{
-					@Override
-					public void onCompleted(Response response)
+					// TODO - do auto extend publish permissions
+					onPublishListener.onFail(FAIL_PERMISSIONS_PUBLISH);
+				}
+				else
+				{
+					// callback with 'thinking'
+					if (onPublishListener != null)
 					{
-						JSONObject graphResponse = response.getGraphObject().getInnerJSONObject();
-						String postId = null;
-						try
-						{
-							postId = graphResponse.getString("id");
-						}
-						catch (JSONException e)
-						{
-							Log.i(TAG, "JSON error " + e.getMessage());
-						}
-
-						FacebookRequestError error = response.getError();
-						if (error != null)
-						{
-							// callback with 'exception'
-							if (onPublishListener != null)
-							{
-								onPublishListener.onException(error.getException());
-							}
-						}
-						else
-						{
-							// callback with 'complete'
-							if (onPublishListener != null)
-							{
-								onPublishListener.onComplete(postId);
-							}
-						}
-
+						onPublishListener.onThinking();
 					}
-				});
 
-				RequestAsyncTask task = new RequestAsyncTask(request);
-				task.execute();
+					Session session = getOpenSession();
+					Request request = new Request(session, "me/feed", feed.getBundle(), HttpMethod.POST, new Request.Callback()
+					{
+						@Override
+						public void onCompleted(Response response)
+						{
+							GraphObject graphObject = response.getGraphObject();
+							if (graphObject != null)
+							{
+								JSONObject graphResponse = graphObject.getInnerJSONObject();
+								String postId = null;
+								try
+								{
+									postId = graphResponse.getString("id");
+								}
+								catch (JSONException e)
+								{
+									Log.i(TAG, "JSON error " + e.getMessage());
+								}
 
-				// callback with 'thinking'
-				if (onPublishListener != null)
-				{
-					onPublishListener.onThinking();
+								FacebookRequestError error = response.getError();
+								if (error != null)
+								{
+									// callback with 'exception'
+									if (onPublishListener != null)
+									{
+										onPublishListener.onException(error.getException());
+									}
+								}
+								else
+								{
+									// callback with 'complete'
+									if (onPublishListener != null)
+									{
+										onPublishListener.onComplete(postId);
+									}
+								}
+							}
+							else
+							{
+								onPublishListener.onComplete("0");
+							}
+						}
+					});
+
+					RequestAsyncTask task = new RequestAsyncTask(request);
+					task.execute();
+
 				}
 			}
 			else
@@ -379,7 +398,7 @@ public class SimpleFacebook
 				// callback with 'fail' due to insufficient permissions
 				if (onPublishListener != null)
 				{
-					onPublishListener.onFail();
+					onPublishListener.onFail(FAIL_PERMISSIONS_PUBLISH);
 				}
 			}
 		}
@@ -388,7 +407,7 @@ public class SimpleFacebook
 			// callback with 'fail' due to not being loged
 			if (onPublishListener != null)
 			{
-				onPublishListener.onFail();
+				onPublishListener.onFail(FAIL_LOGIN);
 			}
 		}
 	}
@@ -409,50 +428,58 @@ public class SimpleFacebook
 				Session session = getOpenSession();
 				String appNamespace = mConfiguration.getNamespace();
 
+				// callback with 'thinking'
+				if (onPublishListener != null)
+				{
+					onPublishListener.onThinking();
+				}
+
 				Request request = new Request(session, story.getGraphPath(appNamespace), story.getActionBundle(), HttpMethod.POST, new Request.Callback()
 				{
 					@Override
 					public void onCompleted(Response response)
 					{
-						JSONObject graphResponse = response.getGraphObject().getInnerJSONObject();
-						String postId = null;
-						try
+						GraphObject graphObject = response.getGraphObject();
+						if (graphObject != null)
 						{
-							postId = graphResponse.getString("id");
-						}
-						catch (JSONException e)
-						{
-							Log.i(TAG, "JSON error " + e.getMessage());
-						}
-
-						FacebookRequestError error = response.getError();
-						if (error != null)
-						{
-							// callback with 'exception'
-							if (onPublishListener != null)
+							JSONObject graphResponse = graphObject.getInnerJSONObject();
+							String postId = null;
+							try
 							{
-								onPublishListener.onException(error.getException());
+								postId = graphResponse.getString("id");
+							}
+							catch (JSONException e)
+							{
+								Log.i(TAG, "JSON error " + e.getMessage());
+							}
+
+							FacebookRequestError error = response.getError();
+							if (error != null)
+							{
+								// callback with 'exception'
+								if (onPublishListener != null)
+								{
+									onPublishListener.onException(error.getException());
+								}
+							}
+							else
+							{
+								// callback with 'complete'
+								if (onPublishListener != null)
+								{
+									onPublishListener.onComplete(postId);
+								}
 							}
 						}
 						else
 						{
-							// callback with 'complete'
-							if (onPublishListener != null)
-							{
-								onPublishListener.onComplete(postId);
-							}
+							onPublishListener.onComplete("0");
 						}
 					}
 				});
 
 				RequestAsyncTask task = new RequestAsyncTask(request);
 				task.execute();
-
-				// callback with 'thinking'
-				if (onPublishListener != null)
-				{
-					onPublishListener.onThinking();
-				}
 			}
 		}
 		else
@@ -460,7 +487,7 @@ public class SimpleFacebook
 			// callback with 'fail' due to not being loged
 			if (onPublishListener != null)
 			{
-				onPublishListener.onFail();
+				onPublishListener.onFail(FAIL_LOGIN);
 			}
 		}
 	}
@@ -481,7 +508,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail();
+			onInviteListener.onFail(FAIL_LOGIN);
 		}
 	}
 
@@ -506,7 +533,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail();
+			onInviteListener.onFail(FAIL_LOGIN);
 		}
 	}
 
@@ -531,7 +558,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail();
+			onInviteListener.onFail(FAIL_LOGIN);
 		}
 	}
 
@@ -600,9 +627,24 @@ public class SimpleFacebook
 		dialog.show();
 	}
 
+	/**
+	 * Get open session
+	 * 
+	 * @return the open session
+	 */
 	private Session getOpenSession()
 	{
 		return mSessionTracker.getOpenSession();
+	}
+
+	/**
+	 * Get permissions that are accepted by user for current token
+	 * 
+	 * @return the list of accepted permissions
+	 */
+	private List<String> getOpenSessionPermissions()
+	{
+		return getOpenSession().getPermissions();
 	}
 
 	private void initSessionTracker()
@@ -683,9 +725,36 @@ public class SimpleFacebook
 		{
 			if (mLogInOutListener != null)
 			{
+				/*
+				 * These are already authorized permissions
+				 */
+				List<String> permissions = session.getPermissions();
+
 				if (exception != null)
 				{
-					mLogInOutListener.onException(exception);
+
+					if (exception instanceof FacebookOperationCanceledException)
+					{
+						/*
+						 * If user canceled the read permissions dialog
+						 */
+						if (permissions.size() == 0)
+						{
+							mLogInOutListener.onNotAcceptingPermissions();
+						}
+						else
+						{
+							/*
+							 * User canceled the WRITE permissions. We do nothing here. Once the user will try
+							 * to do some action that require WRITE permissions, the dialog will be shown
+							 * automatically.
+							 */
+						}
+					}
+					else
+					{
+						mLogInOutListener.onException(exception);
+					}
 				}
 
 				switch (state)
@@ -695,7 +764,7 @@ public class SimpleFacebook
 					break;
 
 				case CLOSED_LOGIN_FAILED:
-					mLogInOutListener.onFail();
+					Log.i(TAG, state.name());
 					break;
 
 				case CREATED:
@@ -711,12 +780,29 @@ public class SimpleFacebook
 					break;
 
 				case OPENED:
+
+					/*
+					 * Check if WRITE permissions were also defined in the configuration. If so, then ask in
+					 * another dialog for WRITE permissions.
+					 */
 					if (mAskPublishPermissions && mWeakReference != null && session.getState().equals(SessionState.OPENED))
 					{
-						mDoOnLogin = true;
-						extendPublishPermissions(mWeakReference.get());
-						mAskPublishPermissions = false;
-						mWeakReference = null;
+						/*
+						 * If user didn't accepte the publish permissions, we still want to notify about
+						 * complete
+						 */
+						if (mDoOnLogin)
+						{
+							mDoOnLogin = false;
+							mLogInOutListener.onLogin();
+						}
+						else
+						{
+							mDoOnLogin = true;
+							extendPublishPermissions(mWeakReference.get());
+							mAskPublishPermissions = false;
+							mWeakReference = null;
+						}
 					}
 					else
 					{
@@ -789,9 +875,21 @@ public class SimpleFacebook
 	 */
 	public interface OnLoginOutListener extends OnActionListener
 	{
+		/**
+		 * If user performed {@link FacebookTools#login(Activity)} action, this callback method will be
+		 * invoked
+		 */
 		void onLogin();
 
+		/**
+		 * If user performed {@link FacebookTools#logout()} action, this callback method will be invoked
+		 */
 		void onLogout();
+
+		/**
+		 * If user pressed 'cancel' in READ (First) permissions dialog
+		 */
+		void onNotAcceptingPermissions();
 	}
 
 	/**
@@ -822,7 +920,7 @@ public class SimpleFacebook
 	{
 		void onException(Throwable throwable);
 
-		void onFail();
+		void onFail(String reason);
 	}
 
 }

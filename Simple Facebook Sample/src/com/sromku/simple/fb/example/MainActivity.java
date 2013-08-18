@@ -56,7 +56,7 @@ public class MainActivity extends Activity
 	{
 
 		@Override
-		public void onFail()
+		public void onFail(String reason)
 		{
 			mTextStatus.setText("Failed to login");
 			Log.w(TAG, "Failed to login");
@@ -92,6 +92,12 @@ public class MainActivity extends Activity
 			mTextStatus.setText("Logged in");
 			loggedInUIState();
 			toast("You are logged in");
+		}
+
+		@Override
+		public void onNotAcceptingPermissions()
+		{
+			toast("You didn't accept publish permissions");
 		}
 	};
 
@@ -208,7 +214,7 @@ public class MainActivity extends Activity
 		{
 
 			@Override
-			public void onFail()
+			public void onFail(String reason)
 			{
 				// insure that you are logged in before publishing
 				Log.w(TAG, "Failed to publish");
@@ -274,10 +280,10 @@ public class MainActivity extends Activity
 		{
 
 			@Override
-			public void onFail()
+			public void onFail(String reason)
 			{
 				// insure that you are logged in before inviting
-				Log.w(TAG, "Failed to invite");
+				Log.w(TAG, reason);
 			}
 
 			@Override
@@ -351,10 +357,10 @@ public class MainActivity extends Activity
 		{
 
 			@Override
-			public void onFail()
+			public void onFail(String reason)
 			{
 				// insure that you are logged in before getting the profile
-				Log.w(TAG, "Failed to get profile");
+				Log.w(TAG, reason);
 			}
 
 			@Override
@@ -387,21 +393,21 @@ public class MainActivity extends Activity
 				// example 1
 				mSimpleFacebook.getProfile(onProfileRequestListener);
 
-//				// - example 2
-//				mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
-//				{
-//					@Override
-//					public void onComplete(Profile profile)
-//					{
-//						String id = profile.getId();
-//						String firstName = profile.getFirstName();
-//						String birthday = profile.getBirthday();
-//						String email = profile.getEmail();
-//						String bio = profile.getBio();
-//						// ... and many more properties of profile ...
-//					}
-//
-//				});
+				// // - example 2
+				// mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
+				// {
+				// @Override
+				// public void onComplete(Profile profile)
+				// {
+				// String id = profile.getId();
+				// String firstName = profile.getFirstName();
+				// String birthday = profile.getBirthday();
+				// String email = profile.getEmail();
+				// String bio = profile.getBio();
+				// // ... and many more properties of profile ...
+				// }
+				//
+				// });
 			}
 		});
 
@@ -417,10 +423,10 @@ public class MainActivity extends Activity
 		{
 
 			@Override
-			public void onFail()
+			public void onFail(String reason)
 			{
 				// insure that you are logged in before getting the friends
-				Log.w(TAG, "Failed to get friends");
+				Log.w(TAG, reason);
 			}
 
 			@Override
@@ -545,7 +551,7 @@ public class MainActivity extends Activity
 
 		}
 	}
-	
+
 	/**
 	 * Update language
 	 * 
@@ -574,7 +580,7 @@ public class MainActivity extends Activity
 		}
 
 		@Override
-		public void onFail()
+		public void onFail(String reason)
 		{
 		}
 
