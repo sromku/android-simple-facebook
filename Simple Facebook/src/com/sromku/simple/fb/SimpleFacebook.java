@@ -429,14 +429,14 @@ public class SimpleFacebook
 	 * @param message The message inside the dialog. It could be <code>null</code>
 	 * @param onInviteListener The listener. It could be <code>null</code>
 	 */
-	public void invite(Activity activity, String message, final OnInviteListener onInviteListener)
+	public void invite(String message, final OnInviteListener onInviteListener)
 	{
 		if (isLogin())
 		{
 
 			Bundle params = new Bundle();
 			params.putString("message", message);
-			openInviteDialog(activity, params, onInviteListener);
+			openInviteDialog(mActivity, params, onInviteListener);
 		}
 		else
 		{
@@ -451,7 +451,7 @@ public class SimpleFacebook
 	 * @param message The message inside the dialog. It could be <code>null</code>
 	 * @param onInviteListener The listener. It could be <code>null</code>
 	 */
-	public void invite(Activity activity, String to, String message, final OnInviteListener onInviteListener)
+	public void invite(String to, String message, final OnInviteListener onInviteListener)
 	{
 		if (isLogin())
 		{
@@ -462,7 +462,7 @@ public class SimpleFacebook
 				params.putString("message", message);
 			}
 			params.putString("to", to);
-			openInviteDialog(activity, params, onInviteListener);
+			openInviteDialog(mActivity, params, onInviteListener);
 		}
 		else
 		{
@@ -477,7 +477,7 @@ public class SimpleFacebook
 	 * @param message The message inside the dialog. It could be <code>null</code>
 	 * @param onInviteListener The error listener. It could be <code>null</code>
 	 */
-	public void invite(Activity activity, String[] suggestedFriends, String message, final OnInviteListener onInviteListener)
+	public void invite(String[] suggestedFriends, String message, final OnInviteListener onInviteListener)
 	{
 		if (isLogin())
 		{
@@ -488,7 +488,7 @@ public class SimpleFacebook
 				params.putString("message", message);
 			}
 			params.putString("suggestions", TextUtils.join(",", suggestedFriends));
-			openInviteDialog(activity, params, onInviteListener);
+			openInviteDialog(mActivity, params, onInviteListener);
 		}
 		else
 		{
