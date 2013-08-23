@@ -26,7 +26,8 @@ import com.sromku.simple.fb.Profile;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnInviteListener;
-import com.sromku.simple.fb.SimpleFacebook.OnLoginOutListener;
+import com.sromku.simple.fb.SimpleFacebook.OnLoginListener;
+import com.sromku.simple.fb.SimpleFacebook.OnLogoutListener;
 import com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnPublishListener;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
@@ -51,14 +52,56 @@ public class MainActivity extends Activity
 	private Button mButtonGetProfile;
 	private Button mButtonGetFriends;
 
-	// Login / Logout listener
-	private OnLoginOutListener mOnLoginOutListener = new SimpleFacebook.OnLoginOutListener()
+	// Login listener
+	private OnLoginListener mOnLoginListener = new OnLoginListener()
 	{
 
 		@Override
 		public void onFail(String reason)
 		{
-			mTextStatus.setText("Failed to login");
+			mTextStatus.setText(reason);
+			Log.w(TAG, "Failed to login");
+		}
+
+		@Override
+		public void onException(Throwable throwable)
+		{
+			mTextStatus.setText("Exception: " + throwable.getMessage());
+			Log.e(TAG, "Bad thing happened", throwable);
+		}
+
+		@Override
+		public void onThinking()
+		{
+			// show progress bar or something to the user while login is happening
+			mTextStatus.setText("Thinking...");
+		}
+
+		@Override
+		public void onLogin()
+		{
+			// change the state of the button or do whatever you want
+			mTextStatus.setText("Logged in");
+			loggedInUIState();
+			toast("You are logged in");
+		}
+
+		@Override
+		public void onNotAcceptingPermissions()
+		{
+			toast("You didn't accept read permissions");
+		}
+	};
+	
+	
+	// Logout listener
+	private OnLogoutListener mOnLogoutListener = new OnLogoutListener()
+	{
+		
+		@Override
+		public void onFail(String reason)
+		{
+			mTextStatus.setText(reason);
 			Log.w(TAG, "Failed to login");
 		}
 
@@ -85,20 +128,6 @@ public class MainActivity extends Activity
 			toast("You are logged out");
 		}
 
-		@Override
-		public void onLogin()
-		{
-			// change the state of the button or do whatever you want
-			mTextStatus.setText("Logged in");
-			loggedInUIState();
-			toast("You are logged in");
-		}
-
-		@Override
-		public void onNotAcceptingPermissions()
-		{
-			toast("You didn't accept publish permissions");
-		}
 	};
 
 	@Override
@@ -121,7 +150,6 @@ public class MainActivity extends Activity
 		 */
 
 		// 1. Login example
-		mSimpleFacebook.setLogInOutListener(mOnLoginOutListener);
 		loginExample();
 
 		// 2. Logout example
@@ -169,7 +197,7 @@ public class MainActivity extends Activity
 			.setPermissions(permissions)
 			.build();
 
-		mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
+		mSimpleFacebook = SimpleFacebook.getInstance(this);
 		mSimpleFacebook.setConfiguration(configuration);
 	}
 
@@ -183,7 +211,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				mSimpleFacebook.login(MainActivity.this);
+				mSimpleFacebook.login(mOnLoginListener);
 			}
 		});
 	}
@@ -198,7 +226,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				mSimpleFacebook.logout();
+				mSimpleFacebook.logout(mOnLogoutListener);
 			}
 		});
 	}
@@ -267,7 +295,6 @@ public class MainActivity extends Activity
 	private void publishStoryExample()
 	{
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
