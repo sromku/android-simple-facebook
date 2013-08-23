@@ -340,7 +340,7 @@ public class MainActivity extends Activity
 			public void onClick(View arg0)
 			{
 				// will open dialog with all my friends
-				mSimpleFacebook.invite(MainActivity.this, "I invite you to use this app", onInviteListener);
+				mSimpleFacebook.invite("I invite you to use this app", onInviteListener);
 			}
 		});
 
@@ -357,7 +357,7 @@ public class MainActivity extends Activity
 					"1456233371",
 					"100000490891462"
 				};
-				mSimpleFacebook.invite(MainActivity.this, friends, "I invite you to use this app", onInviteListener);
+				mSimpleFacebook.invite(friends, "I invite you to use this app", onInviteListener);
 			}
 		});
 
@@ -369,7 +369,7 @@ public class MainActivity extends Activity
 			public void onClick(View v)
 			{
 				String friend = "630243197";
-				mSimpleFacebook.invite(MainActivity.this, friend, "I invite you to use this app", onInviteListener);
+				mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener);
 			}
 		});
 	}
