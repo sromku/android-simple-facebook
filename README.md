@@ -172,9 +172,9 @@ OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
 {
 
 	@Override
-	public void onFail()
+	public void onFail(String reason)
 	{
-		Log.w(TAG, "Failed to login");
+		Log.w(TAG, reason);
 	}
 
 	@Override
@@ -203,6 +203,13 @@ OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
 		// change the state of the button or do whatever you want
 		Log.i(TAG, "Logged in");
 	}
+	
+	@Override
+	public void onNotAcceptingPermissions()
+	{
+		Log.w(TAG, "User didn't accept publish permissions");
+	}
+	
 };
 
 // login
@@ -230,10 +237,10 @@ OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 {
 
 	@Override
-	public void onFail()
+	public void onFail(String reason)
 	{
 		// insure that you are logged in before publishing
-		Log.w(TAG, "Failed to publish");
+		Log.w(TAG, reason);
 	}
 
 	@Override
@@ -291,10 +298,10 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 {
 
 	@Override
-	public void onFail()
+	public void onFail(String reason)
 	{
 		// insure that you are logged in before inviting
-		Log.w(TAG, "Failed to invite");
+		Log.w(TAG, reason);
 	}
 
 	@Override
@@ -356,10 +363,10 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 {
 	
 	@Override
-	public void onFail()
+	public void onFail(String reason)
 	{
 		// insure that you are logged in before getting the profile
-		Log.w(TAG, "Failed to get profile");
+		Log.w(TAG, reason);
 	}
 			
 	@Override
@@ -395,10 +402,10 @@ OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriends
 {
 	
 	@Override
-	public void onFail()
+	public void onFail(String reason)
 	{
 		// insure that you are logged in before getting the friends
-		Log.w(TAG, "Failed to get friends");
+		Log.w(TAG, reason);
 	}
 			
 	@Override
