@@ -194,7 +194,7 @@ OnLoginListener onLoginListener = new SimpleFacebook.OnLoginListener()
 	@Override
 	public void onNotAcceptingPermissions()
 	{
-		Log.w(TAG, "User didn't accept publish permissions");
+		Log.w(TAG, "User didn't accept read permissions");
 	}
 	
 };
