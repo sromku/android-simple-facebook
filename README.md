@@ -1,11 +1,11 @@
 android-simple-facebook
 =======================
 
-Simple Facebook API for Android which wraps original [**Facebook SDK 3.0**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook API for Android which wraps original [**Facebook SDK 3.5**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
-Since my feeling was that the usage of Facebook SDK 3.0 was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
+Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 ## Features
 * [Login](https://github.com/sromku/android-simple-facebook#login-1)
@@ -32,14 +32,14 @@ Just to give you the feeling, how simple it is. For all options and examples, fo
 You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
 
 ``` java
-mSimpleFacebook.login(MainActivity.this);
+mSimpleFacebook.login(onLoginListener);
 ```
 
 ### Logout
 
 As login, just call it anywhere you need
 ``` java
-mSimpleFacebook.logout();
+mSimpleFacebook.logout(onLogoutListener);
 ```
 
 ### Invite friends
@@ -79,7 +79,7 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 
 --------------------
 ## Setup Project
-1. Clone [Facebook SDK 3.0](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+1. Clone [Facebook SDK 3.5](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
 2. Clone and import this (Simple Facebook) project to your workspace.
  
@@ -101,44 +101,38 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 
 ## Usage
 
-Just add next lines in your `Application` class or any other place (like `Activity`) that has `Context` instance.
+#### 1. Just add next lines in your `Activity` class. 
 
-#### 1.	Define and select permissions you need:
+- Define and select permissions you need:
 
-``` java
-Permissions[] permissions = new Permissions[]
-{
-	Permissions.USER_PHOTOS,
-	Permissions.FRIENDS_PHOTOS,
-	Permissions.PUBLISH_ACTION
-};
-``` 
+	``` java
+	Permissions[] permissions = new Permissions[]
+	{
+		Permissions.USER_PHOTOS,
+		Permissions.FRIENDS_PHOTOS,
+		Permissions.PUBLISH_ACTION
+	};
+	``` 
 
-#### 2.	Build and define the configuration by putting `app_id`, `namespace` and `permissions`:
+- Build and define the configuration by putting `app_id`, `namespace` and `permissions`:
 
-``` java
-SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-	.setAppId("625994234086470")
-	.setNamespace("sromkuapp")
-	.setPermissions(permissions)
-	.build();
-``` 	
+	``` java
+	SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+		.setAppId("625994234086470")
+		.setNamespace("sromkuapp")
+		.setPermissions(permissions)
+		.build();
+	``` 	
 
-#### 3.	And, set this configuration: 
+- And, create `SimpleFacebook` instance and set this configuration: 
 
-``` java
-SimpleFacebook simpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
-simpleFacebook.setConfiguration(configuration);
-``` 
+	``` java
+	SimpleFacebook simpleFacebook = SimpleFacebook.getInstance(Activity);
+	simpleFacebook.setConfiguration(configuration);
+	``` 
 
-### Run the action (login, publish, invite,…)
+#### 2. Run the action (login, publish, invite,…)
 
-#### 1.	In your `Activity` create instance of `SimpleFacebook`
-
-``` java
-SimpleFacebook mSimpleFacebook = SimpleFacebook.getInstance(getApplicationContext());
-```
-#### 2.	Do an action like:
 * [Login](https://github.com/sromku/android-simple-facebook#login-1)
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
@@ -164,11 +158,58 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 
 ### Login
 
-Set `OnLoginOutListener` and call for `login(Activity)`
+Set `OnLoginOutListener` and call for `login(OnLoginOutListener)`
 
 ``` java
-// login / logout listener
-OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
+// login listener
+OnLoginListener onLoginListener = new SimpleFacebook.OnLoginListener()
+{
+
+	@Override
+	public void onFail(String reason)
+	{
+		Log.w(TAG, reason);
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while login is happening
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onLogin()
+	{
+		// change the state of the button or do whatever you want
+		Log.i(TAG, "Logged in");
+	}
+	
+	@Override
+	public void onNotAcceptingPermissions()
+	{
+		Log.w(TAG, "User didn't accept publish permissions");
+	}
+	
+};
+
+// login
+mSimpleFacebook.login(onLoginListener);
+```
+
+### Logout
+
+Set `OnLogoutListener` and call for `logout(OnLogoutListener)` to disconnect from facebook.
+
+``` java
+// logout listener
+OnLogoutListener onLogoutListener = new SimpleFacebook.OnLogoutListener()
 {
 
 	@Override
@@ -193,37 +234,13 @@ OnLoginOutListener onLoginOutListener = new SimpleFacebook.OnLoginOutListener()
 	@Override
 	public void onLogout()
 	{
-		// change the state of the button or do whatever you want
-		Log.i(TAG, "Logged out");
-	}
-
-	@Override
-	public void onLogin()
-	{
-		// change the state of the button or do whatever you want
-		Log.i(TAG, "Logged in");
-	}
-	
-	@Override
-	public void onNotAcceptingPermissions()
-	{
-		Log.w(TAG, "User didn't accept publish permissions");
+		Log.i(TAG, "You are logged out");
 	}
 	
 };
 
-// login
-mSimpleFacebook.setLogInOutListener(onLoginOutListener);
-mSimpleFacebook.login(MainActivity.this);
-```
-
-### Logout
-
-Same `OnLoginOutListener` that you defined for login action will trigger the `onLogout()` callback method while doing the logout action. 
-Call `logout()` to disconnect from facebook
-
-``` java
-mSimpleFacebook.logout();
+// logout
+mSimpleFacebook.logout(onLogoutListener);
 ```
 
 ### Publish feed
@@ -436,6 +453,7 @@ mSimpleFacebook.getFriends(onFriendsRequestListener);
 
 * `isLogin()` – check if you are logged in
 * `getAccessToken()` - get current access token
+* `clean()` - Clean all references like `Activity` to prevent memory leaks
 
 ## Sample Application
 *TBE (to be explained)*
