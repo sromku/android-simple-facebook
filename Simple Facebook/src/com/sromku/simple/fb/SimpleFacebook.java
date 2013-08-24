@@ -124,7 +124,7 @@ public class SimpleFacebook
 			 */
 			if (!session.isOpened())
 			{
-				openSession(session);
+				openSession(session, true);
 			}
 			else
 			{
@@ -604,7 +604,7 @@ public class SimpleFacebook
 					{
 						Log.i(TAG, "JSON error " + e.getMessage());
 					}
-	
+
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
@@ -629,7 +629,7 @@ public class SimpleFacebook
 				}
 			}
 		});
-	
+
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 	}
@@ -638,7 +638,7 @@ public class SimpleFacebook
 	{
 		Session session = getOpenSession();
 		String appNamespace = mConfiguration.getNamespace();
-	
+
 		Request request = new Request(session, story.getGraphPath(appNamespace), story.getActionBundle(), HttpMethod.POST, new Request.Callback()
 		{
 			@Override
@@ -657,7 +657,7 @@ public class SimpleFacebook
 					{
 						Log.i(TAG, "JSON error " + e.getMessage());
 					}
-	
+
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
@@ -682,7 +682,7 @@ public class SimpleFacebook
 				}
 			}
 		});
-	
+
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 	}
@@ -751,7 +751,7 @@ public class SimpleFacebook
 		return getOpenSession().getPermissions();
 	}
 
-	private void openSession(Session session)
+	private void openSession(Session session, boolean isRead)
 	{
 		Session.OpenRequest request = new Session.OpenRequest(mActivity);
 		if (request != null)
@@ -769,8 +769,15 @@ public class SimpleFacebook
 				mSessionStatusCallback.askPublishPermissions();
 			}
 
-			// Open session with read permissions
-			session.openForRead(request);
+			if (isRead)
+			{
+				// Open session with read permissions
+				session.openForRead(request);
+			}
+			else
+			{
+				session.openForPublish(request);
+			}
 		}
 	}
 
@@ -782,7 +789,7 @@ public class SimpleFacebook
 	 * Any open method must be called at most once, and cannot be called after the Session is closed. Calling
 	 * the method at an invalid time will result in {@link UnsupportedOperationException}.
 	 */
-	private static void reopenSession()
+	private void reopenSession()
 	{
 		Session session = Session.getActiveSession();
 		if (session != null && session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
@@ -790,11 +797,11 @@ public class SimpleFacebook
 			List<String> permissions = session.getPermissions();
 			if (permissions.containsAll(mConfiguration.getPublishPermissions()))
 			{
-				session.openForPublish(new Session.OpenRequest(mActivity));
+				openSession(session, false);
 			}
 			else if (permissions.containsAll(mConfiguration.getReadPermissions()))
 			{
-				session.openForRead(new Session.OpenRequest(mActivity));
+				openSession(session, true);
 			}
 		}
 	}
