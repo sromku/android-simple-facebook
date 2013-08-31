@@ -12,8 +12,8 @@ public class SimpleFacebookConfiguration
 	private String mNamespace;
 	private List<String> mReadPermissions = null;
 	private List<String> mPublishPermissions = null;
-	private SessionDefaultAudience mDefaultAudience = SessionDefaultAudience.FRIENDS;
-	private SessionLoginBehavior mLoginBehavior = SessionLoginBehavior.SSO_WITH_FALLBACK;
+	private SessionDefaultAudience mDefaultAudience = null;
+	private SessionLoginBehavior mLoginBehavior = null;
 	private boolean mHasPublishPermissions = false;
 
 	private SimpleFacebookConfiguration(Builder builder)
@@ -22,6 +22,8 @@ public class SimpleFacebookConfiguration
 		this.mNamespace = builder.mNamespace;
 		this.mReadPermissions = builder.mReadPermissions;
 		this.mPublishPermissions = builder.mPublishPermissions;
+		this.mDefaultAudience = builder.mDefaultAudience;
+		this.mLoginBehavior = builder.mLoginBehavior;
 
 		if (this.mPublishPermissions.size() > 0)
 		{
@@ -105,6 +107,8 @@ public class SimpleFacebookConfiguration
 		private String mNamespace = null;
 		private List<String> mReadPermissions = new ArrayList<String>();
 		private List<String> mPublishPermissions = new ArrayList<String>();
+		private SessionDefaultAudience mDefaultAudience = SessionDefaultAudience.FRIENDS;
+		private SessionLoginBehavior mLoginBehavior = SessionLoginBehavior.SSO_WITH_FALLBACK;
 
 		public Builder()
 		{
@@ -160,6 +164,22 @@ public class SimpleFacebookConfiguration
 		}
 
 		/**
+		 * @param mDefaultAudience the mDefaultAudience to set
+		 */
+		public void setDefaultAudience(SessionDefaultAudience defaultAudience)
+		{
+			mDefaultAudience = defaultAudience;
+		}
+
+		/**
+		 * @param mLoginBehavior the mLoginBehavior to set
+		 */
+		public void setLoginBehavior(SessionLoginBehavior loginBehavior)
+		{
+			mLoginBehavior = loginBehavior;
+		}
+
+		/**
 		 * Build the configuration for storage tool.
 		 * 
 		 * @return
@@ -168,5 +188,46 @@ public class SimpleFacebookConfiguration
 		{
 			return new SimpleFacebookConfiguration(this);
 		}
+
+	}
+
+	public String toString()
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder
+			.append("[ ")
+			
+			// app id
+			.append("mAppId:")
+			.append(mAppId)
+			.append(", ")
+			
+			// namespace
+			.append("mNamespace:")
+			.append(mNamespace)
+			.append(", ")
+			
+			// default audience
+			.append("mDefaultAudience:")
+			.append(mDefaultAudience.name())
+			.append(", ")
+			
+			// login behavior
+			.append("mLoginBehavior:")
+			.append(mLoginBehavior.name())
+			.append(", ")
+			
+			// read permissions
+			.append("mReadPermissions:")
+			.append(mReadPermissions.toString())
+			.append(", ")
+			
+			// publish permissions
+			.append("mPublishPermissions:")
+			.append(mPublishPermissions.toString())
+		
+			.append(" ]");
+		
+		return stringBuilder.toString();
 	}
 }
