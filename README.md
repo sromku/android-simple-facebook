@@ -52,7 +52,7 @@ String[] friends = new String[]
 	"751875181"
 };
 
-mSimpleFacebook.invite(MainActivity.this, friends, "Some free text", null);
+mSimpleFacebook.invite(friends, "Some free text", null);
 ```
 
 ### Get my profile
@@ -194,7 +194,7 @@ OnLoginListener onLoginListener = new SimpleFacebook.OnLoginListener()
 	@Override
 	public void onNotAcceptingPermissions()
 	{
-		Log.w(TAG, "User didn't accept publish permissions");
+		Log.w(TAG, "User didn't accept read permissions");
 	}
 	
 };
@@ -346,7 +346,7 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 Show dialog with a list of all your friends. Call for `invite(Activity, String, OnInviteListener)`
 The `String` is the message to be shown in the invitation. 
 ``` java
-mSimpleFacebook.invite(MainActivity.this, "I invite you to use this app", onInviteListener);
+mSimpleFacebook.invite("I invite you to use this app", onInviteListener);
 ```
 
 #### Suggested friends
@@ -360,7 +360,7 @@ String[] friends = new String[]
 	"1456233371",
 	"100000490891462"
 };
-mSimpleFacebook.invite(MainActivity.this, friends, "I invite you to use this app", onInviteListener);
+mSimpleFacebook.invite(friends, "I invite you to use this app", onInviteListener);
 ```
 
 #### One friend only
@@ -368,7 +368,7 @@ Show dialog with only one friend to invite.
 
 ``` java
 String friend = "630243197";
-mSimpleFacebook.invite(MainActivity.this, friend, "I invite you to use this app", onInviteListener);
+mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener);
 ```
 
 ### Get my profile
