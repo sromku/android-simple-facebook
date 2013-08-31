@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -28,6 +27,9 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
+import com.sromku.simple.fb.utils.Errors;
+import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.Logger;
 
 /**
  * Simple API which wraps Facebook SDK 3.0
@@ -51,8 +53,6 @@ import com.facebook.widget.WebDialog;
  */
 public class SimpleFacebook
 {
-	private static final String TAG = SimpleFacebook.class.getName();
-
 	private static SimpleFacebook mInstance = null;
 	private static SimpleFacebookConfiguration mConfiguration = new SimpleFacebookConfiguration.Builder().build();
 
@@ -60,10 +60,6 @@ public class SimpleFacebook
 	private SessionStatusCallback mSessionStatusCallback = null;
 
 	private WebDialog mDialog = null;
-
-	private static final String FAIL_LOGIN = "You are not logged in";
-	private static final String FAIL_PERMISSIONS_PUBLISH = "You didn't set 'publish_action' permission in configuration";
-	private static final String FAIL_CANCEL_PERMISSIONS_PUBLISH = "Publish permissions weren't accepted";
 
 	private SimpleFacebook()
 	{
@@ -86,7 +82,7 @@ public class SimpleFacebook
 	 * 
 	 * @param facebookToolsConfiguration
 	 */
-	public static void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
+	public void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
 	{
 		mConfiguration = facebookToolsConfiguration;
 	}
@@ -100,6 +96,9 @@ public class SimpleFacebook
 	{
 		if (isLogin())
 		{
+			// log
+			logInfo("You were already logged in before calling 'login()' method");
+
 			if (onLoginListener != null)
 			{
 				onLoginListener.onLogin();
@@ -120,7 +119,7 @@ public class SimpleFacebook
 			session.addCallback(mSessionStatusCallback);
 
 			/*
-			 * If session is not opened, the open it
+			 * If session is not opened, then open it
 			 */
 			if (!session.isOpened())
 			{
@@ -146,7 +145,7 @@ public class SimpleFacebook
 			Session session = Session.getActiveSession();
 			if (session != null && !session.isClosed())
 			{
-				mSessionStatusCallback.onLogoutListener = onLogoutListener;
+				mSessionStatusCallback.mOnLogoutListener = onLogoutListener;
 				session.closeAndClearTokenInformation();
 				session.removeCallback(mSessionStatusCallback);
 
@@ -158,6 +157,9 @@ public class SimpleFacebook
 		}
 		else
 		{
+			// log
+			logInfo("You were already logged out before calling 'logout()' method");
+
 			if (onLogoutListener != null)
 			{
 				onLogoutListener.onLogout();
@@ -186,6 +188,9 @@ public class SimpleFacebook
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
+						// log
+						logError("failed to get profile", error.getException());
+
 						// callback with 'exception'
 						if (onProfileRequestListener != null)
 						{
@@ -214,6 +219,19 @@ public class SimpleFacebook
 				onProfileRequestListener.onThinking();
 			}
 		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+
+			// log
+			logError(reason, null);
+
+			// callback with 'fail' due to not being loged
+			if (onProfileRequestListener != null)
+			{
+				onProfileRequestListener.onFail(reason);
+			}
+		}
 	}
 
 	/**
@@ -238,6 +256,9 @@ public class SimpleFacebook
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
+						// log
+						logError("failed to get friends", error.getException());
+
 						// callback with 'exception'
 						if (onFriendsRequestListener != null)
 						{
@@ -268,6 +289,19 @@ public class SimpleFacebook
 			if (onFriendsRequestListener != null)
 			{
 				onFriendsRequestListener.onThinking();
+			}
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+
+			// log
+			logError(reason, null);
+
+			// callback with 'fail' due to not being loged
+			if (onFriendsRequestListener != null)
+			{
+				onFriendsRequestListener.onFail(reason);
 			}
 		}
 	}
@@ -323,7 +357,12 @@ public class SimpleFacebook
 						public void onNotAcceptingPermissions()
 						{
 							// this fail can happen when user doesn't accept the publish permissions
-							onPublishListener.onFail(FAIL_CANCEL_PERMISSIONS_PUBLISH);
+							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+
+							// log
+							logError(reason, null);
+
+							onPublishListener.onFail(reason);
 						}
 					};
 
@@ -337,10 +376,15 @@ public class SimpleFacebook
 			}
 			else
 			{
+				String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, "publish_action");
+
+				// log
+				logError(reason, null);
+
 				// callback with 'fail' due to insufficient permissions
 				if (onPublishListener != null)
 				{
-					onPublishListener.onFail(FAIL_PERMISSIONS_PUBLISH);
+					onPublishListener.onFail(reason);
 				}
 			}
 		}
@@ -349,7 +393,12 @@ public class SimpleFacebook
 			// callback with 'fail' due to not being loged
 			if (onPublishListener != null)
 			{
-				onPublishListener.onFail(FAIL_LOGIN);
+				String reason = Errors.getError(ErrorMsg.LOGIN);
+
+				// log
+				logError(reason, null);
+
+				onPublishListener.onFail(reason);
 			}
 		}
 	}
@@ -392,7 +441,12 @@ public class SimpleFacebook
 						public void onNotAcceptingPermissions()
 						{
 							// this fail can happen when user doesn't accept the publish permissions
-							onPublishListener.onFail(FAIL_CANCEL_PERMISSIONS_PUBLISH);
+							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+
+							// log
+							logError(reason, null);
+
+							onPublishListener.onFail(reason);
 						}
 					};
 
@@ -409,7 +463,12 @@ public class SimpleFacebook
 				// callback with 'fail' due to insufficient permissions
 				if (onPublishListener != null)
 				{
-					onPublishListener.onFail(FAIL_PERMISSIONS_PUBLISH);
+					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, "publish_action");
+
+					// log
+					logError(reason, null);
+
+					onPublishListener.onFail(reason);
 				}
 			}
 		}
@@ -418,7 +477,12 @@ public class SimpleFacebook
 			// callback with 'fail' due to not being loged
 			if (onPublishListener != null)
 			{
-				onPublishListener.onFail(FAIL_LOGIN);
+				String reason = Errors.getError(ErrorMsg.LOGIN);
+
+				// log
+				logError(reason, null);
+
+				onPublishListener.onFail(reason);
 			}
 		}
 	}
@@ -440,7 +504,12 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail(FAIL_LOGIN);
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+
+			// log
+			logError(reason, null);
+
+			onInviteListener.onFail(reason);
 		}
 	}
 
@@ -466,7 +535,12 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail(FAIL_LOGIN);
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+
+			// log
+			logError(reason, null);
+
+			onInviteListener.onFail(reason);
 		}
 	}
 
@@ -492,7 +566,12 @@ public class SimpleFacebook
 		}
 		else
 		{
-			onInviteListener.onFail(FAIL_LOGIN);
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+
+			// log
+			logError(reason, null);
+
+			onInviteListener.onFail(reason);
 		}
 	}
 
@@ -570,9 +649,22 @@ public class SimpleFacebook
 	 */
 	public String getAccessToken()
 	{
-		// TODO - check if I didn't made login
 		Session session = getOpenSession();
-		return session.getAccessToken();
+		if (session != null)
+		{
+			return session.getAccessToken();
+		}
+		return null;
+	}
+
+	/**
+	 * Get open session
+	 * 
+	 * @return the open session
+	 */
+	public static Session getOpenSession()
+	{
+		return Session.getActiveSession();
 	}
 
 	/**
@@ -602,12 +694,16 @@ public class SimpleFacebook
 					}
 					catch (JSONException e)
 					{
-						Log.i(TAG, "JSON error " + e.getMessage());
+						// log
+						logError("JSON error", e);
 					}
 
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
+						// log
+						logError("Failed to publish", error.getException());
+						
 						// callback with 'exception'
 						if (onPublishListener != null)
 						{
@@ -625,7 +721,13 @@ public class SimpleFacebook
 				}
 				else
 				{
-					onPublishListener.onComplete("0");
+					// log
+					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+
+					if (onPublishListener != null)
+					{
+						onPublishListener.onComplete("0");
+					}
 				}
 			}
 		});
@@ -655,12 +757,16 @@ public class SimpleFacebook
 					}
 					catch (JSONException e)
 					{
-						Log.i(TAG, "JSON error " + e.getMessage());
+						// log
+						logError("JSON error", e);
 					}
 
 					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
+						// log
+						logError("Failed to publish", error.getException());
+						
 						// callback with 'exception'
 						if (onPublishListener != null)
 						{
@@ -678,7 +784,13 @@ public class SimpleFacebook
 				}
 				else
 				{
-					onPublishListener.onComplete("0");
+					// log
+					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+
+					if (onPublishListener != null)
+					{
+						onPublishListener.onComplete("0");
+					}
 				}
 			}
 		});
@@ -697,6 +809,9 @@ public class SimpleFacebook
 				{
 					if (error != null)
 					{
+						// log
+						logError("Failed to invite", error);
+						
 						if (error instanceof FacebookOperationCanceledException)
 						{
 							onInviteListener.onCancel();
@@ -729,16 +844,6 @@ public class SimpleFacebook
 		dialogWindow.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		mDialog.show();
-	}
-
-	/**
-	 * Get open session
-	 * 
-	 * @return the open session
-	 */
-	private static Session getOpenSession()
-	{
-		return Session.getActiveSession();
 	}
 
 	/**
@@ -844,7 +949,7 @@ public class SimpleFacebook
 		private boolean mAskPublishPermissions = false;
 		private boolean mDoOnLogin = false;
 		OnLoginListener mOnLoginListener = null;
-		OnLogoutListener onLogoutListener = null;
+		OnLogoutListener mOnLogoutListener = null;
 		OnReopenSessionListener mOnReopenSessionListener = null;
 
 		@Override
@@ -857,6 +962,8 @@ public class SimpleFacebook
 
 			if (exception != null)
 			{
+				// log
+				logError("SessionStatusCallback: exception=", exception);
 
 				if (exception instanceof FacebookOperationCanceledException)
 				{
@@ -882,22 +989,22 @@ public class SimpleFacebook
 				}
 			}
 
+			// log
+			logInfo("SessionStatusCallback: state=" + state.name() + ", session=" + String.valueOf(session));
+			
 			switch (state)
 			{
 			case CLOSED:
-				onLogoutListener.onLogout();
+				mOnLogoutListener.onLogout();
 				break;
 
 			case CLOSED_LOGIN_FAILED:
-				Log.i(TAG, state.name());
 				break;
 
 			case CREATED:
-				Log.i(TAG, state.name());
 				break;
 
 			case CREATED_TOKEN_LOADED:
-				Log.i(TAG, state.name());
 				break;
 
 			case OPENING:
@@ -905,7 +1012,7 @@ public class SimpleFacebook
 				break;
 
 			case OPENED:
-
+				
 				/*
 				 * Check if we came from publishing actions where we ask again for publish permissions
 				 */
@@ -973,6 +1080,23 @@ public class SimpleFacebook
 		public void askPublishPermissions()
 		{
 			mAskPublishPermissions = true;
+		}
+	}
+
+	private static void logInfo(String message)
+	{
+		Logger.logInfo(SimpleFacebook.class, message);
+	}
+	
+	private static void logError(String error, Throwable throwable)
+	{
+		if (throwable != null)
+		{
+			Logger.logError(SimpleFacebook.class, error, throwable);
+		}
+		else
+		{
+			Logger.logError(SimpleFacebook.class, error);
 		}
 	}
 
