@@ -82,7 +82,7 @@ public class SimpleFacebook
 	 * 
 	 * @param facebookToolsConfiguration
 	 */
-	public void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
+	public static void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
 	{
 		mConfiguration = facebookToolsConfiguration;
 	}
