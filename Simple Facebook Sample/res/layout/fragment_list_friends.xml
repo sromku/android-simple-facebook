@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- Login to facebook -->
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:text="@string/login" />
+
+    <!-- Logout to facebook -->
+
+    <Button
+        android:id="@+id/button_logout"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:text="@string/logout" />
+
+    <!-- Status of login/logout -->
+
+    <TextView
+        android:id="@+id/text_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_login"
+        android:layout_centerHorizontal="true"
+        android:text="" />
+
+    <!-- Get friends -->
+
+    <Button
+        android:id="@+id/button_get_friends"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_logout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/get_friends" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/button_get_friends"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+    </ListView>
+
+</RelativeLayout>

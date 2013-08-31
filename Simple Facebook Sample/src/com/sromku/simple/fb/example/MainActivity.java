@@ -31,10 +31,12 @@ import com.sromku.simple.fb.SimpleFacebook.OnLogoutListener;
 import com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnPublishListener;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
+import com.sromku.simple.fb.example.friends.FriendsActivity;
+import com.sromku.simple.fb.utils.Logger;
 
 public class MainActivity extends Activity
 {
-	protected static final String TAG = "com.sromku.simple.fb.example";
+	protected static final String TAG = MainActivity.class.getName();
 
 	private static final String APP_ID = "625994234086470";
 	private static final String APP_NAMESPACE = "sromkuapp";
@@ -51,6 +53,7 @@ public class MainActivity extends Activity
 	private Button mButtonInviteOne;
 	private Button mButtonGetProfile;
 	private Button mButtonGetFriends;
+	private Button mButtonFragments;
 
 	// Login listener
 	private OnLoginListener mOnLoginListener = new OnLoginListener()
@@ -92,12 +95,11 @@ public class MainActivity extends Activity
 			toast("You didn't accept read permissions");
 		}
 	};
-	
-	
+
 	// Logout listener
 	private OnLogoutListener mOnLogoutListener = new OnLogoutListener()
 	{
-		
+
 		@Override
 		public void onFail(String reason)
 		{
@@ -172,6 +174,14 @@ public class MainActivity extends Activity
 	}
 
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		setUIState();
+		mSimpleFacebook = SimpleFacebook.getInstance(this);
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
@@ -183,6 +193,8 @@ public class MainActivity extends Activity
 	 */
 	private void inizializeFacebook()
 	{
+		Logger.DEBUG_WITH_STACKTRACE = true;
+
 		Permissions[] permissions = new Permissions[]
 		{
 			Permissions.BASIC_INFO,
@@ -503,7 +515,21 @@ public class MainActivity extends Activity
 		mButtonInviteOne = (Button)findViewById(R.id.button_invite_one);
 		mButtonGetProfile = (Button)findViewById(R.id.button_get_profile);
 		mButtonGetFriends = (Button)findViewById(R.id.button_get_friends);
+		mButtonFragments = (Button)findViewById(R.id.button_fragments);
+		mButtonFragments.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+				startActivity(intent);
+			}
+		});
 
+	}
+
+	private void setUIState()
+	{
 		if (mSimpleFacebook.isLogin())
 		{
 			loggedInUIState();
