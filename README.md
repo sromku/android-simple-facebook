@@ -99,9 +99,8 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 		android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 	```
 
-## Usage
-
-#### 1. Just add next lines in your `Activity` class. 
+## Configuration
+Add next lines in your `Application` or `Activity` class. 
 
 - Define and select permissions you need:
 
@@ -109,7 +108,7 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 	Permissions[] permissions = new Permissions[]
 	{
 		Permissions.USER_PHOTOS,
-		Permissions.FRIENDS_PHOTOS,
+		Permissions.EMAIL,
 		Permissions.PUBLISH_ACTION
 	};
 	``` 
@@ -124,12 +123,26 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 		.build();
 	``` 	
 
-- And, create `SimpleFacebook` instance and set this configuration: 
+- And, set this configuration: 
 
 	``` java
-	SimpleFacebook simpleFacebook = SimpleFacebook.getInstance(Activity);
-	simpleFacebook.setConfiguration(configuration);
+	SimpleFacebook.setConfiguration(configuration);
 	``` 
+	There is no need to set the configuration in any activity, it should be done just once.
+
+## Usage
+
+#### 1. `onResume()`
+In each `Activity` where you want to use the library, just override the `onResume()` and set `SimpleFacebook` instance:
+
+``` java
+@Override
+public void onResume()
+{
+	super.onResume();
+	mSimpleFacebook = SimpleFacebook.getInstance(this);
+}
+```
 
 #### 2. Run the action (login, publish, invite,…)
 
