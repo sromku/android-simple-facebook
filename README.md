@@ -1,7 +1,7 @@
 android-simple-facebook
 =======================
 
-Simple Facebook API for Android which wraps original [**Facebook SDK 3.5**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.5**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
