@@ -248,6 +248,15 @@ mSimpleFacebook.logout(onLogoutListener);
 Set `OnPublishListener` and call for `publish(Feed, OnPublishListener)`.
 You can also publish without setting the listener by calling for `publish(Feed)` method.
 
+#### Basic properties
+
+* `message` - The message of the user 
+* `name` - The name of the link attachment
+* `caption` - The caption of the link (appears beneath the link name)
+* `description` - The description of the link (appears beneath the link caption)
+* `picture` - The URL of a picture attached to this post. The picture must be at least 200px by 200px
+* `link` - The link attached to this post
+
 ``` java
 // create publish listener
 OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
@@ -298,6 +307,32 @@ And, the **result** is:
 
 <p align="center">
   <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed.png" alt="Published feed"/>
+</p>
+
+#### Less basic properties
+
+* `properties` - The key/value pairs which will appear in the stream attachment beneath the description
+* `actions` - One action link which will appear next to the 'Comment' and 'Like' link under posts
+
+``` java
+// build feed
+Feed feed = new Feed.Builder()
+	.setMessage("Clone it out...")
+	.setName("Simple Facebook SDK for Android")
+	.setCaption("Code less, do the same.")
+	.setDescription("Login, publish feeds and stories, invite friends and more...")
+	.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
+	.setLink("https://github.com/sromku/android-simple-facebook")
+	.addAction("Clone", "https://github.com/sromku/android-simple-facebook")
+	.addProperty("Full documentation", "http://sromku.github.io/android-simple-facebook", "http://sromku.github.io/android-simple-facebook")
+	.addProperty("Stars", "14")
+	.build();
+```
+
+And, the **result** is:
+
+<p align="center">
+  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed_advanced.png" alt="Published feed"/>
 </p>
 
 ### Publish story (open graph)
