@@ -41,11 +41,8 @@ public class Feed
 			public static final String NAME = "name";
 			public static final String CAPTION = "caption";
 			public static final String DESCRIPTION = "description";
-			public static final String SOURCE = "source";
-			public static final String TO = "to";
 			public static final String PROPERTIES = "properties";
 			public static final String ACTIONS = "actions";
-			public static final String REF = "ref";
 		}
 
 		public Builder()
