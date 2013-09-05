@@ -164,19 +164,23 @@ public class SimpleFacebookConfiguration
 		}
 
 		/**
-		 * @param mDefaultAudience the mDefaultAudience to set
+		 * @param defaultAudience The defaultAudience to set. 
+		 * @see SessionDefaultAudience
 		 */
-		public void setDefaultAudience(SessionDefaultAudience defaultAudience)
+		public Builder setDefaultAudience(SessionDefaultAudience defaultAudience)
 		{
 			mDefaultAudience = defaultAudience;
+			return this;
 		}
 
 		/**
-		 * @param mLoginBehavior the mLoginBehavior to set
+		 * @param loginBehavior The loginBehavior to set.
+		 * @see SessionLoginBehavior
 		 */
-		public void setLoginBehavior(SessionLoginBehavior loginBehavior)
+		public Builder setLoginBehavior(SessionLoginBehavior loginBehavior)
 		{
 			mLoginBehavior = loginBehavior;
+			return this;
 		}
 
 		/**
@@ -196,38 +200,38 @@ public class SimpleFacebookConfiguration
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder
 			.append("[ ")
-			
+
 			// app id
 			.append("mAppId:")
 			.append(mAppId)
 			.append(", ")
-			
+
 			// namespace
 			.append("mNamespace:")
 			.append(mNamespace)
 			.append(", ")
-			
+
 			// default audience
 			.append("mDefaultAudience:")
 			.append(mDefaultAudience.name())
 			.append(", ")
-			
+
 			// login behavior
 			.append("mLoginBehavior:")
 			.append(mLoginBehavior.name())
 			.append(", ")
-			
+
 			// read permissions
 			.append("mReadPermissions:")
 			.append(mReadPermissions.toString())
 			.append(", ")
-			
+
 			// publish permissions
 			.append("mPublishPermissions:")
 			.append(mPublishPermissions.toString())
-		
+
 			.append(" ]");
-		
+
 		return stringBuilder.toString();
 	}
 }
