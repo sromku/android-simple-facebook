@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.sromku</groupId>
+    <artifactId>android-simple-facebook-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>android-simple-facebook-sample</artifactId>
+  <name>Android Simple Facebook Sample</name>
+  <packaging>apk</packaging>
+  <version>1.0-SNAPSHOT</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>${android.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.sromku</groupId>
+      <artifactId>android-simple-facebook</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>apklib</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+        <artifactId>android-maven-plugin</artifactId>
+        <version>${android.maven-plugin.version}</version>
+        <configuration>
+          <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+          <assetsDirectory>${project.basedir}/assets</assetsDirectory>
+          <resourceDirectory>${project.basedir}/res</resourceDirectory>
+          <apkDebug>${android.apkDebug}</apkDebug>
+          <release>${android.release}</release>
+          <sign>
+            <debug>${android.sign.debug}</debug>
+          </sign>
+          <sdk>
+            <platform>${android.platform}</platform>
+          </sdk>
+          <undeployBeforeDeploy>true</undeployBeforeDeploy>
+          <dex>
+            <jvmArguments>
+              <jvmArgument>-Xmx1024m</jvmArgument>
+            </jvmArguments>
+          </dex>
+          <proguard>
+            <skip>${android.skipProGuard}</skip>
+            <config>proguard.cfg</config>
+            <jvmArguments>
+              <jvmArgument>-Xms256m</jvmArgument>
+              <jvmArgument>-Xmx512m</jvmArgument>
+            </jvmArguments>
+          </proguard>
+        </configuration>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>deploy-on-install</id>
+            <phase>install</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

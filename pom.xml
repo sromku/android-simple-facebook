@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
+  <groupId>com.github.sromku</groupId>
+  <artifactId>android-simple-facebook-project</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Android Simple Facebook Project</name>
+  <url>http://github.com/sromku/android-simple-facebook/</url>
+  <description>Simple Facebook SDK for Android which wraps original Facebook SDK 3.5.</description>
+
+  <scm>
+    <connection>scm:git:https://github.com/sromku/android-simple-facebook.git</connection>
+    <developerConnection>scm:git:https://github.com/sromku/android-simple-facebook.git</developerConnection>
+    <url>http://github.com/sromku/android-simple-facebook/</url>
+  </scm>
+
+  <modules>
+    <module>Simple Facebook</module>
+    <module>Simple Facebook Sample</module>
+  </modules>
+
+  <properties>
+    <android.sdk.path>/home/blackhex/local/android-studio/sdk/</android.sdk.path>
+    <android.version>4.1.1.4</android.version>
+    <android.maven-plugin.version>3.6.1</android.maven-plugin.version>
+    <android.platform>18</android.platform>
+    <android.sign.debug>true</android.sign.debug>
+  </properties>
+
+  <!-- External repositories -->
+  <repositories>
+    <repository>
+      <id>The mavenized Facebook Android API</id>
+      <url>http://avianey.github.io/facebook-api-android-maven/</url>
+    </repository>
+  </repositories>
+
+  <!-- Common dependencies for all modules -->
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Common plugin configuration for all children -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+            <showDeprecation>true</showDeprecation>
+            <showWarnings>true</showWarnings>
+            <compilerArgs>
+              <arg>-Xlint</arg>
+              <arg>-Xlint:-serial</arg>
+              <arg>-Xlint:-path</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.2</version>
+        </plugin>
+
+        <!-- this shuts m2eclipse up about various Maven plugins -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.0,)</versionRange>
+                    <goals>
+                      <goal>unpack</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>
+                      com.jayway.maven.plugins.android.generation2
+                    </groupId>
+                    <artifactId>
+                      android-maven-plugin
+                    </artifactId>
+                    <versionRange>
+                      [3.1.1,)
+                    </versionRange>
+                    <goals>
+                      <goal>generate-sources</goal>
+                      <goal>unpack</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.pyx4j</groupId>
+                    <artifactId>maven-junction-plugin</artifactId>
+                    <versionRange>[1.0.3,)</versionRange>
+                    <goals>
+                      <goal>link</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
