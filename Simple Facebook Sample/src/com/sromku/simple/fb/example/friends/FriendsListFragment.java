@@ -15,11 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sromku.simple.fb.Profile;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLoginListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLogoutListener;
+import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.R;
 
 public class FriendsListFragment extends Fragment
