@@ -152,12 +152,14 @@ public void onResume()
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
 * [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
 	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
+* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
