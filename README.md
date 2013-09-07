@@ -527,7 +527,7 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 mSimpleFacebook.getProfile(onProfileRequestListener);
 ```
 
-### Get Friends
+### Get friends
 
 Set `OnFriendsRequestListener` and call for `getFriends(OnFriendsRequestListener)`
 
@@ -566,7 +566,7 @@ OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriends
 mSimpleFacebook.getFriends(onFriendsRequestListener);
 ```
 
-### Get Albums
+### Get albums
 
 Set `OnAlbumsRequestListener` and call for `getAlbums(OnAlbumsRequestListener)`
 
