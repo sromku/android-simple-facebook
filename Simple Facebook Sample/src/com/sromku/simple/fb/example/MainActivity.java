@@ -1,36 +1,34 @@
 package com.sromku.simple.fb.example;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
-import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sromku.simple.fb.Feed;
 import com.sromku.simple.fb.Permissions;
-import com.sromku.simple.fb.Profile;
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebook.OnAlbumsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnInviteListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLoginListener;
 import com.sromku.simple.fb.SimpleFacebook.OnLogoutListener;
 import com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnPublishListener;
+import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.friends.FriendsActivity;
+import com.sromku.simple.fb.example.utils.Utils;
 
 public class MainActivity extends Activity
 {
@@ -38,16 +36,19 @@ public class MainActivity extends Activity
 
 	private SimpleFacebook mSimpleFacebook;
 
+	private ProgressDialog mProgress;
 	private Button mButtonLogin;
 	private Button mButtonLogout;
 	private TextView mTextStatus;
 	private Button mButtonPublishFeed;
 	private Button mButtonPublishStory;
+	private Button mButtonPublishPhoto;
 	private Button mButtonInviteAll;
 	private Button mButtonInviteSuggested;
 	private Button mButtonInviteOne;
 	private Button mButtonGetProfile;
 	private Button mButtonGetFriends;
+	private Button mButtonGetAlbums;
 	private Button mButtonFragments;
 
 	// Login listener
@@ -131,15 +132,13 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		// test local language
-		updateLanguage("en");
-		setContentView(R.layout.activity_main);
 
-		/*
-		 * Initialize facebook
-		 */
+		// test local language
+		Utils.updateLanguage(getApplicationContext(), "en");
+		Utils.printHashKey(getApplicationContext());
+
+		setContentView(R.layout.activity_main);
 		initUI();
-		printHash();
 
 		/*
 		 * ---- Examples -----
@@ -154,17 +153,23 @@ public class MainActivity extends Activity
 		// 3. Publish feed example
 		publishFeedExample();
 
-		// 4. Publish open graph story example
+		// 4. Publish photo example
+		publishPhotoExample();
+
+		// 5. Publish open graph story example
 		publishStoryExample();
 
-		// 5. Invite examples
+		// 6. Invite examples
 		inviteExamples();
 
-		// 6. Get my profile example
+		// 7. Get my profile example
 		getProfileExample();
 
-		// 7. Get friends example
+		// 8. Get friends example
 		getFriendsExample();
+
+		// 9. Get Albums example
+		getAlbumsExample();
 	}
 
 	@Override
@@ -225,6 +230,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onFail(String reason)
 			{
+				hideDialog();
 				// insure that you are logged in before publishing
 				Log.w(TAG, "Failed to publish");
 			}
@@ -232,6 +238,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onException(Throwable throwable)
 			{
+				hideDialog();
 				Log.e(TAG, "Bad thing happened", throwable);
 			}
 
@@ -239,12 +246,13 @@ public class MainActivity extends Activity
 			public void onThinking()
 			{
 				// show progress bar or something to the user while publishing
-				toast("Thinking...");
+				showDialog();
 			}
 
 			@Override
 			public void onComplete(String postId)
 			{
+				hideDialog();
 				toast("Published successfully. The new post id = " + postId);
 			}
 		};
@@ -275,7 +283,63 @@ public class MainActivity extends Activity
 	 */
 	private void publishStoryExample()
 	{
-		// TODO Auto-generated method stub
+		// TODO
+	}
+
+	/**
+	 * Publish photo example. <br>
+	 * Must use {@link Permissions#PUBLISH_STREAM}
+	 */
+	private void publishPhotoExample()
+	{
+		mButtonPublishPhoto.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				// take screenshot
+				final Bitmap bitmap = Utils.takeScreenshot(MainActivity.this);
+
+				// create Photo instace and add some properties
+				Photo photo = new Photo(bitmap);
+				photo.addDescription("Screenshot from #android_simple_facebook sample application");
+				photo.addPlace("110619208966868");
+
+				// publish
+				mSimpleFacebook.publish(photo, new OnPublishListener()
+				{
+
+					@Override
+					public void onFail(String reason)
+					{
+						hideDialog();
+						// insure that you are logged in before publishing
+						Log.w(TAG, "Failed to publish");
+					}
+
+					@Override
+					public void onException(Throwable throwable)
+					{
+						hideDialog();
+						Log.e(TAG, "Bad thing happened", throwable);
+					}
+
+					@Override
+					public void onThinking()
+					{
+						// show progress bar or something to the user while publishing
+						showDialog();
+					}
+
+					@Override
+					public void onComplete(String id)
+					{
+						hideDialog();
+						toast("Published successfully. The new image id = " + id);
+					}
+				});
+			}
+		});
 	}
 
 	/**
@@ -367,6 +431,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onFail(String reason)
 			{
+				hideDialog();
 				// insure that you are logged in before getting the profile
 				Log.w(TAG, reason);
 			}
@@ -374,12 +439,14 @@ public class MainActivity extends Activity
 			@Override
 			public void onException(Throwable throwable)
 			{
+				hideDialog();
 				Log.e(TAG, "Bad thing happened", throwable);
 			}
 
 			@Override
 			public void onThinking()
 			{
+				showDialog();
 				// show progress bar or something to the user while fetching profile
 				Log.i(TAG, "Thinking...");
 			}
@@ -387,6 +454,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onComplete(Profile profile)
 			{
+				hideDialog();
 				Log.i(TAG, "My profile id = " + profile.getId());
 				toast("My profile id = " + profile.getId() + ", " + profile.getEmail());
 			}
@@ -422,7 +490,7 @@ public class MainActivity extends Activity
 	}
 
 	/**
-	 * Get my profile example
+	 * Get friends example
 	 */
 	private void getFriendsExample()
 	{
@@ -433,6 +501,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onFail(String reason)
 			{
+				hideDialog();
 				// insure that you are logged in before getting the friends
 				Log.w(TAG, reason);
 			}
@@ -440,12 +509,14 @@ public class MainActivity extends Activity
 			@Override
 			public void onException(Throwable throwable)
 			{
+				hideDialog();
 				Log.e(TAG, "Bad thing happened", throwable);
 			}
 
 			@Override
 			public void onThinking()
 			{
+				showDialog();
 				// show progress bar or something to the user while fetching profile
 				Log.i(TAG, "Thinking...");
 			}
@@ -453,6 +524,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onComplete(List<Profile> friends)
 			{
+				hideDialog();
 				Log.i(TAG, "Number of friends = " + friends.size());
 				toast("Number of friends = " + friends.size());
 			}
@@ -472,6 +544,62 @@ public class MainActivity extends Activity
 
 	}
 
+	/**
+	 * Get albums example <br>
+	 * Must use {@link Permissions#USER_PHOTOS}
+	 */
+	private void getAlbumsExample()
+	{
+		// listener for friends request
+		final OnAlbumsRequestListener onAlbumsRequestListener = new SimpleFacebook.OnAlbumsRequestListener()
+		{
+
+			@Override
+			public void onFail(String reason)
+			{
+				hideDialog();
+				// insure that you are logged in before getting the friends
+				Log.w(TAG, reason);
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				hideDialog();
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking()
+			{
+				showDialog();
+				// show progress bar or something to the user while fetching profile
+				Log.i(TAG, "Thinking...");
+			}
+
+			@Override
+			public void onComplete(List<Album> albums)
+			{
+				hideDialog();
+				Log.i(TAG, "Number of albums = " + albums.size());
+				toast("Number of albums = " + albums.size());
+			}
+
+		};
+
+		// set button
+		mButtonGetAlbums.setOnClickListener(new View.OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				mSimpleFacebook.getAlbums(onAlbumsRequestListener);
+			}
+		});
+
+	}
+
 	private void initUI()
 	{
 		mButtonLogin = (Button)findViewById(R.id.button_login);
@@ -479,11 +607,13 @@ public class MainActivity extends Activity
 		mTextStatus = (TextView)findViewById(R.id.text_status);
 		mButtonPublishFeed = (Button)findViewById(R.id.button_publish_feed);
 		mButtonPublishStory = (Button)findViewById(R.id.button_publish_story);
+		mButtonPublishPhoto = (Button)findViewById(R.id.button_publish_photo);
 		mButtonInviteAll = (Button)findViewById(R.id.button_invite_all);
 		mButtonInviteSuggested = (Button)findViewById(R.id.button_invite_suggested);
 		mButtonInviteOne = (Button)findViewById(R.id.button_invite_one);
 		mButtonGetProfile = (Button)findViewById(R.id.button_get_profile);
 		mButtonGetFriends = (Button)findViewById(R.id.button_get_friends);
+		mButtonGetAlbums = (Button)findViewById(R.id.button_get_albums);
 		mButtonFragments = (Button)findViewById(R.id.button_fragments);
 		mButtonFragments.setOnClickListener(new View.OnClickListener()
 		{
@@ -525,11 +655,13 @@ public class MainActivity extends Activity
 		mButtonLogout.setEnabled(true);
 		mButtonPublishFeed.setEnabled(true);
 		mButtonPublishStory.setEnabled(true);
+		mButtonPublishPhoto.setEnabled(true);
 		mButtonInviteAll.setEnabled(true);
 		mButtonInviteSuggested.setEnabled(true);
 		mButtonInviteOne.setEnabled(true);
 		mButtonGetProfile.setEnabled(true);
 		mButtonGetFriends.setEnabled(true);
+		mButtonGetAlbums.setEnabled(true);
 		mTextStatus.setText("Logged in");
 	}
 
@@ -539,53 +671,25 @@ public class MainActivity extends Activity
 		mButtonLogout.setEnabled(false);
 		mButtonPublishFeed.setEnabled(false);
 		mButtonPublishStory.setEnabled(false);
+		mButtonPublishPhoto.setEnabled(false);
 		mButtonInviteAll.setEnabled(false);
 		mButtonInviteSuggested.setEnabled(false);
 		mButtonInviteOne.setEnabled(false);
 		mButtonGetProfile.setEnabled(false);
 		mButtonGetFriends.setEnabled(false);
+		mButtonGetAlbums.setEnabled(false);
 		mTextStatus.setText("Logged out");
 	}
 
-	/**
-	 * Print hash
-	 */
-	private void printHash()
+	private void showDialog()
 	{
-		try
-		{
-			PackageInfo info = getPackageManager().getPackageInfo(TAG,
-				PackageManager.GET_SIGNATURES);
-			for (Signature signature: info.signatures)
-			{
-				MessageDigest md = MessageDigest.getInstance("SHA");
-				md.update(signature.toByteArray());
-				String keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
-				Log.d(TAG, "keyHash: " + keyHash);
-			}
-		}
-		catch (NameNotFoundException e)
-		{
-
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-
-		}
+		mProgress = ProgressDialog.show(this, "Thinking",
+			"Waiting for Facebook", true);
 	}
 
-	/**
-	 * Update language
-	 * 
-	 * @param code The language code. Like: en, cz, iw, ...
-	 */
-	private void updateLanguage(String code)
+	private void hideDialog()
 	{
-		Locale locale = new Locale(code);
-		Locale.setDefault(locale);
-		Configuration config = new Configuration();
-		config.locale = locale;
-		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+		mProgress.hide();
 	}
 
 	public class OnProfileRequestAdapter implements OnProfileRequestListener

@@ -27,7 +27,9 @@ public class SampleApplication extends Application
 			Permissions.BASIC_INFO,
 			Permissions.EMAIL,
 			Permissions.USER_BIRTHDAY,
-			Permissions.PUBLISH_ACTION
+			Permissions.USER_PHOTOS,
+			Permissions.PUBLISH_ACTION,
+			Permissions.PUBLISH_STREAM
 		};
 
 		SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
