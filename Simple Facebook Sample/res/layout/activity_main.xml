@@ -60,6 +60,17 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/publish_story" />
+        
+         <!-- Publish Photo -->
+
+        <Button
+            android:id="@+id/button_publish_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_publish_story"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/publish_photo" />
 
         <!-- Invite all -->
 
@@ -68,7 +79,7 @@
             android:layout_width="100dp"
             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/button_publish_story"
+            android:layout_below="@id/button_publish_photo"
             android:layout_margin="10dp"
             android:text="@string/invite_all" />
 
@@ -79,7 +90,7 @@
             android:layout_width="100dp"
             android:layout_height="55dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/button_publish_story"
+            android:layout_below="@id/button_publish_photo"
             android:layout_margin="10dp"
             android:text="@string/invite_one" />
 
@@ -89,7 +100,7 @@
             android:id="@+id/button_invite_suggested"
             android:layout_width="100dp"
             android:layout_height="55dp"
-            android:layout_below="@id/button_publish_story"
+            android:layout_below="@id/button_publish_photo"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/invite_suggested" />
@@ -116,13 +127,24 @@
             android:layout_margin="10dp"
             android:text="@string/get_friends" />
         
+        <!-- Get albums -->
+
+        <Button
+            android:id="@+id/button_get_albums"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_friends"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="@string/get_albums" />
+        
         <!-- Fragment -->
 
         <Button
             android:id="@+id/button_fragments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_get_friends"
+            android:layout_below="@id/button_get_albums"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/fragment_example_" />

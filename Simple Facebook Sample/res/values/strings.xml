@@ -6,11 +6,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="logout">Logout</string>
     <string name="login">Login</string>
-    <string name="publish_feed">Publish Feed</string>
-    <string name="publish_story">Publish Story</string>
-    <string name="invite_all">Invite All</string>
-    <string name="invite_one">Invite One</string>
-    <string name="invite_suggested">Invite Suggested</string>
+    <string name="publish_feed">Publish feed</string>
+    <string name="publish_story">Publish story</string>
+    <string name="invite_all">Invite all</string>
+    <string name="invite_one">Invite one</string>
+    <string name="invite_suggested">Invite suggested</string>
     <string name="get_my_profile">Get my profile</string>
     <string name="get_friends">Get friends</string>
     <string name="fb_feed_caption">Know who are your best friends</string>
@@ -20,5 +20,7 @@
     <string name="fb_feed_message">Who dare to be my opponent? :)</string>
     <string name="fb_feed_image">http://romkuapps.com/Apps/Socialist/blue_version_2.png</string>
     <string name="fragment_example_">Fragment example >></string>
+    <string name="publish_photo">Publish photo</string>
+    <string name="get_albums">Get albums</string>
 
 </resources>
