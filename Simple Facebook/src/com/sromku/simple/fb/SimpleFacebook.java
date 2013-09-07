@@ -27,14 +27,19 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
+import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 
 /**
- * Simple API which wraps Facebook SDK 3.0
+ * Simple Facebook SDK which wraps original Facebook SDK 3.5
  * 
- * <br>
+ * <br><br>
  * <b>Features:</b>
  * <ul>
  * <li>Simple configuration</li>
@@ -42,9 +47,11 @@ import com.sromku.simple.fb.utils.Logger;
  * <li>Login/logout</li>
  * <li>Publish feed</li>
  * <li>Publish open graph story</li>
+ * <li>Publish photo</li>
  * <li>Invite friends</li>
  * <li>Fetch my profile</li>
  * <li>Fetch friends</li>
+ * <li>Fetch albums</li>
  * <li>Predefined all possible permissions. See {@link Permissions}</li>
  * <li>No need to care for correct sequence logging with READ and PUBLISH permissions</li>
  * </ul>
@@ -222,8 +229,6 @@ public class SimpleFacebook
 		else
 		{
 			String reason = Errors.getError(ErrorMsg.LOGIN);
-
-			// log
 			logError(reason, null);
 
 			// callback with 'fail' due to not being loged
@@ -294,8 +299,6 @@ public class SimpleFacebook
 		else
 		{
 			String reason = Errors.getError(ErrorMsg.LOGIN);
-
-			// log
 			logError(reason, null);
 
 			// callback with 'fail' due to not being loged
@@ -307,19 +310,84 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Publish {@link Feed} on the wall.
-	 * 
-	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
-	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#USER_PHOTOS}
 	 */
-	public void publish(Feed feed)
+	public void getAlbums(final OnAlbumsRequestListener onAlbumsRequestListener)
 	{
-		publish(feed, null);
+		// if we are logged in
+		if (isLogin())
+		{
+			// move these params to method call parameters
+			Session session = getOpenSession();
+			Bundle bundle = new Bundle();
+			bundle.putString("date_format", "U");
+			Request request = new Request(session, "me/albums", bundle, HttpMethod.GET, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					List<GraphObject> graphObjects = typedListFromResponse(response, GraphObject.class);
+
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to get albums", error.getException());
+
+						// callback with 'exception'
+						if (onAlbumsRequestListener != null)
+						{
+							onAlbumsRequestListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onAlbumsRequestListener != null)
+						{
+							List<Album> albums = new ArrayList<Album>(graphObjects.size());
+							for (GraphObject graphObject: graphObjects)
+							{
+								Album album = Album.create(graphObject);
+								albums.add(album);
+							}
+							onAlbumsRequestListener.onComplete(albums);
+						}
+					}
+
+				}
+			});
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+
+			// callback with 'thinking'
+			if (onAlbumsRequestListener != null)
+			{
+				onAlbumsRequestListener.onThinking();
+			}
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being loged
+			if (onAlbumsRequestListener != null)
+			{
+				onAlbumsRequestListener.onFail(reason);
+			}
+		}
 	}
 
 	/**
 	 * 
-	 * Publish {@link Feed} on the wall.
+	 * Publish {@link Feed} on the wall.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
 	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
 	 * @param onPublishListener The listener for publishing action
@@ -358,8 +426,6 @@ public class SimpleFacebook
 						{
 							// this fail can happen when user doesn't accept the publish permissions
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-
-							// log
 							logError(reason, null);
 
 							onPublishListener.onFail(reason);
@@ -376,9 +442,7 @@ public class SimpleFacebook
 			}
 			else
 			{
-				String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, "publish_action");
-
-				// log
+				String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
 				logError(reason, null);
 
 				// callback with 'fail' due to insufficient permissions
@@ -394,8 +458,6 @@ public class SimpleFacebook
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
-
-				// log
 				logError(reason, null);
 
 				onPublishListener.onFail(reason);
@@ -404,7 +466,11 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Publish open graph story
+	 * Publish open graph story.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
 	 * @param openGraph
 	 * @param onPublishListener
@@ -442,8 +508,6 @@ public class SimpleFacebook
 						{
 							// this fail can happen when user doesn't accept the publish permissions
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-
-							// log
 							logError(reason, null);
 
 							onPublishListener.onFail(reason);
@@ -463,9 +527,7 @@ public class SimpleFacebook
 				// callback with 'fail' due to insufficient permissions
 				if (onPublishListener != null)
 				{
-					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, "publish_action");
-
-					// log
+					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
 					logError(reason, null);
 
 					onPublishListener.onFail(reason);
@@ -478,13 +540,122 @@ public class SimpleFacebook
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
-
-				// log
 				logError(reason, null);
 
 				onPublishListener.onFail(reason);
 			}
 		}
+	}
+
+	/**
+	 * Publish photo to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
+	 * all user's albums.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * <br>
+	 * 
+	 * <b>Important:</b><br>
+	 * - The user must own the album<br>
+	 * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
+	 * - The app can add photos to the album<br>
+	 * - The privacy setting of the app should be at minimum as the privacy setting of the album (
+	 * {@link Album#getPrivacy()}
+	 * 
+	 * @param photo The photo to upload
+	 * @param albumId The album to which the photo should be uploaded
+	 * @param onPublishListener The callback listener
+	 */
+	public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener)
+	{
+		if (isLogin())
+		{
+			// if we defined the publish permission
+			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_STREAM.getValue()))
+			{
+				// callback with 'thinking'
+				if (onPublishListener != null)
+				{
+					onPublishListener.onThinking();
+				}
+
+				/*
+				 * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+				 * this permission.
+				 */
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_STREAM.getValue()))
+				{
+					mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener()
+					{
+						@Override
+						public void onSuccess()
+						{
+							publishImpl(photo, albumId, onPublishListener);
+						}
+
+						@Override
+						public void onNotAcceptingPermissions()
+						{
+							// this fail can happen when user doesn't accept the publish permissions
+							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+							logError(reason, null);
+
+							onPublishListener.onFail(reason);
+						}
+					};
+
+					// extend publish permissions automatically
+					extendPublishPermissions();
+				}
+				else
+				{
+					publishImpl(photo, albumId, onPublishListener);
+				}
+			}
+			else
+			{
+				// callback with 'fail' due to insufficient permissions
+				if (onPublishListener != null)
+				{
+					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_STREAM.getValue());
+					logError(reason, null);
+
+					onPublishListener.onFail(reason);
+				}
+			}
+		}
+		else
+		{
+			// callback with 'fail' due to not being loged
+			if (onPublishListener != null)
+			{
+				String reason = Errors.getError(ErrorMsg.LOGIN);
+				logError(reason, null);
+
+				onPublishListener.onFail(reason);
+			}
+		}
+	}
+
+	/**
+	 * Publish photo to application default album.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * <br>
+	 * 
+	 * <b>Important:</b><br>
+	 * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
+	 * {@link Album#getPrivacy()}
+	 * 
+	 * @param photo The photo to upload
+	 * @param onPublishListener The callback listener
+	 */
+	public void publish(final Photo photo, final OnPublishListener onPublishListener)
+	{
+		publish(photo, "me", onPublishListener);
 	}
 
 	/**
@@ -505,8 +676,6 @@ public class SimpleFacebook
 		else
 		{
 			String reason = Errors.getError(ErrorMsg.LOGIN);
-
-			// log
 			logError(reason, null);
 
 			onInviteListener.onFail(reason);
@@ -536,8 +705,6 @@ public class SimpleFacebook
 		else
 		{
 			String reason = Errors.getError(ErrorMsg.LOGIN);
-
-			// log
 			logError(reason, null);
 
 			onInviteListener.onFail(reason);
@@ -567,8 +734,6 @@ public class SimpleFacebook
 		else
 		{
 			String reason = Errors.getError(ErrorMsg.LOGIN);
-
-			// log
 			logError(reason, null);
 
 			onInviteListener.onFail(reason);
@@ -703,7 +868,7 @@ public class SimpleFacebook
 					{
 						// log
 						logError("Failed to publish", error.getException());
-						
+
 						// callback with 'exception'
 						if (onPublishListener != null)
 						{
@@ -766,7 +931,68 @@ public class SimpleFacebook
 					{
 						// log
 						logError("Failed to publish", error.getException());
-						
+
+						// callback with 'exception'
+						if (onPublishListener != null)
+						{
+							onPublishListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onPublishListener != null)
+						{
+							onPublishListener.onComplete(postId);
+						}
+					}
+				}
+				else
+				{
+					// log
+					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+
+					if (onPublishListener != null)
+					{
+						onPublishListener.onComplete("0");
+					}
+				}
+			}
+		});
+
+		RequestAsyncTask task = new RequestAsyncTask(request);
+		task.execute();
+	}
+
+	private static void publishImpl(Photo photo, String albumId, final OnPublishListener onPublishListener)
+	{
+		Session session = getOpenSession();
+		Request request = new Request(session, albumId + "/photos", photo.getBundle(), HttpMethod.POST, new Request.Callback()
+		{
+			@Override
+			public void onCompleted(Response response)
+			{
+				GraphObject graphObject = response.getGraphObject();
+				if (graphObject != null)
+				{
+					JSONObject graphResponse = graphObject.getInnerJSONObject();
+					String postId = null;
+					try
+					{
+						postId = graphResponse.getString("id");
+					}
+					catch (JSONException e)
+					{
+						// log
+						logError("JSON error", e);
+					}
+
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("Failed to publish", error.getException());
+
 						// callback with 'exception'
 						if (onPublishListener != null)
 						{
@@ -811,7 +1037,7 @@ public class SimpleFacebook
 					{
 						// log
 						logError("Failed to invite", error);
-						
+
 						if (error instanceof FacebookOperationCanceledException)
 						{
 							onInviteListener.onCancel();
@@ -991,7 +1217,7 @@ public class SimpleFacebook
 
 			// log
 			logInfo("SessionStatusCallback: state=" + state.name() + ", session=" + String.valueOf(session));
-			
+
 			switch (state)
 			{
 			case CLOSED:
@@ -1012,7 +1238,7 @@ public class SimpleFacebook
 				break;
 
 			case OPENED:
-				
+
 				/*
 				 * Check if we came from publishing actions where we ask again for publish permissions
 				 */
@@ -1087,7 +1313,7 @@ public class SimpleFacebook
 	{
 		Logger.logInfo(SimpleFacebook.class, message);
 	}
-	
+
 	private static void logError(String error, Throwable throwable)
 	{
 		if (throwable != null)
@@ -1130,6 +1356,17 @@ public class SimpleFacebook
 	}
 
 	/**
+	 * On albums request listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
+	public interface OnAlbumsRequestListener extends OnActionListener
+	{
+		void onComplete(List<Album> albums);
+	}
+
+	/**
 	 * On publishing action listener
 	 * 
 	 * @author sromku
@@ -1137,7 +1374,7 @@ public class SimpleFacebook
 	 */
 	public interface OnPublishListener extends OnActionListener
 	{
-		void onComplete(String postId);
+		void onComplete(String id);
 	}
 
 	/**
