@@ -73,11 +73,17 @@ public class Story
 			return this;
 		}
 
+		public Builder addActionProperty(String property, boolean value)
+		{
+			mActionBundle.putBoolean(property, value);
+			return this;
+		}
+
 		public Story build()
 		{
-			// validate input
-			validate();
-			
+			// // validate input
+			// validate();
+
 			// create story
 			ObjectOpenGraph object = new ObjectOpenGraph(mObjectName, mObjectUrl);
 			object.setProperties(mObjectBundle);
@@ -88,23 +94,23 @@ public class Story
 			return new Story(action, object);
 		}
 
-		private void validate()
-		{
-			if (isEmpty(mObjectName))
-			{
-				throw new RuntimeException("Object name must be set");
-			}
-
-			if (isEmpty(mObjectUrl))
-			{
-				throw new RuntimeException("Object url must be set");
-			}
-
-			if (isEmpty(mActionName))
-			{
-				throw new RuntimeException("Action must be set");
-			}
-		}
+		// private void validate()
+		// {
+		// if (isEmpty(mObjectName))
+		// {
+		// throw new RuntimeException("Object name must be set");
+		// }
+		//
+		// if (isEmpty(mObjectUrl))
+		// {
+		// throw new RuntimeException("Object url must be set");
+		// }
+		//
+		// if (isEmpty(mActionName))
+		// {
+		// throw new RuntimeException("Action must be set");
+		// }
+		// }
 
 		boolean isEmpty(String str)
 		{
