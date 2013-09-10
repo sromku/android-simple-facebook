@@ -12,12 +12,14 @@ Since my feeling was that the usage of Facebook SDK was too complicated for simp
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
 * [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
 	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
+* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
 
 *And,*
 * Based on latest Facebook SDK
@@ -150,12 +152,14 @@ public void onResume()
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
 * [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
 * [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
+* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
 * [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
 	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
+* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -259,7 +263,6 @@ mSimpleFacebook.logout(onLogoutListener);
 ### Publish feed
 
 Set `OnPublishListener` and call for `publish(Feed, OnPublishListener)`.
-You can also publish without setting the listener by calling for `publish(Feed)` method.
 
 #### Basic properties
 
@@ -350,6 +353,72 @@ And, the **result** is:
 
 ### Publish story (open graph)
 *TBE (to be explained)*
+
+### Publish photo
+
+You can publish (upload) photo to default album or to any other album you have. <br>
+`Photo` can be created from:<br>
+- `Bitmap`
+- `File`
+- `byte[]`
+
+#### App (default) album
+Set `OnPublishListener` and call for `publish(Photo, OnPublishListener)`.
+
+``` java
+// create publish listener
+OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+{
+
+	@Override
+	public void onFail(String reason)
+	{
+		// insure that you are logged in before publishing
+		Log.w(TAG, reason);
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while publishing
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onComplete(String id)
+	{
+		Log.i(TAG, "Published successfully. id = " + id);
+	}
+};
+
+// This is the image you want to upload
+Bitmap bitmap = ...
+
+// create Photo instace and add some properties
+Photo photo = new Photo(bitmap);
+photo.addDescription("Screenshot from #android_simple_facebook sample application");
+photo.addPlace("110619208966868");
+
+// publish photo to app album
+mSimpleFacebook.publish(photo, onPublishListener);
+```
+
+#### Specific album
+
+Set `OnPublishListener` and call for `publish(Photo, String, OnPublishListener)`. While the `String` is the album id.
+
+``` java
+String albumId = ...;
+
+// publish photo to album
+mSimpleFacebook.publish(photo, albumId, onPublishListener);
+```
 
 ### Invite
 
@@ -458,7 +527,7 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 mSimpleFacebook.getProfile(onProfileRequestListener);
 ```
 
-### Get Friends
+### Get friends
 
 Set `OnFriendsRequestListener` and call for `getFriends(OnFriendsRequestListener)`
 
@@ -497,11 +566,52 @@ OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriends
 mSimpleFacebook.getFriends(onFriendsRequestListener);
 ```
 
+### Get albums
+
+Set `OnAlbumsRequestListener` and call for `getAlbums(OnAlbumsRequestListener)`
+
+``` java
+OnAlbumsRequestListener onAlbumsRequestListener = new SimpleFacebook.OnAlbumsRequestListener()
+{
+	
+	@Override
+	public void onFail(String reason)
+	{
+		// insure that you are logged in before getting the albums
+		Log.w(TAG, reason);
+	}
+			
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+			
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while fetching albums
+		Log.i(TAG, "Thinking...");
+	}
+			
+	@Override
+	public void onComplete(List<Album> albums)
+	{
+		Log.i(TAG, "Number of albums = " + albums.size());
+	}
+			
+};
+
+mSimpleFacebook.getAlbums(onAlbumsRequestListener);
+```
+
+
 ## More options
 
-* `isLogin()` – check if you are logged in
-* `getAccessToken()` - get current access token
+* `isLogin()` – Check if you are logged in
+* `getAccessToken()` - Get current access token
 * `clean()` - Clean all references like `Activity` to prevent memory leaks
+* `Logger.DEBUG` or `DEBUG_WITH_STACKTRACE` - Print info and errors to logcat
 
 ## Sample Application
 *TBE (to be explained)*
