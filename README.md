@@ -619,7 +619,7 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 * `clean()` - Clean all references like `Activity` to prevent memory leaks
 * `Logger.DEBUG` or `DEBUG_WITH_STACKTRACE` - Print info and errors to logcat
 
-## Sample Application
+## Sample application
 <a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
@@ -630,7 +630,7 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 [Besties](https://play.google.com/store/apps/details?id=com.besties) | [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | 
 [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
 
-If you use this library in your project and you found it helpful, it will be really great to share it here :) 
+If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
 ## License
 
