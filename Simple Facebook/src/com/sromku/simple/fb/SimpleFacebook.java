@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +40,8 @@ import com.sromku.simple.fb.utils.Logger;
 /**
  * Simple Facebook SDK which wraps original Facebook SDK 3.5
  * 
- * <br><br>
+ * <br>
+ * <br>
  * <b>Features:</b>
  * <ul>
  * <li>Simple configuration</li>
@@ -1059,17 +1061,48 @@ public class SimpleFacebook
 						}
 						else
 						{
-							onInviteListener.onComplete();
+							List<String> invitedFriends = fetchInvitedFriends(values);
+							onInviteListener.onComplete(invitedFriends);
 						}
 					}
 					mDialog = null;
 				}
+
 			}).build();
 
 		Window dialogWindow = mDialog.getWindow();
 		dialogWindow.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		mDialog.show();
+	}
+	
+	/**
+	 * Fetch invited friends from response bundle
+	 * 
+	 * @param values
+	 * @return list of invited friends
+	 */
+	@SuppressLint("DefaultLocale")
+	private static List<String> fetchInvitedFriends(Bundle values)
+	{
+		List<String> friends = new ArrayList<String>();
+
+		int size = values.size();
+		int numOfFriends = size - 1;
+		if (numOfFriends > 0)
+		{
+			for (int i = 0; i < numOfFriends; i++)
+			{
+				String key = String.format("to[%d]", i);
+				String friendId = values.getString(key);
+				if (friendId != null)
+				{
+					friends.add(friendId);
+				}
+			}
+		}
+
+		return friends;
 	}
 
 	/**
@@ -1412,7 +1445,7 @@ public class SimpleFacebook
 	 */
 	public interface OnInviteListener extends OnErrorListener
 	{
-		void onComplete();
+		void onComplete(List<String> invitedFriends);
 
 		void onCancel();
 	}
