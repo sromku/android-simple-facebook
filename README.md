@@ -451,9 +451,9 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 	}
 
 	@Override
-	public void onComplete()
+	public void onComplete(List<String> invitedFriends)
 	{
-		Log.i(TAG, "Invitation was sent");
+		Log.i(TAG, "Invitation was sent to " + invitedFriends.size() + " users");
 	}
 	
 	@Override
