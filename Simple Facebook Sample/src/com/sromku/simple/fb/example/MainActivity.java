@@ -365,9 +365,9 @@ public class MainActivity extends Activity
 			}
 
 			@Override
-			public void onComplete()
+			public void onComplete(List<String> invitedFriends)
 			{
-				toast("Invitation was sent");
+				toast("Invitation was sent to " + invitedFriends.size() + " users");
 			}
 
 			@Override
