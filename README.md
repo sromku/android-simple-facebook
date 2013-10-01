@@ -7,6 +7,12 @@ This is a library project which makes the life much easier by coding less code f
 
 Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
+Sample app:
+<a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
+
 ## Features
 * [Login](https://github.com/sromku/android-simple-facebook#login-1)
 * [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
@@ -613,8 +619,18 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 * `clean()` - Clean all references like `Activity` to prevent memory leaks
 * `Logger.DEBUG` or `DEBUG_WITH_STACKTRACE` - Print info and errors to logcat
 
-## Sample Application
-*TBE (to be explained)*
+## Sample application
+<a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
+
+## Applications using the library
+
+[Besties](https://play.google.com/store/apps/details?id=com.besties) | [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | 
+[Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
+
+If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
 ## License
 
