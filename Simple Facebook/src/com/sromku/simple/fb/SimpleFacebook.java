@@ -253,7 +253,11 @@ public class SimpleFacebook
 		{
 			// move these params to method call parameters
 			Session session = getOpenSession();
-			Request request = new Request(session, "me/friends", null, HttpMethod.GET, new Request.Callback()
+
+			// TODO - temporal get these data, in the next fix, the data will be flexable and configured
+			Bundle bundle = new Bundle();
+			bundle.putString("fields", "id,name,first_name,last_name,link,birthday");
+			Request request = new Request(session, "me/friends", bundle, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
@@ -1075,7 +1079,7 @@ public class SimpleFacebook
 
 		mDialog.show();
 	}
-	
+
 	/**
 	 * Fetch invited friends from response bundle
 	 * 
