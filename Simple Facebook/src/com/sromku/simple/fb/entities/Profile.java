@@ -23,10 +23,11 @@ public class Profile
 	private static final String PROPERTY_TIMEZONE = "timezone";
 	private static final String PROPERTY_BIO = "bio";
 	private static final String PROPERTY_EMAIL = "email";
-	
+	private static final String PROPERTY_GENDER = "gender";
+
 	private static final String ID = "id";
 	private static final String NAME = "name";
-	
+
 	private final GraphUser mGraphUser;
 
 	private Profile(GraphUser graphUser)
@@ -121,6 +122,20 @@ public class Profile
 	}
 
 	/**
+	 * Returns the gender of the user. <br>
+	 * <br>
+	 * <b> Permissions:</b><br>
+	 * {@link Permissions#BASIC_INFO}
+	 * 
+	 * @return the gender of the user
+	 */
+	public String getGender()
+	{
+		String gender = String.valueOf(mGraphUser.getProperty(PROPERTY_GENDER));
+		return gender;
+	}
+
+	/**
 	 * Returns the Facebook URL of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
@@ -164,13 +179,25 @@ public class Profile
 	 * Returns the current city of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permissions#BASIC_INFO}
+	 * {@link Permissions#USER_LOCATION}
+	 * {@link Permissions#FRIENDS_LOCATION}
 	 * 
 	 * @return the current city of the user
 	 */
-	public GraphLocation getLocation()
+	public Location getLocation()
 	{
-		return mGraphUser.getLocation();
+		GraphLocation graphLocation = mGraphUser.getLocation();
+		if (graphLocation != null)
+		{
+			String id = String.valueOf(graphLocation.getProperty(ID));
+			String name = String.valueOf(graphLocation.getProperty(NAME));
+			Location location = new Location();
+			location.setId(id);
+			location.setName(name);
+			return location;
+		}
+
+		return null;
 	}
 
 	/**
