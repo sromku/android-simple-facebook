@@ -256,7 +256,7 @@ public class SimpleFacebook
 
 			// TODO - temporal get these data, in the next fix, the data will be flexable and configured
 			Bundle bundle = new Bundle();
-			bundle.putString("fields", "id,name,first_name,last_name,link,birthday");
+			bundle.putString("fields", "id,name,first_name,last_name,link,birthday,gender,location");
 			Request request = new Request(session, "me/friends", bundle, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
