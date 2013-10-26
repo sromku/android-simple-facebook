@@ -627,8 +627,11 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 
 ## Applications using the library
 
-[Besties](https://play.google.com/store/apps/details?id=com.besties) | [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | 
-[Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
+[Besties](https://play.google.com/store/apps/details?id=com.besties) 
+| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) 
+| [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) 
+| [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) 
+| [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
 
 If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
