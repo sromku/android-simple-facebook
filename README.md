@@ -23,7 +23,7 @@ Sample app:
 	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
 
@@ -163,7 +163,7 @@ public void onResume()
 	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
 	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
 	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile)
+* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
 
