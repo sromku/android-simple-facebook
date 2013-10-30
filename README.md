@@ -497,7 +497,7 @@ mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener)
 ### Get my profile
 
 Facebook doesn't reveal all user fields by default. For example, if you need picture, then you need to specify it in your graph api request. 
-I can understand, since getting all possible user fieldsm will be time consuming task and this is not what we want.<br>
+I can understand this, since getting all possible user fields will be time consuming task and this is not what we want.<br>
 Thus, **two** options are possible to get profile data.
 
 #### Default
