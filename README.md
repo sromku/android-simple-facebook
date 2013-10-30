@@ -496,6 +496,14 @@ mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener)
 
 ### Get my profile
 
+Facebook doesn't reveal all user fields by default. For example, if you need picture, then you need to specify it in your graph api request. 
+I can understand, since getting all possible user fieldsm will be time consuming task and this is not what we want.<br>
+Thus, **two** options are possible to get profile data.
+
+#### Default
+By using this way, you can get many properties like: *id*, *name*, *education* and more. Just ensure to have needed permissions. Read the javadoc to know what is needed.
+But, here you won't be able to get several properties like: *cover*, *picture* and other. 
+
 Set `OnProfileRequestListener` and call for `getMyProfile(OnProfileRequestListener)`
 
 ``` java
@@ -530,8 +538,50 @@ OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfile
 			
 };
 
+// do the get profile action
 mSimpleFacebook.getProfile(onProfileRequestListener);
 ```
+
+#### Be specific and get what you need
+By using this option, you define the properties you need, and you will get only them. Here, any property is possible to get.
+Set `OnProfileRequestListener` and call for `getMyProfile(Properties, OnProfileRequestListener)`
+
+``` java
+// prepare the properties that you need
+Properties properties = new Properties.Builder()
+	.add(Properties.ID)
+	.add(Properties.FIRST_NAME)
+	.add(Properties.COVER)
+	.add(Properties.WORK)
+	.add(Properties.EDUCATION)
+	.add(Properties.PICTURE)
+	.build();
+				
+// do the get profile action
+mSimpleFacebook.getProfile(properties, onProfileRequestListener);
+```
+
+#### Be even more specific - Picture Attributes
+You can describe the picture you really need like: *`small`, `normal`, `large`* and set width and height.
+
+``` java
+// prepare specific picture that we need
+PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+pictureAttributes.setHeight(500);
+pictureAttributes.setWidth(500);
+pictureAttributes.setType(PictureType.SQUARE);
+
+// prepare the properties that you need
+Properties properties = new Properties.Builder()
+	.add(Properties.ID)
+	.add(Properties.FIRST_NAME)
+	.add(Properties.PICTURE, pictureAttributes)
+	.build();
+				
+// do the get profile action
+mSimpleFacebook.getProfile(properties, onProfileRequestListener);
+```
+
 
 ### Get friends
 
