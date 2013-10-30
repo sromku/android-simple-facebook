@@ -53,6 +53,12 @@ public enum Permissions
 	USER_RELIGION_POLITICS("user_religion_politics", Type.READ),
 	FRIENDS_RELIGION_POLITICS("friends_religion_politics", Type.READ),
 
+	USER_RELATIONSHIPS("user_relationships", Type.READ),
+	FRIENDS_RELATIONSHIPS("friends_relationships", Type.READ),
+	
+	USER_RELATIONSHIP_DETAILS("user_relationship_details", Type.READ),
+	FRIENDS_RELATIONSHIP_DETAILS("friends_relationship_details", Type.READ),
+	
 	USER_STATUS("user_status", Type.READ),
 	FRIENDS_STATUS("friends_status", Type.READ),
 
