@@ -177,17 +177,63 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Get my profile from facebook
+	 * Get my profile from facebook.<br>
+	 * This methos will return profile with next default properties depends on permissions you have:<br>
+	 * <em>id, name, first_name, middle_name, last_name, gender, locale, languages, link, username, timezone, updated_time, verified, bio, birthday, education, email, 
+	 * hometown, location, political, favorite_athletes, favorite_teams, quotes, relationship_status, religion, website, work</em>
+	 * 
+	 * <br>
+	 * <br>
+	 * If you need additional or other profile properties like: <em>age_range, picture and more</em>, then use
+	 * this method: {@link #getProfile(Properties, OnProfileRequestListener)} <br>
+	 * <br>
+	 * <b>Note:</b> If you need only few properties for your app, then it is recommended <b>not</b> to use
+	 * this method, since getting unnecessary properties is time consuming task from facebook side.<br>
+	 * It is recommended in this case, to use {@link #getProfile(Properties, OnProfileRequestListener)} and
+	 * mention only needed properties.
 	 * 
 	 * @param onProfileRequestListener
 	 */
 	public void getProfile(final OnProfileRequestListener onProfileRequestListener)
 	{
+		getProfile(null, onProfileRequestListener);
+	}
+
+	/**
+	 * Get my profile from facebook by mentioning specific parameters. <br>
+	 * For example, if you need: <em>square picture 500x500 pixels</em>
+	 * 
+	 * @param onProfileRequestListener
+	 * @param properties The {@link Properties}. <br>
+	 *            To create {@link Properties} instance use:
+	 * 
+	 * <pre>
+	 * // define the profile picture we want to get
+	 * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+	 * pictureAttributes.setType(PictureType.SQUARE);
+	 * pictureAttributes.setHeight(500);
+	 * pictureAttributes.setWidth(500);
+	 * 
+	 * // create properties
+	 * Properties properties = new Properties.Builder()
+	 * 	.add(Properties.ID)
+	 * 	.add(Properties.FIRST_NAME)
+	 * 	.add(Properties.PICTURE, attributes)
+	 * 	.build();
+	 * </pre>
+	 */
+	public void getProfile(Properties properties, final OnProfileRequestListener onProfileRequestListener)
+	{
 		// if we are logged in
 		if (isLogin())
 		{
 			Session session = getOpenSession();
-			Request request = new Request(session, "me", null, HttpMethod.GET, new Request.Callback()
+			Bundle bundle = null;
+			if (properties != null)
+			{
+				bundle = properties.getBundle();
+			}
+			Request request = new Request(session, "me", bundle, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
@@ -242,21 +288,59 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Get my friends from facebook
+	 * Get my friends from facebook.<br>
+	 * This methos will return profile with next default properties depends on permissions you have:<br>
+	 * <em>id, name</em>
+	 * 
+	 * <br>
+	 * <br>
+	 * If you need additional or other friend properties like: <em>education, location and more</em>, then use
+	 * this method: {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
+	 * <br>
 	 * 
 	 * @param onFriendsRequestListener
 	 */
 	public void getFriends(final OnFriendsRequestListener onFriendsRequestListener)
+	{
+		getFriends(null, onFriendsRequestListener);
+	}
+
+	/**
+	 * Get my friends from facebook by mentioning specific parameters. <br>
+	 * For example, if you need: <em>id, last_name, picture, birthday</em>
+	 * 
+	 * @param onFriendsRequestListener
+	 * @param properties The {@link Properties}. <br>
+	 *            To create {@link Properties} instance use:
+	 * 
+	 *            <pre>
+	 * // define the friend picture we want to get
+	 * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+	 * pictureAttributes.setType(PictureType.SQUARE);
+	 * pictureAttributes.setHeight(500);
+	 * pictureAttributes.setWidth(500);
+	 * 
+	 * // create properties
+	 * Properties properties = new Properties.Builder()
+	 * 	.add(Properties.ID)
+	 * 	.add(Properties.LAST_NAME)
+	 * 	.add(Properties.PICTURE, attributes)
+	 * 	.add(Properties.BIRTHDAY)
+	 * 	.build();
+	 * </pre>
+	 */
+	public void getFriends(Properties properties, final OnFriendsRequestListener onFriendsRequestListener)
 	{
 		// if we are logged in
 		if (isLogin())
 		{
 			// move these params to method call parameters
 			Session session = getOpenSession();
-
-			// TODO - temporal get these data, in the next fix, the data will be flexable and configured
-			Bundle bundle = new Bundle();
-			bundle.putString("fields", "id,name,first_name,last_name,link,birthday,gender,location");
+			Bundle bundle = null;
+			if (properties != null)
+			{
+				bundle = properties.getBundle();
+			}
 			Request request = new Request(session, "me/friends", bundle, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
@@ -316,6 +400,8 @@ public class SimpleFacebook
 	}
 
 	/**
+	 * Get albums
+	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permissions#USER_PHOTOS}
 	 */
