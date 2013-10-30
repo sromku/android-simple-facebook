@@ -12,7 +12,9 @@
     <string name="invite_one">Invite one</string>
     <string name="invite_suggested">Invite suggested</string>
     <string name="get_my_profile">Get my profile</string>
+    <string name="get_my_profile_with_properties">Get my profile (Properties)</string>
     <string name="get_friends">Get friends</string>
+    <string name="get_friends_with_properties">Get friends (Properties)</string>
     <string name="fb_feed_caption">Know who are your best friends</string>
     <string name="fb_feed_description">With Besties, the exciting new social game, you will be able to find out how truly do you know your friends</string>
     <string name="fb_feed_link">https://play.google.com/store/apps/details?id=com.besties</string>

@@ -60,8 +60,8 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/publish_story" />
-        
-         <!-- Publish Photo -->
+
+        <!-- Publish Photo -->
 
         <Button
             android:id="@+id/button_publish_photo"
@@ -109,24 +109,35 @@
 
         <Button
             android:id="@+id/button_get_profile"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/button_invite_suggested"
-            android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/get_my_profile" />
+
+        <!-- Get my profile with properties -->
+
+        <Button
+            android:id="@+id/button_get_profile_with_properties"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/button_invite_suggested"
+            android:layout_margin="10dp"
+            android:text="@string/get_my_profile_with_properties" />
 
         <!-- Get friends -->
 
         <Button
             android:id="@+id/button_get_friends"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_get_profile"
             android:layout_centerHorizontal="true"
+            android:layout_below="@id/button_get_profile"
             android:layout_margin="10dp"
             android:text="@string/get_friends" />
-        
+
         <!-- Get albums -->
 
         <Button
@@ -137,7 +148,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/get_albums" />
-        
+
         <!-- Fragment -->
 
         <Button

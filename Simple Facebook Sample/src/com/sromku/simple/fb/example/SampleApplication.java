@@ -26,8 +26,9 @@ public class SampleApplication extends Application
 		{
 			Permissions.BASIC_INFO,
 			Permissions.EMAIL,
-			Permissions.USER_BIRTHDAY,
 			Permissions.USER_PHOTOS,
+			Permissions.USER_BIRTHDAY,
+			Permissions.USER_LOCATION,
 			Permissions.PUBLISH_ACTION,
 			Permissions.PUBLISH_STREAM
 		};

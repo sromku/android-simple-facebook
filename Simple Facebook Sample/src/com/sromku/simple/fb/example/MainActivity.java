@@ -3,11 +3,13 @@ package com.sromku.simple.fb.example;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sromku.simple.fb.Permissions;
+import com.sromku.simple.fb.Properties;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebook.OnAlbumsRequestListener;
 import com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener;
@@ -29,6 +32,9 @@ import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.friends.FriendsActivity;
 import com.sromku.simple.fb.example.utils.Utils;
+import com.sromku.simple.fb.utils.Attributes;
+import com.sromku.simple.fb.utils.PictureAttributes;
+import com.sromku.simple.fb.utils.PictureAttributes.PictureType;
 
 public class MainActivity extends Activity
 {
@@ -47,6 +53,7 @@ public class MainActivity extends Activity
 	private Button mButtonInviteSuggested;
 	private Button mButtonInviteOne;
 	private Button mButtonGetProfile;
+	private Button mButtonGetProfileProperties;
 	private Button mButtonGetFriends;
 	private Button mButtonGetAlbums;
 	private Button mButtonFragments;
@@ -164,11 +171,14 @@ public class MainActivity extends Activity
 
 		// 7. Get my profile example
 		getProfileExample();
+		
+		// 8. Get my profile with properties example
+		getProfileWithPropertiesExample();
 
-		// 8. Get friends example
+		// 9. Get friends example
 		getFriendsExample();
-
-		// 9. Get Albums example
+		
+		// 10. Get Albums example
 		getAlbumsExample();
 	}
 
@@ -456,7 +466,9 @@ public class MainActivity extends Activity
 			{
 				hideDialog();
 				Log.i(TAG, "My profile id = " + profile.getId());
-				toast("My profile id = " + profile.getId() + ", " + profile.getEmail());
+				String name = profile.getName();
+				String email = profile.getEmail();
+				toast("name = " + name + ", email = " + String.valueOf(email));
 			}
 		};
 
@@ -484,6 +496,85 @@ public class MainActivity extends Activity
 				// }
 				//
 				// });
+			}
+		});
+
+	}
+	
+	/**
+	 * Get my profile with properties example
+	 */
+	private void getProfileWithPropertiesExample()
+	{
+		// listener for profile request
+		final OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
+		{
+
+			@Override
+			public void onFail(String reason)
+			{
+				hideDialog();
+				// insure that you are logged in before getting the profile
+				Log.w(TAG, reason);
+			}
+
+			@Override
+			public void onException(Throwable throwable)
+			{
+				hideDialog();
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking()
+			{
+				showDialog();
+				// show progress bar or something to the user while fetching profile
+				Log.i(TAG, "Thinking...");
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onComplete(Profile profile)
+			{
+				hideDialog();
+				String id = profile.getId();
+				String firstName = profile.getFirstName();
+				String coverUrl = profile.getCover();
+				String pictureUrl = profile.getPicture();
+
+				// this is just to show the results
+				AlertDialog dialog = Utils.buildProfileResultDialog(MainActivity.this,
+						new Pair<String, String>(Properties.ID, id),
+						new Pair<String, String>(Properties.FIRST_NAME, firstName),
+						new Pair<String, String>(Properties.COVER, coverUrl),
+						new Pair<String, String>(Properties.PICTURE, pictureUrl));
+				dialog.show();
+			}
+		};
+
+		// set on click button
+		mButtonGetProfileProperties.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				// prepare specific picture that we need
+				PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+				pictureAttributes.setHeight(500);
+				pictureAttributes.setWidth(500);
+				pictureAttributes.setType(PictureType.SQUARE);
+				
+				// prepare the properties that we need
+				Properties properties = new Properties.Builder()
+						.add(Properties.ID)
+						.add(Properties.FIRST_NAME)
+						.add(Properties.COVER)
+						.add(Properties.PICTURE, pictureAttributes)
+						.build();
+				
+				// do the get profile action
+				mSimpleFacebook.getProfile(properties, onProfileRequestListener);
 			}
 		});
 
@@ -543,7 +634,7 @@ public class MainActivity extends Activity
 		});
 
 	}
-
+	
 	/**
 	 * Get albums example <br>
 	 * Must use {@link Permissions#USER_PHOTOS}
@@ -612,6 +703,7 @@ public class MainActivity extends Activity
 		mButtonInviteSuggested = (Button)findViewById(R.id.button_invite_suggested);
 		mButtonInviteOne = (Button)findViewById(R.id.button_invite_one);
 		mButtonGetProfile = (Button)findViewById(R.id.button_get_profile);
+		mButtonGetProfileProperties = (Button)findViewById(R.id.button_get_profile_with_properties);
 		mButtonGetFriends = (Button)findViewById(R.id.button_get_friends);
 		mButtonGetAlbums = (Button)findViewById(R.id.button_get_albums);
 		mButtonFragments = (Button)findViewById(R.id.button_fragments);
@@ -660,6 +752,7 @@ public class MainActivity extends Activity
 		mButtonInviteSuggested.setEnabled(true);
 		mButtonInviteOne.setEnabled(true);
 		mButtonGetProfile.setEnabled(true);
+		mButtonGetProfileProperties.setEnabled(true);
 		mButtonGetFriends.setEnabled(true);
 		mButtonGetAlbums.setEnabled(true);
 		mTextStatus.setText("Logged in");
@@ -676,6 +769,7 @@ public class MainActivity extends Activity
 		mButtonInviteSuggested.setEnabled(false);
 		mButtonInviteOne.setEnabled(false);
 		mButtonGetProfile.setEnabled(false);
+		mButtonGetProfileProperties.setEnabled(false);
 		mButtonGetFriends.setEnabled(false);
 		mButtonGetAlbums.setEnabled(false);
 		mTextStatus.setText("Logged out");
