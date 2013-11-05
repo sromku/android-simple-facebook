@@ -74,6 +74,15 @@ public class SimpleFacebook
 	{
 		mSessionStatusCallback = new SessionStatusCallback();
 	}
+	
+	public static void initialize(Activity activity)
+	{
+		if (mInstance == null) {
+			mInstance = new SimpleFacebook();
+		}
+		
+		mActivity = activity;
+	}
 
 	public static SimpleFacebook getInstance(Activity activity)
 	{
@@ -83,6 +92,11 @@ public class SimpleFacebook
 		}
 
 		mActivity = activity;
+		return mInstance;
+	}
+	
+	public static SimpleFacebook getInstance()
+	{
 		return mInstance;
 	}
 
