@@ -833,6 +833,80 @@ public class SimpleFacebook
 	}
 
 	/**
+	 *
+	 * Requests {@link Permissions#PUBLISH_ACTION} and nothing else.
+	 * Useful when you just want to request the action and won't be publishing at the time, but still need the
+	 * updated <b>access token</b> with the permissions (possibly to pass back to your backend).
+	 * You must add {@link Permissions#PUBLISH_ACTION} to your SimpleFacebook configuration before calling this.
+	 *
+	 * <b>Must be logged to use.</b>
+	 *
+	 * @param onPermissionListener The listener for the request permission action
+	 */
+	public void requestPublish(final OnPermissionListener onPermissionListener) 
+	{
+		if (isLogin()) 
+		{
+			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) 
+			{
+				if (onPermissionListener != null) 
+				{
+					onPermissionListener.onThinking();
+				}
+				/*
+				 * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+				 * this permission.
+				 */
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) 
+				{
+					mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener() 
+					{
+						@Override
+						public void onSuccess() 
+						{
+							if (onPermissionListener != null) 
+							{
+								onPermissionListener.onSuccess(getAccessToken());
+							}
+						}
+						@Override
+						public void onNotAcceptingPermissions() 
+						{
+							// this fail can happen when user doesn't accept the publish permissions
+							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+							logError(reason, null);
+							if (onPermissionListener != null) 
+							{
+								onPermissionListener.onFail(reason);
+							}
+						}
+					};
+					// extend publish permissions automatically
+					extendPublishPermissions();
+				} 
+				else 
+				{
+					// We already have the permission.
+					if (onPermissionListener != null) 
+					{
+						onPermissionListener.onSuccess(getAccessToken());
+					}
+				}
+			}
+		} 
+		else 
+		{
+			// callback with 'fail' due to not being loged
+			if (onPermissionListener != null) 
+			{
+				String reason = Errors.getError(ErrorMsg.LOGIN);
+				logError(reason, null);
+				onPermissionListener.onFail(reason);
+			}
+		}
+	}
+
+	/**
 	 * Call this inside your activity in {@link Activity#onActivityResult} method
 	 * 
 	 * @param activity
@@ -1525,6 +1599,24 @@ public class SimpleFacebook
 		 * If user performed {@link FacebookTools#logout()} action, this callback method will be invoked
 		 */
 		void onLogout();
+	}
+
+    /**
+	 * On permission listener - If the App must request a specific permission (only to obtain the new Access Token)
+	 *
+	 * @author Gryzor
+	 *
+	 */
+	public interface OnPermissionListener extends OnActionListener
+	{
+		/**
+		 * If the permission was granted, this callback is invoked.
+		 */
+		void onSuccess(final String accessToken);
+		/**
+		 * If user pressed 'cancel' in PUBLISH permissions dialog
+		 */
+		void onNotAcceptingPermissions();
 	}
 
 	/**
