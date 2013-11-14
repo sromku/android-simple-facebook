@@ -26,7 +26,7 @@ Sample app:
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get Publish Permissions](https://github.com/sromku/android-simple-facebook#request-publish)
+* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
 
 *And,*
 * Based on latest Facebook SDK
@@ -167,7 +167,7 @@ public void onResume()
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get Publish Permissions](https://github.com/sromku/android-simple-facebook#request-publish)
+* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -664,6 +664,9 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 ```
 
 ### Request publish
+
+Use this method to request PUBLISH permissions, without having to perform any action yet. 
+Useful if you need the new access token to pass to your Backend.
 
 Set `OnPermissionListener`and call for `requestPublish(OnPermissionListener)`
 
