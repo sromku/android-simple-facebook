@@ -26,6 +26,7 @@ Sample app:
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
+* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
 
 *And,*
 * Based on latest Facebook SDK
@@ -166,6 +167,7 @@ public void onResume()
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
+* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -661,6 +663,48 @@ OnAlbumsRequestListener onAlbumsRequestListener = new SimpleFacebook.OnAlbumsReq
 mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 ```
 
+### Request publish
+
+Use this method to request PUBLISH permissions, without having to perform any action yet. 
+Useful if you need the new access token to pass to your Backend.
+
+Set `OnPermissionListener`and call for `requestPublish(OnPermissionListener)`
+
+```java
+private SimpleFacebook.OnPermissionListener mOnPermissionListener = new SimpleFacebook.OnPermissionListener() {
+		@Override
+		public void onSuccess(final String accessToken) {
+		}
+		@Override
+		public void onNotAcceptingPermissions() {
+		}
+		@Override
+		public void onThinking() {
+		}
+		@Override
+		public void onException(final Throwable throwable) {
+		}
+		@Override
+		public void onFail(final String reason) {
+		}
+};
+// Set your configuration to include PUBLISH ACTIONS
+Permissions[] permissions = new Permissions[]{
+				Permissions.BASIC_INFO,
+				Permissions.EMAIL,
+				Permissions.PUBLISH_ACTION
+};
+
+SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+				.setAppId(yourFBApiKey)
+				.setNamespace("your.namespace")
+				.setPermissions(permissions)
+				.build();
+SimpleFacebook.setConfiguration(configuration);
+
+mSimpleFacebook.requestPermission(mOnPermissionListener);
+```
+
 
 ## More options
 
@@ -681,7 +725,8 @@ mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 | [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) 
 | [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) 
 | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) 
-| [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
+| [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) 
+| [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
 
 If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
