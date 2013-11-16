@@ -26,7 +26,7 @@ Sample app:
 * [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
 * [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
 * [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
+* [Get publish permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
 
 *And,*
 * Based on latest Facebook SDK
@@ -671,36 +671,41 @@ Useful if you need the new access token to pass to your Backend.
 Set `OnPermissionListener`and call for `requestPublish(OnPermissionListener)`
 
 ```java
-private SimpleFacebook.OnPermissionListener mOnPermissionListener = new SimpleFacebook.OnPermissionListener() {
-		@Override
-		public void onSuccess(final String accessToken) {
-		}
-		@Override
-		public void onNotAcceptingPermissions() {
-		}
-		@Override
-		public void onThinking() {
-		}
-		@Override
-		public void onException(final Throwable throwable) {
-		}
-		@Override
-		public void onFail(final String reason) {
-		}
+private OnPermissionListener mOnPermissionListener = new OnPermissionListener() {
+	
+	@Override
+	public void onSuccess(final String accessToken) 
+	{
+		// the updated access token
+		Log.i(TAG, accessToken);
+	}
+		
+	@Override
+	public void onNotAcceptingPermissions() 
+	{
+		Log.w(TAG, "User didn't accept publish permissions");
+	}
+	
+	@Override
+	public void onThinking() 
+	{
+		// show progress bar or something 
+		Log.i(TAG, "Thinking...");
+	}
+	
+	@Override
+	public void onException(final Throwable throwable) 
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+	
+	@Override
+	public void onFail(final String reason) 
+	{
+		// insure that you are logged in before getting the albums
+		Log.w(TAG, reason);
+	}
 };
-// Set your configuration to include PUBLISH ACTIONS
-Permissions[] permissions = new Permissions[]{
-				Permissions.BASIC_INFO,
-				Permissions.EMAIL,
-				Permissions.PUBLISH_ACTION
-};
-
-SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-				.setAppId(yourFBApiKey)
-				.setNamespace("your.namespace")
-				.setPermissions(permissions)
-				.build();
-SimpleFacebook.setConfiguration(configuration);
 
 mSimpleFacebook.requestPermission(mOnPermissionListener);
 ```
@@ -721,11 +726,11 @@ mSimpleFacebook.requestPermission(mOnPermissionListener);
 
 ## Applications using the library
 
-[Besties](https://play.google.com/store/apps/details?id=com.besties) 
-| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) 
-| [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) 
-| [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) 
-| [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) 
+| [Besties](https://play.google.com/store/apps/details?id=com.besties) <br>
+| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) <br>
+| [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
+| [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) <br>
+| [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
 | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
 
 If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
