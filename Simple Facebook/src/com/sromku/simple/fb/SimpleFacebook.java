@@ -1240,7 +1240,7 @@ public class SimpleFacebook
 						else
 						{
 							List<String> invitedFriends = fetchInvitedFriends(values);
-							onInviteListener.onComplete(invitedFriends);
+							onInviteListener.onComplete(invitedFriends, object.toString());
 						}
 					}
 					mDialog = null;
@@ -1641,7 +1641,7 @@ public class SimpleFacebook
 	 */
 	public interface OnInviteListener extends OnErrorListener
 	{
-		void onComplete(List<String> invitedFriends);
+		void onComplete(List<String> invitedFriends, String requestId);
 
 		void onCancel();
 	}
