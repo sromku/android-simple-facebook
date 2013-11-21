@@ -533,8 +533,10 @@ public class SimpleFacebook
 							// this fail can happen when user doesn't accept the publish permissions
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
 							logError(reason, null);
-
-							onPublishListener.onFail(reason);
+							if (onPublishListener != null)
+							{
+								onPublishListener.onFail(reason);
+							}
 						}
 					};
 
@@ -616,7 +618,10 @@ public class SimpleFacebook
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
 							logError(reason, null);
 
-							onPublishListener.onFail(reason);
+							if (onPublishListener != null)
+							{
+								onPublishListener.onFail(reason);
+							}
 						}
 					};
 
@@ -707,7 +712,10 @@ public class SimpleFacebook
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
 							logError(reason, null);
 
-							onPublishListener.onFail(reason);
+							if (onPublishListener != null)
+							{
+								onPublishListener.onFail(reason);
+							}
 						}
 					};
 
@@ -951,12 +959,15 @@ public class SimpleFacebook
 		Session session = Session.getActiveSession();
 		if (session == null)
 		{
-			if (session == null)
+			if ( mActivity == null )
 			{
-				session = new Session.Builder(mActivity.getApplicationContext())
+				// You can't create a session if the activity/context hasn't been initialized
+				// This is now possible because the library can be started without context.
+				return false;
+			}
+			session = new Session.Builder(mActivity.getApplicationContext())
 					.setApplicationId(mConfiguration.getAppId())
 					.build();
-			}
 			Session.setActiveSession(session);
 		}
 		if (session.isOpened())
@@ -966,7 +977,7 @@ public class SimpleFacebook
 		}
 
 		/*
-		 * Check if we can reload the session when it will be nessecary. We won't do it now.
+		 * Check if we can reload the session when it will be neccesary. We won't do it now.
 		 */
 		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
 		{
@@ -990,7 +1001,7 @@ public class SimpleFacebook
 	/**
 	 * Get access token of open session
 	 * 
-	 * @return
+	 * @return a {@link String} containing the Access Token of the current {@link Session} or null if no session.
 	 */
 	public String getAccessToken()
 	{
@@ -1432,7 +1443,10 @@ public class SimpleFacebook
 			switch (state)
 			{
 			case CLOSED:
-				mOnLogoutListener.onLogout();
+			    if (mOnLogoutListener != null) 
+			    {
+					mOnLogoutListener.onLogout();
+				}
 				break;
 
 			case CLOSED_LOGIN_FAILED:
@@ -1445,7 +1459,10 @@ public class SimpleFacebook
 				break;
 
 			case OPENING:
-				mOnLoginListener.onThinking();
+			    if (mOnLogoutListener != null) 
+			    {
+					mOnLoginListener.onThinking();
+				}
 				break;
 
 			case OPENED:
@@ -1484,7 +1501,10 @@ public class SimpleFacebook
 				}
 				else
 				{
-					mOnLoginListener.onLogin();
+					if (mOnLoginListener != null) 
+				    {
+						mOnLoginListener.onLogin();
+					}
 				}
 				break;
 
@@ -1501,7 +1521,9 @@ public class SimpleFacebook
 				else if (mDoOnLogin)
 				{
 					mDoOnLogin = false;
-					mOnLoginListener.onLogin();
+				if (mOnLogoutListener != null) 
+			    {
+					mOnLogoutListener.onLogin();
 				}
 				break;
 
