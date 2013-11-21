@@ -1459,7 +1459,7 @@ public class SimpleFacebook
 				break;
 
 			case OPENING:
-			    if (mOnLogoutListener != null) 
+			    if (mOnLoginListener != null)
 			    {
 					mOnLoginListener.onThinking();
 				}
@@ -1522,9 +1522,9 @@ public class SimpleFacebook
 				{
 					mDoOnLogin = false;
 				}
-				if (mOnLogoutListener != null) 
+				if (mOnLoginListener != null)
 			    {
-					mOnLogoutListener.onLogin();
+					mOnLoginListener.onLogin();
 				}
 				break;
 
