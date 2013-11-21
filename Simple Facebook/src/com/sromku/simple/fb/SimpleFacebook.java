@@ -486,6 +486,55 @@ public class SimpleFacebook
 			}
 		}
 	}
+	
+	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) {
+		if(isLogin())
+		{
+		    // Create a new request for an HTTP delete with the
+		    // request ID as the Graph path.
+			Session session = getOpenSession();
+		    Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback() 
+		    {
+	            @Override
+	            public void onCompleted(Response response)
+	            {
+	            	FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to delete requests", error.getException());
+
+						// callback with 'exception'
+						if (onDeleteRequestListener != null)
+						{
+							onDeleteRequestListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onDeleteRequestListener != null)
+						{
+							onDeleteRequestListener.onComplete();
+						}
+					}
+	            }
+	        });
+		    // Execute the request asynchronously.
+		    Request.executeBatchAsync(request);
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being logged in
+			if (onDeleteRequestListener != null)
+			{
+				onDeleteRequestListener.onFail(reason);
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -1019,7 +1068,7 @@ public class SimpleFacebook
 	{
 		mActivity = null;
 	}
-
+	
 	private static void publishImpl(Feed feed, final OnPublishListener onPublishListener)
 	{
 		Session session = getOpenSession();
@@ -1564,6 +1613,17 @@ public class SimpleFacebook
 	public interface OnFriendsRequestListener extends OnActionListener
 	{
 		void onComplete(List<Profile> friends);
+	}
+	
+	/**
+	 * On delete request listener
+	 * 
+	 * @author koraybalci
+	 * 
+	 */
+	public interface OnDeleteRequestListener extends OnActionListener
+	{
+		void onComplete();
 	}
 
 	/**
