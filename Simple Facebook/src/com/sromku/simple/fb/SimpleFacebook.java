@@ -1521,6 +1521,7 @@ public class SimpleFacebook
 				else if (mDoOnLogin)
 				{
 					mDoOnLogin = false;
+				}
 				if (mOnLogoutListener != null) 
 			    {
 					mOnLogoutListener.onLogin();
