@@ -563,7 +563,17 @@ public class SimpleFacebook
 		}
 	}
 	
-	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) {
+	/**
+	 * 
+	 * Deletes an apprequest.<br>
+	 * <br>
+	 * 
+	 * @param inRequestId Input request id to be deleted. Note that it should have the form {USERID}_{REQUESTID} <code>String</code>
+	 * @param onDeleteRequestListener The listener for deletion action
+	 * @see https://developers.facebook.com/docs/android/app-link-requests/#step3
+	 */
+	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) 
+	{
 		if(isLogin())
 		{
 		    // Create a new request for an HTTP delete with the
@@ -608,6 +618,108 @@ public class SimpleFacebook
 			if (onDeleteRequestListener != null)
 			{
 				onDeleteRequestListener.onFail(reason);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Posts a score using Scores API for games. If missing publish_actions permission, we do not ask again for it.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_ACTION}
+	 * 
+	 * 
+	 * @param score Score to be posted. <code>int</code>
+	 * @param onPostScoreListener The listener for posting score
+	 * @see https://developers.facebook.com/docs/games/scores/
+	 */
+	public void postScore(int score, final OnPostScoreListener onPostScoreListener)
+	{
+		if(isLogin())
+		{
+			// if we defined the publish permission
+			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+			{
+				// callback with 'thinking'
+				if (onPostScoreListener != null)
+				{
+					onPostScoreListener.onThinking();
+				}
+
+				/*
+				 * Check if session to facebook has 'publish_action' permission. If not, we will return fail, 
+				 * client app may try to ask for permission later (not to annoy users).
+				 */
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+				{
+					String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+					logError(reason, null);
+
+					// callback with 'fail' due to not being logged in
+					if (onPostScoreListener != null)
+					{
+						onPostScoreListener.onFail(reason);
+					}
+					return;
+				}
+			}
+			else
+			{
+				String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH);
+				logError(reason, null);
+
+				// callback with 'fail' due to not being logged in
+				if (onPostScoreListener != null)
+				{
+					onPostScoreListener.onFail(reason);
+				}
+				return;
+			}
+
+			Bundle param = new Bundle();
+			param.putInt("score", score);
+			Request request = new Request(getOpenSession(), "me/scores", param, HttpMethod.POST, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("Failed to publish score", error.getException());
+	
+						// callback with 'exception'
+						if (onPostScoreListener != null)
+						{
+							onPostScoreListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onPostScoreListener != null)
+						{
+							onPostScoreListener.onComplete();
+						}
+					}				
+				}
+			});
+	
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being logged in
+			if (onPostScoreListener != null)
+			{
+				onPostScoreListener.onFail(reason);
 			}
 		}
 	}
@@ -1329,7 +1441,7 @@ public class SimpleFacebook
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 	}
-
+	
 	private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener)
 	{
 		mDialog = new WebDialog.RequestsDialogBuilder(activity, Session.getActiveSession(), params).
@@ -1709,6 +1821,17 @@ public class SimpleFacebook
 	 * 
 	 */
 	public interface OnDeleteRequestListener extends OnActionListener
+	{
+		void onComplete();
+	}
+	
+	/**
+	 * On post score listener
+	 * 
+	 * @author koraybalci
+	 * 
+	 */
+	public interface OnPostScoreListener extends OnActionListener
 	{
 		void onComplete();
 	}
