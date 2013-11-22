@@ -192,7 +192,7 @@ public class SimpleFacebook
 
 	/**
 	 * Get my profile from facebook.<br>
-	 * This methos will return profile with next default properties depends on permissions you have:<br>
+	 * This method will return profile with next default properties depends on permissions you have:<br>
 	 * <em>id, name, first_name, middle_name, last_name, gender, locale, languages, link, username, timezone, updated_time, verified, bio, birthday, education, email, 
 	 * hometown, location, political, favorite_athletes, favorite_teams, quotes, relationship_status, religion, website, work</em>
 	 * 
@@ -303,7 +303,7 @@ public class SimpleFacebook
 
 	/**
 	 * Get my friends from facebook.<br>
-	 * This methos will return profile with next default properties depends on permissions you have:<br>
+	 * This method will return profile with next default properties depends on permissions you have:<br>
 	 * <em>id, name</em>
 	 * 
 	 * <br>
