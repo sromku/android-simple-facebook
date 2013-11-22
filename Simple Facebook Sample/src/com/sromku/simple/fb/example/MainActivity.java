@@ -375,9 +375,9 @@ public class MainActivity extends Activity
 			}
 
 			@Override
-			public void onComplete(List<String> invitedFriends)
+			public void onComplete(List<String> invitedFriends, String requestId)
 			{
-				toast("Invitation was sent to " + invitedFriends.size() + " users");
+				toast("Invitation was sent to " + invitedFriends.size() + " users, invite reauest=" + requestId);
 			}
 
 			@Override
@@ -385,6 +385,7 @@ public class MainActivity extends Activity
 			{
 				toast("Canceled the dialog");
 			}
+
 		};
 
 		// invite all
