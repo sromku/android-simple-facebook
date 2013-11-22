@@ -3,6 +3,7 @@ package com.sromku.simple.fb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -483,6 +484,81 @@ public class SimpleFacebook
 			if (onAlbumsRequestListener != null)
 			{
 				onAlbumsRequestListener.onFail(reason);
+			}
+		}
+	}
+	
+	public void getAppRequests(final OnAppRequestsListener onAppRequestsListener)
+	{
+		// if we are logged in
+		if (isLogin())
+		{
+			Session session = getOpenSession();
+			Bundle bundle = null;
+			Request request = new Request(session, "me/apprequests", bundle, HttpMethod.GET, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to get app requests", error.getException());
+
+						// callback with 'exception'
+						if (onAppRequestsListener != null)
+						{
+							onAppRequestsListener.onException(error.getException());
+						}						
+					}
+					else
+					{
+						GraphObject graphObject = response.getGraphObject();					
+						if (graphObject != null)
+						{						
+							JSONObject graphResponse = graphObject.getInnerJSONObject();
+							try {
+								JSONArray result = graphResponse.getJSONArray( "data" );
+								if (onAppRequestsListener != null)
+								{
+									onAppRequestsListener.onComplete(result);
+								}
+							} catch (JSONException e) {
+								if (onAppRequestsListener != null)
+								{
+									onAppRequestsListener.onException(e);
+								}
+								return;
+							}
+						}
+						else
+						{
+							// log
+							logError("The GraphObject in Response of getAppRequests has null value. Response=" + response.toString(), null);
+						}	
+					}	
+				}
+			});
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+
+			// callback with 'thinking'
+			if (onAppRequestsListener != null)
+			{
+				onAppRequestsListener.onThinking();
+			}
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being logged in
+			if (onAppRequestsListener != null)
+			{
+				onAppRequestsListener.onFail(reason);
 			}
 		}
 	}
@@ -1615,6 +1691,17 @@ public class SimpleFacebook
 		void onComplete(List<Profile> friends);
 	}
 	
+	/**
+	 * On get app requests listener
+	 * 
+	 * @author koraybalci
+	 * 
+	 */
+	public interface OnAppRequestsListener extends OnActionListener
+	{
+		void onComplete(JSONArray result);
+	}
+
 	/**
 	 * On delete request listener
 	 * 
