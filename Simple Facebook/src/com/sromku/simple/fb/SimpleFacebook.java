@@ -529,7 +529,6 @@ public class SimpleFacebook
 								{
 									onAppRequestsListener.onException(e);
 								}
-								return;
 							}
 						}
 						else
@@ -618,6 +617,89 @@ public class SimpleFacebook
 			if (onDeleteRequestListener != null)
 			{
 				onDeleteRequestListener.onFail(reason);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Gets scores using Scores API for games. <br>
+	 * <br>
+	 * 
+	 * 
+	 * @param onScoresRequestListener The listener for getting scores
+	 * @see https://developers.facebook.com/docs/games/scores/
+	 */
+	public void getScores(final OnScoresRequestListener onScoresRequestListener)
+	{
+		// if we are logged in
+		if (isLogin())
+		{
+			Session session = getOpenSession();
+			Bundle bundle = null;
+			Request request = new Request(session, mConfiguration.getAppId() + "/scores", bundle, HttpMethod.GET, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to get scores", error.getException());
+
+						// callback with 'exception'
+						if (onScoresRequestListener != null)
+						{
+							onScoresRequestListener.onException(error.getException());
+						}						
+					}
+					else
+					{
+						GraphObject graphObject = response.getGraphObject();					
+						if (graphObject != null)
+						{						
+							JSONObject graphResponse = graphObject.getInnerJSONObject();
+							try {
+								JSONArray result = graphResponse.getJSONArray( "data" );
+								if (onScoresRequestListener != null)
+								{
+									onScoresRequestListener.onComplete(result);
+								}
+							} catch (JSONException e) {
+								if (onScoresRequestListener != null)
+								{
+									onScoresRequestListener.onException(e);
+								}
+							}
+						}
+						else
+						{
+							// log
+							logError("The GraphObject in Response of getScores has null value. Response=" + response.toString(), null);
+						}	
+					}	
+				}
+			});
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+
+			// callback with 'thinking'
+			if (onScoresRequestListener != null)
+			{
+				onScoresRequestListener.onThinking();
+			}
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being logged in
+			if (onScoresRequestListener != null)
+			{
+				onScoresRequestListener.onFail(reason);
 			}
 		}
 	}
@@ -1823,6 +1905,17 @@ public class SimpleFacebook
 	public interface OnDeleteRequestListener extends OnActionListener
 	{
 		void onComplete();
+	}
+	
+	/**
+	 * On get scores requests listener
+	 * 
+	 * @author koraybalci
+	 * 
+	 */
+	public interface OnScoresRequestListener extends OnActionListener
+	{
+		void onComplete(JSONArray result);
 	}
 	
 	/**
