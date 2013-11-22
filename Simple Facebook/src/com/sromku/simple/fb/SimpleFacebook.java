@@ -1521,11 +1521,13 @@ public class SimpleFacebook
 				else if (mDoOnLogin)
 				{
 					mDoOnLogin = false;
+
+					if (mOnLoginListener != null)
+					{
+						mOnLoginListener.onLogin();
+					}
 				}
-				if (mOnLoginListener != null)
-			    {
-					mOnLoginListener.onLogin();
-				}
+
 				break;
 
 			default:
