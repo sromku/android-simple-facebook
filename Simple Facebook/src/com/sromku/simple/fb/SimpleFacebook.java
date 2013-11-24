@@ -1629,25 +1629,27 @@ public class SimpleFacebook
 		if (request != null)
 		{
 			request.setDefaultAudience(mConfiguration.getSessionDefaultAudience());
-			request.setPermissions(mConfiguration.getReadPermissions());
 			request.setLoginBehavior(mConfiguration.getSessionLoginBehavior());
-
-			/*
-			 * In case there are also PUBLISH permissions, then we would ask for these permissions second time
-			 * (after, user accepted the read permissions)
-			 */
-			if (mConfiguration.hasPublishPermissions())
-			{
-				mSessionStatusCallback.askPublishPermissions();
-			}
 
 			if (isRead)
 			{
-				// Open session with read permissions
+                request.setPermissions(mConfiguration.getReadPermissions());
+
+                /*
+                 * In case there are also PUBLISH permissions, then we would ask for these permissions second time
+                 * (after, user accepted the read permissions)
+                 */
+                if (mConfiguration.hasPublishPermissions())
+                {
+                    mSessionStatusCallback.askPublishPermissions();
+                }
+
+                // Open session with read permissions
 				session.openForRead(request);
 			}
 			else
 			{
+                request.setPermissions(mConfiguration.getPublishPermissions());
 				session.openForPublish(request);
 			}
 		}
