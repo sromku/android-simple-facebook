@@ -9,75 +9,83 @@ import com.sromku.simple.fb.utils.Logger;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class Video
-{
-	private static final String THUMBNAIL = "picture"; //TODO
-	private static final String NAME = "name";
+public class Video {
+    private static final String THUMBNAIL = "picture";
+    private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
+    //private static final String PRIVACY = "privacy"; // Should work by facebook staff developer example but doesn't
 
     private String mDescription = null;
     private String mTitle = null;
+    private String mVideoFileName = null;
+    //private SessionDefaultAudience mPrivacy = null; // Should work by facebook staff developer example but doesn't
     private Bitmap mThumbnail = null; //TODO
 
-	private Parcelable mParcelable = null;
-	private byte[] mBytes = null;
+    private Parcelable mParcelable = null;
+    private byte[] mBytes = null;
 
-	public Video(File file)
-	{
-		try
-		{
-			mParcelable = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
-		}
-		catch (FileNotFoundException e)
-		{
-			Logger.logError(Video.class, "Failed to create video from file", e);
-		}
-	}
+    public Video(File file) {
+        try {
+            mParcelable = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+            mVideoFileName = file.getName();
+        } catch (FileNotFoundException e) {
+            Logger.logError(Video.class, "Failed to create video from file", e);
+        }
+    }
 
-	public Video(byte[] bytes)
-	{
-		mBytes = bytes;
-	}
+    /**
+     * @param videoFileName A valid video file name.<br/>
+     *                      Have to be something with a valid extensions (for example: video.mp4)
+     * @param bytes         The byte array of the video file
+     */
+    public Video(String videoFileName, byte[] bytes) {
+        mVideoFileName = videoFileName;
+        mBytes = bytes;
+    }
 
-	/**
-	 * Add description to the video
-	 * 
-	 * @param description The description of the video
-	 */
-	public void addDescription(String description)
-	{
-		mDescription = description;
-	}
+    /**
+     * Add description to the video
+     *
+     * @param description The description of the video
+     */
+    public void addDescription(String description) {
+        mDescription = description;
+    }
 
     /**
      * Add title to the video
      *
      * @param title The title of the video
      */
-    public void addTitle(String title)
-    {
+    public void addTitle(String title) {
         mTitle = title;
     }
 
-	public Bundle getBundle()
-	{
-		Bundle bundle = new Bundle();
+    public Bundle getBundle() {
+        Bundle bundle = new Bundle();
 
         // add title
-        if (mTitle != null)
-        {
-            bundle.putString(NAME, mTitle);
+        if (mTitle != null) {
+            bundle.putString(TITLE, mTitle);
         }
 
-		// add description
-		if (mDescription != null)
-		{
-			bundle.putString(DESCRIPTION, mDescription);
-		}
+        // add description
+        if (mDescription != null) {
+            bundle.putString(DESCRIPTION, mDescription);
+        }
 
-		// add thumbnail //TODO
+        // add thumbnail //TODO
 
-		return bundle;
-	}
+        // add video
+        if (mParcelable != null) {
+            bundle.putParcelable(mVideoFileName, mParcelable);
+        }
+
+        if (mBytes != null) {
+            bundle.putByteArray(mVideoFileName, mBytes);
+        }
+
+        return bundle;
+    }
 
 }
