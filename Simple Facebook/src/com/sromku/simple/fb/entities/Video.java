@@ -64,7 +64,7 @@ public class Video {
         mTitle = title;
     }
 
-    public void setPrivacy(Privacy privacy) {
+    public void addPrivacy(Privacy privacy) {
         mPrivacy = privacy;
     }
 
@@ -92,6 +92,7 @@ public class Video {
             bundle.putByteArray(mVideoFileName, mBytes);
         }
 
+        // add privacy
         if (mPrivacy != null) {
             bundle.putString(PRIVACY, mPrivacy.getJSONString());
         }
