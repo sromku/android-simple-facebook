@@ -19,6 +19,7 @@ Sample app:
 * [Publish feed](#publish-feed)
 * [Publish story (open graph)](#publish-story-open-graph)
 * [Publish photo](#publish-photo)
+* [Publish video](#publish-video)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
@@ -160,6 +161,7 @@ public void onResume()
 * [Publish feed](#publish-feed)
 * [Publish story (open graph)](#publish-story-open-graph)
 * [Publish photo](#publish-photo)
+* [Publish video](#publish-video)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
@@ -408,7 +410,7 @@ OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 // This is the image you want to upload
 Bitmap bitmap = ...
 
-// create Photo instace and add some properties
+// create Photo instance and add some properties
 Photo photo = new Photo(bitmap);
 photo.addDescription("Screenshot from #android_simple_facebook sample application");
 photo.addPlace("110619208966868");
@@ -426,6 +428,59 @@ String albumId = ...;
 
 // publish photo to album
 mSimpleFacebook.publish(photo, albumId, onPublishListener);
+```
+
+### Publish video
+
+You can publish (upload) a video only to the default "Videos" album. <br>
+`Video` can be created from:<br>
+- `File`
+- `byte[]`
+
+Set `OnPublishListener` and call for `publish(Video, OnPublishListener)`.
+
+``` java
+// create publish listener
+OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+{
+
+	@Override
+	public void onFail(String reason)
+	{
+		// insure that you are logged in before publishing
+		Log.w(TAG, reason);
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while publishing
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onComplete(String id)
+	{
+		Log.i(TAG, "Published successfully. id = " + id);
+	}
+};
+
+// This is the Video you want to upload
+File videoFile = ...
+
+// create a Video instance and add some properties
+Video video = new Video(videoFile);
+video.addTitle("A video");
+video.addDescription("Video from #android_simple_facebook sample application");
+
+// publish video to "Videos" album
+mSimpleFacebook.publish(video, onPublishListener);
 ```
 
 ### Invite
