@@ -14,19 +14,19 @@ Sample app:
 </a>
 
 ## Features
-* [Login](https://github.com/sromku/android-simple-facebook#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
-* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
-	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
-	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
-	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
-* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
-* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get publish permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
+* [Login](#login-1)
+* [Logout](#logout-1)
+* [Publish feed](#publish-feed)
+* [Publish story (open graph)](#publish-story-open-graph)
+* [Publish photo](#publish-photo)
+* [Invite friend/s](#invite)
+	* [Invite all friends](#all)
+	* [Invite suggested friends](#suggested-friends)
+	* [Invite one friend](#one-friend-only)
+* [Get profile](#get-my-profile-1)
+* [Get friends](#get-friends)
+* [Get albums](#get-albums)
+* [Get publish permissions](#request-publish)
 
 *And,*
 * Based on latest Facebook SDK
@@ -35,7 +35,7 @@ Sample app:
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
 ## Few Examples
-Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](https://github.com/sromku/android-simple-facebook#usage) paragraph.
+Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](#usage) paragraph.
 
 ### Login
 You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
@@ -155,19 +155,19 @@ public void onResume()
 
 #### 2. Run the action (login, publish, invite,…)
 
-* [Login](https://github.com/sromku/android-simple-facebook#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
-* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
-	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
-	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
-	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
-* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
-* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
+* [Login](#login-1)
+* [Logout](#logout-1)
+* [Publish feed](#publish-feed)
+* [Publish story (open graph)](#publish-story-open-graph)
+* [Publish photo](#publish-photo)
+* [Invite friend/s](#invite)
+	* [Invite all friends](#all)
+	* [Invite suggested friends](#suggested-friends)
+	* [Invite one friend](#one-friend-only)
+* [Get profile](#get-my-profile-1)
+* [Get friends](#get-friends)
+* [Get albums](#get-albums)
+* [Get Publish Permissions](#request-publish)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
