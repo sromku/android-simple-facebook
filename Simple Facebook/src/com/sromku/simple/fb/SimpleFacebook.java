@@ -1088,25 +1088,17 @@ public class SimpleFacebook
 	}
 
     /**
-     * Publish video to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
-     * all user's albums.<br>
+     * Publish video to "Videos" album.
      * <br>
      *
      * <b>Permission:</b><br>
      * {@link Permissions#PUBLISH_STREAM}<br>
      * <br>
      *
-     * <b>Important:</b><br>
-     * - The user must own the album<br>
-     * - The app can add videos to the album<br>
-     * - The privacy setting of the app should be at minimum as the privacy setting of the album (
-     * {@link Album#getPrivacy()}
-     *
      * @param video The video to upload
-     * @param albumId The album to which the photo should be uploaded
      * @param onPublishListener The callback listener
      */
-    public void publish(final Video video, final String albumId, final OnPublishListener onPublishListener)
+    public void publish(final Video video, final OnPublishListener onPublishListener)
     {
         if (isLogin())
         {
@@ -1130,7 +1122,7 @@ public class SimpleFacebook
                         @Override
                         public void onSuccess()
                         {
-                            publishImpl(video, albumId, onPublishListener);
+                            publishImpl(video, onPublishListener);
                         }
 
                         @Override
@@ -1152,7 +1144,7 @@ public class SimpleFacebook
                 }
                 else
                 {
-                    publishImpl(video, albumId, onPublishListener);
+                    publishImpl(video, onPublishListener);
                 }
             }
             else
@@ -1178,25 +1170,6 @@ public class SimpleFacebook
                 onPublishListener.onFail(reason);
             }
         }
-    }
-
-    /**
-     * Publish video to application default album.<br>
-     * <br>
-     *
-     * <b>Permission:</b><br>
-     * {@link Permissions#PUBLISH_STREAM}<br>
-     * <br>
-     *
-     * <b>Important:</b><br>
-     * {@link Album#getPrivacy()}
-     *
-     * @param video The video to upload
-     * @param onPublishListener The callback listener
-     */
-    public void publish(final Video video, final OnPublishListener onPublishListener)
-    {
-        publish(video, "me", onPublishListener);
     }
 
 	/**
@@ -1643,10 +1616,10 @@ public class SimpleFacebook
 		task.execute();
 	}
 
-    private static void publishImpl(Video video, String albumId, final OnPublishListener onPublishListener)
+    private static void publishImpl(Video video, final OnPublishListener onPublishListener)
     {
         Session session = getOpenSession();
-        Request request = new Request(session, albumId + "/videos", video.getBundle(), HttpMethod.POST, new Request.Callback()
+        Request request = new Request(session, "me/videos", video.getBundle(), HttpMethod.POST, new Request.Callback()
         {
             @Override
             public void onCompleted(Response response)
