@@ -4,22 +4,25 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
+import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Video {
-    private static final String THUMBNAIL = "picture";
+    private static final String THUMBNAIL = "picture"; //TODO
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
-    //private static final String PRIVACY = "privacy"; // Should work by facebook staff developer example but doesn't
+    private static final String PRIVACY = "privacy";
 
     private String mDescription = null;
     private String mTitle = null;
     private String mVideoFileName = null;
-    //private SessionDefaultAudience mPrivacy = null; // Should work by facebook staff developer example but doesn't
     private Bitmap mThumbnail = null; //TODO
+    private Privacy mPrivacy = null;
 
     private Parcelable mParcelable = null;
     private byte[] mBytes = null;
@@ -61,6 +64,10 @@ public class Video {
         mTitle = title;
     }
 
+    public void setPrivacy(Privacy privacy) {
+        mPrivacy = privacy;
+    }
+
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
 
@@ -83,6 +90,10 @@ public class Video {
 
         if (mBytes != null) {
             bundle.putByteArray(mVideoFileName, mBytes);
+        }
+
+        if (mPrivacy != null) {
+            bundle.putString(PRIVACY, mPrivacy.getJSONString());
         }
 
         return bundle;
