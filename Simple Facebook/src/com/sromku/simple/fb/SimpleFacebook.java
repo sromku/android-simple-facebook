@@ -31,6 +31,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Story;
@@ -807,6 +808,110 @@ public class SimpleFacebook
 	}
 	
 	/**
+	 * 
+	 * Publish {@link Like}.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_ACTION}
+	 * 
+	 * @param like The like object to publish. Use {@link Like.Builder} to create a new <code>Like</code>
+	 * @param onPublishListener The listener for publishing action
+     * @See https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes
+     */
+	public void publish(final Like like, final OnPublishListener onPublishListener)
+    {
+        publish(like, onPublishListener, true);
+    }
+    
+    /**
+    * 
+    * Publish {@link Like}.<br>
+    * <br>
+    * 
+    * <b>Permission:</b><br>
+    * {@link Permissions#PUBLISH_ACTION}
+    * 
+    * @param like The like object to publish. Use {@link Like.Builder} to create a new <code>Like</code>
+    * @param onPublishListener The listener for publishing action
+    * @param async should the call be made via async task
+    * @See https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes
+    */
+   public void publish(final Like like, final OnPublishListener onPublishListener, final boolean async)
+   {
+       // if we are logged in
+       if (isLogin())
+       {
+           // if we defined the publish permission
+           if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+           {
+               // callback with 'thinking'
+               if (onPublishListener != null)
+               {
+                   onPublishListener.onThinking();
+               }
+               
+               /*
+                * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+                * this permission.
+                */
+               if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+               {
+                   mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener()
+                   {
+                       @Override
+                       public void onSuccess()
+                       {
+                           publishImpl(like, onPublishListener, async);
+                       }
+                       
+                       @Override
+                       public void onNotAcceptingPermissions()
+                       {
+                           // this fail can happen when user doesn't accept the publish permissions
+                           String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+                           logError(reason, null);
+                           if (onPublishListener != null)
+                           {
+                               onPublishListener.onFail(reason);
+                           }
+                       }
+                   };
+                   
+                   // extend publish permissions automatically
+                   extendPublishPermissions();
+               }
+               else
+               {
+                   publishImpl(like, onPublishListener, async);
+               }
+           }
+           else
+           {
+               String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
+               logError(reason, null);
+               
+               // callback with 'fail' due to insufficient permissions
+               if (onPublishListener != null)
+               {
+                   onPublishListener.onFail(reason);
+               }
+           }
+       }
+       else
+       {
+           // callback with 'fail' due to not being loged
+           if (onPublishListener != null)
+           {
+               String reason = Errors.getError(ErrorMsg.LOGIN);
+               logError(reason, null);
+
+               onPublishListener.onFail(reason);
+           }
+       }
+   }
+	
+	/**
      * 
      * Publish {@link Feed} on the wall.<br>
      * <br>
@@ -1408,6 +1513,17 @@ public class SimpleFacebook
 	{
 		mActivity = null;
 	}	
+	
+	private static void publishImpl(Like like, final OnPublishListener onPublishListener, boolean async) {
+	    if (async)
+	    {
+	        publishAsync("me/og.likes", like.getBundle(), onPublishListener);
+	    }
+	    else
+	    {
+	        publishSync("me/og.likes", like.getBundle(), onPublishListener);
+	    }
+	}
 	
 	private static void publishImpl(Feed feed, final OnPublishListener onPublishListener, boolean async)
 	{
