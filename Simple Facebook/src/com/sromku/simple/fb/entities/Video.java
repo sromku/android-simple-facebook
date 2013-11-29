@@ -1,13 +1,10 @@
 package com.sromku.simple.fb.entities;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +59,12 @@ public class Video {
         mTitle = title;
     }
 
+    /**
+     * Add privacy setting to the video
+     *
+     * @param privacy The privacy setting of the video
+     * @see com.sromku.simple.fb.Privacy
+     */
     public void addPrivacy(Privacy privacy) {
         mPrivacy = privacy;
     }
