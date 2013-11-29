@@ -50,7 +50,20 @@ public class Privacy {
     }
 
     /**
-     * Add users and/or friend lists to the allowed list
+     * Add a predefined friend list to the allowed list
+     * This can <b>only</b> be ALL_FRIENDS or FRIENDS_OF_FRIENDS to include all members of those sets.
+     * @param friendList ALL_FRIENDS or FRIENDS_OF_FRIENDS to include all members of those sets
+     */
+    public void addallowedUserOrListID(PrivacySettings friendList) {
+        ValidateListsAccessRequest();
+        if (friendList != PrivacySettings.ALL_FRIENDS || friendList != PrivacySettings.FRIENDS_OF_FRIENDS) {
+            throw new UnsupportedOperationException("Can't add this predefined friend list. Only allowed are: ALL_FRIENDS or FRIENDS_OF_FRIENDS");
+        }
+        allowedUsers.add(friendList.name());
+    }
+
+    /**
+     * Add users and/or friend lists to the allowed list.
      * @param userOrListIDs mixed user IDs and friend list IDs that "can" see the post
      */
     public void addAllowedUserOrListIDs(Collection<? extends String> userOrListIDs) {
