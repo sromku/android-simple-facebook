@@ -63,7 +63,7 @@ public class Privacy {
         ALL_FRIENDS,
         FRIENDS_OF_FRIENDS,
         SELF,
-        CUSTOM //TODO: Implement
+        CUSTOM
     }
 
     public String getJSONString() {
