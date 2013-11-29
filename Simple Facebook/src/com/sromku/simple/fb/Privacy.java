@@ -23,7 +23,7 @@ public class Privacy {
     private ArrayList<String> deniedUsers = new ArrayList<String>();
 
     /**
-     * Important: If you choose "CUSTOM", you must call either<br/>
+     * <b>Important:</b> If you choose "CUSTOM", you must call either<br/>
      * addAllowedUserOrListID(s) or addDeniedUserOrListID(s).
      *
      * @param privacySettings The wanted privacy settings
