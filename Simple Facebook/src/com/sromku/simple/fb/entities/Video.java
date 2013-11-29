@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Video {
-    private static final String THUMBNAIL = "picture"; //TODO
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
     private static final String PRIVACY = "privacy";
@@ -21,7 +20,6 @@ public class Video {
     private String mDescription = null;
     private String mTitle = null;
     private String mVideoFileName = null;
-    private Bitmap mThumbnail = null; //TODO
     private Privacy mPrivacy = null;
 
     private Parcelable mParcelable = null;
@@ -80,8 +78,6 @@ public class Video {
         if (mDescription != null) {
             bundle.putString(DESCRIPTION, mDescription);
         }
-
-        // add thumbnail //TODO
 
         // add video
         if (mParcelable != null) {
