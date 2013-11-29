@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * https://developers.facebook.com/docs/reference/api/privacy-parameter/
+ * Reference: https://developers.facebook.com/docs/reference/api/privacy-parameter/
  *
  * @author ronlut
  */
@@ -23,6 +23,8 @@ public class Privacy {
     private ArrayList<String> deniedUsers = new ArrayList<String>();
 
     /**
+     * The privacy parameter only applies for posts to the user's own timeline<br/>
+     * and is ultimately governed by the privacy ceiling a user has configured for an app.<br/>
      * <b>Important:</b> If you choose "CUSTOM", you must call either<br/>
      * addAllowedUserOrListID(s) or addDeniedUserOrListID(s).
      *
@@ -37,22 +39,38 @@ public class Privacy {
             throw new UnsupportedOperationException("Can't add / delete from allowed / denied lists when privacy setting is different than \"CUSTOM\"");
     }
 
+    /**
+     * Add a user or a friend list to the allowed list
+     * @param userOrListID user ID or friend list ID that "can" see the post
+     */
     public void addAllowedUserOrListID(String userOrListID) {
 
         ValidateListsAccessRequest();
         allowedUsers.add(userOrListID);
     }
 
+    /**
+     * Add users and/or friend lists to the allowed list
+     * @param userOrListIDs mixed user IDs and friend list IDs that "can" see the post
+     */
     public void addAllowedUserOrListIDs(Collection<? extends String> userOrListIDs) {
         ValidateListsAccessRequest();
         allowedUsers.addAll(userOrListIDs);
     }
 
+    /**
+     * Add a user or a friend list to the denied list
+     * @param userOrListID user ID or friend list ID that "cannot" see the post
+     */
     public void addDeniedUserOrListID(String userOrListID) {
         ValidateListsAccessRequest();
         deniedUsers.add(userOrListID);
     }
 
+    /**
+     * Add users and/or friend lists to the denied list
+     * @param userOrListIDs mixed user IDs and friend list IDs that "can" see the post
+     */
     public void addDeniedUserOrListIDs(Collection<? extends String> userOrListIDs) {
         ValidateListsAccessRequest();
         deniedUsers.addAll(userOrListIDs);
