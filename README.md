@@ -20,6 +20,7 @@ Sample app:
 * [Publish story (open graph)](#publish-story-open-graph)
 * [Publish photo](#publish-photo)
 * [Publish video](#publish-video)
+* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
@@ -162,6 +163,7 @@ public void onResume()
 * [Publish story (open graph)](#publish-story-open-graph)
 * [Publish photo](#publish-photo)
 * [Publish video](#publish-video)
+* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
@@ -481,6 +483,54 @@ video.addDescription("Video from #android_simple_facebook sample application");
 
 // publish video to "Videos" album
 mSimpleFacebook.publish(video, onPublishListener);
+```
+
+### Set privacy settings of a single post
+You can set the privacy settings of a single post (set who can / can't see the post). <br/>
+Currently supported in:<br/>
+- `Feed`
+- `Photo`
+- `Video`
+
+``` java
+// This is the object you want to set privacy of and the publish listener
+Photo photo = ...
+OnPublishListener onPublishListener = ...
+```
+
+#### Predefined privacy settings
+You can use one of the following predefined privacy settings: <br/>
+- EVERYONE, 
+- ALL_FRIENDS, 
+- FRIENDS_OF_FRIENDS, 
+- SELF
+
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.EVERYONE);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
+```
+
+#### Custom privacy settings
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.CUSTOM);
+
+// All available options: 
+privacy.addAllowedUserOrListID({user ID or friend list ID that "can" see the post});
+privacy.addAllowedUserOrListIDs({mixed user IDs and friend list IDs that "can" see the post});
+privacy.addDeniedUserOrListID({user ID or friend list ID that "cannot" see the post});
+privacy.addDeniedUserOrListIDs({mixed user IDs and friend list IDs that "cannot" see the post});
+
+// List ID can also be "ALL_FRIENDS" or "FRIENDS_OF_FRIENDS" (only) to include all members of those sets:
+privacy.addAllowedUserOrListID(Privacy.PrivacySettings.ALL_FRIENDS);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
 ```
 
 ### Invite
