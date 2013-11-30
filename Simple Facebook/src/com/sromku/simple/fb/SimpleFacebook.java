@@ -3,7 +3,12 @@ package com.sromku.simple.fb;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sromku.simple.fb.entities.*;
+import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.Video;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
