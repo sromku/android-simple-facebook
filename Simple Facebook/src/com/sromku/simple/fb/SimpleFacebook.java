@@ -75,13 +75,14 @@ public class SimpleFacebook
 	{
 		mSessionStatusCallback = new SessionStatusCallback();
 	}
-	
+
 	public static void initialize(Activity activity)
 	{
-		if (mInstance == null) {
+		if (mInstance == null)
+		{
 			mInstance = new SimpleFacebook();
 		}
-		
+
 		mActivity = activity;
 	}
 
@@ -95,7 +96,7 @@ public class SimpleFacebook
 		mActivity = activity;
 		return mInstance;
 	}
-	
+
 	public static SimpleFacebook getInstance()
 	{
 		return mInstance;
@@ -222,7 +223,7 @@ public class SimpleFacebook
 	 * @param properties The {@link Properties}. <br>
 	 *            To create {@link Properties} instance use:
 	 * 
-	 * <pre>
+	 *            <pre>
 	 * // define the profile picture we want to get
 	 * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
 	 * pictureAttributes.setType(PictureType.SQUARE);
@@ -487,7 +488,7 @@ public class SimpleFacebook
 			}
 		}
 	}
-	
+
 	public void getAppRequests(final OnAppRequestsListener onAppRequestsListener)
 	{
 		// if we are logged in
@@ -510,21 +511,24 @@ public class SimpleFacebook
 						if (onAppRequestsListener != null)
 						{
 							onAppRequestsListener.onException(error.getException());
-						}						
+						}
 					}
 					else
 					{
-						GraphObject graphObject = response.getGraphObject();					
+						GraphObject graphObject = response.getGraphObject();
 						if (graphObject != null)
-						{						
+						{
 							JSONObject graphResponse = graphObject.getInnerJSONObject();
-							try {
-								JSONArray result = graphResponse.getJSONArray( "data" );
+							try
+							{
+								JSONArray result = graphResponse.getJSONArray("data");
 								if (onAppRequestsListener != null)
 								{
 									onAppRequestsListener.onComplete(result);
 								}
-							} catch (JSONException e) {
+							}
+							catch (JSONException e)
+							{
 								if (onAppRequestsListener != null)
 								{
 									onAppRequestsListener.onException(e);
@@ -535,8 +539,8 @@ public class SimpleFacebook
 						{
 							// log
 							logError("The GraphObject in Response of getAppRequests has null value. Response=" + response.toString(), null);
-						}	
-					}	
+						}
+					}
 				}
 			});
 
@@ -561,29 +565,30 @@ public class SimpleFacebook
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Deletes an apprequest.<br>
 	 * <br>
 	 * 
-	 * @param inRequestId Input request id to be deleted. Note that it should have the form {USERID}_{REQUESTID} <code>String</code>
+	 * @param inRequestId Input request id to be deleted. Note that it should have the form
+	 *            {USERID}_{REQUESTID} <code>String</code>
 	 * @param onDeleteRequestListener The listener for deletion action
 	 * @see https://developers.facebook.com/docs/android/app-link-requests/#step3
 	 */
-	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) 
+	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener)
 	{
-		if(isLogin())
+		if (isLogin())
 		{
-		    // Create a new request for an HTTP delete with the
-		    // request ID as the Graph path.
+			// Create a new request for an HTTP delete with the
+			// request ID as the Graph path.
 			Session session = getOpenSession();
-		    Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback() 
-		    {
-	            @Override
-	            public void onCompleted(Response response)
-	            {
-	            	FacebookRequestError error = response.getError();
+			Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					FacebookRequestError error = response.getError();
 					if (error != null)
 					{
 						// log
@@ -603,10 +608,10 @@ public class SimpleFacebook
 							onDeleteRequestListener.onComplete();
 						}
 					}
-	            }
-	        });
-		    // Execute the request asynchronously.
-		    Request.executeBatchAsync(request);
+				}
+			});
+			// Execute the request asynchronously.
+			Request.executeBatchAsync(request);
 		}
 		else
 		{
@@ -620,7 +625,7 @@ public class SimpleFacebook
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Gets scores using Scores API for games. <br>
@@ -652,21 +657,24 @@ public class SimpleFacebook
 						if (onScoresRequestListener != null)
 						{
 							onScoresRequestListener.onException(error.getException());
-						}						
+						}
 					}
 					else
 					{
-						GraphObject graphObject = response.getGraphObject();					
+						GraphObject graphObject = response.getGraphObject();
 						if (graphObject != null)
-						{						
+						{
 							JSONObject graphResponse = graphObject.getInnerJSONObject();
-							try {
-								JSONArray result = graphResponse.getJSONArray( "data" );
+							try
+							{
+								JSONArray result = graphResponse.getJSONArray("data");
 								if (onScoresRequestListener != null)
 								{
 									onScoresRequestListener.onComplete(result);
 								}
-							} catch (JSONException e) {
+							}
+							catch (JSONException e)
+							{
 								if (onScoresRequestListener != null)
 								{
 									onScoresRequestListener.onException(e);
@@ -677,8 +685,8 @@ public class SimpleFacebook
 						{
 							// log
 							logError("The GraphObject in Response of getScores has null value. Response=" + response.toString(), null);
-						}	
-					}	
+						}
+					}
 				}
 			});
 
@@ -703,10 +711,11 @@ public class SimpleFacebook
 			}
 		}
 	}
-	
+
 	/**
 	 * 
-	 * Posts a score using Scores API for games. If missing publish_actions permission, we do not ask again for it.<br>
+	 * Posts a score using Scores API for games. If missing publish_actions permission, we do not ask again
+	 * for it.<br>
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
@@ -719,7 +728,7 @@ public class SimpleFacebook
 	 */
 	public void postScore(int score, final OnPostScoreListener onPostScoreListener)
 	{
-		if(isLogin())
+		if (isLogin())
 		{
 			// if we defined the publish permission
 			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
@@ -731,7 +740,7 @@ public class SimpleFacebook
 				}
 
 				/*
-				 * Check if session to facebook has 'publish_action' permission. If not, we will return fail, 
+				 * Check if session to facebook has 'publish_action' permission. If not, we will return fail,
 				 * client app may try to ask for permission later (not to annoy users).
 				 */
 				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
@@ -772,7 +781,7 @@ public class SimpleFacebook
 					{
 						// log
 						logError("Failed to publish score", error.getException());
-	
+
 						// callback with 'exception'
 						if (onPostScoreListener != null)
 						{
@@ -786,10 +795,10 @@ public class SimpleFacebook
 						{
 							onPostScoreListener.onComplete();
 						}
-					}				
+					}
 				}
 			});
-	
+
 			RequestAsyncTask task = new RequestAsyncTask(request);
 			task.execute();
 		}
@@ -1174,23 +1183,23 @@ public class SimpleFacebook
 	}
 
 	/**
-	 *
-	 * Requests {@link Permissions#PUBLISH_ACTION} and nothing else.
-	 * Useful when you just want to request the action and won't be publishing at the time, but still need the
-	 * updated <b>access token</b> with the permissions (possibly to pass back to your backend).
-	 * You must add {@link Permissions#PUBLISH_ACTION} to your SimpleFacebook configuration before calling this.
-	 *
+	 * 
+	 * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when you just want to request the
+	 * action and won't be publishing at the time, but still need the updated <b>access token</b> with the
+	 * permissions (possibly to pass back to your backend). You must add {@link Permissions#PUBLISH_ACTION} to
+	 * your SimpleFacebook configuration before calling this.
+	 * 
 	 * <b>Must be logged to use.</b>
-	 *
+	 * 
 	 * @param onPermissionListener The listener for the request permission action
 	 */
-	public void requestPublish(final OnPermissionListener onPermissionListener) 
+	public void requestPublish(final OnPermissionListener onPermissionListener)
 	{
-		if (isLogin()) 
+		if (isLogin())
 		{
-			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) 
+			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
 			{
-				if (onPermissionListener != null) 
+				if (onPermissionListener != null)
 				{
 					onPermissionListener.onThinking();
 				}
@@ -1198,25 +1207,26 @@ public class SimpleFacebook
 				 * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
 				 * this permission.
 				 */
-				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) 
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
 				{
-					mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener() 
+					mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener()
 					{
 						@Override
-						public void onSuccess() 
+						public void onSuccess()
 						{
-							if (onPermissionListener != null) 
+							if (onPermissionListener != null)
 							{
 								onPermissionListener.onSuccess(getAccessToken());
 							}
 						}
+
 						@Override
-						public void onNotAcceptingPermissions() 
+						public void onNotAcceptingPermissions()
 						{
 							// this fail can happen when user doesn't accept the publish permissions
 							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
 							logError(reason, null);
-							if (onPermissionListener != null) 
+							if (onPermissionListener != null)
 							{
 								onPermissionListener.onFail(reason);
 							}
@@ -1224,21 +1234,21 @@ public class SimpleFacebook
 					};
 					// extend publish permissions automatically
 					extendPublishPermissions();
-				} 
-				else 
+				}
+				else
 				{
 					// We already have the permission.
-					if (onPermissionListener != null) 
+					if (onPermissionListener != null)
 					{
 						onPermissionListener.onSuccess(getAccessToken());
 					}
 				}
 			}
-		} 
-		else 
+		}
+		else
 		{
 			// callback with 'fail' due to not being loged
-			if (onPermissionListener != null) 
+			if (onPermissionListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
 				logError(reason, null);
@@ -1278,15 +1288,15 @@ public class SimpleFacebook
 		Session session = Session.getActiveSession();
 		if (session == null)
 		{
-			if ( mActivity == null )
+			if (mActivity == null)
 			{
 				// You can't create a session if the activity/context hasn't been initialized
 				// This is now possible because the library can be started without context.
 				return false;
 			}
 			session = new Session.Builder(mActivity.getApplicationContext())
-					.setApplicationId(mConfiguration.getAppId())
-					.build();
+				.setApplicationId(mConfiguration.getAppId())
+				.build();
 			Session.setActiveSession(session);
 		}
 		if (session.isOpened())
@@ -1320,7 +1330,8 @@ public class SimpleFacebook
 	/**
 	 * Get access token of open session
 	 * 
-	 * @return a {@link String} containing the Access Token of the current {@link Session} or null if no session.
+	 * @return a {@link String} containing the Access Token of the current {@link Session} or null if no
+	 *         session.
 	 */
 	public String getAccessToken()
 	{
@@ -1349,7 +1360,7 @@ public class SimpleFacebook
 	{
 		mActivity = null;
 	}
-	
+
 	private static void publishImpl(Feed feed, final OnPublishListener onPublishListener)
 	{
 		Session session = getOpenSession();
@@ -1534,7 +1545,7 @@ public class SimpleFacebook
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 	}
-	
+
 	private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener)
 	{
 		mDialog = new WebDialog.RequestsDialogBuilder(activity, Session.getActiveSession(), params).
@@ -1633,23 +1644,23 @@ public class SimpleFacebook
 
 			if (isRead)
 			{
-                request.setPermissions(mConfiguration.getReadPermissions());
+				request.setPermissions(mConfiguration.getReadPermissions());
 
-                /*
-                 * In case there are also PUBLISH permissions, then we would ask for these permissions second time
-                 * (after, user accepted the read permissions)
-                 */
-                if (mConfiguration.hasPublishPermissions())
-                {
-                    mSessionStatusCallback.askPublishPermissions();
-                }
+				/*
+				 * In case there are also PUBLISH permissions, then we would ask for these permissions second
+				 * time (after, user accepted the read permissions)
+				 */
+				if (mConfiguration.hasPublishPermissions())
+				{
+					mSessionStatusCallback.askPublishPermissions();
+				}
 
-                // Open session with read permissions
+				// Open session with read permissions
 				session.openForRead(request);
 			}
 			else
 			{
-                request.setPermissions(mConfiguration.getPublishPermissions());
+				request.setPermissions(mConfiguration.getPublishPermissions());
 				session.openForPublish(request);
 			}
 		}
@@ -1669,7 +1680,8 @@ public class SimpleFacebook
 		if (session != null && session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
 		{
 			List<String> permissions = session.getPermissions();
-			if (permissions.containsAll(mConfiguration.getPublishPermissions()))
+			List<String> publishPermissions = mConfiguration.getPublishPermissions();
+			if (publishPermissions != null && publishPermissions.size() > 0 && permissions.containsAll(publishPermissions))
 			{
 				openSession(session, false);
 			}
@@ -1764,8 +1776,8 @@ public class SimpleFacebook
 			switch (state)
 			{
 			case CLOSED:
-			    if (mOnLogoutListener != null) 
-			    {
+				if (mOnLogoutListener != null)
+				{
 					mOnLogoutListener.onLogout();
 				}
 				break;
@@ -1780,8 +1792,8 @@ public class SimpleFacebook
 				break;
 
 			case OPENING:
-			    if (mOnLoginListener != null)
-			    {
+				if (mOnLoginListener != null)
+				{
 					mOnLoginListener.onThinking();
 				}
 				break;
@@ -1822,8 +1834,8 @@ public class SimpleFacebook
 				}
 				else
 				{
-					if (mOnLoginListener != null) 
-				    {
+					if (mOnLoginListener != null)
+					{
 						mOnLoginListener.onLogin();
 					}
 				}
@@ -1911,7 +1923,7 @@ public class SimpleFacebook
 	{
 		void onComplete(List<Profile> friends);
 	}
-	
+
 	/**
 	 * On get app requests listener
 	 * 
@@ -1933,7 +1945,7 @@ public class SimpleFacebook
 	{
 		void onComplete();
 	}
-	
+
 	/**
 	 * On get scores requests listener
 	 * 
@@ -1944,7 +1956,7 @@ public class SimpleFacebook
 	{
 		void onComplete(JSONArray result);
 	}
-	
+
 	/**
 	 * On post score listener
 	 * 
@@ -2005,11 +2017,12 @@ public class SimpleFacebook
 		void onLogout();
 	}
 
-    /**
-	 * On permission listener - If the App must request a specific permission (only to obtain the new Access Token)
-	 *
+	/**
+	 * On permission listener - If the App must request a specific permission (only to obtain the new Access
+	 * Token)
+	 * 
 	 * @author Gryzor
-	 *
+	 * 
 	 */
 	public interface OnPermissionListener extends OnActionListener
 	{
@@ -2017,6 +2030,7 @@ public class SimpleFacebook
 		 * If the permission was granted, this callback is invoked.
 		 */
 		void onSuccess(final String accessToken);
+
 		/**
 		 * If user pressed 'cancel' in PUBLISH permissions dialog
 		 */
