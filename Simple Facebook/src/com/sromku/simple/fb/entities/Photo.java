@@ -73,7 +73,8 @@ public class Photo
      * @param privacy The privacy setting of the photo
      * @see com.sromku.simple.fb.Privacy
      */
-    public void addPrivacy(Privacy privacy) {
+    public void addPrivacy(Privacy privacy)
+    {
         mPrivacy = privacy;
     }
 
