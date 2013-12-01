@@ -1624,11 +1624,11 @@ public class SimpleFacebook
 	{
 	    if (async) 
 	    {
-	        publishAsync("me/feed", feed.getBundle(), onPublishListener);
+	        publishAsync(feed.getGraphPath(), feed.getBundle(), onPublishListener);
 	    }
 	    else 
 	    {
-	        publishSync("me/feed", feed.getBundle(), onPublishListener);
+	        publishSync(feed.getGraphPath(), feed.getBundle(), onPublishListener);
 	    }
 	}
 	

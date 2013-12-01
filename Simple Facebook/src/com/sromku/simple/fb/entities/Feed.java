@@ -16,10 +16,23 @@ import com.sromku.simple.fb.utils.Logger;
 public class Feed
 {
 	private Bundle mBundle = null;
+	private String mGroupId = null;
 
 	private Feed(Builder builder)
 	{
 		this.mBundle = builder.mBundle;
+		this.mGroupId = builder.mGroupId;
+	}
+	
+	public String getGraphPath()
+	{
+	    if (mGroupId == null) {
+	        return "me/feed";
+	    }
+	    else
+	    {
+	        return mGroupId + "/feed/";
+	    }
 	}
 
 	public Bundle getBundle()
@@ -32,6 +45,7 @@ public class Feed
 		Bundle mBundle;
 		JSONObject mProperties = new JSONObject();
 		JSONObject mActions = new JSONObject();
+		String mGroupId;
 
 		static class Parameters
 		{
@@ -123,6 +137,18 @@ public class Feed
 			mBundle.putString(Parameters.DESCRIPTION, description);
 			return this;
 		}
+		
+	      /**
+         * If group ID is specified, the post will be to the group feed and not the users feed. 
+         * 
+         * @param groupId
+         * @return {@link Builder}
+         */
+        public Builder setGroupId(String groupId)
+        {
+            mGroupId = groupId; 
+            return this;
+        }
 
 		/**
 		 * Object of key/value pairs which will appear in the stream attachment beneath the description, with
