@@ -31,6 +31,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
@@ -414,6 +415,101 @@ public class SimpleFacebook
 			}
 		}
 	}
+
+	/**
+     * Get my groups from Facebook
+     * 
+     * @param OnGroupsRequestListener
+     * 
+     */
+    public void getGroups(final OnGroupsRequestListener onGroupsRequestListener)
+    {
+        // if we are logged in
+        if (isLogin())
+        {
+            // move these params to method call parameters
+            Session session = getOpenSession();
+            Request request = new Request(session, "me/groups", null, HttpMethod.GET, new Request.Callback()
+            {
+                @Override
+                public void onCompleted(Response response)
+                {
+                    logError(response.toString(), null);
+
+                    FacebookRequestError error = response.getError();
+                    if (error != null)
+                    {
+                        // log
+                        logError("failed to get groups", error.getException());
+
+                        // callback with 'exception'
+                        if (onGroupsRequestListener != null)
+                        {
+                            onGroupsRequestListener.onException(error.getException());
+                        }
+                    }
+                    else
+                    {
+                        GraphObject graphObject = response.getGraphObject();                    
+                        if (graphObject != null)
+                        {                       
+                            JSONObject graphResponse = graphObject.getInnerJSONObject();
+                            try {
+                                JSONArray result = graphResponse.getJSONArray("data");
+                                if (result != null)
+                                {
+                                    List<Group> groups = new ArrayList<Group>();
+                                    int size = result.length();
+                                    for (int i = 0; i < size; i++) 
+                                    {
+                                        logError("Adding group " + result.getJSONObject(i), null);
+
+                                        groups.add(Group.create(result.getJSONObject(i)));
+                                    }
+                                    
+                                    if (onGroupsRequestListener != null)
+                                    {
+                                        onGroupsRequestListener.onComplete(groups);
+                                    }
+                                } 
+                                else if (onGroupsRequestListener != null)
+                                {
+                                    onGroupsRequestListener.onFail("data array is null");
+                                }
+                            } catch (JSONException e) {
+                                if (onGroupsRequestListener != null)
+                                {
+                                    onGroupsRequestListener.onException(e);
+                                }
+                            }
+                        } else if (onGroupsRequestListener != null) {
+                            onGroupsRequestListener.onFail("graphObject in null");
+                        }
+                    }
+                }
+            });
+
+            RequestAsyncTask task = new RequestAsyncTask(request);
+            task.execute();
+
+            // callback with 'thinking'
+            if (onGroupsRequestListener != null)
+            {
+                onGroupsRequestListener.onThinking();
+            }
+        }
+        else
+        {
+            String reason = Errors.getError(ErrorMsg.LOGIN);
+            logError(reason, null);
+
+            // callback with 'fail' due to not being loged
+            if (onGroupsRequestListener != null)
+            {
+                onGroupsRequestListener.onFail(reason);
+            }
+        }
+    }
 
 	/**
 	 * Get albums
@@ -2018,6 +2114,17 @@ public class SimpleFacebook
 	{
 		void onComplete(List<Profile> friends);
 	}
+	
+	   /**
+     * On groups request listener
+     * 
+     * @author tamir7
+     * 
+     */
+    public interface OnGroupsRequestListener extends OnActionListener
+    {
+        void onComplete(List<Group> groups);
+    }
 	
 	/**
 	 * On get app requests listener
