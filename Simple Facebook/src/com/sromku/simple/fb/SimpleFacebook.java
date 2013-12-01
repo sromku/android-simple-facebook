@@ -434,8 +434,6 @@ public class SimpleFacebook
                 @Override
                 public void onCompleted(Response response)
                 {
-                    logError(response.toString(), null);
-
                     FacebookRequestError error = response.getError();
                     if (error != null)
                     {
@@ -462,8 +460,6 @@ public class SimpleFacebook
                                     int size = result.length();
                                     for (int i = 0; i < size; i++) 
                                     {
-                                        logError("Adding group " + result.getJSONObject(i), null);
-
                                         groups.add(Group.create(result.getJSONObject(i)));
                                     }
                                     
@@ -474,15 +470,18 @@ public class SimpleFacebook
                                 } 
                                 else if (onGroupsRequestListener != null)
                                 {
+                                    logError("data array is null", null);
                                     onGroupsRequestListener.onFail("data array is null");
                                 }
                             } catch (JSONException e) {
                                 if (onGroupsRequestListener != null)
                                 {
+                                    logError("Exception while parsing json object", e);
                                     onGroupsRequestListener.onException(e);
                                 }
                             }
                         } else if (onGroupsRequestListener != null) {
+                            logError("graphObject is null", null);
                             onGroupsRequestListener.onFail("graphObject in null");
                         }
                     }
