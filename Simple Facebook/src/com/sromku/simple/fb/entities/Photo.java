@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 
+import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.Logger;
 
 public class Photo
@@ -15,12 +16,14 @@ public class Photo
 	private static final String PICTURE = "picture";
 	private static final String PLACE = "place";
 	private static final String MESSAGE = "message";
+    private static final String PRIVACY = "privacy";
 
 	private String mDescription = null;
 	private String mPlaceId = null;
 
 	private Parcelable mParcelable = null;
 	private byte[] mBytes = null;
+    private Privacy mPrivacy = null;
 
 	public Photo(Bitmap bitmap)
 	{
@@ -64,6 +67,17 @@ public class Photo
 		mPlaceId = placeId;
 	}
 
+    /**
+     * Add privacy setting to the photo
+     *
+     * @param privacy The privacy setting of the photo
+     * @see com.sromku.simple.fb.Privacy
+     */
+    public void addPrivacy(Privacy privacy)
+    {
+        mPrivacy = privacy;
+    }
+
 	public Bundle getBundle()
 	{
 		Bundle bundle = new Bundle();
@@ -79,6 +93,11 @@ public class Photo
 		{
 			bundle.putString(PLACE, mPlaceId);
 		}
+
+        // add privacy
+        if (mPrivacy != null) {
+            bundle.putString(PRIVACY, mPrivacy.getJSONString());
+        }
 
 		// add image
 		if (mParcelable != null)

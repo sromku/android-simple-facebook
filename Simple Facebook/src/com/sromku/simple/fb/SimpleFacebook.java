@@ -34,6 +34,7 @@ import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
@@ -1101,6 +1102,90 @@ public class SimpleFacebook
 	}
 
 	/**
+	 * Publish video to "Videos" album. <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * <br>
+	 * 
+	 * @param video The video to upload
+	 * @param onPublishListener The callback listener
+	 */
+	public void publish(final Video video, final OnPublishListener onPublishListener)
+	{
+		if (isLogin())
+		{
+			// if we defined the publish permission
+			if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_STREAM.getValue()))
+			{
+				// callback with 'thinking'
+				if (onPublishListener != null)
+				{
+					onPublishListener.onThinking();
+				}
+
+				/*
+				 * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+				 * this permission.
+				 */
+				if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_STREAM.getValue()))
+				{
+					mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener()
+					{
+						@Override
+						public void onSuccess()
+						{
+							publishImpl(video, onPublishListener);
+						}
+
+						@Override
+						public void onNotAcceptingPermissions()
+						{
+							// this fail can happen when user doesn't accept the publish permissions
+							String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+							logError(reason, null);
+
+							if (onPublishListener != null)
+							{
+								onPublishListener.onFail(reason);
+							}
+						}
+					};
+
+					// extend publish permissions automatically
+					extendPublishPermissions();
+				}
+				else
+				{
+					publishImpl(video, onPublishListener);
+				}
+			}
+			else
+			{
+				// callback with 'fail' due to insufficient permissions
+				if (onPublishListener != null)
+				{
+					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_STREAM.getValue());
+					logError(reason, null);
+
+					onPublishListener.onFail(reason);
+				}
+			}
+		}
+		else
+		{
+			// callback with 'fail' due to not being loged
+			if (onPublishListener != null)
+			{
+				String reason = Errors.getError(ErrorMsg.LOGIN);
+				logError(reason, null);
+
+				onPublishListener.onFail(reason);
+			}
+		}
+	}
+
+	/**
 	 * Open invite dialog and can add multiple friends
 	 * 
 	 * @param message The message inside the dialog. It could be <code>null</code>
@@ -1489,6 +1574,67 @@ public class SimpleFacebook
 	{
 		Session session = getOpenSession();
 		Request request = new Request(session, albumId + "/photos", photo.getBundle(), HttpMethod.POST, new Request.Callback()
+		{
+			@Override
+			public void onCompleted(Response response)
+			{
+				GraphObject graphObject = response.getGraphObject();
+				if (graphObject != null)
+				{
+					JSONObject graphResponse = graphObject.getInnerJSONObject();
+					String postId = null;
+					try
+					{
+						postId = graphResponse.getString("id");
+					}
+					catch (JSONException e)
+					{
+						// log
+						logError("JSON error", e);
+					}
+
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("Failed to publish", error.getException());
+
+						// callback with 'exception'
+						if (onPublishListener != null)
+						{
+							onPublishListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onPublishListener != null)
+						{
+							onPublishListener.onComplete(postId);
+						}
+					}
+				}
+				else
+				{
+					// log
+					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+
+					if (onPublishListener != null)
+					{
+						onPublishListener.onComplete("0");
+					}
+				}
+			}
+		});
+
+		RequestAsyncTask task = new RequestAsyncTask(request);
+		task.execute();
+	}
+
+	private static void publishImpl(Video video, final OnPublishListener onPublishListener)
+	{
+		Session session = getOpenSession();
+		Request request = new Request(session, "me/videos", video.getBundle(), HttpMethod.POST, new Request.Callback()
 		{
 			@Override
 			public void onCompleted(Response response)
