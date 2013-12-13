@@ -901,6 +901,10 @@ public class SimpleFacebook
 			}
 		}
 	}
+	
+	public void publish(final Feed feed, boolean withDialog, final OnPublishListener onPublishListener) {
+		
+	}
 
 	/**
 	 * Publish open graph story.<br>
