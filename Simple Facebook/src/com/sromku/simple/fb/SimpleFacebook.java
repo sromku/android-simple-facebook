@@ -29,6 +29,7 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
@@ -901,9 +902,77 @@ public class SimpleFacebook
 			}
 		}
 	}
-	
-	public void publish(final Feed feed, boolean withDialog, final OnPublishListener onPublishListener) {
-		
+
+	/**
+	 * Share to feed by using dialog or do it silently without dialog. <br>
+	 * If you use dialog for sharing, you don't have to configure {@link Permissions#PUBLISH_ACTION} since
+	 * user does the share by himself.
+	 * 
+	 * @param feed The feed to post
+	 * @param withDialog Set <code>True</code> if you want to use dialog.
+	 * @param onPublishListener
+	 */
+	public void publish(final Feed feed, boolean withDialog, final OnPublishListener onPublishListener)
+	{
+		if (!withDialog)
+		{
+			// make it silently
+			publish(feed, onPublishListener);
+		}
+		else
+		{
+			if (isLogin())
+			{
+				WebDialog feedDialog = (
+					new WebDialog.FeedDialogBuilder(mActivity, Session.getActiveSession(), feed.getBundle()))
+						.setOnCompleteListener(new OnCompleteListener()
+						{
+							@Override
+							public void onComplete(Bundle values, FacebookException error)
+							{
+								if (error == null)
+								{
+									// When the story is posted, echo the success
+									// and the post Id.
+									final String postId = values.getString("post_id");
+									if (postId != null)
+									{
+										onPublishListener.onComplete(postId);
+									}
+									else
+									{
+										onPublishListener.onFail("Canceled by user");
+									}
+								}
+								else if (error instanceof FacebookOperationCanceledException)
+								{
+									// User clicked the "x" button
+									onPublishListener.onFail("Canceled by user");
+								}
+								else
+								{
+									onPublishListener.onException(error);
+								}
+							}
+
+						})
+						.build();
+				
+				// show the dialog
+				feedDialog.show();
+			}
+			else
+			{
+				// callback with 'fail' due to not being loged
+				if (onPublishListener != null)
+				{
+					String reason = Errors.getError(ErrorMsg.LOGIN);
+					logError(reason, null);
+
+					onPublishListener.onFail(reason);
+				}
+			}
+		}
 	}
 
 	/**
