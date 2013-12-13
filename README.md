@@ -1,7 +1,7 @@
 android-simple-facebook
 =======================
 
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.5**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.6**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
@@ -90,7 +90,7 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 
 --------------------
 ## Setup Project
-1. Clone [Facebook SDK 3.5](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+1. Clone [Facebook SDK 3.6](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
 2. Clone and import this (Simple Facebook) project to your workspace.
  
