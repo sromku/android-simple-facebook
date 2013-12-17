@@ -1210,6 +1210,14 @@ public class SimpleFacebook
 		}
 	}
 	
+	public boolean checkForPublishPermissions() {
+	    return getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue());
+	}
+	
+	public void requestPublishPermissions() {
+	    extendPublishPermissions();
+	}
+	
      /**
      * Publish photo to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
      * all user's albums.<br>
