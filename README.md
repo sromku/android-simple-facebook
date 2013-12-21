@@ -839,6 +839,8 @@ mSimpleFacebook.requestPermission(mOnPermissionListener);
 | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
 | [Gelatto](https://play.google.com/store/apps/details?id=com.doit.gelatto) <br>
 | [Pony Racing](https://play.google.com/store/apps/details?id=com.tiarsoft.ponyrace) <br>
+| [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) <br>
+
 
 If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
