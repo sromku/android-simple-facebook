@@ -34,6 +34,7 @@ import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.utils.Errors;
@@ -78,6 +79,15 @@ public class SimpleFacebook
 		mSessionStatusCallback = new SessionStatusCallback();
 	}
 
+	/**
+	 * Initialize the library and pass an {@link Activity}. This kind of initialization is
+	 * good in case you have a one base activity and many fragments. In this case you just initialize
+	 * this library and then just get an instance of this library by {@link SimpleFacebook#getInstance()} in
+	 * any other place.
+	 * 
+	 * @param activity
+	 *            Activity
+	 */
 	public static void initialize(Activity activity)
 	{
 		if (mInstance == null)
@@ -88,6 +98,25 @@ public class SimpleFacebook
 		mActivity = activity;
 	}
 
+	/**
+	 * Get the instance of {@link SimpleFacebook}. This method, not only returns a singleton instance of
+	 * {@link SimpleFacebook} but also updates the current activity with the passed
+	 * activity. <br>
+	 * If you have more than one <code>Activity</code> in your application. And more than one activity do
+	 * something with facebook. Then, call this method in {@link Activity#onResume()} method
+	 * 
+	 * <pre>
+	 * &#064;Override
+	 * protected void onResume()
+	 * {
+	 * 	super.onResume();
+	 * 	mSimpleFacebook = SimpleFacebook.getInstance(this);
+	 * }
+	 * </pre>
+	 * 
+	 * @param activity
+	 * @return {@link SimpleFacebook} instance
+	 */
 	public static SimpleFacebook getInstance(Activity activity)
 	{
 		if (mInstance == null)
@@ -99,19 +128,78 @@ public class SimpleFacebook
 		return mInstance;
 	}
 
+	/**
+	 * Get the instace of {@link SimpleFacebook}. <br>
+	 * <br>
+	 * <b>Important:</b> Use this method only after you initialized this library or by:
+	 * {@link #initialize(Activity)} or by {@link #getInstance(Activity)}
+	 * 
+	 * @return The {@link SimpleFacebook} instance
+	 */
 	public static SimpleFacebook getInstance()
 	{
 		return mInstance;
 	}
 
 	/**
-	 * Set facebook configuration
+	 * Set facebook configuration. <b>Make sure</b> to set a configuration before first actual use of this
+	 * library like (login, getProfile, etc..).
 	 * 
-	 * @param facebookToolsConfiguration
+	 * @param configuration
+	 *            The configuration of this library
 	 */
-	public static void setConfiguration(SimpleFacebookConfiguration facebookToolsConfiguration)
+	public static void setConfiguration(SimpleFacebookConfiguration configuration)
 	{
-		mConfiguration = facebookToolsConfiguration;
+		mConfiguration = configuration;
+	}
+
+	/**
+	 * Indicate if you are logged in or not.
+	 * 
+	 * @return <code>True</code> if you is logged in, otherwise return <code>False</code>
+	 */
+	public boolean isLogin()
+	{
+		Session session = Session.getActiveSession();
+		if (session == null)
+		{
+			if (mActivity == null)
+			{
+				// You can't create a session if the activity/context hasn't been initialized
+				// This is now possible because the library can be started without context.
+				return false;
+			}
+			session = new Session.Builder(mActivity.getApplicationContext())
+				.setApplicationId(mConfiguration.getAppId())
+				.build();
+			Session.setActiveSession(session);
+		}
+		if (session.isOpened())
+		{
+			// mSessionNeedsToReopen = false;
+			return true;
+		}
+	
+		/*
+		 * Check if we can reload the session when it will be neccesary. We won't do it now.
+		 */
+		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
+		{
+			List<String> permissions = session.getPermissions();
+			if (permissions.containsAll(mConfiguration.getReadPermissions()))
+			{
+				reopenSession();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -222,7 +310,8 @@ public class SimpleFacebook
 	 * For example, if you need: <em>square picture 500x500 pixels</em>
 	 * 
 	 * @param onProfileRequestListener
-	 * @param properties The {@link Properties}. <br>
+	 * @param properties
+	 *            The {@link Properties}. <br>
 	 *            To create {@link Properties} instance use:
 	 * 
 	 *            <pre>
@@ -328,7 +417,8 @@ public class SimpleFacebook
 	 * For example, if you need: <em>id, last_name, picture, birthday</em>
 	 * 
 	 * @param onFriendsRequestListener
-	 * @param properties The {@link Properties}. <br>
+	 * @param properties
+	 *            The {@link Properties}. <br>
 	 *            To create {@link Properties} instance use:
 	 * 
 	 *            <pre>
@@ -570,71 +660,12 @@ public class SimpleFacebook
 
 	/**
 	 * 
-	 * Deletes an apprequest.<br>
-	 * <br>
-	 * 
-	 * @param inRequestId Input request id to be deleted. Note that it should have the form
-	 *            {USERID}_{REQUESTID} <code>String</code>
-	 * @param onDeleteRequestListener The listener for deletion action
-	 * @see https://developers.facebook.com/docs/android/app-link-requests/#step3
-	 */
-	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener)
-	{
-		if (isLogin())
-		{
-			// Create a new request for an HTTP delete with the
-			// request ID as the Graph path.
-			Session session = getOpenSession();
-			Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback()
-			{
-				@Override
-				public void onCompleted(Response response)
-				{
-					FacebookRequestError error = response.getError();
-					if (error != null)
-					{
-						// log
-						logError("failed to delete requests", error.getException());
-
-						// callback with 'exception'
-						if (onDeleteRequestListener != null)
-						{
-							onDeleteRequestListener.onException(error.getException());
-						}
-					}
-					else
-					{
-						// callback with 'complete'
-						if (onDeleteRequestListener != null)
-						{
-							onDeleteRequestListener.onComplete();
-						}
-					}
-				}
-			});
-			// Execute the request asynchronously.
-			Request.executeBatchAsync(request);
-		}
-		else
-		{
-			String reason = Errors.getError(ErrorMsg.LOGIN);
-			logError(reason, null);
-
-			// callback with 'fail' due to not being logged in
-			if (onDeleteRequestListener != null)
-			{
-				onDeleteRequestListener.onFail(reason);
-			}
-		}
-	}
-
-	/**
-	 * 
 	 * Gets scores using Scores API for games. <br>
 	 * <br>
 	 * 
 	 * 
-	 * @param onScoresRequestListener The listener for getting scores
+	 * @param onScoresRequestListener
+	 *            The listener for getting scores
 	 * @see https://developers.facebook.com/docs/games/scores/
 	 */
 	public void getScores(final OnScoresRequestListener onScoresRequestListener)
@@ -724,11 +755,13 @@ public class SimpleFacebook
 	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
 	 * 
-	 * @param score Score to be posted. <code>int</code>
-	 * @param onPostScoreListener The listener for posting score
+	 * @param score
+	 *            Score to be posted. <code>int</code>
+	 * @param onPostScoreListener
+	 *            The listener for posting score
 	 * @see https://developers.facebook.com/docs/games/scores/
 	 */
-	public void postScore(int score, final OnPostScoreListener onPostScoreListener)
+	public void publish(Score score, final OnPostScoreListener onPostScoreListener)
 	{
 		if (isLogin())
 		{
@@ -772,7 +805,7 @@ public class SimpleFacebook
 			}
 
 			Bundle param = new Bundle();
-			param.putInt("score", score);
+			param.putInt("score", score.getScore());
 			Request request = new Request(getOpenSession(), "me/scores", param, HttpMethod.POST, new Request.Callback()
 			{
 				@Override
@@ -825,8 +858,10 @@ public class SimpleFacebook
 	 * <b>Permission:</b><br>
 	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
-	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
-	 * @param onPublishListener The listener for publishing action
+	 * @param feed
+	 *            The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
+	 * @param onPublishListener
+	 *            The listener for publishing action
 	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
 	 */
 	public void publish(final Feed feed, final OnPublishListener onPublishListener)
@@ -908,8 +943,10 @@ public class SimpleFacebook
 	 * If you use dialog for sharing, you don't have to configure {@link Permissions#PUBLISH_ACTION} since
 	 * user does the share by himself.
 	 * 
-	 * @param feed The feed to post
-	 * @param withDialog Set <code>True</code> if you want to use dialog.
+	 * @param feed
+	 *            The feed to post
+	 * @param withDialog
+	 *            Set <code>True</code> if you want to use dialog.
 	 * @param onPublishListener
 	 */
 	public void publish(final Feed feed, boolean withDialog, final OnPublishListener onPublishListener)
@@ -957,7 +994,7 @@ public class SimpleFacebook
 
 						})
 						.build();
-				
+
 				// show the dialog
 				feedDialog.show();
 			}
@@ -1076,9 +1113,12 @@ public class SimpleFacebook
 	 * - The privacy setting of the app should be at minimum as the privacy setting of the album (
 	 * {@link Album#getPrivacy()}
 	 * 
-	 * @param photo The photo to upload
-	 * @param albumId The album to which the photo should be uploaded
-	 * @param onPublishListener The callback listener
+	 * @param photo
+	 *            The photo to upload
+	 * @param albumId
+	 *            The album to which the photo should be uploaded
+	 * @param onPublishListener
+	 *            The callback listener
 	 */
 	public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener)
 	{
@@ -1166,8 +1206,10 @@ public class SimpleFacebook
 	 * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
 	 * {@link Album#getPrivacy()}
 	 * 
-	 * @param photo The photo to upload
-	 * @param onPublishListener The callback listener
+	 * @param photo
+	 *            The photo to upload
+	 * @param onPublishListener
+	 *            The callback listener
 	 */
 	public void publish(final Photo photo, final OnPublishListener onPublishListener)
 	{
@@ -1181,8 +1223,10 @@ public class SimpleFacebook
 	 * {@link Permissions#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
-	 * @param video The video to upload
-	 * @param onPublishListener The callback listener
+	 * @param video
+	 *            The video to upload
+	 * @param onPublishListener
+	 *            The callback listener
 	 */
 	public void publish(final Video video, final OnPublishListener onPublishListener)
 	{
@@ -1261,8 +1305,10 @@ public class SimpleFacebook
 	/**
 	 * Open invite dialog and can add multiple friends
 	 * 
-	 * @param message The message inside the dialog. It could be <code>null</code>
-	 * @param onInviteListener The listener. It could be <code>null</code>
+	 * @param message
+	 *            The message inside the dialog. It could be <code>null</code>
+	 * @param onInviteListener
+	 *            The listener. It could be <code>null</code>
 	 */
 	public void invite(String message, final OnInviteListener onInviteListener)
 	{
@@ -1285,9 +1331,12 @@ public class SimpleFacebook
 	/**
 	 * Open invite dialog and invite only specific friend
 	 * 
-	 * @param to The id of the friend profile
-	 * @param message The message inside the dialog. It could be <code>null</code>
-	 * @param onInviteListener The listener. It could be <code>null</code>
+	 * @param to
+	 *            The id of the friend profile
+	 * @param message
+	 *            The message inside the dialog. It could be <code>null</code>
+	 * @param onInviteListener
+	 *            The listener. It could be <code>null</code>
 	 */
 	public void invite(String to, String message, final OnInviteListener onInviteListener)
 	{
@@ -1314,9 +1363,12 @@ public class SimpleFacebook
 	/**
 	 * Open invite dialog and invite several specific friends
 	 * 
-	 * @param suggestedFriends The ids of friends' profiles
-	 * @param message The message inside the dialog. It could be <code>null</code>
-	 * @param onInviteListener The error listener. It could be <code>null</code>
+	 * @param suggestedFriends
+	 *            The ids of friends' profiles
+	 * @param message
+	 *            The message inside the dialog. It could be <code>null</code>
+	 * @param onInviteListener
+	 *            The error listener. It could be <code>null</code>
 	 */
 	public void invite(String[] suggestedFriends, String message, final OnInviteListener onInviteListener)
 	{
@@ -1342,6 +1394,68 @@ public class SimpleFacebook
 
 	/**
 	 * 
+	 * Deletes an apprequest.<br>
+	 * <br>
+	 * 
+	 * @param inRequestId
+	 *            Input request id to be deleted. Note that it should have the form
+	 *            {USERID}_{REQUESTID} <code>String</code>
+	 * @param onDeleteRequestListener
+	 *            The listener for deletion action
+	 * @see https://developers.facebook.com/docs/android/app-link-requests/#step3
+	 */
+	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener)
+	{
+		if (isLogin())
+		{
+			// Create a new request for an HTTP delete with the
+			// request ID as the Graph path.
+			Session session = getOpenSession();
+			Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to delete requests", error.getException());
+	
+						// callback with 'exception'
+						if (onDeleteRequestListener != null)
+						{
+							onDeleteRequestListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onDeleteRequestListener != null)
+						{
+							onDeleteRequestListener.onComplete();
+						}
+					}
+				}
+			});
+			// Execute the request asynchronously.
+			Request.executeBatchAsync(request);
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+	
+			// callback with 'fail' due to not being logged in
+			if (onDeleteRequestListener != null)
+			{
+				onDeleteRequestListener.onFail(reason);
+			}
+		}
+	}
+
+	/**
+	 * 
 	 * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when you just want to request the
 	 * action and won't be publishing at the time, but still need the updated <b>access token</b> with the
 	 * permissions (possibly to pass back to your backend). You must add {@link Permissions#PUBLISH_ACTION} to
@@ -1349,7 +1463,8 @@ public class SimpleFacebook
 	 * 
 	 * <b>Must be logged to use.</b>
 	 * 
-	 * @param onPermissionListener The listener for the request permission action
+	 * @param onPermissionListener
+	 *            The listener for the request permission action
 	 */
 	public void requestPublish(final OnPermissionListener onPermissionListener)
 	{
@@ -1416,76 +1531,6 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Call this inside your activity in {@link Activity#onActivityResult} method
-	 * 
-	 * @param activity
-	 * @param requestCode
-	 * @param resultCode
-	 * @param data
-	 * @return
-	 */
-	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data)
-	{
-		if (Session.getActiveSession() != null)
-		{
-			return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Indicate if you are logged in or not.
-	 * 
-	 * @return <code>True</code> if you is logged in, otherwise return <code>False</code>
-	 */
-	public boolean isLogin()
-	{
-		Session session = Session.getActiveSession();
-		if (session == null)
-		{
-			if (mActivity == null)
-			{
-				// You can't create a session if the activity/context hasn't been initialized
-				// This is now possible because the library can be started without context.
-				return false;
-			}
-			session = new Session.Builder(mActivity.getApplicationContext())
-				.setApplicationId(mConfiguration.getAppId())
-				.build();
-			Session.setActiveSession(session);
-		}
-		if (session.isOpened())
-		{
-			// mSessionNeedsToReopen = false;
-			return true;
-		}
-
-		/*
-		 * Check if we can reload the session when it will be neccesary. We won't do it now.
-		 */
-		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
-		{
-			List<String> permissions = session.getPermissions();
-			if (permissions.containsAll(mConfiguration.getReadPermissions()))
-			{
-				reopenSession();
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
 	 * Get access token of open session
 	 * 
 	 * @return a {@link String} containing the Access Token of the current {@link Session} or null if no
@@ -1509,6 +1554,27 @@ public class SimpleFacebook
 	public static Session getOpenSession()
 	{
 		return Session.getActiveSession();
+	}
+
+	/**
+	 * Call this inside your activity in {@link Activity#onActivityResult} method
+	 * 
+	 * @param activity
+	 * @param requestCode
+	 * @param resultCode
+	 * @param data
+	 * @return
+	 */
+	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data)
+	{
+		if (Session.getActiveSession() != null)
+		{
+			return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
