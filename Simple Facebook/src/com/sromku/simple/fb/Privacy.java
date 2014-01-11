@@ -1,12 +1,13 @@
 package com.sromku.simple.fb;
 
-import com.sromku.simple.fb.utils.Logger;
-import com.sromku.simple.fb.utils.Utils;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Utils;
 
 /**
  * A class that helps control the audience on Facebook that can see a post made by an app on behalf of a user.

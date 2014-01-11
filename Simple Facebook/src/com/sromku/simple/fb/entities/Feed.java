@@ -1,11 +1,11 @@
 package com.sromku.simple.fb.entities;
 
-import com.sromku.simple.fb.Privacy;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
 
+import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.Logger;
 
 /**
