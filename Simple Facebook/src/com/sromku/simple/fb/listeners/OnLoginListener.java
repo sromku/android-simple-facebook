@@ -1,5 +1,7 @@
 package com.sromku.simple.fb.listeners;
 
+import com.sromku.simple.fb.Permission;
+
 import android.app.Activity;
 
 /**
@@ -15,7 +17,7 @@ public interface OnLoginListener extends OnActionListener {
     void onLogin();
 
     /**
-     * If user pressed 'cancel' in READ (First) permissions dialog
+     * If user pressed 'cancel' in one of the permissions dialog (READ or PUBLISH)
      */
-    void onNotAcceptingPermissions();
+    void onNotAcceptingPermissions(Permission.Type type);
 }

@@ -40,10 +40,8 @@ public class GetFriendsAction extends AbstractAction {
 
     @Override
     protected void executeImpl() {
-	// if we are logged in
-	if (sessionManager.isLogin()) {
-	    // move these params to method call parameters
-	    Session session = sessionManager.getOpenSession();
+	if (sessionManager.isLogin(true)) {
+	    Session session = sessionManager.getActiveSession();
 	    Bundle bundle = null;
 	    if (mProperties != null) {
 		bundle = mProperties.getBundle();
@@ -52,17 +50,13 @@ public class GetFriendsAction extends AbstractAction {
 		@Override
 		public void onCompleted(Response response) {
 		    List<GraphUser> graphUsers = Utils.typedListFromResponse(response, GraphUser.class);
-
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
 			Logger.logError(GetFriendsAction.class, "failed to get friends", error.getException());
-
-			// callback with 'exception'
 			if (mOnFriendsRequestListener != null) {
 			    mOnFriendsRequestListener.onException(error.getException());
 			}
 		    } else {
-			// callback with 'complete'
 			if (mOnFriendsRequestListener != null) {
 			    List<Profile> friends = new ArrayList<Profile>(graphUsers.size());
 			    for (GraphUser graphUser : graphUsers) {
@@ -74,19 +68,14 @@ public class GetFriendsAction extends AbstractAction {
 
 		}
 	    });
-
 	    RequestAsyncTask task = new RequestAsyncTask(request);
 	    task.execute();
-
-	    // callback with 'thinking'
 	    if (mOnFriendsRequestListener != null) {
 		mOnFriendsRequestListener.onThinking();
 	    }
 	} else {
 	    String reason = Errors.getError(ErrorMsg.LOGIN);
 	    Logger.logError(GetFriendsAction.class, reason, null);
-
-	    // callback with 'fail' due to not being loged
 	    if (mOnFriendsRequestListener != null) {
 		mOnFriendsRequestListener.onFail(reason);
 	    }

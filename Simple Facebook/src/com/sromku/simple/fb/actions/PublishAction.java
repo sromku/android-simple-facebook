@@ -42,8 +42,7 @@ public class PublishAction extends AbstractAction {
 
     @Override
     protected void executeImpl() {
-	// if we are logged in
-	if (sessionManager.isLogin()) {
+	if (sessionManager.isLogin(true)) {
 	    // if we defined the publish permission
 	    if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
 		// callback with 'thinking'
@@ -55,7 +54,7 @@ public class PublishAction extends AbstractAction {
 		 * Check if session to facebook has 'publish_action' permission.
 		 * If not, we will ask user for this permission.
 		 */
-		if (!sessionManager.getOpenSessionPermissions().contains(mPublishable.getPermission().getValue())) {
+		if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
 		    sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
 			@Override
 			public void onSuccess() {
@@ -64,8 +63,6 @@ public class PublishAction extends AbstractAction {
 
 			@Override
 			public void onNotAcceptingPermissions() {
-			    // this fail can happen when user doesn't accept the
-			    // publish permissions
 			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
 			    Logger.logError(PublishAction.class, reason, null);
 			    if (mOnPublishListener != null) {
@@ -73,8 +70,6 @@ public class PublishAction extends AbstractAction {
 			    }
 			}
 		    });
-
-		    // extend publish permissions automatically
 		    sessionManager.extendPublishPermissions();
 		} else {
 		    publishImpl(mPublishable, mOnPublishListener);
@@ -82,25 +77,21 @@ public class PublishAction extends AbstractAction {
 	    } else {
 		String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
 		Logger.logError(PublishAction.class, reason, null);
-
-		// callback with 'fail' due to insufficient permissions
 		if (mOnPublishListener != null) {
 		    mOnPublishListener.onFail(reason);
 		}
 	    }
 	} else {
-	    // callback with 'fail' due to not being loged
 	    if (mOnPublishListener != null) {
 		String reason = Errors.getError(ErrorMsg.LOGIN);
 		Logger.logError(PublishAction.class, reason, null);
-
 		mOnPublishListener.onFail(reason);
 	    }
 	}
     }
 
     private void publishImpl(Publishable publishable, final OnPublishListener onPublishListener) {
-	Session session = sessionManager.getOpenSession();
+	Session session = sessionManager.getActiveSession();
 	Request request = new Request(session, mTarget + "/" + publishable.getPath(), publishable.getBundle(), HttpMethod.POST, new Request.Callback() {
 	    @Override
 	    public void onCompleted(Response response) {
@@ -113,17 +104,13 @@ public class PublishAction extends AbstractAction {
 		    } catch (JSONException e) {
 			Logger.logError(PublishAction.class, "JSON error", e);
 		    }
-
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
 			Logger.logError(PublishAction.class, "Failed to publish", error.getException());
-
-			// callback with 'exception'
 			if (onPublishListener != null) {
 			    onPublishListener.onException(error.getException());
 			}
 		    } else {
-			// callback with 'complete'
 			if (onPublishListener != null) {
 			    onPublishListener.onComplete(postId);
 			}
@@ -137,9 +124,8 @@ public class PublishAction extends AbstractAction {
 		}
 	    }
 	});
-
 	RequestAsyncTask task = new RequestAsyncTask(request);
 	task.execute();
     }
-
+    
 }

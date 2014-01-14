@@ -27,37 +27,36 @@ public class InviteAction extends AbstractAction {
     private String mMessage;
     private String mTo;
     private String[] mSuggestions;
-    
+
     public InviteAction(SessionManager sessionManager) {
 	super(sessionManager);
     }
-    
+
     public void setMessage(String message) {
 	mMessage = message;
     }
-    
+
     public void setTo(String to) {
 	mTo = to;
     }
-    
+
     public void setSuggestions(String[] suggestions) {
 	mSuggestions = suggestions;
     }
-    
+
     public void setOnInviteListener(OnInviteListener onInviteListener) {
 	mOnInviteListener = onInviteListener;
     }
 
     @Override
     protected void executeImpl() {
-	if (sessionManager.isLogin()) {
+	if (sessionManager.isLogin(true)) {
 	    Bundle params = new Bundle();
 	    if (mMessage != null) {
 		params.putString("message", mMessage);
 	    }
-	    // set 'to' or set 'suggestions'
 	    if (mTo != null) {
-		 params.putString("to", mTo);
+		params.putString("to", mTo);
 	    } else if (mSuggestions != null) {
 		params.putString("suggestions", TextUtils.join(",", mSuggestions));
 	    }
@@ -65,18 +64,16 @@ public class InviteAction extends AbstractAction {
 	} else {
 	    String reason = Errors.getError(ErrorMsg.LOGIN);
 	    Logger.logError(InviteAction.class, reason, null);
-
 	    mOnInviteListener.onFail(reason);
 	}
     }
-    
+
     private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener) {
 	final Dialog dialog = new WebDialog.RequestsDialogBuilder(activity, Session.getActiveSession(), params).setOnCompleteListener(new WebDialog.OnCompleteListener() {
 	    @Override
 	    public void onComplete(Bundle values, FacebookException error) {
 		if (error != null) {
 		    Logger.logError(InviteAction.class, "Failed to invite", error);
-
 		    if (error instanceof FacebookOperationCanceledException) {
 			onInviteListener.onCancel();
 		    } else {
@@ -94,15 +91,12 @@ public class InviteAction extends AbstractAction {
 		    }
 		}
 	    }
-
 	}).build();
-
 	Window dialogWindow = dialog.getWindow();
 	dialogWindow.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 	dialog.show();
     }
-    
+
     /**
      * Fetch invited friends from response bundle
      * 
@@ -124,7 +118,6 @@ public class InviteAction extends AbstractAction {
 		}
 	    }
 	}
-
 	return friends;
     }
 

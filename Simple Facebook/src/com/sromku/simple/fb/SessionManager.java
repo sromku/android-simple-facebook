@@ -14,10 +14,12 @@ import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnPermissionListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
 import com.sromku.simple.fb.utils.Errors;
-import com.sromku.simple.fb.utils.Logger;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.Logger;
 
 public class SessionManager {
+
+    private final static Class<?> TAG = SessionManager.class;
 
     static Activity activity;
     static SimpleFacebookConfiguration configuration;
@@ -35,29 +37,27 @@ public class SessionManager {
      * @param onLoginListener
      */
     public void login(OnLoginListener onLoginListener) {
-	if (isLogin()) {
-	    Logger.logInfo(SessionManager.class, "You were already logged in before calling 'login()' method");
-	    if (onLoginListener != null) {
-		onLoginListener.onLogin();
-	    }
-	} else {
-	    Session session = Session.getActiveSession();
-	    if (session == null || session.getState().isClosed()) {
-		session = new Session.Builder(activity.getApplicationContext()).setApplicationId(configuration.getAppId()).build();
-		Session.setActiveSession(session);
-	    }
-	    mSessionStatusCallback.mOnLoginListener = onLoginListener;
+	if (onLoginListener == null) {
+	    Logger.logError(TAG, "OnLoginListener can't be null in -> 'login(OnLoginListener onLoginListener)' method.");
+	    return;
+	}
+	if (activity == null) {
+	    onLoginListener.onFail("You must initialize the SimpleFacebook instance with you current Activity.");
+	    return;
+	}
+	if (isLogin(true)) {
+	    Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
+	    onLoginListener.onLogin();
+	}
+	else {
+	    Session session = getOrCreateActiveSession();
+	    mSessionStatusCallback.onLoginListener = onLoginListener;
 	    session.addCallback(mSessionStatusCallback);
-
-	    /*
-	     * If session is not opened, then open it
-	     */
 	    if (!session.isOpened()) {
 		openSession(session, true);
-	    } else {
-		if (onLoginListener != null) {
-		    onLoginListener.onLogin();
-		}
+	    }
+	    else {
+		onLoginListener.onLogin();
 	    }
 	}
     }
@@ -66,21 +66,25 @@ public class SessionManager {
      * Logout from Facebook
      */
     public void logout(OnLogoutListener onLogoutListener) {
-	if (isLogin()) {
-	    Session session = Session.getActiveSession();
-	    if (session != null && !session.isClosed()) {
-		mSessionStatusCallback.mOnLogoutListener = onLogoutListener;
-		session.closeAndClearTokenInformation();
-		session.removeCallback(mSessionStatusCallback);
-		if (onLogoutListener != null) {
-		    onLogoutListener.onLogout();
-		}
-	    }
-	} else {
-	    Logger.logInfo(SessionManager.class, "You were already logged out before calling 'logout()' method");
-	    if (onLogoutListener != null) {
+	if (onLogoutListener == null) {
+	    Logger.logError(TAG, "OnLogoutListener can't be null in -> 'logout(OnLogoutListener onLogoutListener)' method");
+	    return;
+	}
+	Session session = getActiveSession();
+	if (session != null) {
+	    if (session.isClosed()) {
+		Logger.logInfo(SessionManager.class, "You were already logged out before calling 'logout()' method");
 		onLogoutListener.onLogout();
 	    }
+	    else {
+		mSessionStatusCallback.onLogoutListener = onLogoutListener;
+		session.closeAndClearTokenInformation();
+		session.removeCallback(mSessionStatusCallback);
+		onLogoutListener.onLogout();
+	    }
+	}
+	else {
+	    onLogoutListener.onLogout();
 	}
     }
 
@@ -90,41 +94,83 @@ public class SessionManager {
      * @return <code>True</code> if you is logged in, otherwise return
      *         <code>False</code>
      */
-    public boolean isLogin() {
-	Session session = Session.getActiveSession();
+    public boolean isLogin(boolean reopenIfPossible) {
+	Session session = getActiveSession();
 	if (session == null) {
-	    if (activity == null) {
-		/*
-		 * You can't create a session if the activity/context hasn't
-		 * been initialized This is now possible because the library can
-		 * be started without context.
-		 */
-		return false;
-	    }
-	    session = new Session.Builder(activity.getApplicationContext()).setApplicationId(configuration.getAppId()).build();
-	    Session.setActiveSession(session);
+	    return false;
 	}
 	if (session.isOpened()) {
 	    return true;
 	}
+	if (reopenIfPossible && canReopenSession(session)) {
+	    reopenSession();
+	    return true;
+	}
 
-	/*
-	 * Check if we can reload the session when it will be necessary. We
-	 * won't do it now.
-	 */
-	if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-	    List<String> permissions = session.getPermissions();
-	    if (permissions.containsAll(configuration.getReadPermissions())) {
-		reopenSession();
-		return true;
-	    } else {
-		return false;
-	    }
-	} else {
+	return false;
+    }
+
+    /**
+     * Check if we already have Active session. If such exists, then return it,
+     * otherwise create and set new Active session. <br>
+     * <br>
+     * 
+     * <b>Note:</b><br>
+     * <li>'Active' session doesn't meant that it's ready for running requests
+     * on facebook side. For being able to run requests we need this session to
+     * be 'Open'.</li> <li>You can't create a session if the activity/context
+     * hasn't been initialized This is now possible because the library can be
+     * started without context.</li><br>
+     * 
+     * @return Active session or <code>null</code> if activity wasn't
+     *         initialized in SimpleFacebook class.
+     */
+    private Session getOrCreateActiveSession() {
+	if (activity == null) {
+	    Logger.logError(TAG, "You must initialize the SimpleFacebook instance with you current Activity.");
+	    return null;
+	}
+
+	if (getActiveSession() == null || getActiveSession().isClosed()) {
+	    Session session = new Session.Builder(activity.getApplicationContext()).setApplicationId(configuration.getAppId()).build();
+	    Session.setActiveSession(session);
+	}
+	return getActiveSession();
+    }
+
+    /**
+     * Get the current 'Active' session. <br>
+     * <br>
+     * <b>Important:</b> The result could be <code>null</code>. If you want to
+     * have not null active session, then use
+     * {@link #getOrCreateActiveSession()} method.
+     * 
+     * @return Active session or null.
+     */
+    public Session getActiveSession() {
+	return Session.getActiveSession();
+    }
+
+    /**
+     * @param session
+     * @return <code>True</code> if is possible to relive and reopen the current
+     *         active session. Otherwise return <code>False</code>.
+     */
+    private boolean canReopenSession(Session session) {
+	if (activity == null) {
+	    Logger.logError(TAG, "You must initialize the SimpleFacebook instance with you current Activity.");
 	    return false;
 	}
+
+	if (SessionState.CREATED_TOKEN_LOADED.equals(session.getState())) {
+	    List<String> permissions = getActiveSessionPermissions();
+	    if (permissions.containsAll(configuration.getReadPermissions())) {
+		return true;
+	    }
+	}
+	return false;
     }
-    
+
     /**
      * 
      * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when
@@ -140,7 +186,7 @@ public class SessionManager {
      *            The listener for the request permission action
      */
     public void requestPublish(final OnPermissionListener onPermissionListener) {
-	if (isLogin()) {
+	if (isLogin(true)) {
 	    if (configuration.getPublishPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
 		if (onPermissionListener != null) {
 		    onPermissionListener.onThinking();
@@ -149,8 +195,8 @@ public class SessionManager {
 		 * Check if session to facebook has 'publish_action' permission.
 		 * If not, we will ask user for this permission.
 		 */
-		if (getOpenSessionPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
-		    getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
+		if (getActiveSessionPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
+		    getSessionStatusCallback().onReopenSessionListener = new OnReopenSessionListener() {
 			@Override
 			public void onSuccess() {
 			    if (onPermissionListener != null) {
@@ -171,14 +217,16 @@ public class SessionManager {
 		    };
 		    // extend publish permissions automatically
 		    extendPublishPermissions();
-		} else {
+		}
+		else {
 		    // We already have the permission.
 		    if (onPermissionListener != null) {
 			onPermissionListener.onSuccess(getAccessToken());
 		    }
 		}
 	    }
-	} else {
+	}
+	else {
 	    // callback with 'fail' due to not being loged
 	    if (onPermissionListener != null) {
 		String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -208,7 +256,8 @@ public class SessionManager {
 
 		// Open session with read permissions
 		session.openForRead(request);
-	    } else {
+	    }
+	    else {
 		request.setPermissions(configuration.getPublishPermissions());
 		session.openForPublish(request);
 	    }
@@ -232,9 +281,11 @@ public class SessionManager {
 	    List<String> publishPermissions = configuration.getPublishPermissions();
 	    if (publishPermissions != null && publishPermissions.size() > 0 && permissions.containsAll(publishPermissions)) {
 		openSession(session, false);
-	    } else if (permissions.containsAll(configuration.getReadPermissions())) {
-		openSession(session, true);
 	    }
+	    else
+		if (permissions.containsAll(configuration.getReadPermissions())) {
+		    openSession(session, true);
+		}
 	}
     }
 
@@ -257,20 +308,11 @@ public class SessionManager {
      *         {@link Session} or null if no session.
      */
     public String getAccessToken() {
-	Session session = getOpenSession();
+	Session session = getActiveSession();
 	if (session != null) {
 	    return session.getAccessToken();
 	}
 	return null;
-    }
-
-    /**
-     * Get open session
-     * 
-     * @return the open session
-     */
-    public Session getOpenSession() {
-	return Session.getActiveSession();
     }
 
     public SessionStatusCallback getSessionStatusCallback() {
@@ -282,31 +324,32 @@ public class SessionManager {
      * 
      * @return the list of accepted permissions
      */
-    public List<String> getOpenSessionPermissions() {
-	return getOpenSession().getPermissions();
+    public List<String> getActiveSessionPermissions() {
+	return getActiveSession().getPermissions();
     }
-    
+
     public Activity getActivity() {
 	return activity;
     }
-    
+
     public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
 	if (Session.getActiveSession() != null) {
 	    return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
-	} else {
+	}
+	else {
 	    return false;
 	}
     }
 
     public class SessionStatusCallback implements Session.StatusCallback {
-	private boolean mAskPublishPermissions = false;
-	private boolean mDoOnLogin = false;
-	OnLoginListener mOnLoginListener = null;
-	OnLogoutListener mOnLogoutListener = null;
-	OnReopenSessionListener mOnReopenSessionListener = null;
+	private boolean askPublishPermissions = false;
+	private boolean doOnLogin = false;
+	private OnReopenSessionListener onReopenSessionListener = null;
+	OnLoginListener onLoginListener = null;
+	OnLogoutListener onLogoutListener = null;
 
 	public void setOnReopenSessionListener(OnReopenSessionListener onReopenSessionListener) {
-	    mOnReopenSessionListener = onReopenSessionListener;
+	    this.onReopenSessionListener = onReopenSessionListener;
 	}
 
 	@Override
@@ -322,20 +365,20 @@ public class SessionManager {
 
 		if (exception instanceof FacebookOperationCanceledException) {
 		    /*
-		     * If user canceled the read permissions dialog
+		     * If user canceled the READ permissions dialog
 		     */
 		    if (permissions.size() == 0) {
-			mOnLoginListener.onNotAcceptingPermissions();
-		    } else {
-			/*
-			 * User canceled the WRITE permissions. We do nothing
-			 * here. Once the user will try to do some action that
-			 * require WRITE permissions, the dialog will be shown
-			 * automatically.
-			 */
+			onLoginListener.onNotAcceptingPermissions(Permission.Type.READ);
 		    }
-		} else {
-		    mOnLoginListener.onException(exception);
+		    else {
+			/*
+			 * User canceled the PUBLISH permissions. 
+			 */
+			onLoginListener.onNotAcceptingPermissions(Permission.Type.PUBLISH);
+		    }
+		}
+		else {
+		    onLoginListener.onException(exception);
 		}
 	    }
 
@@ -345,8 +388,8 @@ public class SessionManager {
 
 	    switch (state) {
 	    case CLOSED:
-		if (mOnLogoutListener != null) {
-		    mOnLogoutListener.onLogout();
+		if (onLogoutListener != null) {
+		    onLogoutListener.onLogout();
 		}
 		break;
 
@@ -360,8 +403,8 @@ public class SessionManager {
 		break;
 
 	    case OPENING:
-		if (mOnLoginListener != null) {
-		    mOnLoginListener.onThinking();
+		if (onLoginListener != null) {
+		    onLoginListener.onThinking();
 		}
 		break;
 
@@ -371,9 +414,9 @@ public class SessionManager {
 		 * Check if we came from publishing actions where we ask again
 		 * for publish permissions
 		 */
-		if (mOnReopenSessionListener != null) {
-		    mOnReopenSessionListener.onNotAcceptingPermissions();
-		    mOnReopenSessionListener = null;
+		if (onReopenSessionListener != null) {
+		    onReopenSessionListener.onNotAcceptingPermissions();
+		    onReopenSessionListener = null;
 		}
 
 		/*
@@ -381,25 +424,28 @@ public class SessionManager {
 		 * configuration. If so, then ask in another dialog for WRITE
 		 * permissions.
 		 */
-		else if (mAskPublishPermissions && session.getState().equals(SessionState.OPENED)) {
-		    if (mDoOnLogin) {
-			/*
-			 * If user didn't accept the publish permissions, we
-			 * still want to notify about complete
-			 */
-			mDoOnLogin = false;
-			mOnLoginListener.onLogin();
-		    } else {
+		else
+		    if (askPublishPermissions && session.getState().equals(SessionState.OPENED)) {
+			if (doOnLogin) {
+			    /*
+			     * If user didn't accept the publish permissions, we
+			     * still want to notify about complete
+			     */
+			    doOnLogin = false;
+			    onLoginListener.onLogin();
+			}
+			else {
 
-			mDoOnLogin = true;
-			extendPublishPermissions();
-			mAskPublishPermissions = false;
+			    doOnLogin = true;
+			    extendPublishPermissions();
+			    askPublishPermissions = false;
+			}
 		    }
-		} else {
-		    if (mOnLoginListener != null) {
-			mOnLoginListener.onLogin();
+		    else {
+			if (onLoginListener != null) {
+			    onLoginListener.onLogin();
+			}
 		    }
-		}
 		break;
 
 	    case OPENED_TOKEN_UPDATED:
@@ -408,16 +454,18 @@ public class SessionManager {
 		 * Check if came from publishing actions and we need to reask
 		 * for publish permissions
 		 */
-		if (mOnReopenSessionListener != null) {
-		    mOnReopenSessionListener.onSuccess();
-		    mOnReopenSessionListener = null;
-		} else if (mDoOnLogin) {
-		    mDoOnLogin = false;
-
-		    if (mOnLoginListener != null) {
-			mOnLoginListener.onLogin();
-		    }
+		if (onReopenSessionListener != null) {
+		    onReopenSessionListener.onSuccess();
+		    onReopenSessionListener = null;
 		}
+		else
+		    if (doOnLogin) {
+			doOnLogin = false;
+
+			if (onLoginListener != null) {
+			    onLoginListener.onLogin();
+			}
+		    }
 
 		break;
 
@@ -431,7 +479,7 @@ public class SessionManager {
 	 * showing read permissions, then this method should be called
 	 */
 	public void askPublishPermissions() {
-	    mAskPublishPermissions = true;
+	    askPublishPermissions = true;
 	}
     }
 }

@@ -33,9 +33,8 @@ public class GetAppRequestsAction extends AbstractAction {
 
     @Override
     protected void executeImpl() {
-	// if we are logged in
-	if (sessionManager.isLogin()) {
-	    Session session = sessionManager.getOpenSession();
+	if (sessionManager.isLogin(true)) {
+	    Session session = sessionManager.getActiveSession();
 	    Bundle bundle = null;
 	    Request request = new Request(session, "me/apprequests", bundle, HttpMethod.GET, new Request.Callback() {
 		@Override
@@ -43,8 +42,6 @@ public class GetAppRequestsAction extends AbstractAction {
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
 			Logger.logError(GetAppRequestsAction.class, "failed to get app requests", error.getException());
-
-			// callback with 'exception'
 			if (mOnAppRequestsListener != null) {
 			    mOnAppRequestsListener.onException(error.getException());
 			}
@@ -68,19 +65,14 @@ public class GetAppRequestsAction extends AbstractAction {
 		    }
 		}
 	    });
-
 	    RequestAsyncTask task = new RequestAsyncTask(request);
 	    task.execute();
-
-	    // callback with 'thinking'
 	    if (mOnAppRequestsListener != null) {
 		mOnAppRequestsListener.onThinking();
 	    }
 	} else {
 	    String reason = Errors.getError(ErrorMsg.LOGIN);
 	    Logger.logError(GetAppRequestsAction.class, reason, null);
-
-	    // callback with 'fail' due to not being logged in
 	    if (mOnAppRequestsListener != null) {
 		mOnAppRequestsListener.onFail(reason);
 	    }

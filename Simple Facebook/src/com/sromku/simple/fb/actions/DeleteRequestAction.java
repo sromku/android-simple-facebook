@@ -30,36 +30,28 @@ public class DeleteRequestAction extends AbstractAction {
 
     @Override
     protected void executeImpl() {
-	if (sessionManager.isLogin()) {
-	    // Create a new request for an HTTP delete with the
-	    // request ID as the Graph path.
-	    Session session = sessionManager.getOpenSession();
+	if (sessionManager.isLogin(true)) {
+	    Session session = sessionManager.getActiveSession();
 	    Request request = new Request(session, mRequestId, null, HttpMethod.DELETE, new Request.Callback() {
 		@Override
 		public void onCompleted(Response response) {
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
 			Logger.logError(DeleteRequestAction.class, "failed to delete requests", error.getException());
-
-			// callback with 'exception'
 			if (mOnDeleteRequestListener != null) {
 			    mOnDeleteRequestListener.onException(error.getException());
 			}
 		    } else {
-			// callback with 'complete'
 			if (mOnDeleteRequestListener != null) {
 			    mOnDeleteRequestListener.onComplete();
 			}
 		    }
 		}
 	    });
-	    // Execute the request asynchronously.
 	    Request.executeBatchAsync(request);
 	} else {
 	    String reason = Errors.getError(ErrorMsg.LOGIN);
 	    Logger.logError(DeleteRequestAction.class, reason, null);
-
-	    // callback with 'fail' due to not being logged in
 	    if (mOnDeleteRequestListener != null) {
 		mOnDeleteRequestListener.onFail(reason);
 	    }

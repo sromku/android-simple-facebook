@@ -94,17 +94,26 @@ public enum Permission {
     MANAGE_NOTIFICATIONS("manage_notifications", Type.PUBLISH),
     MANAGE_PAGES("manage_pages", Type.PUBLISH);
 
-    private static class Type {
-	static final SessionAuthorizationType PUBLISH = SessionAuthorizationType.PUBLISH;
-	static final SessionAuthorizationType READ = SessionAuthorizationType.READ;
+    /**
+     * Permission type enum: <li>READ</li> <li>PUBLISH</li><br>
+     */
+    public static enum Type {
+	PUBLISH(SessionAuthorizationType.PUBLISH),
+	READ(SessionAuthorizationType.READ);
+
+	private SessionAuthorizationType sessionAuthorizationType;
+
+	private Type(SessionAuthorizationType sessionAuthorizationType) {
+	    this.sessionAuthorizationType = sessionAuthorizationType;
+	}
     };
 
     private String mValue;
     private SessionAuthorizationType mType;
 
-    private Permission(String value, SessionAuthorizationType type) {
+    private Permission(String value, Type type) {
 	mValue = value;
-	mType = type;
+	mType = type.sessionAuthorizationType;
     }
 
     public String getValue() {

@@ -33,14 +33,11 @@ public class PublishFeedDialogAction extends AbstractAction {
 
     @Override
     protected void executeImpl() {
-	if (sessionManager.isLogin()) {
+	if (sessionManager.isLogin(true)) {
 	    WebDialog feedDialog = (new WebDialog.FeedDialogBuilder(sessionManager.getActivity(), Session.getActiveSession(), mFeed.getBundle())).setOnCompleteListener(new OnCompleteListener() {
 		@Override
 		public void onComplete(Bundle values, FacebookException error) {
 		    if (error == null) {
-			// When the story is posted, echo the
-			// success
-			// and the post Id.
 			final String postId = values.getString("post_id");
 			if (postId != null) {
 			    mOnPublishListener.onComplete(postId);
@@ -56,11 +53,8 @@ public class PublishFeedDialogAction extends AbstractAction {
 		}
 
 	    }).build();
-
-	    // show the dialog
 	    feedDialog.show();
 	} else {
-	    // callback with 'fail' due to not being loged
 	    if (mOnPublishListener != null) {
 		String reason = Errors.getError(ErrorMsg.LOGIN);
 		Logger.logError(PublishFeedDialogAction.class, reason, null);

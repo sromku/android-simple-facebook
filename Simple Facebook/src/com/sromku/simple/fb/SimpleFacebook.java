@@ -381,20 +381,6 @@ public class SimpleFacebook {
     }
 
     /**
-     * Publish any publishable entity
-     * 
-     * @param publishable
-     * @param onPublishListener
-     */
-    public void publish(Publishable publishable, String target, OnPublishListener onPublishListener) {
-	PublishAction publishAction = new PublishAction(mSessionManager);
-	publishAction.setPublishable(publishable);
-	publishAction.setTarget(target);
-	publishAction.setOnPublishListener(onPublishListener);
-	publishAction.execute();
-    }
-
-    /**
      * Publish photo to specific album. You can use
      * {@link #getAlbums(OnAlbumsRequestListener)} to retrieve all user's
      * albums.<br>
@@ -459,6 +445,20 @@ public class SimpleFacebook {
      */
     public void publish(Video video, OnPublishListener onPublishListener) {
 	publish((Publishable) video, "me", onPublishListener);
+    }
+
+    /**
+     * Publish any publishable entity
+     * 
+     * @param publishable
+     * @param onPublishListener
+     */
+    public void publish(Publishable publishable, String target, OnPublishListener onPublishListener) {
+        PublishAction publishAction = new PublishAction(mSessionManager);
+        publishAction.setPublishable(publishable);
+        publishAction.setTarget(target);
+        publishAction.setOnPublishListener(onPublishListener);
+        publishAction.execute();
     }
 
     /**
