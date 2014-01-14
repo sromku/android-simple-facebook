@@ -1,16 +1,21 @@
 package com.sromku.simple.fb;
 
+import java.security.Permissions;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
+import com.sromku.simple.fb.listeners.OnPermissionListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
+import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 
 public class SessionManager {
 
@@ -119,6 +124,69 @@ public class SessionManager {
 	    return false;
 	}
     }
+    
+    /**
+     * 
+     * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when
+     * you just want to request the action and won't be publishing at the time,
+     * but still need the updated <b>access token</b> with the permissions
+     * (possibly to pass back to your backend). You must add
+     * {@link Permissions#PUBLISH_ACTION} to your SimpleFacebook configuration
+     * before calling this.
+     * 
+     * <b>Must be logged to use.</b>
+     * 
+     * @param onPermissionListener
+     *            The listener for the request permission action
+     */
+    public void requestPublish(final OnPermissionListener onPermissionListener) {
+	if (isLogin()) {
+	    if (configuration.getPublishPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
+		if (onPermissionListener != null) {
+		    onPermissionListener.onThinking();
+		}
+		/*
+		 * Check if session to facebook has 'publish_action' permission.
+		 * If not, we will ask user for this permission.
+		 */
+		if (getOpenSessionPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
+		    getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
+			@Override
+			public void onSuccess() {
+			    if (onPermissionListener != null) {
+				onPermissionListener.onSuccess(getAccessToken());
+			    }
+			}
+
+			@Override
+			public void onNotAcceptingPermissions() {
+			    // this fail can happen when user doesn't accept the
+			    // publish permissions
+			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
+			    Logger.logError(SessionManager.class, reason, null);
+			    if (onPermissionListener != null) {
+				onPermissionListener.onFail(reason);
+			    }
+			}
+		    };
+		    // extend publish permissions automatically
+		    extendPublishPermissions();
+		} else {
+		    // We already have the permission.
+		    if (onPermissionListener != null) {
+			onPermissionListener.onSuccess(getAccessToken());
+		    }
+		}
+	    }
+	} else {
+	    // callback with 'fail' due to not being loged
+	    if (onPermissionListener != null) {
+		String reason = Errors.getError(ErrorMsg.LOGIN);
+		Logger.logError(SessionManager.class, reason, null);
+		onPermissionListener.onFail(reason);
+	    }
+	}
+    }
 
     public void openSession(Session session, boolean isRead) {
 	Session.OpenRequest request = new Session.OpenRequest(activity);
@@ -220,6 +288,14 @@ public class SessionManager {
     
     public Activity getActivity() {
 	return activity;
+    }
+    
+    public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+	if (Session.getActiveSession() != null) {
+	    return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
+	} else {
+	    return false;
+	}
     }
 
     public class SessionStatusCallback implements Session.StatusCallback {

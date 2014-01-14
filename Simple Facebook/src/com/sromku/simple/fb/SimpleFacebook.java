@@ -1,30 +1,17 @@
 package com.sromku.simple.fb;
 
 import java.security.Permissions;
-import java.util.ArrayList;
-import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.widget.WebDialog;
+import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
+import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.entities.Album;
@@ -44,11 +31,7 @@ import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnPermissionListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
-import com.sromku.simple.fb.listeners.OnReopenSessionListener;
 import com.sromku.simple.fb.listeners.OnScoresRequestListener;
-import com.sromku.simple.fb.utils.Errors;
-import com.sromku.simple.fb.utils.Errors.ErrorMsg;
-import com.sromku.simple.fb.utils.Logger;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK 3.5
@@ -80,8 +63,6 @@ public class SimpleFacebook {
 
     private static Activity mActivity;
     private static SessionManager mSessionManager = null;
-
-    private WebDialog mDialog = null;
 
     private SimpleFacebook() {
     }
@@ -439,7 +420,7 @@ public class SimpleFacebook {
      *            The callback listener
      */
     public void publish(Photo photo, String albumId, OnPublishListener onPublishListener) {
-	publish((Publishable)photo, albumId, onPublishListener);
+	publish((Publishable) photo, albumId, onPublishListener);
     }
 
     /**
@@ -461,7 +442,7 @@ public class SimpleFacebook {
      *            The callback listener
      */
     public void publish(Photo photo, OnPublishListener onPublishListener) {
-	publish((Publishable)photo, "me", onPublishListener);
+	publish((Publishable) photo, "me", onPublishListener);
     }
 
     /**
@@ -477,7 +458,7 @@ public class SimpleFacebook {
      *            The callback listener
      */
     public void publish(Video video, OnPublishListener onPublishListener) {
-	publish((Publishable)video, "me", onPublishListener);
+	publish((Publishable) video, "me", onPublishListener);
     }
 
     /**
@@ -489,17 +470,10 @@ public class SimpleFacebook {
      *            The listener. It could be <code>null</code>
      */
     public void invite(String message, final OnInviteListener onInviteListener) {
-	if (mSessionManager.isLogin()) {
-
-	    Bundle params = new Bundle();
-	    params.putString("message", message);
-	    openInviteDialog(mActivity, params, onInviteListener);
-	} else {
-	    String reason = Errors.getError(ErrorMsg.LOGIN);
-	    logError(reason, null);
-
-	    onInviteListener.onFail(reason);
-	}
+	InviteAction inviteAction = new InviteAction(mSessionManager);
+	inviteAction.setMessage(message);
+	inviteAction.setOnInviteListener(onInviteListener);
+	inviteAction.execute();
     }
 
     /**
@@ -513,20 +487,11 @@ public class SimpleFacebook {
      *            The listener. It could be <code>null</code>
      */
     public void invite(String to, String message, final OnInviteListener onInviteListener) {
-	if (mSessionManager.isLogin()) {
-
-	    Bundle params = new Bundle();
-	    if (message != null) {
-		params.putString("message", message);
-	    }
-	    params.putString("to", to);
-	    openInviteDialog(mActivity, params, onInviteListener);
-	} else {
-	    String reason = Errors.getError(ErrorMsg.LOGIN);
-	    logError(reason, null);
-
-	    onInviteListener.onFail(reason);
-	}
+	InviteAction inviteAction = new InviteAction(mSessionManager);
+	inviteAction.setTo(to);
+	inviteAction.setMessage(message);
+	inviteAction.setOnInviteListener(onInviteListener);
+	inviteAction.execute();
     }
 
     /**
@@ -540,20 +505,11 @@ public class SimpleFacebook {
      *            The error listener. It could be <code>null</code>
      */
     public void invite(String[] suggestedFriends, String message, final OnInviteListener onInviteListener) {
-	if (mSessionManager.isLogin()) {
-
-	    Bundle params = new Bundle();
-	    if (message != null) {
-		params.putString("message", message);
-	    }
-	    params.putString("suggestions", TextUtils.join(",", suggestedFriends));
-	    openInviteDialog(mActivity, params, onInviteListener);
-	} else {
-	    String reason = Errors.getError(ErrorMsg.LOGIN);
-	    logError(reason, null);
-
-	    onInviteListener.onFail(reason);
-	}
+	InviteAction inviteAction = new InviteAction(mSessionManager);
+	inviteAction.setSuggestions(suggestedFriends);
+	inviteAction.setMessage(message);
+	inviteAction.setOnInviteListener(onInviteListener);
+	inviteAction.execute();
     }
 
     /**
@@ -570,41 +526,10 @@ public class SimpleFacebook {
      *      ://developers.facebook.com/docs/android/app-link-requests/#step3
      */
     public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) {
-	if (mSessionManager.isLogin()) {
-	    // Create a new request for an HTTP delete with the
-	    // request ID as the Graph path.
-	    Session session = mSessionManager.getOpenSession();
-	    Request request = new Request(session, inRequestId, null, HttpMethod.DELETE, new Request.Callback() {
-		@Override
-		public void onCompleted(Response response) {
-		    FacebookRequestError error = response.getError();
-		    if (error != null) {
-			// log
-			logError("failed to delete requests", error.getException());
-
-			// callback with 'exception'
-			if (onDeleteRequestListener != null) {
-			    onDeleteRequestListener.onException(error.getException());
-			}
-		    } else {
-			// callback with 'complete'
-			if (onDeleteRequestListener != null) {
-			    onDeleteRequestListener.onComplete();
-			}
-		    }
-		}
-	    });
-	    // Execute the request asynchronously.
-	    Request.executeBatchAsync(request);
-	} else {
-	    String reason = Errors.getError(ErrorMsg.LOGIN);
-	    logError(reason, null);
-
-	    // callback with 'fail' due to not being logged in
-	    if (onDeleteRequestListener != null) {
-		onDeleteRequestListener.onFail(reason);
-	    }
-	}
+	DeleteRequestAction deleteRequestAction = new DeleteRequestAction(mSessionManager);
+	deleteRequestAction.setRequestId(inRequestId);
+	deleteRequestAction.setOnDeleteRequestListener(onDeleteRequestListener);
+	deleteRequestAction.execute();
     }
 
     /**
@@ -621,53 +546,8 @@ public class SimpleFacebook {
      * @param onPermissionListener
      *            The listener for the request permission action
      */
-    public void requestPublish(final OnPermissionListener onPermissionListener) {
-	if (mSessionManager.isLogin()) {
-	    if (mConfiguration.getPublishPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
-		if (onPermissionListener != null) {
-		    onPermissionListener.onThinking();
-		}
-		/*
-		 * Check if session to facebook has 'publish_action' permission.
-		 * If not, we will ask user for this permission.
-		 */
-		if (!mSessionManager.getOpenSessionPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
-		    mSessionManager.getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
-			@Override
-			public void onSuccess() {
-			    if (onPermissionListener != null) {
-				onPermissionListener.onSuccess(mSessionManager.getAccessToken());
-			    }
-			}
-
-			@Override
-			public void onNotAcceptingPermissions() {
-			    // this fail can happen when user doesn't accept the
-			    // publish permissions
-			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-			    logError(reason, null);
-			    if (onPermissionListener != null) {
-				onPermissionListener.onFail(reason);
-			    }
-			}
-		    };
-		    // extend publish permissions automatically
-		    mSessionManager.extendPublishPermissions();
-		} else {
-		    // We already have the permission.
-		    if (onPermissionListener != null) {
-			onPermissionListener.onSuccess(mSessionManager.getAccessToken());
-		    }
-		}
-	    }
-	} else {
-	    // callback with 'fail' due to not being loged
-	    if (onPermissionListener != null) {
-		String reason = Errors.getError(ErrorMsg.LOGIN);
-		logError(reason, null);
-		onPermissionListener.onFail(reason);
-	    }
-	}
+    public void requestPublish(OnPermissionListener onPermissionListener) {
+	mSessionManager.requestPublish(onPermissionListener);
     }
 
     /**
@@ -681,11 +561,7 @@ public class SimpleFacebook {
      * @return
      */
     public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-	if (Session.getActiveSession() != null) {
-	    return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
-	} else {
-	    return false;
-	}
+	return mSessionManager.onActivityResult(activity, requestCode, resultCode, data);
     }
 
     /**
@@ -693,74 +569,7 @@ public class SimpleFacebook {
      */
     public void clean() {
 	mActivity = null;
-    }
-
-    private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener) {
-	mDialog = new WebDialog.RequestsDialogBuilder(activity, Session.getActiveSession(), params).setOnCompleteListener(new WebDialog.OnCompleteListener() {
-	    @Override
-	    public void onComplete(Bundle values, FacebookException error) {
-		if (error != null) {
-		    // log
-		    logError("Failed to invite", error);
-
-		    if (error instanceof FacebookOperationCanceledException) {
-			onInviteListener.onCancel();
-		    } else {
-			if (onInviteListener != null) {
-			    onInviteListener.onException(error);
-			}
-		    }
-		} else {
-		    Object object = values.get("request");
-		    if (object == null) {
-			onInviteListener.onCancel();
-		    } else {
-			List<String> invitedFriends = fetchInvitedFriends(values);
-			onInviteListener.onComplete(invitedFriends, object.toString());
-		    }
-		}
-		mDialog = null;
-	    }
-
-	}).build();
-
-	Window dialogWindow = mDialog.getWindow();
-	dialogWindow.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-	mDialog.show();
-    }
-
-    /**
-     * Fetch invited friends from response bundle
-     * 
-     * @param values
-     * @return list of invited friends
-     */
-    @SuppressLint("DefaultLocale")
-    private static List<String> fetchInvitedFriends(Bundle values) {
-	List<String> friends = new ArrayList<String>();
-
-	int size = values.size();
-	int numOfFriends = size - 1;
-	if (numOfFriends > 0) {
-	    for (int i = 0; i < numOfFriends; i++) {
-		String key = String.format("to[%d]", i);
-		String friendId = values.getString(key);
-		if (friendId != null) {
-		    friends.add(friendId);
-		}
-	    }
-	}
-
-	return friends;
-    }
-
-    private static void logError(String error, Throwable throwable) {
-	if (throwable != null) {
-	    Logger.logError(SimpleFacebook.class, error, throwable);
-	} else {
-	    Logger.logError(SimpleFacebook.class, error);
-	}
+	SessionManager.activity = null;
     }
 
 }
