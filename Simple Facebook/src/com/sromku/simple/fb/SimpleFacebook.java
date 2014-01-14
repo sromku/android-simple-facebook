@@ -1,10 +1,8 @@
 package com.sromku.simple.fb;
 
+import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,22 +17,20 @@ import com.facebook.FacebookOperationCanceledException;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
-import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.model.GraphObject;
 import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
-import com.sromku.simple.fb.actions.PublishFeedAction;
-import com.sromku.simple.fb.actions.PublishScoreAction;
+import com.sromku.simple.fb.actions.PublishAction;
+import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
@@ -46,7 +42,6 @@ import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnPermissionListener;
-import com.sromku.simple.fb.listeners.OnPostScoreListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
@@ -162,9 +157,10 @@ public class SimpleFacebook {
 	mConfiguration = configuration;
 	SessionManager.configuration = configuration;
     }
-    
+
     /**
      * Get configuration
+     * 
      * @return
      */
     public static SimpleFacebookConfiguration getConfiguration() {
@@ -341,11 +337,8 @@ public class SimpleFacebook {
      *            The listener for posting score
      * @see https://developers.facebook.com/docs/games/scores/
      */
-    public void publish(Score score, OnPostScoreListener onPostScoreListener) {
-	PublishScoreAction publishScoreAction = new PublishScoreAction(mSessionManager);
-	publishScoreAction.setScore(score);
-	publishScoreAction.setOnPostScoreListener(onPostScoreListener);
-	publishScoreAction.execute();
+    public void publish(Score score, OnPublishListener onPublishListener) {
+	publish((Publishable) score, "me", onPublishListener);
     }
 
     /**
@@ -365,11 +358,8 @@ public class SimpleFacebook {
      *      ://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to
      *      -feed/
      */
-    public void publish(final Feed feed, final OnPublishListener onPublishListener) {
-	PublishFeedAction publishFeedAction = new PublishFeedAction(mSessionManager);
-	publishFeedAction.setFeed(feed);
-	publishFeedAction.setOnPublishListener(onPublishListener);
-	publishFeedAction.execute();
+    public void publish(Feed feed, OnPublishListener onPublishListener) {
+	publish((Publishable) feed, "me", onPublishListener);
     }
 
     /**
@@ -383,46 +373,15 @@ public class SimpleFacebook {
      *            Set <code>True</code> if you want to use dialog.
      * @param onPublishListener
      */
-    public void publish(final Feed feed, boolean withDialog, final OnPublishListener onPublishListener) {
+    public void publish(Feed feed, boolean withDialog, OnPublishListener onPublishListener) {
 	if (!withDialog) {
 	    // make it silently
 	    publish(feed, onPublishListener);
 	} else {
-	    if (mSessionManager.isLogin()) {
-		WebDialog feedDialog = (new WebDialog.FeedDialogBuilder(mActivity, Session.getActiveSession(), feed.getBundle())).setOnCompleteListener(new OnCompleteListener() {
-		    @Override
-		    public void onComplete(Bundle values, FacebookException error) {
-			if (error == null) {
-			    // When the story is posted, echo the
-			    // success
-			    // and the post Id.
-			    final String postId = values.getString("post_id");
-			    if (postId != null) {
-				onPublishListener.onComplete(postId);
-			    } else {
-				onPublishListener.onFail("Canceled by user");
-			    }
-			} else if (error instanceof FacebookOperationCanceledException) {
-			    // User clicked the "x" button
-			    onPublishListener.onFail("Canceled by user");
-			} else {
-			    onPublishListener.onException(error);
-			}
-		    }
-
-		}).build();
-
-		// show the dialog
-		feedDialog.show();
-	    } else {
-		// callback with 'fail' due to not being loged
-		if (onPublishListener != null) {
-		    String reason = Errors.getError(ErrorMsg.LOGIN);
-		    logError(reason, null);
-
-		    onPublishListener.onFail(reason);
-		}
-	    }
+	    PublishFeedDialogAction publishFeedDialogAction = new PublishFeedDialogAction(mSessionManager);
+	    publishFeedDialogAction.setFeed(feed);
+	    publishFeedDialogAction.setOnPublishListener(onPublishListener);
+	    publishFeedDialogAction.execute();
 	}
     }
 
@@ -436,63 +395,22 @@ public class SimpleFacebook {
      * @param openGraph
      * @param onPublishListener
      */
-    public void publish(final Story story, final OnPublishListener onPublishListener) {
-	if (mSessionManager.isLogin()) {
+    public void publish(Story story, OnPublishListener onPublishListener) {
+	publish((Publishable) story, "me", onPublishListener);
+    }
 
-	    // if we defined the publish permission
-	    if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
-		// callback with 'thinking'
-		if (onPublishListener != null) {
-		    onPublishListener.onThinking();
-		}
-
-		/*
-		 * Check if session to facebook has 'publish_action' permission.
-		 * If not, we will ask user for this permission.
-		 */
-		if (!mSessionManager.getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
-		    mSessionManager.getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
-			@Override
-			public void onSuccess() {
-			    publishImpl(story, onPublishListener);
-			}
-
-			@Override
-			public void onNotAcceptingPermissions() {
-			    // this fail can happen when user doesn't accept the
-			    // publish permissions
-			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-			    logError(reason, null);
-
-			    if (onPublishListener != null) {
-				onPublishListener.onFail(reason);
-			    }
-			}
-		    };
-
-		    // extend publish permissions automatically
-		    mSessionManager.extendPublishPermissions();
-		} else {
-		    publishImpl(story, onPublishListener);
-		}
-	    } else {
-		// callback with 'fail' due to insufficient permissions
-		if (onPublishListener != null) {
-		    String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
-		    logError(reason, null);
-
-		    onPublishListener.onFail(reason);
-		}
-	    }
-	} else {
-	    // callback with 'fail' due to not being loged
-	    if (onPublishListener != null) {
-		String reason = Errors.getError(ErrorMsg.LOGIN);
-		logError(reason, null);
-
-		onPublishListener.onFail(reason);
-	    }
-	}
+    /**
+     * Publish any publishable entity
+     * 
+     * @param publishable
+     * @param onPublishListener
+     */
+    public void publish(Publishable publishable, String target, OnPublishListener onPublishListener) {
+	PublishAction publishAction = new PublishAction(mSessionManager);
+	publishAction.setPublishable(publishable);
+	publishAction.setTarget(target);
+	publishAction.setOnPublishListener(onPublishListener);
+	publishAction.execute();
     }
 
     /**
@@ -520,62 +438,8 @@ public class SimpleFacebook {
      * @param onPublishListener
      *            The callback listener
      */
-    public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener) {
-	if (mSessionManager.isLogin()) {
-	    // if we defined the publish permission
-	    if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_STREAM.getValue())) {
-		// callback with 'thinking'
-		if (onPublishListener != null) {
-		    onPublishListener.onThinking();
-		}
-
-		/*
-		 * Check if session to facebook has 'publish_action' permission.
-		 * If not, we will ask user for this permission.
-		 */
-		if (!mSessionManager.getOpenSessionPermissions().contains(Permissions.PUBLISH_STREAM.getValue())) {
-		    mSessionManager.getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
-			@Override
-			public void onSuccess() {
-			    publishImpl(photo, albumId, onPublishListener);
-			}
-
-			@Override
-			public void onNotAcceptingPermissions() {
-			    // this fail can happen when user doesn't accept the
-			    // publish permissions
-			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-			    logError(reason, null);
-
-			    if (onPublishListener != null) {
-				onPublishListener.onFail(reason);
-			    }
-			}
-		    };
-
-		    // extend publish permissions automatically
-		    mSessionManager.extendPublishPermissions();
-		} else {
-		    publishImpl(photo, albumId, onPublishListener);
-		}
-	    } else {
-		// callback with 'fail' due to insufficient permissions
-		if (onPublishListener != null) {
-		    String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_STREAM.getValue());
-		    logError(reason, null);
-
-		    onPublishListener.onFail(reason);
-		}
-	    }
-	} else {
-	    // callback with 'fail' due to not being loged
-	    if (onPublishListener != null) {
-		String reason = Errors.getError(ErrorMsg.LOGIN);
-		logError(reason, null);
-
-		onPublishListener.onFail(reason);
-	    }
-	}
+    public void publish(Photo photo, String albumId, OnPublishListener onPublishListener) {
+	publish((Publishable)photo, albumId, onPublishListener);
     }
 
     /**
@@ -596,8 +460,8 @@ public class SimpleFacebook {
      * @param onPublishListener
      *            The callback listener
      */
-    public void publish(final Photo photo, final OnPublishListener onPublishListener) {
-	publish(photo, "me", onPublishListener);
+    public void publish(Photo photo, OnPublishListener onPublishListener) {
+	publish((Publishable)photo, "me", onPublishListener);
     }
 
     /**
@@ -612,62 +476,8 @@ public class SimpleFacebook {
      * @param onPublishListener
      *            The callback listener
      */
-    public void publish(final Video video, final OnPublishListener onPublishListener) {
-	if (mSessionManager.isLogin()) {
-	    // if we defined the publish permission
-	    if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_STREAM.getValue())) {
-		// callback with 'thinking'
-		if (onPublishListener != null) {
-		    onPublishListener.onThinking();
-		}
-
-		/*
-		 * Check if session to facebook has 'publish_action' permission.
-		 * If not, we will ask user for this permission.
-		 */
-		if (!mSessionManager.getOpenSessionPermissions().contains(Permissions.PUBLISH_STREAM.getValue())) {
-		    mSessionManager.getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
-			@Override
-			public void onSuccess() {
-			    publishImpl(video, onPublishListener);
-			}
-
-			@Override
-			public void onNotAcceptingPermissions() {
-			    // this fail can happen when user doesn't accept the
-			    // publish permissions
-			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
-			    logError(reason, null);
-
-			    if (onPublishListener != null) {
-				onPublishListener.onFail(reason);
-			    }
-			}
-		    };
-
-		    // extend publish permissions automatically
-		    mSessionManager.extendPublishPermissions();
-		} else {
-		    publishImpl(video, onPublishListener);
-		}
-	    } else {
-		// callback with 'fail' due to insufficient permissions
-		if (onPublishListener != null) {
-		    String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_STREAM.getValue());
-		    logError(reason, null);
-
-		    onPublishListener.onFail(reason);
-		}
-	    }
-	} else {
-	    // callback with 'fail' due to not being loged
-	    if (onPublishListener != null) {
-		String reason = Errors.getError(ErrorMsg.LOGIN);
-		logError(reason, null);
-
-		onPublishListener.onFail(reason);
-	    }
-	}
+    public void publish(Video video, OnPublishListener onPublishListener) {
+	publish((Publishable)video, "me", onPublishListener);
     }
 
     /**
@@ -813,7 +623,7 @@ public class SimpleFacebook {
      */
     public void requestPublish(final OnPermissionListener onPermissionListener) {
 	if (mSessionManager.isLogin()) {
-	    if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
+	    if (mConfiguration.getPublishPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
 		if (onPermissionListener != null) {
 		    onPermissionListener.onThinking();
 		}
@@ -821,7 +631,7 @@ public class SimpleFacebook {
 		 * Check if session to facebook has 'publish_action' permission.
 		 * If not, we will ask user for this permission.
 		 */
-		if (!mSessionManager.getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
+		if (!mSessionManager.getOpenSessionPermissions().contains(Permission.PUBLISH_ACTION.getValue())) {
 		    mSessionManager.getSessionStatusCallback().mOnReopenSessionListener = new OnReopenSessionListener() {
 			@Override
 			public void onSuccess() {
@@ -883,146 +693,6 @@ public class SimpleFacebook {
      */
     public void clean() {
 	mActivity = null;
-    }
-
-    private static void publishImpl(Story story, final OnPublishListener onPublishListener) {
-	Session session = mSessionManager.getOpenSession();
-	String appNamespace = mConfiguration.getNamespace();
-
-	Request request = new Request(session, story.getGraphPath(appNamespace), story.getActionBundle(), HttpMethod.POST, new Request.Callback() {
-	    @Override
-	    public void onCompleted(Response response) {
-		GraphObject graphObject = response.getGraphObject();
-		if (graphObject != null) {
-		    JSONObject graphResponse = graphObject.getInnerJSONObject();
-		    String postId = null;
-		    try {
-			postId = graphResponse.getString("id");
-		    } catch (JSONException e) {
-			// log
-			logError("JSON error", e);
-		    }
-
-		    FacebookRequestError error = response.getError();
-		    if (error != null) {
-			// log
-			logError("Failed to publish", error.getException());
-
-			// callback with 'exception'
-			if (onPublishListener != null) {
-			    onPublishListener.onException(error.getException());
-			}
-		    } else {
-			// callback with 'complete'
-			if (onPublishListener != null) {
-			    onPublishListener.onComplete(postId);
-			}
-		    }
-		} else {
-		    // log
-		    logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-		    if (onPublishListener != null) {
-			onPublishListener.onComplete("0");
-		    }
-		}
-	    }
-	});
-
-	RequestAsyncTask task = new RequestAsyncTask(request);
-	task.execute();
-    }
-
-    private static void publishImpl(Photo photo, String albumId, final OnPublishListener onPublishListener) {
-	Session session = mSessionManager.getOpenSession();
-	Request request = new Request(session, albumId + "/photos", photo.getBundle(), HttpMethod.POST, new Request.Callback() {
-	    @Override
-	    public void onCompleted(Response response) {
-		GraphObject graphObject = response.getGraphObject();
-		if (graphObject != null) {
-		    JSONObject graphResponse = graphObject.getInnerJSONObject();
-		    String postId = null;
-		    try {
-			postId = graphResponse.getString("id");
-		    } catch (JSONException e) {
-			// log
-			logError("JSON error", e);
-		    }
-
-		    FacebookRequestError error = response.getError();
-		    if (error != null) {
-			// log
-			logError("Failed to publish", error.getException());
-
-			// callback with 'exception'
-			if (onPublishListener != null) {
-			    onPublishListener.onException(error.getException());
-			}
-		    } else {
-			// callback with 'complete'
-			if (onPublishListener != null) {
-			    onPublishListener.onComplete(postId);
-			}
-		    }
-		} else {
-		    // log
-		    logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-		    if (onPublishListener != null) {
-			onPublishListener.onComplete("0");
-		    }
-		}
-	    }
-	});
-
-	RequestAsyncTask task = new RequestAsyncTask(request);
-	task.execute();
-    }
-
-    private static void publishImpl(Video video, final OnPublishListener onPublishListener) {
-	Session session = mSessionManager.getOpenSession();
-	Request request = new Request(session, "me/videos", video.getBundle(), HttpMethod.POST, new Request.Callback() {
-	    @Override
-	    public void onCompleted(Response response) {
-		GraphObject graphObject = response.getGraphObject();
-		if (graphObject != null) {
-		    JSONObject graphResponse = graphObject.getInnerJSONObject();
-		    String postId = null;
-		    try {
-			postId = graphResponse.getString("id");
-		    } catch (JSONException e) {
-			// log
-			logError("JSON error", e);
-		    }
-
-		    FacebookRequestError error = response.getError();
-		    if (error != null) {
-			// log
-			logError("Failed to publish", error.getException());
-
-			// callback with 'exception'
-			if (onPublishListener != null) {
-			    onPublishListener.onException(error.getException());
-			}
-		    } else {
-			// callback with 'complete'
-			if (onPublishListener != null) {
-			    onPublishListener.onComplete(postId);
-			}
-		    }
-		} else {
-		    // log
-		    logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-		    if (onPublishListener != null) {
-			onPublishListener.onComplete("0");
-		    }
-		}
-	    }
-	});
-
-	RequestAsyncTask task = new RequestAsyncTask(request);
-	task.execute();
     }
 
     private void openInviteDialog(Activity activity, Bundle params, final OnInviteListener onInviteListener) {

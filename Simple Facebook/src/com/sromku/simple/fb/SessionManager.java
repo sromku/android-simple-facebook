@@ -217,6 +217,10 @@ public class SessionManager {
     public List<String> getOpenSessionPermissions() {
 	return getOpenSession().getPermissions();
     }
+    
+    public Activity getActivity() {
+	return activity;
+    }
 
     public class SessionStatusCallback implements Session.StatusCallback {
 	private boolean mAskPublishPermissions = false;

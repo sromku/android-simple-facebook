@@ -42,7 +42,7 @@ public class SimpleFacebookConfiguration {
      * 
      * @return
      */
-    String getNamespace() {
+    public String getNamespace() {
 	return mNamespace;
     }
 
@@ -130,8 +130,8 @@ public class SimpleFacebookConfiguration {
 	 * 
 	 * @param permissions
 	 */
-	public Builder setPermissions(Permissions[] permissions) {
-	    for (Permissions permission : permissions) {
+	public Builder setPermissions(Permission[] permissions) {
+	    for (Permission permission : permissions) {
 		switch (permission.getType()) {
 		case READ:
 		    mReadPermissions.add(permission.getValue());

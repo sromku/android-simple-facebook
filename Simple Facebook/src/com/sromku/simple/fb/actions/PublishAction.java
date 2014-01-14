@@ -10,26 +10,30 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
-import com.sromku.simple.fb.Permissions;
 import com.sromku.simple.fb.SessionManager;
-import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 
-public class PublishFeedAction extends AbstractAction {
+public class PublishAction extends AbstractAction {
 
     private OnPublishListener mOnPublishListener;
-    private Feed mFeed;
+    private Publishable mPublishable;
+    private String mTarget = "me";
 
-    public PublishFeedAction(SessionManager sessionManager) {
+    public PublishAction(SessionManager sessionManager) {
 	super(sessionManager);
     }
-
-    public void setFeed(Feed feed) {
-	mFeed = feed;
+    
+    public void setPublishable(Publishable publishable) {
+	mPublishable = publishable;
+    }
+    
+    public void setTarget(String target){
+	mTarget = target;
     }
 
     public void setOnPublishListener(OnPublishListener onPublishListener) {
@@ -41,7 +45,7 @@ public class PublishFeedAction extends AbstractAction {
 	// if we are logged in
 	if (sessionManager.isLogin()) {
 	    // if we defined the publish permission
-	    if (configuration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
+	    if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
 		// callback with 'thinking'
 		if (mOnPublishListener != null) {
 		    mOnPublishListener.onThinking();
@@ -51,11 +55,11 @@ public class PublishFeedAction extends AbstractAction {
 		 * Check if session to facebook has 'publish_action' permission.
 		 * If not, we will ask user for this permission.
 		 */
-		if (!sessionManager.getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue())) {
+		if (!sessionManager.getOpenSessionPermissions().contains(mPublishable.getPermission().getValue())) {
 		    sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
 			@Override
 			public void onSuccess() {
-			    publishImpl(mFeed, mOnPublishListener);
+			    publishImpl(mPublishable, mOnPublishListener);
 			}
 
 			@Override
@@ -63,7 +67,7 @@ public class PublishFeedAction extends AbstractAction {
 			    // this fail can happen when user doesn't accept the
 			    // publish permissions
 			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
-			    Logger.logError(PublishFeedAction.class, reason, null);
+			    Logger.logError(PublishAction.class, reason, null);
 			    if (mOnPublishListener != null) {
 				mOnPublishListener.onFail(reason);
 			    }
@@ -73,11 +77,11 @@ public class PublishFeedAction extends AbstractAction {
 		    // extend publish permissions automatically
 		    sessionManager.extendPublishPermissions();
 		} else {
-		    publishImpl(mFeed, mOnPublishListener);
+		    publishImpl(mPublishable, mOnPublishListener);
 		}
 	    } else {
-		String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
-		Logger.logError(PublishFeedAction.class, reason, null);
+		String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
+		Logger.logError(PublishAction.class, reason, null);
 
 		// callback with 'fail' due to insufficient permissions
 		if (mOnPublishListener != null) {
@@ -88,16 +92,16 @@ public class PublishFeedAction extends AbstractAction {
 	    // callback with 'fail' due to not being loged
 	    if (mOnPublishListener != null) {
 		String reason = Errors.getError(ErrorMsg.LOGIN);
-		Logger.logError(PublishFeedAction.class, reason, null);
+		Logger.logError(PublishAction.class, reason, null);
 
 		mOnPublishListener.onFail(reason);
 	    }
 	}
     }
 
-    private void publishImpl(Feed feed, final OnPublishListener onPublishListener) {
+    private void publishImpl(Publishable publishable, final OnPublishListener onPublishListener) {
 	Session session = sessionManager.getOpenSession();
-	Request request = new Request(session, "me/feed", feed.getBundle(), HttpMethod.POST, new Request.Callback() {
+	Request request = new Request(session, mTarget + "/" + publishable.getPath(), publishable.getBundle(), HttpMethod.POST, new Request.Callback() {
 	    @Override
 	    public void onCompleted(Response response) {
 		GraphObject graphObject = response.getGraphObject();
@@ -107,12 +111,12 @@ public class PublishFeedAction extends AbstractAction {
 		    try {
 			postId = graphResponse.getString("id");
 		    } catch (JSONException e) {
-			Logger.logError(PublishFeedAction.class, "JSON error", e);
+			Logger.logError(PublishAction.class, "JSON error", e);
 		    }
 
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
-			Logger.logError(PublishFeedAction.class, "Failed to publish", error.getException());
+			Logger.logError(PublishAction.class, "Failed to publish", error.getException());
 
 			// callback with 'exception'
 			if (onPublishListener != null) {
@@ -125,7 +129,7 @@ public class PublishFeedAction extends AbstractAction {
 			}
 		    }
 		} else {
-		    Logger.logError(PublishFeedAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+		    Logger.logError(PublishAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
 
 		    if (onPublishListener != null) {
 			onPublishListener.onComplete("0");

@@ -5,7 +5,7 @@ import com.facebook.internal.SessionAuthorizationType;
 /**
  * @author sromku
  */
-public enum Permissions {
+public enum Permission {
     BASIC_INFO("basic_info", Type.READ),
 
     USER_ABOUT_ME("user_about_me", Type.READ),
@@ -102,7 +102,7 @@ public enum Permissions {
     private String mValue;
     private SessionAuthorizationType mType;
 
-    private Permissions(String value, SessionAuthorizationType type) {
+    private Permission(String value, SessionAuthorizationType type) {
 	mValue = value;
 	mType = type;
     }
