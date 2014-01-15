@@ -46,7 +46,6 @@ public class GetProfileAction extends AbstractAction {
 		@Override
 		public void onCompleted(Response response) {
 		    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
 			Logger.logError(GetProfileAction.class, "failed to get profile", error.getException());

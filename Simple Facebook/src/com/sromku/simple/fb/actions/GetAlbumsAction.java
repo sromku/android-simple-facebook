@@ -17,6 +17,7 @@ import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -38,7 +39,7 @@ public class GetAlbumsAction extends AbstractAction {
 	    Session session = sessionManager.getActiveSession();
 	    Bundle bundle = new Bundle();
 	    bundle.putString("date_format", "U");
-	    Request request = new Request(session, "me/albums", bundle, HttpMethod.GET, new Request.Callback() {
+	    Request request = new Request(session, "me/" + GraphPath.ALBUMS, bundle, HttpMethod.GET, new Request.Callback() {
 		@Override
 		public void onCompleted(Response response) {
 		    List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);

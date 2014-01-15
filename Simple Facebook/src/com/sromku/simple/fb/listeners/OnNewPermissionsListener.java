@@ -1,5 +1,7 @@
 package com.sromku.simple.fb.listeners;
 
+import com.sromku.simple.fb.Permission.Type;
+
 /**
  * On permission listener - If the App must request a specific permission (only
  * to obtain the new Access Token)
@@ -7,7 +9,7 @@ package com.sromku.simple.fb.listeners;
  * @author Gryzor
  * 
  */
-public interface OnPermissionListener extends OnActionListener {
+public interface OnNewPermissionsListener extends OnActionListener {
     /**
      * If the permission was granted, this callback is invoked.
      */
@@ -15,6 +17,7 @@ public interface OnPermissionListener extends OnActionListener {
 
     /**
      * If user pressed 'cancel' in PUBLISH permissions dialog
+     * @param type 
      */
-    void onNotAcceptingPermissions();
+    void onNotAcceptingPermissions(Type type);
 }

@@ -10,9 +10,10 @@ import android.os.Parcelable;
 
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.Privacy;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 
-public class Photo implements Publishable{
+public class Photo implements Publishable {
     private static final String PICTURE = "picture";
     private static final String PLACE = "place";
     private static final String MESSAGE = "message";
@@ -32,7 +33,8 @@ public class Photo implements Publishable{
     public Photo(File file) {
 	try {
 	    mParcelable = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
-	} catch (FileNotFoundException e) {
+	}
+	catch (FileNotFoundException e) {
 	    Logger.logError(Photo.class, "Failed to create photo from file", e);
 	}
     }
@@ -40,10 +42,10 @@ public class Photo implements Publishable{
     public Photo(byte[] bytes) {
 	mBytes = bytes;
     }
-    
+
     @Override
     public String getPath() {
-	return "photos";
+	return GraphPath.PHOTOS;
     }
 
     @Override

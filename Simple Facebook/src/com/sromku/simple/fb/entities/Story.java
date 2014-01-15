@@ -2,10 +2,10 @@ package com.sromku.simple.fb.entities;
 
 import java.net.URLEncoder;
 
+import android.os.Bundle;
+
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
-
-import android.os.Bundle;
 
 /**
  * Open graph story
@@ -13,26 +13,26 @@ import android.os.Bundle;
  * @author sromku
  * @see http://ogp.me/
  */
-public class Story implements Publishable{
-    private final ActionOpenGraph _action;
-    private final ObjectOpenGraph _object;
+public class Story implements Publishable {
+    private final ActionOpenGraph mAction;
+    private final ObjectOpenGraph mObject;
 
     private Story(ActionOpenGraph action, ObjectOpenGraph object) {
-	_action = action;
-	_object = object;
+	mAction = action;
+	mObject = object;
 
 	// Connect between object and action
-	_action.putProperty(_object.getObjectName(), _object.getObjectUrl());
+	mAction.putProperty(mObject.getObjectName(), mObject.getObjectUrl());
     }
-    
+
     @Override
     public Bundle getBundle() {
-	return _action.getProperties();
+	return mAction.getProperties();
     }
 
     @Override
     public String getPath() {
-	return SimpleFacebook.getConfiguration().getNamespace() + ":" + _action.getActionName();
+	return SimpleFacebook.getConfiguration().getNamespace() + ":" + mAction.getActionName();
     }
 
     @Override
@@ -201,7 +201,8 @@ public class Story implements Publishable{
 
 		if (first) {
 		    first = false;
-		} else {
+		}
+		else {
 		    sb.append("&");
 		}
 		sb.append(URLEncoder.encode(key) + "=" + URLEncoder.encode(parameters.getString(key)));

@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.Privacy;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 
 public class Video implements Publishable {
@@ -28,7 +29,8 @@ public class Video implements Publishable {
 	try {
 	    mParcelable = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
 	    mVideoFileName = file.getName();
-	} catch (FileNotFoundException e) {
+	}
+	catch (FileNotFoundException e) {
 	    Logger.logError(Video.class, "Failed to create video from file", e);
 	}
     }
@@ -48,7 +50,7 @@ public class Video implements Publishable {
 
     @Override
     public String getPath() {
-	return "videos";
+	return GraphPath.VIDEOS;
     }
 
     @Override

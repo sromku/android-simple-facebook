@@ -18,6 +18,7 @@ import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -46,7 +47,7 @@ public class GetFriendsAction extends AbstractAction {
 	    if (mProperties != null) {
 		bundle = mProperties.getBundle();
 	    }
-	    Request request = new Request(session, "me/friends", bundle, HttpMethod.GET, new Request.Callback() {
+	    Request request = new Request(session, "me/" + GraphPath.FRIENDS, bundle, HttpMethod.GET, new Request.Callback() {
 		@Override
 		public void onCompleted(Response response) {
 		    List<GraphUser> graphUsers = Utils.typedListFromResponse(response, GraphUser.class);

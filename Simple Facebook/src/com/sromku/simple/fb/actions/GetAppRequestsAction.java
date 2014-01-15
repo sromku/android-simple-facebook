@@ -17,6 +17,7 @@ import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 
 public class GetAppRequestsAction extends AbstractAction {
@@ -36,7 +37,7 @@ public class GetAppRequestsAction extends AbstractAction {
 	if (sessionManager.isLogin(true)) {
 	    Session session = sessionManager.getActiveSession();
 	    Bundle bundle = null;
-	    Request request = new Request(session, "me/apprequests", bundle, HttpMethod.GET, new Request.Callback() {
+	    Request request = new Request(session, "me/" + GraphPath.APPREQUESTS, bundle, HttpMethod.GET, new Request.Callback() {
 		@Override
 		public void onCompleted(Response response) {
 		    FacebookRequestError error = response.getError();

@@ -123,4 +123,14 @@ public enum Permission {
     public SessionAuthorizationType getType() {
 	return mType;
     }
+
+    public static Permission fromValue(String pemissionValue) {
+	for (Permission permission : values()) {
+	    if (permission.mValue.equals(pemissionValue)) {
+		return permission;
+	    }
+	}
+	return null;
+    }
+
 }

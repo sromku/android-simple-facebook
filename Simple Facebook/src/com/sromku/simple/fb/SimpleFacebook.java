@@ -1,6 +1,8 @@
 package com.sromku.simple.fb;
 
 import java.security.Permissions;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,32 +30,13 @@ import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
-import com.sromku.simple.fb.listeners.OnPermissionListener;
+import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnScoresRequestListener;
 
 /**
- * Simple Facebook SDK which wraps original Facebook SDK 3.5
- * 
- * <br>
- * <br>
- * <b>Features:</b>
- * <ul>
- * <li>Simple configuration</li>
- * <li>No need to use LoginButton view</li>
- * <li>Login/logout</li>
- * <li>Publish feed</li>
- * <li>Publish open graph story</li>
- * <li>Publish photo</li>
- * <li>Invite friends</li>
- * <li>Fetch my profile</li>
- * <li>Fetch friends</li>
- * <li>Fetch albums</li>
- * <li>Predefined all possible permissions. See {@link Permissions}</li>
- * <li>No need to care for correct sequence logging with READ and PUBLISH
- * permissions</li>
- * </ul>
+ * Simple Facebook SDK which wraps original Facebook SDK 3.6
  * 
  * @author sromku
  */
@@ -162,6 +145,15 @@ public class SimpleFacebook {
      */
     public void logout(OnLogoutListener onLogoutListener) {
 	mSessionManager.logout(onLogoutListener);
+    }
+
+    /**
+     * Are we logged in to facebook
+     * 
+     * @return <code>True</code> if we have active and open session to facebook
+     */
+    public boolean isLogin() {
+	return mSessionManager.isLogin(true);
     }
 
     /**
@@ -358,7 +350,8 @@ public class SimpleFacebook {
 	if (!withDialog) {
 	    // make it silently
 	    publish(feed, onPublishListener);
-	} else {
+	}
+	else {
 	    PublishFeedDialogAction publishFeedDialogAction = new PublishFeedDialogAction(mSessionManager);
 	    publishFeedDialogAction.setFeed(feed);
 	    publishFeedDialogAction.setOnPublishListener(onPublishListener);
@@ -454,11 +447,11 @@ public class SimpleFacebook {
      * @param onPublishListener
      */
     public void publish(Publishable publishable, String target, OnPublishListener onPublishListener) {
-        PublishAction publishAction = new PublishAction(mSessionManager);
-        publishAction.setPublishable(publishable);
-        publishAction.setTarget(target);
-        publishAction.setOnPublishListener(onPublishListener);
-        publishAction.execute();
+	PublishAction publishAction = new PublishAction(mSessionManager);
+	publishAction.setPublishable(publishable);
+	publishAction.setTarget(target);
+	publishAction.setOnPublishListener(onPublishListener);
+	publishAction.execute();
     }
 
     /**
@@ -534,20 +527,59 @@ public class SimpleFacebook {
 
     /**
      * 
-     * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when
-     * you just want to request the action and won't be publishing at the time,
-     * but still need the updated <b>access token</b> with the permissions
-     * (possibly to pass back to your backend). You must add
-     * {@link Permissions#PUBLISH_ACTION} to your SimpleFacebook configuration
-     * before calling this.
+     * Requests any new permission in a runtime. <br>
+     * <br>
+     * Useful when you just want to request the action and won't be publishing
+     * at the time, but still need the updated <b>access token</b> with the
+     * permissions (possibly to pass back to your backend).
      * 
+     * <br>
      * <b>Must be logged to use.</b>
      * 
-     * @param onPermissionListener
-     *            The listener for the request permission action
+     * @param permissions
+     *            New permissions you want to have. This array can include READ
+     *            and PUBLISH permissions in the same time. Just ask what you
+     *            need.<br>
+     * <br>
+     * @param showPublish
+     *            This flag is relevant only in cases when new permissions
+     *            include PUBLISH permission. Then you can decide if you want
+     *            the dialog of requesting publish permission to appear <b>right
+     *            away</b> or <b>later</b>, at first time of real publish
+     *            action.<br>
+     * <br>
+     * @param onNewPermissionsListener
+     *            The listener for the requesting new permission action.
      */
-    public void requestPublish(OnPermissionListener onPermissionListener) {
-	mSessionManager.requestPublish(onPermissionListener);
+    public void requestNewPermissions(Permission[] permissions, boolean showPublish, OnNewPermissionsListener onNewPermissionsListener) {
+	mSessionManager.requestNewPermissions(permissions, showPublish, onNewPermissionsListener);
+    }
+
+    /**
+     * Get the list of all granted permissions. <br>
+     * Use {@link Permission#fromValue(String)} to get the {@link Permission}
+     * object from string in this list.
+     * 
+     * @return List of granted permissions
+     */
+    public List<String> getGrantedPermissions() {
+	return mSessionManager.getActiveSessionPermissions();
+    }
+
+    /**
+     * @return <code>True</code> if all permissions were granted by the user,
+     *         otherwise return <code>False</code>
+     */
+    public boolean isAllPermissionsGranted() {
+	List<String> grantedPermissions = getGrantedPermissions();
+	List<String> readPermissions = new ArrayList<String>(mConfiguration.getReadPermissions());
+	List<String> publishPermissions = new ArrayList<String>(mConfiguration.getPublishPermissions());
+	readPermissions.removeAll(grantedPermissions);
+	publishPermissions.removeAll(grantedPermissions);
+	if (readPermissions.size() > 0 || publishPermissions.size() > 0) {
+	    return false;
+	}
+	return true;
     }
 
     /**
@@ -558,7 +590,6 @@ public class SimpleFacebook {
      * @param requestCode
      * @param resultCode
      * @param data
-     * @return
      */
     public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
 	return mSessionManager.onActivityResult(activity, requestCode, resultCode, data);

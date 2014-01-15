@@ -3,6 +3,7 @@ package com.sromku.simple.fb.entities;
 import android.os.Bundle;
 
 import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.utils.GraphPath;
 
 public class Score implements Publishable {
 
@@ -25,7 +26,7 @@ public class Score implements Publishable {
 
     @Override
     public String getPath() {
-	return "scores";
+	return GraphPath.SCORES;
     }
 
     @Override

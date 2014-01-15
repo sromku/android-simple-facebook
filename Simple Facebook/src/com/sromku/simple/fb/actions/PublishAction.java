@@ -10,6 +10,7 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.listeners.OnPublishListener;
@@ -51,7 +52,7 @@ public class PublishAction extends AbstractAction {
 		}
 
 		/*
-		 * Check if session to facebook has 'publish_action' permission.
+		 * Check if session to facebook has needed publish permission.
 		 * If not, we will ask user for this permission.
 		 */
 		if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
@@ -62,7 +63,7 @@ public class PublishAction extends AbstractAction {
 			}
 
 			@Override
-			public void onNotAcceptingPermissions() {
+			public void onNotAcceptingPermissions(Permission.Type type) {
 			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
 			    Logger.logError(PublishAction.class, reason, null);
 			    if (mOnPublishListener != null) {

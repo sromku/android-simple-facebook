@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.Privacy;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 
 /**
@@ -27,7 +28,7 @@ public class Feed implements Publishable {
     }
 
     public String getPath() {
-	return "feed";
+	return GraphPath.FEED;
     }
 
     @Override
@@ -151,7 +152,8 @@ public class Feed implements Publishable {
 	public Builder addProperty(String text, String secondText) {
 	    try {
 		mProperties.put(text, secondText);
-	    } catch (JSONException e) {
+	    }
+	    catch (JSONException e) {
 		Logger.logError(Feed.class, "Failed to add property", e);
 	    }
 
@@ -174,7 +176,8 @@ public class Feed implements Publishable {
 		json.put("text", linkName);
 		json.put("href", link);
 		mProperties.put(text, json);
-	    } catch (JSONException e) {
+	    }
+	    catch (JSONException e) {
 		Logger.logError(Feed.class, "Failed to add property", e);
 	    }
 
@@ -194,7 +197,8 @@ public class Feed implements Publishable {
 	    try {
 		mActions.put("name", name);
 		mActions.put("link", link);
-	    } catch (JSONException e) {
+	    }
+	    catch (JSONException e) {
 		Logger.logError(Feed.class, "Failed to add action", e);
 	    }
 	    return this;
