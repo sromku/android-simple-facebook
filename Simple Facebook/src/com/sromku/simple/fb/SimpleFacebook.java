@@ -338,7 +338,28 @@ public class SimpleFacebook {
     /**
      * Share to feed by using dialog or do it silently without dialog. <br>
      * If you use dialog for sharing, you don't have to configure
-     * {@link Permissions#PUBLISH_ACTION} since user does the share by himself.
+     * {@link Permissions#PUBLISH_ACTION} since user does the share by himself.<br>
+     * <br>
+     * <b>Important:</b><br>
+     * By setting <code>withDialog=true</code> the default implementation will
+     * try to use a native facebook dialog. If option of native dialog will not
+     * succeed, then a web facebook dialog will be used.<br>
+     * <br>
+     * 
+     * For having the native dialog, you must add to your <b>manifest.xml</b>
+     * 'app_id' meta value:
+     * 
+     * <pre>
+     * {@code <}meta-data
+     *      android:name="com.facebook.sdk.ApplicationId"
+     *      android:value="@string/app_id" /{@code >}
+     * </pre>
+     * 
+     * And in your <b>string.xml</b> add your app_id. For example:
+     * 
+     * <pre>
+     * {@code <}string name="app_id"{@code >}625994234086470{@code <}/string{@code >}
+     * </pre>
      * 
      * @param feed
      *            The feed to post

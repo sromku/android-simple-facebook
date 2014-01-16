@@ -183,8 +183,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
 	super.onActivityResult(requestCode, resultCode, data);
+	mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
     }
 
     /**
@@ -258,7 +258,7 @@ public class MainActivity extends Activity {
 	mButtonPublishFeed.setOnClickListener(new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-		mSimpleFacebook.publish(feed, onPublishListener);
+		mSimpleFacebook.publish(feed, true, onPublishListener);
 	    }
 	});
     }
@@ -722,7 +722,9 @@ public class MainActivity extends Activity {
     }
 
     private void hideDialog() {
-	mProgress.hide();
+	if (mProgress != null) {
+	    mProgress.hide();
+	}
     }
 
     public class OnProfileRequestAdapter implements OnProfileRequestListener {

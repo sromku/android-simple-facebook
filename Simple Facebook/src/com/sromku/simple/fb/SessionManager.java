@@ -9,6 +9,10 @@ import android.content.Intent;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.FacebookDialog.Callback;
+import com.facebook.widget.FacebookDialog.PendingCall;
 import com.sromku.simple.fb.Permission.Type;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
@@ -23,11 +27,15 @@ public class SessionManager {
     static Activity activity;
     static SimpleFacebookConfiguration configuration;
     private final SessionStatusCallback mSessionStatusCallback;
+    private UiLifecycleHelper uiLifecycleHelper;
+
+    private Callback mFacebookDialogCallback;
 
     public SessionManager(Activity activity, SimpleFacebookConfiguration configuration) {
 	SessionManager.activity = activity;
 	SessionManager.configuration = configuration;
 	mSessionStatusCallback = new SessionStatusCallback();
+	uiLifecycleHelper = new UiLifecycleHelper(activity, mSessionStatusCallback);
     }
 
     /**
@@ -274,14 +282,19 @@ public class SessionManager {
 		}
 	}
     }
+    
+    public void trackFacebookDialogPendingCall(PendingCall pendingCall, FacebookDialog.Callback callback) {
+	mFacebookDialogCallback = callback;
+	uiLifecycleHelper.trackPendingDialogCall(pendingCall);
+    }
+    
+    public void untrackPendingCall() {
+	mFacebookDialogCallback = null;
+    }
 
     public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-	if (Session.getActiveSession() != null) {
-	    return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
-	}
-	else {
-	    return false;
-	}
+	uiLifecycleHelper.onActivityResult(requestCode, resultCode, data, mFacebookDialogCallback);
+	return true;
     }
 
     /**

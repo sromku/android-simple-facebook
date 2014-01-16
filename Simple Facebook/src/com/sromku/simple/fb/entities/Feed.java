@@ -41,7 +41,7 @@ public class Feed implements Publishable {
 	JSONObject mProperties = new JSONObject();
 	JSONObject mActions = new JSONObject();
 
-	static class Parameters {
+	public static class Parameters {
 	    public static final String MESSAGE = "message";
 	    public static final String LINK = "link";
 	    public static final String PICTURE = "picture";
