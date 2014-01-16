@@ -7,7 +7,7 @@ This is a library project which makes the life much easier by coding less code f
 
 Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
-Sample app:
+Sample app:<br>
 <a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
