@@ -104,7 +104,11 @@ public class SessionManager {
     public boolean isLogin(boolean reopenIfPossible) {
 	Session session = getActiveSession();
 	if (session == null) {
-	    return false;
+	    if (activity == null) {
+		return false;
+	    }
+	    session = new Session.Builder(activity.getApplicationContext()).setApplicationId(configuration.getAppId()).build();
+	    Session.setActiveSession(session);
 	}
 	if (session.isOpened()) {
 	    return true;
@@ -282,12 +286,12 @@ public class SessionManager {
 		}
 	}
     }
-    
+
     public void trackFacebookDialogPendingCall(PendingCall pendingCall, FacebookDialog.Callback callback) {
 	mFacebookDialogCallback = callback;
 	uiLifecycleHelper.trackPendingDialogCall(pendingCall);
     }
-    
+
     public void untrackPendingCall() {
 	mFacebookDialogCallback = null;
     }
@@ -468,7 +472,7 @@ public class SessionManager {
 	    askPublishPermissions = ask;
 	}
     }
-    
+
     private class OnLogoutAdapter implements OnLogoutListener {
 
 	@Override
@@ -486,6 +490,6 @@ public class SessionManager {
 	@Override
 	public void onLogout() {
 	}
-	
+
     }
 }
