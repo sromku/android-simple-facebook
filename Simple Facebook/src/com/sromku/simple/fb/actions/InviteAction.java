@@ -25,8 +25,14 @@ public class InviteAction extends AbstractAction {
 
     private OnInviteListener mOnInviteListener;
     private String mMessage;
+    private String mData;
     private String mTo;
     private String[] mSuggestions;
+    
+    private static final String PARAM_MESSAGE = "message";
+    private static final String PARAM_DATA = "data";
+    private static final String PARAM_TO = "to";
+    private static final String PARAM_SUGGESTIONS = "suggestions";
 
     public InviteAction(SessionManager sessionManager) {
 	super(sessionManager);
@@ -34,6 +40,10 @@ public class InviteAction extends AbstractAction {
 
     public void setMessage(String message) {
 	mMessage = message;
+    }
+    
+    public void setData(String data) {
+	mData = data;
     }
 
     public void setTo(String to) {
@@ -53,12 +63,15 @@ public class InviteAction extends AbstractAction {
 	if (sessionManager.isLogin(true)) {
 	    Bundle params = new Bundle();
 	    if (mMessage != null) {
-		params.putString("message", mMessage);
+		params.putString(PARAM_MESSAGE, mMessage);
+	    }
+	    if (mData != null) {
+		params.putString(PARAM_DATA, mData);
 	    }
 	    if (mTo != null) {
-		params.putString("to", mTo);
+		params.putString(PARAM_TO, mTo);
 	    } else if (mSuggestions != null) {
-		params.putString("suggestions", TextUtils.join(",", mSuggestions));
+		params.putString(PARAM_SUGGESTIONS, TextUtils.join(",", mSuggestions));
 	    }
 	    openInviteDialog(sessionManager.getActivity(), params, mOnInviteListener);
 	} else {

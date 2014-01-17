@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.facebook.AppEventsLogger;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
@@ -479,13 +480,18 @@ public class SimpleFacebook {
      * Open invite dialog and can add multiple friends
      * 
      * @param message
-     *            The message inside the dialog. It could be <code>null</code>
+     *            (Optional) The message inside the dialog. It could be
+     *            <code>null</code>
+     * @param data
+     *            (Optional) The data you want to send within the request. It
+     *            could be <code>null</code>
      * @param onInviteListener
      *            The listener. It could be <code>null</code>
      */
-    public void invite(String message, final OnInviteListener onInviteListener) {
+    public void invite(String message, final OnInviteListener onInviteListener, String data) {
 	InviteAction inviteAction = new InviteAction(mSessionManager);
 	inviteAction.setMessage(message);
+	inviteAction.setData(data);
 	inviteAction.setOnInviteListener(onInviteListener);
 	inviteAction.execute();
     }
@@ -497,13 +503,17 @@ public class SimpleFacebook {
      *            The id of the friend profile
      * @param message
      *            The message inside the dialog. It could be <code>null</code>
+     * @param data
+     *            (Optional) The data you want to send within the request. It
+     *            could be <code>null</code>
      * @param onInviteListener
      *            The listener. It could be <code>null</code>
      */
-    public void invite(String to, String message, final OnInviteListener onInviteListener) {
+    public void invite(String to, String message, final OnInviteListener onInviteListener, String data) {
 	InviteAction inviteAction = new InviteAction(mSessionManager);
 	inviteAction.setTo(to);
 	inviteAction.setMessage(message);
+	inviteAction.setData(data);
 	inviteAction.setOnInviteListener(onInviteListener);
 	inviteAction.execute();
     }
@@ -515,13 +525,17 @@ public class SimpleFacebook {
      *            The ids of friends' profiles
      * @param message
      *            The message inside the dialog. It could be <code>null</code>
+     * @param data
+     *            (Optional) The data you want to send within the request. It
+     *            could be <code>null</code>
      * @param onInviteListener
      *            The error listener. It could be <code>null</code>
      */
-    public void invite(String[] suggestedFriends, String message, final OnInviteListener onInviteListener) {
+    public void invite(String[] suggestedFriends, String message, final OnInviteListener onInviteListener, String data) {
 	InviteAction inviteAction = new InviteAction(mSessionManager);
 	inviteAction.setSuggestions(suggestedFriends);
 	inviteAction.setMessage(message);
+	inviteAction.setData(data);
 	inviteAction.setOnInviteListener(onInviteListener);
 	inviteAction.execute();
     }
@@ -601,6 +615,16 @@ public class SimpleFacebook {
 	    return false;
 	}
 	return true;
+    }
+
+    /**
+     * Notifies the events system that the app has launched & logs an
+     * activatedApp event. Should be called whenever your app becomes active,
+     * typically in the onResume() method of each long-running Activity of your
+     * app.
+     */
+    public void eventAppLaunched() {
+	AppEventsLogger.activateApp(mActivity.getApplicationContext(), mConfiguration.getAppId());
     }
 
     /**

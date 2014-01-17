@@ -273,6 +273,7 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onClick(View view) {
 		Permission[] newPermissions = new Permission[] {
+			Permission.USER_PHOTOS,
 			Permission.PUBLISH_ACTION
 		};
 		
@@ -393,7 +394,7 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onClick(View arg0) {
 		// will open dialog with all my friends
-		mSimpleFacebook.invite("I invite you to use this app", onInviteListener);
+		mSimpleFacebook.invite("I invite you to use this app", onInviteListener, "secret data");
 	    }
 	});
 
@@ -402,7 +403,7 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onClick(View v) {
 		String[] friends = new String[] { "630243197", "584419361", "1456233371", "100000490891462" };
-		mSimpleFacebook.invite(friends, "I invite you to use this app", onInviteListener);
+		mSimpleFacebook.invite(friends, "I invite you to use this app", onInviteListener, "secret data");
 	    }
 	});
 
@@ -412,7 +413,7 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onClick(View v) {
 		String friend = "630243197";
-		mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener);
+		mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener, "secret data");
 	    }
 	});
     }
