@@ -1,6 +1,5 @@
 package com.sromku.simple.fb;
 
-import java.security.Permissions;
 import java.util.List;
 
 import android.app.Activity;
@@ -207,17 +206,29 @@ public class SessionManager {
 
     /**
      * 
-     * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when
-     * you just want to request the action and won't be publishing at the time,
-     * but still need the updated <b>access token</b> with the permissions
-     * (possibly to pass back to your backend). You must add
-     * {@link Permissions#PUBLISH_ACTION} to your SimpleFacebook configuration
-     * before calling this.
+     * Requests any new permission in a runtime. <br>
+     * <br>
+     * Useful when you just want to request the action and won't be publishing
+     * at the time, but still need the updated <b>access token</b> with the
+     * permissions (possibly to pass back to your backend).
      * 
+     * <br>
      * <b>Must be logged to use.</b>
      * 
-     * @param onNewPermissionListener
-     *            The listener for the request permission action
+     * @param permissions
+     *            New permissions you want to have. This array can include READ
+     *            and PUBLISH permissions in the same time. Just ask what you
+     *            need.<br>
+     * <br>
+     * @param showPublish
+     *            This flag is relevant only in cases when new permissions
+     *            include PUBLISH permission. Then you can decide if you want
+     *            the dialog of requesting publish permission to appear <b>right
+     *            away</b> or <b>later</b>, at first time of real publish
+     *            action.<br>
+     * <br>
+     * @param onNewPermissionsListener
+     *            The listener for the requesting new permission action.
      */
     public void requestNewPermissions(Permission[] permissions, final boolean showPublish, final OnNewPermissionsListener onNewPermissionListener) {
 	configuration.addNewPermissions(permissions);
