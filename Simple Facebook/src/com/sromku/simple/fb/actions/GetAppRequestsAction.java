@@ -1,19 +1,22 @@
 package com.sromku.simple.fb.actions;
 
-import org.json.JSONArray;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Bundle;
 
 import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
+import com.sromku.simple.fb.entities.AppRequest;
 import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.utils.GraphPath;
+import com.sromku.simple.fb.utils.Utils;
 
-public class GetAppRequestsAction extends GetAction<JSONArray> {
+public class GetAppRequestsAction extends GetAction<List<AppRequest>> {
 
     private OnAppRequestsListener mOnAppRequestsListener;
 
@@ -32,20 +35,25 @@ public class GetAppRequestsAction extends GetAction<JSONArray> {
 
     @Override
     protected Bundle getBundle() {
-	return null;
+	Bundle bundle = new Bundle();
+	bundle.putString("date_format", "U");
+	return bundle;
     }
 
     @Override
-    protected OnActionListener<JSONArray> getActionListener() {
+    protected OnActionListener<List<AppRequest>> getActionListener() {
 	return mOnAppRequestsListener;
     }
 
     @Override
-    protected JSONArray processResponse(Response response) throws JSONException {
-	GraphObject graphObject = response.getGraphObject();
-	JSONObject graphResponse = graphObject.getInnerJSONObject();
-	JSONArray result = graphResponse.getJSONArray("data");
-	return result;
+    protected List<AppRequest> processResponse(Response response) throws JSONException {
+	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+	List<AppRequest> appRequests = new ArrayList<AppRequest>(graphObjects.size());
+	for (GraphObject graphObject : graphObjects) {
+	    AppRequest graphRequest = AppRequest.create(graphObject);
+	    appRequests.add(graphRequest);
+	}
+	return appRequests;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.sromku.simple.fb.listeners;
 
-import org.json.JSONArray;
+import java.util.List;
+
+import com.sromku.simple.fb.entities.AppRequest;
 
 /**
  * On get app requests listener
@@ -8,5 +10,5 @@ import org.json.JSONArray;
  * @author koraybalci
  * 
  */
-public interface OnAppRequestsListener extends OnActionListener<JSONArray> {
+public interface OnAppRequestsListener extends OnActionListener<List<AppRequest>> {
 }

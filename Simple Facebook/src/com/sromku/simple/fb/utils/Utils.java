@@ -30,13 +30,17 @@ public class Utils {
 	    Class<?> cls = classLoader.loadClass("com.facebook.FacebookSdkVersion");
 	    Field field = cls.getField("BUILD");
 	    sdkVersion = String.valueOf(field.get(null));
-	} catch (ClassNotFoundException e) {
+	}
+	catch (ClassNotFoundException e) {
 	    e.printStackTrace();
-	} catch (NoSuchFieldException e) {
+	}
+	catch (NoSuchFieldException e) {
 	    e.printStackTrace();
-	} catch (IllegalArgumentException e) {
+	}
+	catch (IllegalArgumentException e) {
 	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
+	}
+	catch (IllegalAccessException e) {
 	    e.printStackTrace();
 	}
 	return sdkVersion;
@@ -51,9 +55,11 @@ public class Utils {
 		md.update(signature.toByteArray());
 		return Base64.encodeToString(md.digest(), Base64.DEFAULT);
 	    }
-	} catch (NameNotFoundException e) {
+	}
+	catch (NameNotFoundException e) {
 
-	} catch (NoSuchAlgorithmException e) {
+	}
+	catch (NoSuchAlgorithmException e) {
 
 	}
 	return null;
@@ -70,20 +76,13 @@ public class Utils {
      * strings within the iteration are represented by empty strings.
      * </p>
      * 
-     * <p>
-     * See the examples here: {@link #join(Object[],char)}.
-     * </p>
-     * 
      * @param iterator
      *            the {@code Iterator} of values to join together, may be null
      * @param separator
      *            the separator character to use
      * @return the joined String, {@code null} if null iterator input
-     * @since 2.0
      */
     public static String join(Iterator<?> iterator, char separator) {
-
-	// handle null, zero and one elements before building a buffer
 	if (iterator == null) {
 	    return null;
 	}
@@ -92,16 +91,12 @@ public class Utils {
 	}
 	Object first = iterator.next();
 	if (!iterator.hasNext()) {
-	    return first == null ? "" : first.toString();
+	    return first == null ? EMPTY : first.toString();
 	}
-
-	// two or more elements
-	StringBuilder buf = new StringBuilder(256); // Java default is 16,
-						    // probably too small
+	StringBuilder buf = new StringBuilder(256);
 	if (first != null) {
 	    buf.append(first);
 	}
-
 	while (iterator.hasNext()) {
 	    buf.append(separator);
 	    Object obj = iterator.next();
@@ -109,24 +104,18 @@ public class Utils {
 		buf.append(obj);
 	    }
 	}
-
 	return buf.toString();
     }
 
     public static String join(Map<?, ?> map, char separator, char valueStartChar, char valueEndChar) {
 
-	// handle null, zero and one elements before building a buffer
 	if (map == null) {
 	    return null;
 	}
 	if (map.size() == 0) {
 	    return EMPTY;
 	}
-
-	// two or more elements
-	StringBuilder buf = new StringBuilder(256); // Java default is 16,
-						    // probably too small
-
+	StringBuilder buf = new StringBuilder(256);
 	boolean isFirst = true;
 	for (Entry<?, ?> entry : map.entrySet()) {
 	    if (isFirst) {
@@ -135,7 +124,8 @@ public class Utils {
 		buf.append(entry.getValue());
 		buf.append(valueEndChar);
 		isFirst = false;
-	    } else {
+	    }
+	    else {
 		buf.append(separator);
 		buf.append(entry.getKey());
 		buf.append(valueStartChar);

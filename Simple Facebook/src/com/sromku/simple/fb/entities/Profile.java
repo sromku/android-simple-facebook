@@ -19,9 +19,7 @@ import com.sromku.simple.fb.Properties;
  * @author sromku
  * @see https://developers.facebook.com/docs/reference/api/user/
  */
-public class Profile {
-    private static final String ID = "id";
-    private static final String NAME = "name";
+public class Profile implements User {
 
     private final GraphUser mGraphUser;
 
@@ -150,8 +148,8 @@ public class Profile {
 	if (jsonArray != null) {
 	    for (int i = 0; i < jsonArray.length(); i++) {
 		JSONObject jsonObject = jsonArray.optJSONObject(i);
-		int id = jsonObject.optInt(ID);
-		String name = jsonObject.optString(NAME);
+		int id = jsonObject.optInt(Properties.ID);
+		String name = jsonObject.optString(Properties.NAME);
 
 		Language language = new Language();
 		language.setId(id);
@@ -450,7 +448,7 @@ public class Profile {
 	    for (int i = 0; i < jsonArray.length(); i++) {
 		JSONObject jsonObject = jsonArray.optJSONObject(i);
 		if (jsonObject != null) {
-		    String name = jsonObject.optString(NAME);
+		    String name = jsonObject.optString(Properties.NAME);
 		    athletes.add(name);
 		}
 	    }
@@ -474,7 +472,7 @@ public class Profile {
 	    for (int i = 0; i < jsonArray.length(); i++) {
 		JSONObject jsonObject = jsonArray.optJSONObject(i);
 		if (jsonObject != null) {
-		    String name = jsonObject.optString(NAME);
+		    String name = jsonObject.optString(Properties.NAME);
 		    athletes.add(name);
 		}
 	    }
