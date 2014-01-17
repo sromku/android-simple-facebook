@@ -43,7 +43,7 @@ public class DeleteRequestAction extends AbstractAction {
 			}
 		    } else {
 			if (mOnDeleteRequestListener != null) {
-			    mOnDeleteRequestListener.onComplete();
+			    mOnDeleteRequestListener.onComplete(null);
 			}
 		    }
 		}

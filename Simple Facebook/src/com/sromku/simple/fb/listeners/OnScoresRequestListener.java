@@ -8,6 +8,5 @@ import org.json.JSONArray;
  * @author koraybalci
  * 
  */
-public interface OnScoresRequestListener extends OnActionListener {
-    void onComplete(JSONArray result);
+public interface OnScoresRequestListener extends OnActionListener<JSONArray> {
 }

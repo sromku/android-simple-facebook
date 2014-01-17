@@ -9,7 +9,7 @@ import com.sromku.simple.fb.Permission.Type;
  * @author Gryzor
  * 
  */
-public interface OnNewPermissionsListener extends OnActionListener {
+public interface OnNewPermissionsListener extends OnThinkingListetener {
     /**
      * If the permission was granted, this callback is invoked.
      */

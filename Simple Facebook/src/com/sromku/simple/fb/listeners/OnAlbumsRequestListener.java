@@ -10,6 +10,5 @@ import com.sromku.simple.fb.entities.Album;
  * @author sromku
  * 
  */
-public interface OnAlbumsRequestListener extends OnActionListener {
-    void onComplete(List<Album> albums);
+public interface OnAlbumsRequestListener extends OnActionListener<List<Album>> {
 }

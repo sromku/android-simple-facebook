@@ -1,5 +1,6 @@
 package com.sromku.simple.fb.listeners;
 
-public interface OnActionListener extends OnErrorListener{
-    void onThinking();
+public interface OnActionListener<T> extends OnThinkingListetener {
+
+    void onComplete(T t);
 }

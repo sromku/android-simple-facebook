@@ -34,7 +34,7 @@ public class Profile {
      * 
      * @param graphUser
      *            The {@link GraphUser} instance
-     * @return
+     * @return {@link Profile} of the user
      */
     public static Profile create(GraphUser graphUser) {
 	return new Profile(graphUser);

@@ -9,7 +9,7 @@ import android.app.Activity;
  * 
  * @author sromku
  */
-public interface OnLoginListener extends OnActionListener {
+public interface OnLoginListener extends OnThinkingListetener {
     /**
      * If user performed {@link FacebookTools#login(Activity)} action, this
      * callback method will be invoked

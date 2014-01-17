@@ -10,6 +10,5 @@ import com.sromku.simple.fb.entities.Profile;
  * @author sromku
  * 
  */
-public interface OnFriendsRequestListener extends OnActionListener {
-    void onComplete(List<Profile> friends);
+public interface OnFriendsRequestListener extends OnActionListener<List<Profile>> {
 }

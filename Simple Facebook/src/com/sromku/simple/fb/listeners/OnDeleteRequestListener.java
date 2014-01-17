@@ -6,6 +6,5 @@ package com.sromku.simple.fb.listeners;
  * @author koraybalci
  * 
  */
-public interface OnDeleteRequestListener extends OnActionListener {
-    void onComplete();
+public interface OnDeleteRequestListener extends OnActionListener<Void> {
 }

@@ -1,0 +1,81 @@
+package com.sromku.simple.fb.actions;
+
+import org.json.JSONException;
+
+import android.os.Bundle;
+
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.sromku.simple.fb.SessionManager;
+import com.sromku.simple.fb.listeners.OnActionListener;
+import com.sromku.simple.fb.utils.Errors;
+import com.sromku.simple.fb.utils.Errors.ErrorMsg;
+import com.sromku.simple.fb.utils.Logger;
+
+public abstract class GetAction<T> extends AbstractAction {
+
+    public GetAction(SessionManager sessionManager) {
+	super(sessionManager);
+    }
+
+    @Override
+    protected void executeImpl() {
+	final OnActionListener<T> actionListener = getActionListener();
+	if (sessionManager.isLogin(true)) {
+	    Session session = sessionManager.getActiveSession();
+	    Request request = new Request(session, getGraphPath(), getBundle(), HttpMethod.GET, new Request.Callback() {
+		@Override
+		public void onCompleted(Response response) {
+		    FacebookRequestError error = response.getError();
+		    if (error != null) {
+			Logger.logError(GetAppRequestsAction.class, "failed to get what you have requested", error.getException());
+			if (actionListener != null) {
+			    actionListener.onException(error.getException());
+			}
+		    }
+		    else {
+			if (response.getGraphObject() == null) {
+			    Logger.logError(getClass(), "The response GraphObject has null value. Response=" + response.toString(), null);
+			}
+			else {
+			    if (actionListener != null) {
+				try {
+				    T result = processResponse(response);
+				    actionListener.onComplete(result);
+				}
+				catch (JSONException e) {
+				    actionListener.onException(e);
+				}
+			    }
+			}
+		    }
+		}
+	    });
+	    RequestAsyncTask task = new RequestAsyncTask(request);
+	    task.execute();
+	    if (actionListener != null) {
+		actionListener.onThinking();
+	    }
+	}
+	else {
+	    String reason = Errors.getError(ErrorMsg.LOGIN);
+	    Logger.logError(getClass(), reason, null);
+	    if (actionListener != null) {
+		actionListener.onFail(reason);
+	    }
+	}
+    }
+
+    protected abstract String getGraphPath();
+
+    protected abstract Bundle getBundle();
+
+    protected abstract OnActionListener<T> getActionListener();
+
+    protected abstract T processResponse(Response response) throws JSONException;
+
+}
