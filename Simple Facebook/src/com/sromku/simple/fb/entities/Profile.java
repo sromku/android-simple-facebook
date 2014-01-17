@@ -226,9 +226,9 @@ public class Profile implements User {
     public boolean getInstalled() {
 	Boolean property = (Boolean) mGraphUser.asMap().get(Properties.INSTALLED);
 	if (property != null) {
-	    return false;
+	    return property;
 	}
-	return true;
+	return false;
     }
 
     /**
