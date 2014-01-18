@@ -44,18 +44,18 @@ public class PublishAction extends AbstractAction {
     @Override
     protected void executeImpl() {
 	if (sessionManager.isLogin(true)) {
-	    // if we defined the publish permission
-	    if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
-		/*
-		 * Check if session to facebook has needed publish permission.
-		 * If not, we will ask user for this permission.
-		 */
-		if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
-		    if (sessionManager.canMakeAdditionalRequest()) {
-			if (mOnPublishListener != null) {
-			    mOnPublishListener.onThinking();
-			}
+	    if (sessionManager.canMakeAdditionalRequest()) {
+		// if we defined the publish permission
+		if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
+		    if (mOnPublishListener != null) {
+			mOnPublishListener.onThinking();
+		    }
 
+		    /*
+		     * Check if session to facebook has needed publish
+		     * permission. If not, we will ask user for this permission.
+		     */
+		    if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
 			sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
 			    @Override
 			    public void onSuccess() {
@@ -74,23 +74,19 @@ public class PublishAction extends AbstractAction {
 			sessionManager.extendPublishPermissions();
 		    }
 		    else {
-			return;
+			publishImpl(mPublishable, mOnPublishListener);
 		    }
 		}
 		else {
+		    String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
+		    Logger.logError(PublishAction.class, reason, null);
 		    if (mOnPublishListener != null) {
-			mOnPublishListener.onThinking();
+			mOnPublishListener.onFail(reason);
 		    }
-
-		    publishImpl(mPublishable, mOnPublishListener);
 		}
 	    }
 	    else {
-		String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
-		Logger.logError(PublishAction.class, reason, null);
-		if (mOnPublishListener != null) {
-		    mOnPublishListener.onFail(reason);
-		}
+		return;
 	    }
 	}
 	else {
@@ -132,7 +128,6 @@ public class PublishAction extends AbstractAction {
 		}
 		else {
 		    Logger.logError(PublishAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
 		    if (onPublishListener != null) {
 			onPublishListener.onComplete("0");
 		    }

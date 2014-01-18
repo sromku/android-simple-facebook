@@ -19,6 +19,8 @@ import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
+import com.sromku.simple.fb.utils.Errors;
+import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 
 public class SessionManager {
@@ -181,6 +183,18 @@ public class SessionManager {
 	    return !hasPendingRequest(session);
 	}
 	return true;
+    }
+
+    /**
+     * Return true if current session contains all publish permissions.
+     * 
+     * @return
+     */
+    public boolean containsAllPublishPermissions() {
+	if (getActiveSessionPermissions().containsAll(configuration.getPublishPermissions())) {
+	    return true;
+	}
+	return false;
     }
 
     /**
@@ -412,17 +426,19 @@ public class SessionManager {
 	public void call(Session session, SessionState state, Exception exception) {
 	    List<String> permissions = getActiveSessionPermissions();
 	    if (exception != null) {
-		if (exception instanceof FacebookOperationCanceledException) {
-		    if (permissions.size() == 0) {
-			notAcceptedPermission(Permission.Type.READ);
+		if (!SessionState.CLOSED_LOGIN_FAILED.equals(state)) {
+		    if (exception instanceof FacebookOperationCanceledException) {
+			if (permissions.size() == 0) {
+			    notAcceptedPermission(Permission.Type.READ);
+			}
+			else {
+			    notAcceptedPermission(Permission.Type.PUBLISH);
+			}
 		    }
 		    else {
-			notAcceptedPermission(Permission.Type.PUBLISH);
-		    }
-		}
-		else {
-		    if (onLoginListener != null) {
-			onLoginListener.onException(exception);
+			if (onLoginListener != null) {
+			    onLoginListener.onException(exception);
+			}
 		    }
 		}
 	    }
@@ -435,6 +451,10 @@ public class SessionManager {
 		break;
 
 	    case CLOSED_LOGIN_FAILED:
+		if (onLoginListener != null) {
+		    String reason = Errors.getError(ErrorMsg.CANCEL_WEB_LOGIN);
+		    onLoginListener.onFail(reason);
+		}
 		break;
 
 	    case CREATED:
@@ -495,7 +515,12 @@ public class SessionManager {
 		 * for publish permissions
 		 */
 		if (onReopenSessionListener != null) {
-		    onReopenSessionListener.onSuccess();
+		    if ((exception != null && exception instanceof FacebookOperationCanceledException) || (!containsAllPublishPermissions())) {
+			onReopenSessionListener.onNotAcceptingPermissions(Permission.Type.PUBLISH);
+		    }
+		    else {
+			onReopenSessionListener.onSuccess();
+		    }
 		    onReopenSessionListener = null;
 		}
 		else

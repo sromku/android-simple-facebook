@@ -62,9 +62,9 @@ public class PublishFeedDialogAction extends AbstractAction {
 		    @Override
 		    public void onComplete(PendingCall pendingCall, Bundle data) {
 			sessionManager.untrackPendingCall();
-			boolean didCancel = FacebookDialog.getNativeDialogDidComplete(data);
+			boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
 			String postId = FacebookDialog.getNativeDialogPostId(data);  
-			if (didCancel && postId != null) {
+			if (didComplete && postId != null) {
 			    mOnPublishListener.onComplete(postId);
 			}
 			else {
