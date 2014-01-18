@@ -28,12 +28,12 @@ public class PublishAction extends AbstractAction {
     public PublishAction(SessionManager sessionManager) {
 	super(sessionManager);
     }
-    
+
     public void setPublishable(Publishable publishable) {
 	mPublishable = publishable;
     }
-    
-    public void setTarget(String target){
+
+    public void setTarget(String target) {
 	mTarget = target;
     }
 
@@ -46,43 +46,54 @@ public class PublishAction extends AbstractAction {
 	if (sessionManager.isLogin(true)) {
 	    // if we defined the publish permission
 	    if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
-		// callback with 'thinking'
-		if (mOnPublishListener != null) {
-		    mOnPublishListener.onThinking();
-		}
-
 		/*
 		 * Check if session to facebook has needed publish permission.
 		 * If not, we will ask user for this permission.
 		 */
 		if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
-		    sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
-			@Override
-			public void onSuccess() {
-			    publishImpl(mPublishable, mOnPublishListener);
+		    if (sessionManager.canMakeAdditionalRequest()) {
+			if (mOnPublishListener != null) {
+			    mOnPublishListener.onThinking();
 			}
 
-			@Override
-			public void onNotAcceptingPermissions(Permission.Type type) {
-			    String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
-			    Logger.logError(PublishAction.class, reason, null);
-			    if (mOnPublishListener != null) {
-				mOnPublishListener.onFail(reason);
+			sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
+			    @Override
+			    public void onSuccess() {
+				publishImpl(mPublishable, mOnPublishListener);
 			    }
-			}
-		    });
-		    sessionManager.extendPublishPermissions();
-		} else {
+
+			    @Override
+			    public void onNotAcceptingPermissions(Permission.Type type) {
+				String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
+				Logger.logError(PublishAction.class, reason, null);
+				if (mOnPublishListener != null) {
+				    mOnPublishListener.onFail(reason);
+				}
+			    }
+			});
+			sessionManager.extendPublishPermissions();
+		    }
+		    else {
+			return;
+		    }
+		}
+		else {
+		    if (mOnPublishListener != null) {
+			mOnPublishListener.onThinking();
+		    }
+
 		    publishImpl(mPublishable, mOnPublishListener);
 		}
-	    } else {
+	    }
+	    else {
 		String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
 		Logger.logError(PublishAction.class, reason, null);
 		if (mOnPublishListener != null) {
 		    mOnPublishListener.onFail(reason);
 		}
 	    }
-	} else {
+	}
+	else {
 	    if (mOnPublishListener != null) {
 		String reason = Errors.getError(ErrorMsg.LOGIN);
 		Logger.logError(PublishAction.class, reason, null);
@@ -102,7 +113,8 @@ public class PublishAction extends AbstractAction {
 		    String postId = null;
 		    try {
 			postId = graphResponse.getString("id");
-		    } catch (JSONException e) {
+		    }
+		    catch (JSONException e) {
 			Logger.logError(PublishAction.class, "JSON error", e);
 		    }
 		    FacebookRequestError error = response.getError();
@@ -111,12 +123,14 @@ public class PublishAction extends AbstractAction {
 			if (onPublishListener != null) {
 			    onPublishListener.onException(error.getException());
 			}
-		    } else {
+		    }
+		    else {
 			if (onPublishListener != null) {
 			    onPublishListener.onComplete(postId);
 			}
 		    }
-		} else {
+		}
+		else {
 		    Logger.logError(PublishAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
 
 		    if (onPublishListener != null) {
@@ -128,5 +142,5 @@ public class PublishAction extends AbstractAction {
 	RequestAsyncTask task = new RequestAsyncTask(request);
 	task.execute();
     }
-    
+
 }

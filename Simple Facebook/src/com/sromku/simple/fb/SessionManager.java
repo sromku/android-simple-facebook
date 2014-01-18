@@ -1,5 +1,6 @@
 package com.sromku.simple.fb;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import android.app.Activity;
@@ -7,6 +8,7 @@ import android.content.Intent;
 
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
+import com.facebook.Session.AuthorizationRequest;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
@@ -54,17 +56,21 @@ public class SessionManager {
 	if (isLogin(true)) {
 	    Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
 	    onLoginListener.onLogin();
+	    return;
+	}
+	Session session = getOrCreateActiveSession();
+	if (hasPendingRequest(session)) {
+	    Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
+	    return;
+	}
+
+	mSessionStatusCallback.onLoginListener = onLoginListener;
+	session.addCallback(mSessionStatusCallback);
+	if (!session.isOpened()) {
+	    openSession(session, true);
 	}
 	else {
-	    Session session = getOrCreateActiveSession();
-	    mSessionStatusCallback.onLoginListener = onLoginListener;
-	    session.addCallback(mSessionStatusCallback);
-	    if (!session.isOpened()) {
-		openSession(session, true);
-	    }
-	    else {
-		onLoginListener.onLogin();
-	    }
+	    onLoginListener.onLogin();
 	}
     }
 
@@ -165,13 +171,28 @@ public class SessionManager {
     }
 
     /**
+     * Return true if there is no pending request like: asking for permissions..
+     * 
+     * @return
+     */
+    public boolean canMakeAdditionalRequest() {
+	Session session = Session.getActiveSession();
+	if (session != null) {
+	    return !hasPendingRequest(session);
+	}
+	return true;
+    }
+
+    /**
      * Extend and ask user for PUBLISH permissions
      * 
      * @param activity
      */
     public void extendPublishPermissions() {
 	Session session = Session.getActiveSession();
-
+	if (hasPendingRequest(session)) {
+	    Logger.logWarning(TAG, "You are trying to ask for publish permission one more time, before finishing the previous login call");
+	}
 	Session.NewPermissionsRequest request = new Session.NewPermissionsRequest(activity, configuration.getPublishPermissions());
 	session.addCallback(mSessionStatusCallback);
 	session.requestNewPublishPermissions(request);
@@ -361,13 +382,28 @@ public class SessionManager {
 	return false;
     }
 
+    private boolean hasPendingRequest(Session session) {
+	try {
+	    Field f = session.getClass().getDeclaredField("pendingAuthorizationRequest");
+	    f.setAccessible(true);
+	    AuthorizationRequest authorizationRequest = (AuthorizationRequest) f.get(session);
+	    if (authorizationRequest != null) {
+		return true;
+	    }
+	}
+	catch (Exception e) {
+	    // do nothing
+	}
+	return false;
+    }
+
     public class SessionStatusCallback implements Session.StatusCallback {
 	private boolean askPublishPermissions = false;
 	private boolean doOnLogin = false;
 	private OnReopenSessionListener onReopenSessionListener = null;
 	OnLoginListener onLoginListener = null;
 	OnLogoutListener onLogoutListener = null;
-	
+
 	public void setOnReopenSessionListener(OnReopenSessionListener onReopenSessionListener) {
 	    this.onReopenSessionListener = onReopenSessionListener;
 	}
@@ -485,7 +521,7 @@ public class SessionManager {
 	public void setAskPublishPermissions(boolean ask) {
 	    askPublishPermissions = ask;
 	}
-	
+
 	private void notAcceptedPermission(Permission.Type type) {
 	    if (onLoginListener != null) {
 		onLoginListener.onNotAcceptingPermissions(type);
