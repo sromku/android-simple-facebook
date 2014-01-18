@@ -19,8 +19,6 @@ import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnReopenSessionListener;
-import com.sromku.simple.fb.utils.Errors;
-import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 
 public class SessionManager {
@@ -426,19 +424,17 @@ public class SessionManager {
 	public void call(Session session, SessionState state, Exception exception) {
 	    List<String> permissions = getActiveSessionPermissions();
 	    if (exception != null) {
-		if (!SessionState.CLOSED_LOGIN_FAILED.equals(state)) {
-		    if (exception instanceof FacebookOperationCanceledException) {
-			if (permissions.size() == 0) {
-			    notAcceptedPermission(Permission.Type.READ);
-			}
-			else {
-			    notAcceptedPermission(Permission.Type.PUBLISH);
-			}
+		if (exception instanceof FacebookOperationCanceledException && !SessionState.OPENED_TOKEN_UPDATED.equals(state)) {
+		    if (permissions.size() == 0) {
+			notAcceptedPermission(Permission.Type.READ);
 		    }
 		    else {
-			if (onLoginListener != null) {
-			    onLoginListener.onException(exception);
-			}
+			notAcceptedPermission(Permission.Type.PUBLISH);
+		    }
+		}
+		else {
+		    if (onLoginListener != null) {
+			onLoginListener.onException(exception);
 		    }
 		}
 	    }
@@ -451,10 +447,6 @@ public class SessionManager {
 		break;
 
 	    case CLOSED_LOGIN_FAILED:
-		if (onLoginListener != null) {
-		    String reason = Errors.getError(ErrorMsg.CANCEL_WEB_LOGIN);
-		    onLoginListener.onFail(reason);
-		}
 		break;
 
 	    case CREATED:
