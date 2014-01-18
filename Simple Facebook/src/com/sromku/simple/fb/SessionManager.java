@@ -173,6 +173,7 @@ public class SessionManager {
 	Session session = Session.getActiveSession();
 
 	Session.NewPermissionsRequest request = new Session.NewPermissionsRequest(activity, configuration.getPublishPermissions());
+	session.addCallback(mSessionStatusCallback);
 	session.requestNewPublishPermissions(request);
     }
 
@@ -366,7 +367,7 @@ public class SessionManager {
 	private OnReopenSessionListener onReopenSessionListener = null;
 	OnLoginListener onLoginListener = null;
 	OnLogoutListener onLogoutListener = null;
-
+	
 	public void setOnReopenSessionListener(OnReopenSessionListener onReopenSessionListener) {
 	    this.onReopenSessionListener = onReopenSessionListener;
 	}
@@ -377,14 +378,16 @@ public class SessionManager {
 	    if (exception != null) {
 		if (exception instanceof FacebookOperationCanceledException) {
 		    if (permissions.size() == 0) {
-			onLoginListener.onNotAcceptingPermissions(Permission.Type.READ);
+			notAcceptedPermission(Permission.Type.READ);
 		    }
 		    else {
-			onLoginListener.onNotAcceptingPermissions(Permission.Type.PUBLISH);
+			notAcceptedPermission(Permission.Type.PUBLISH);
 		    }
 		}
 		else {
-		    onLoginListener.onException(exception);
+		    if (onLoginListener != null) {
+			onLoginListener.onException(exception);
+		    }
 		}
 	    }
 
@@ -481,6 +484,12 @@ public class SessionManager {
 	 */
 	public void setAskPublishPermissions(boolean ask) {
 	    askPublishPermissions = ask;
+	}
+	
+	private void notAcceptedPermission(Permission.Type type) {
+	    if (onLoginListener != null) {
+		onLoginListener.onNotAcceptingPermissions(type);
+	    }
 	}
     }
 
