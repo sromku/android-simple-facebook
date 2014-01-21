@@ -108,6 +108,39 @@ public enum Permission {
 	}
     };
 
+    public static enum Page {
+	/**
+	 * Manage admins<br>
+	 * Full Admin
+	 */
+	ADMINISTER,
+	/**
+	 * Edit the Page and add apps<br>
+	 * Full Admin, Content Creator
+	 */
+	EDIT_PROFILE,
+	/**
+	 * Create posts as the Page<br>
+	 * Full Admin, Content Creator
+	 */
+	CREATE_CONTENT,
+	/**
+	 * Respond to and delete comments, send messages as the Page<br>
+	 * Full Admin, Content Creator, Moderator
+	 */
+	MODERATE_CONTENT,
+	/**
+	 * Create ads and unpublished page posts<br>
+	 * Full Admin, Content Creator, Moderator, Ads Creator
+	 */
+	CREATE_ADS,
+	/**
+	 * View Insights<br>
+	 * Full Admin, Content Creator, Moderator, Ads Creator, Insights Manager
+	 */
+	BASIC_ADMIN
+    }
+
     private String mValue;
     private SessionAuthorizationType mType;
 

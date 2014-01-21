@@ -9,9 +9,9 @@ import android.os.Bundle;
 
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
-import com.sromku.simple.fb.Properties;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -36,7 +36,7 @@ public class GetFriendsAction extends GetAction<List<Profile>> {
 
     @Override
     protected String getGraphPath() {
-	return "me/" + GraphPath.FRIENDS;
+	return String.format("%s/%s", "me", GraphPath.FRIENDS);
     }
 
     @Override

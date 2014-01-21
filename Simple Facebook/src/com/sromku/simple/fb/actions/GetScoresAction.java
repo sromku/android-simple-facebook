@@ -27,7 +27,7 @@ public class GetScoresAction extends GetAction<JSONArray> {
 
     @Override
     protected String getGraphPath() {
-	return configuration.getAppId() + "/" + GraphPath.SCORES;
+	return String.format("%s/%s", configuration.getAppId(), GraphPath.SCORES);
     }
 
     @Override

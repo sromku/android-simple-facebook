@@ -20,6 +20,7 @@ import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;

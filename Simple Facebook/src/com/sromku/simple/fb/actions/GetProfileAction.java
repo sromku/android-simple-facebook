@@ -6,9 +6,9 @@ import android.os.Bundle;
 
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
-import com.sromku.simple.fb.Properties;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 
@@ -31,7 +31,7 @@ public class GetProfileAction extends GetAction<Profile> {
 
     @Override
     protected String getGraphPath() {
-	return "me";
+	return String.format("%s", "me");
     }
 
     @Override

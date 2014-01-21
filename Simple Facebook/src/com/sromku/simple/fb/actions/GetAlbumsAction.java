@@ -30,7 +30,7 @@ public class GetAlbumsAction extends GetAction<List<Album>> {
 
     @Override
     protected String getGraphPath() {
-	return "me/" + GraphPath.ALBUMS;
+	return String.format("%s/%s", "me", GraphPath.ALBUMS);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class GetAppRequestsAction extends GetAction<List<AppRequest>> {
 
     @Override
     protected String getGraphPath() {
-	return "me/" + GraphPath.APPREQUESTS;
+	return String.format("%s/%s", "me", GraphPath.APPREQUESTS);
     }
 
     @Override
