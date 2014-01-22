@@ -30,6 +30,7 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
 import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Checkins;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
@@ -56,6 +57,7 @@ import com.sromku.simple.fb.utils.Logger;
  * <li>Fetch my profile</li>
  * <li>Fetch friends</li>
  * <li>Fetch albums</li>
+ * <li>Fetch checkins</li>
  * <li>Predefined all possible permissions. See {@link Permissions}</li>
  * <li>No need to care for correct sequence logging with READ and PUBLISH permissions</li>
  * </ul>
@@ -486,6 +488,78 @@ public class SimpleFacebook
 			if (onAlbumsRequestListener != null)
 			{
 				onAlbumsRequestListener.onFail(reason);
+			}
+		}
+	}
+	
+	/**
+	 * Get checkins of a user
+	 * 
+	 * @param userId The id of user' profiles
+	 * @param OnCheckinsRequestListener 
+	 */
+	public void getCheckins(String userId, final OnCheckinsRequestListener onCheckinsRequestListener)
+	{
+		// if we are logged in
+		if (isLogin())
+		{
+			// move these params to method call parameters
+			Session session = getOpenSession();
+			
+			Request request = new Request(session, userId+"/checkins", null, HttpMethod.GET, new Request.Callback()
+			{
+				@Override
+				public void onCompleted(Response response)
+				{
+					List<GraphObject> graphObjects = typedListFromResponse(response, GraphObject.class);
+
+					FacebookRequestError error = response.getError();
+					if (error != null)
+					{
+						// log
+						logError("failed to get checkins", error.getException());
+
+						// callback with 'exception'
+						if (onCheckinsRequestListener != null)
+						{
+							onCheckinsRequestListener.onException(error.getException());
+						}
+					}
+					else
+					{
+						// callback with 'complete'
+						if (onCheckinsRequestListener != null)
+						{
+							List<Checkins> checkins = new ArrayList<Checkins>(graphObjects.size());
+							for (GraphObject graphObject: graphObjects)
+							{
+								checkins.add(Checkins.create(graphObject));
+							}
+							onCheckinsRequestListener.onComplete(checkins);
+						}
+					}
+
+				}
+			});
+
+			RequestAsyncTask task = new RequestAsyncTask(request);
+			task.execute();
+
+			// callback with 'thinking'
+			if (onCheckinsRequestListener != null)
+			{
+				onCheckinsRequestListener.onThinking();
+			}
+		}
+		else
+		{
+			String reason = Errors.getError(ErrorMsg.LOGIN);
+			logError(reason, null);
+
+			// callback with 'fail' due to not being loged
+			if (onCheckinsRequestListener != null)
+			{
+				onCheckinsRequestListener.onFail(reason);
 			}
 		}
 	}
@@ -2069,7 +2143,18 @@ public class SimpleFacebook
 	{
 		void onComplete(List<Profile> friends);
 	}
-
+	
+	/**
+	 * On checkins request listener
+	 * 
+	 * @author sromku
+	 * 
+	 */
+	public interface OnCheckinsRequestListener extends OnActionListener
+	{
+		void onComplete(List<Checkins> checkins);
+	}
+	
 	/**
 	 * On get app requests listener
 	 * 
@@ -2194,7 +2279,7 @@ public class SimpleFacebook
 		void onComplete(List<String> invitedFriends, String requestId);
 
 		void onCancel();
-	}
+	}		
 
 	/**
 	 * General interface in this simple sdk
