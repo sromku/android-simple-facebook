@@ -1,5 +1,6 @@
 package com.sromku.simple.fb.entities;
 
+import com.sromku.simple.fb.Privacy;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,6 +58,7 @@ public class Feed
 			public static final String DESCRIPTION = "description";
 			public static final String PROPERTIES = "properties";
 			public static final String ACTIONS = "actions";
+            public static final String PRIVACY = "privacy";
 		}
 
 		public Builder()
@@ -147,6 +149,19 @@ public class Feed
         public Builder setGroupId(String groupId)
         {
             mGroupId = groupId; 
+            return this;
+        }
+
+        /**
+         * The privacy settings of the feed. If not specified, this setting is
+         * automatically populated by the privacy setting a user has configured for the app.
+         *
+         * @param privacy
+         * @return {@link Builder}
+         */
+        public Builder setPrivacy(Privacy privacy)
+        {
+            mBundle.putString(Parameters.PRIVACY, privacy.getJSONString());
             return this;
         }
 

@@ -121,4 +121,13 @@ public enum Permissions
 	{
 		return mType;
 	}
+	
+	public static Permissions findPermission(String value)
+	{
+		for (Permissions p : Permissions.values()) {
+			if(p.getValue().equals(value)) return p;
+		}
+		return null;
+	}
+
 }

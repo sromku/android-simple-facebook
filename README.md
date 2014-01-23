@@ -14,19 +14,21 @@ Sample app:
 </a>
 
 ## Features
-* [Login](https://github.com/sromku/android-simple-facebook#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
-* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
-	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
-	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
-	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
-* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
-* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get publish permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
+* [Login](#login-1)
+* [Logout](#logout-1)
+* [Publish feed](#publish-feed)
+* [Publish story (open graph)](#publish-story-open-graph)
+* [Publish photo](#publish-photo)
+* [Publish video](#publish-video)
+* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+* [Invite friend/s](#invite)
+	* [Invite all friends](#all)
+	* [Invite suggested friends](#suggested-friends)
+	* [Invite one friend](#one-friend-only)
+* [Get profile](#get-my-profile-1)
+* [Get friends](#get-friends)
+* [Get albums](#get-albums)
+* [Get publish permissions](#request-publish)
 
 *And,*
 * Based on latest Facebook SDK
@@ -35,7 +37,7 @@ Sample app:
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
 ## Few Examples
-Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](https://github.com/sromku/android-simple-facebook#usage) paragraph.
+Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](#usage) paragraph.
 
 ### Login
 You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
@@ -155,19 +157,21 @@ public void onResume()
 
 #### 2. Run the action (login, publish, invite,…)
 
-* [Login](https://github.com/sromku/android-simple-facebook#login-1)
-* [Logout](https://github.com/sromku/android-simple-facebook#logout-1)
-* [Publish feed](https://github.com/sromku/android-simple-facebook#publish-feed)
-* [Publish story (open graph)](https://github.com/sromku/android-simple-facebook#publish-story-open-graph)
-* [Publish photo](https://github.com/sromku/android-simple-facebook#publish-photo)
-* [Invite friend/s](https://github.com/sromku/android-simple-facebook#invite)
-	* [Invite all friends](https://github.com/sromku/android-simple-facebook#all)
-	* [Invite suggested friends](https://github.com/sromku/android-simple-facebook#suggested-friends)
-	* [Invite one friend](https://github.com/sromku/android-simple-facebook#one-friend-only)
-* [Get profile](https://github.com/sromku/android-simple-facebook#get-my-profile-1)
-* [Get friends](https://github.com/sromku/android-simple-facebook#get-friends)
-* [Get albums](https://github.com/sromku/android-simple-facebook#get-albums)
-* [Get Publish Permissions](https://github.com/Gryzor/android-simple-facebook#request-publish)
+* [Login](#login-1)
+* [Logout](#logout-1)
+* [Publish feed](#publish-feed)
+* [Publish story (open graph)](#publish-story-open-graph)
+* [Publish photo](#publish-photo)
+* [Publish video](#publish-video)
+* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+* [Invite friend/s](#invite)
+	* [Invite all friends](#all)
+	* [Invite suggested friends](#suggested-friends)
+	* [Invite one friend](#one-friend-only)
+* [Get profile](#get-my-profile-1)
+* [Get friends](#get-friends)
+* [Get albums](#get-albums)
+* [Get Publish Permissions](#request-publish)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -408,7 +412,7 @@ OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 // This is the image you want to upload
 Bitmap bitmap = ...
 
-// create Photo instace and add some properties
+// create Photo instance and add some properties
 Photo photo = new Photo(bitmap);
 photo.addDescription("Screenshot from #android_simple_facebook sample application");
 photo.addPlace("110619208966868");
@@ -426,6 +430,107 @@ String albumId = ...;
 
 // publish photo to album
 mSimpleFacebook.publish(photo, albumId, onPublishListener);
+```
+
+### Publish video
+
+You can publish (upload) a video only to the default "Videos" album. <br>
+`Video` can be created from:<br>
+- `File`
+- `byte[]`
+
+Set `OnPublishListener` and call for `publish(Video, OnPublishListener)`.
+
+``` java
+// create publish listener
+OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+{
+
+	@Override
+	public void onFail(String reason)
+	{
+		// insure that you are logged in before publishing
+		Log.w(TAG, reason);
+	}
+
+	@Override
+	public void onException(Throwable throwable)
+	{
+		Log.e(TAG, "Bad thing happened", throwable);
+	}
+
+	@Override
+	public void onThinking()
+	{
+		// show progress bar or something to the user while publishing
+		Log.i(TAG, "In progress");
+	}
+
+	@Override
+	public void onComplete(String id)
+	{
+		Log.i(TAG, "Published successfully. id = " + id);
+	}
+};
+
+// This is the Video you want to upload
+File videoFile = ...
+
+// create a Video instance and add some properties
+Video video = new Video(videoFile);
+video.addTitle("A video");
+video.addDescription("Video from #android_simple_facebook sample application");
+
+// publish video to "Videos" album
+mSimpleFacebook.publish(video, onPublishListener);
+```
+
+### Set privacy settings of a single post
+You can set the privacy settings of a single post (set who can / can't see the post). <br/>
+Currently supported in:<br/>
+- `Feed`
+- `Photo`
+- `Video`
+
+``` java
+// This is the object you want to set privacy of and the publish listener
+Photo photo = ...
+OnPublishListener onPublishListener = ...
+```
+
+#### Predefined privacy settings
+You can use one of the following predefined privacy settings: <br/>
+- EVERYONE, 
+- ALL_FRIENDS, 
+- FRIENDS_OF_FRIENDS, 
+- SELF
+
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.EVERYONE);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
+```
+
+#### Custom privacy settings
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.CUSTOM);
+
+// All available options: 
+privacy.addAllowedUserOrListID({user ID or friend list ID that "can" see the post});
+privacy.addAllowedUserOrListIDs({mixed user IDs and friend list IDs that "can" see the post});
+privacy.addDeniedUserOrListID({user ID or friend list ID that "cannot" see the post});
+privacy.addDeniedUserOrListIDs({mixed user IDs and friend list IDs that "cannot" see the post});
+
+// List ID can also be "ALL_FRIENDS" or "FRIENDS_OF_FRIENDS" (only) to include all members of those sets:
+privacy.addAllowedUserOrListID(Privacy.PrivacySettings.ALL_FRIENDS);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
 ```
 
 ### Invite
@@ -732,6 +837,8 @@ mSimpleFacebook.requestPermission(mOnPermissionListener);
 | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) <br>
 | [שיחה מצחיקה - שינוי קול בקלות](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
 | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
+| [Gelatto](https://play.google.com/store/apps/details?id=com.doit.gelatto) <br>
+| [Pony Racing](https://play.google.com/store/apps/details?id=com.tiarsoft.ponyrace) <br>
 
 If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
 
