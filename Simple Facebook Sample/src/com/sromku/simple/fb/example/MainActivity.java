@@ -18,9 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.Properties;
-import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.Permission.Type;
+import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
@@ -320,10 +319,12 @@ public class MainActivity extends Activity {
 		// take screenshot
 		final Bitmap bitmap = Utils.takeScreenshot(MainActivity.this);
 
-		// create Photo instace and add some properties
-		Photo photo = new Photo(bitmap);
-		photo.addDescription("Screenshot from #android_simple_facebook sample application");
-		photo.addPlace("110619208966868");
+		// create Photo instance and add some properties
+		Photo photo = new Photo.Builder()
+			.setImage(bitmap)
+			.setDescription("Screenshot from #android_simple_facebook sample application")
+			.setPlace("110619208966868")
+			.build();
 
 		// publish
 		mSimpleFacebook.publish(photo, new OnPublishListener() {
@@ -517,12 +518,15 @@ public class MainActivity extends Activity {
 		hideDialog();
 		String id = profile.getId();
 		String firstName = profile.getFirstName();
-		String coverUrl = profile.getCover();
+		Photo photo = profile.getCover();
 		String pictureUrl = profile.getPicture();
 
 		// this is just to show the results
-		AlertDialog dialog = Utils.buildProfileResultDialog(MainActivity.this, new Pair<String, String>(Properties.ID, id), new Pair<String, String>(Properties.FIRST_NAME, firstName),
-			new Pair<String, String>(Properties.COVER, coverUrl), new Pair<String, String>(Properties.PICTURE, pictureUrl));
+		AlertDialog dialog = Utils.buildProfileResultDialog(MainActivity.this, 
+			new Pair<String, String>(Profile.Properties.ID, id), 
+			new Pair<String, String>(Profile.Properties.FIRST_NAME, firstName),
+			new Pair<String, String>(Profile.Properties.COVER, photo.getSource()), 
+			new Pair<String, String>(Profile.Properties.PICTURE, pictureUrl));
 		dialog.show();
 	    }
 	};
@@ -538,7 +542,12 @@ public class MainActivity extends Activity {
 		pictureAttributes.setType(PictureType.SQUARE);
 
 		// prepare the properties that we need
-		Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.FIRST_NAME).add(Properties.COVER).add(Properties.PICTURE, pictureAttributes).build();
+		Profile.Properties properties = new Profile.Properties.Builder()
+			.add(Profile.Properties.ID)
+			.add(Profile.Properties.FIRST_NAME)
+			.add(Profile.Properties.COVER)
+			.add(Profile.Properties.PICTURE, pictureAttributes)
+			.build();
 
 		// do the get profile action
 		mSimpleFacebook.getProfile(properties, onProfileRequestListener);
