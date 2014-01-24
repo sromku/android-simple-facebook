@@ -6,6 +6,11 @@ import com.sromku.simple.fb.Permission;
 
 public interface Publishable {
 
+    /**
+     * Is used for publishing actions
+     * 
+     * @return
+     */
     Bundle getBundle();
 
     /**

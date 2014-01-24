@@ -5,10 +5,12 @@ import org.json.JSONObject;
 import com.facebook.model.GraphObject;
 
 public class Place {
+    
     private String mId;
     private String mName;
     private String mStreet;
     private String mCity;
+    private String mState;
     private String mCountry;
     private int mZip;
     private long mLatitude;
@@ -28,6 +30,13 @@ public class Place {
 
     public void setCity(String mCity) {
 	this.mCity = mCity;
+    }
+    
+    /**
+     * @return the state
+     */
+    public String getState() {
+	return mState;
     }
 
     public String getCountry() {
@@ -92,7 +101,7 @@ public class Place {
 	    mCity = jsonObject.optString("city");
 	    mCountry = jsonObject.optString("country");
 	    mZip = jsonObject.optInt("zip");
-
+	    mState = jsonObject.optString("state");
 	    mLatitude = jsonObject.optLong("latitude");
 	    mLongitude = jsonObject.optLong("longitude");
 	}

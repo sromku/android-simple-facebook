@@ -24,7 +24,7 @@ import com.sromku.simple.fb.utils.Utils;
  * The facebook user
  * 
  * @author sromku
- * @see https://developers.facebook.com/docs/reference/api/user/
+ * @see https://developers.facebook.com/docs/graph-api/reference/user
  */
 public class Profile implements User {
 
@@ -200,11 +200,11 @@ public class Profile implements User {
      * 
      * @return the user's age range
      */
-    public String getAgeRange() {
+    public AgeRange getAgeRange() {
 	JSONObject jsonObject = (JSONObject) mGraphUser.getProperty(Properties.AGE_RANGE);
 	String min = jsonObject.optString("min");
 	String max = jsonObject.optString("max");
-	String ageRange = min + max;
+	AgeRange ageRange = new AgeRange(min, max);
 	return ageRange;
     }
 
@@ -334,13 +334,10 @@ public class Profile implements User {
      * 
      * @return The user's cover photo
      */
-    public String getCover() {
-	JSONObject jsonObject = (JSONObject) mGraphUser.getProperty(Properties.COVER);
-	if (jsonObject != null) {
-	    String coverUrl = jsonObject.optString("source");
-	    return coverUrl;
-	}
-	return null;
+    public Photo getCover() {
+	GraphObject graphObject = mGraphUser.getPropertyAs(Properties.COVER, GraphObject.class);
+	Photo photo = Photo.create(graphObject);
+	return photo;
     }
 
     /**
