@@ -57,7 +57,7 @@ import com.sromku.simple.fb.utils.Logger;
  * <li>Fetch my profile</li>
  * <li>Fetch friends</li>
  * <li>Fetch albums</li>
- * <li>Fetch checkins</li>
+ * <li>Fetch check-ins</li>
  * <li>Predefined all possible permissions. See {@link Permissions}</li>
  * <li>No need to care for correct sequence logging with READ and PUBLISH permissions</li>
  * </ul>
@@ -298,7 +298,7 @@ public class SimpleFacebook
 			String reason = Errors.getError(ErrorMsg.LOGIN);
 			logError(reason, null);
 
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onProfileRequestListener != null)
 			{
 				onProfileRequestListener.onFail(reason);
@@ -410,7 +410,7 @@ public class SimpleFacebook
 			String reason = Errors.getError(ErrorMsg.LOGIN);
 			logError(reason, null);
 
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onFriendsRequestListener != null)
 			{
 				onFriendsRequestListener.onFail(reason);
@@ -484,7 +484,7 @@ public class SimpleFacebook
 			String reason = Errors.getError(ErrorMsg.LOGIN);
 			logError(reason, null);
 
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onAlbumsRequestListener != null)
 			{
 				onAlbumsRequestListener.onFail(reason);
@@ -493,7 +493,7 @@ public class SimpleFacebook
 	}
 	
 	/**
-	 * Get checkins of a user
+	 * Get check-ins of a user
 	 * 
 	 * @param userId The id of user' profiles
 	 * @param OnCheckinsRequestListener 
@@ -556,7 +556,7 @@ public class SimpleFacebook
 			String reason = Errors.getError(ErrorMsg.LOGIN);
 			logError(reason, null);
 
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onCheckinsRequestListener != null)
 			{
 				onCheckinsRequestListener.onFail(reason);
@@ -571,7 +571,7 @@ public class SimpleFacebook
 		{
 			Session session = getOpenSession();
 			Bundle bundle = null;
-			Request request = new Request(session, "me/apprequests", bundle, HttpMethod.GET, new Request.Callback()
+			Request request = new Request(session, "me/apprequests", null, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
@@ -717,7 +717,7 @@ public class SimpleFacebook
 		{
 			Session session = getOpenSession();
 			Bundle bundle = null;
-			Request request = new Request(session, mConfiguration.getAppId() + "/scores", bundle, HttpMethod.GET, new Request.Callback()
+			Request request = new Request(session, mConfiguration.getAppId() + "/scores", null, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
@@ -965,7 +965,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -983,7 +983,7 @@ public class SimpleFacebook
 	 * <b>Permission:</b><br>
 	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
-	 * @param openGraph
+	 * @param story
 	 * @param onPublishListener
 	 */
 	public void publish(final Story story, final OnPublishListener onPublishListener)
@@ -1050,7 +1050,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -1144,7 +1144,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -1248,7 +1248,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onPublishListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -1406,7 +1406,7 @@ public class SimpleFacebook
 		}
 		else
 		{
-			// callback with 'fail' due to not being loged
+			// callback with 'fail' due to not being logged
 			if (onPermissionListener != null)
 			{
 				String reason = Errors.getError(ErrorMsg.LOGIN);
@@ -1465,7 +1465,7 @@ public class SimpleFacebook
 		}
 
 		/*
-		 * Check if we can reload the session when it will be neccesary. We won't do it now.
+		 * Check if we can reload the session when it will be necessary. We won't do it now.
 		 */
 		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
 		{
@@ -1857,7 +1857,7 @@ public class SimpleFacebook
 	private void openSession(Session session, boolean isRead)
 	{
 		Session.OpenRequest request = new Session.OpenRequest(mActivity);
-		if (request != null)
+		if (request != null) //NOTE: this check is redundant, request can never be null.
 		{
 			request.setDefaultAudience(mConfiguration.getSessionDefaultAudience());
 			request.setLoginBehavior(mConfiguration.getSessionLoginBehavior());
@@ -2064,7 +2064,7 @@ public class SimpleFacebook
 			case OPENED_TOKEN_UPDATED:
 
 				/*
-				 * Check if came from publishing actions and we need to reask for publish permissions
+				 * Check if came from publishing actions and we need to re-ask for publish permissions
 				 */
 				if (mOnReopenSessionListener != null)
 				{
@@ -2145,7 +2145,7 @@ public class SimpleFacebook
 	}
 	
 	/**
-	 * On checkins request listener
+	 * On check-ins request listener
 	 * 
 	 * @author sromku
 	 * 
