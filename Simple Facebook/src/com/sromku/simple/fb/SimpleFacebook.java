@@ -1,5 +1,12 @@
 package com.sromku.simple.fb;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -7,22 +14,31 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
-import com.facebook.*;
+
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
-import com.sromku.simple.fb.entities.*;
+import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Checkins;
+import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK 3.5
@@ -42,7 +58,7 @@ import java.util.List;
  * <li>Fetch friends</li>
  * <li>Fetch albums</li>
  * <li>Fetch checkins</li>
- * <li>Predefined all possible permissions. See {@link com.sromku.simple.fb.Permissions}</li>
+ * <li>Predefined all possible permissions. See {@link Permissions}</li>
  * <li>No need to care for correct sequence logging with READ and PUBLISH permissions</li>
  * </ul>
  * 
@@ -188,11 +204,11 @@ public class SimpleFacebook
 	 * <br>
 	 * <br>
 	 * If you need additional or other profile properties like: <em>age_range, picture and more</em>, then use
-	 * this method: {@link #getProfile(com.sromku.simple.fb.Properties, com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener)} <br>
+	 * this method: {@link #getProfile(Properties, OnProfileRequestListener)} <br>
 	 * <br>
 	 * <b>Note:</b> If you need only few properties for your app, then it is recommended <b>not</b> to use
 	 * this method, since getting unnecessary properties is time consuming task from facebook side.<br>
-	 * It is recommended in this case, to use {@link #getProfile(com.sromku.simple.fb.Properties, com.sromku.simple.fb.SimpleFacebook.OnProfileRequestListener)} and
+	 * It is recommended in this case, to use {@link #getProfile(Properties, OnProfileRequestListener)} and
 	 * mention only needed properties.
 	 * 
 	 * @param onProfileRequestListener
@@ -207,8 +223,8 @@ public class SimpleFacebook
 	 * For example, if you need: <em>square picture 500x500 pixels</em>
 	 * 
 	 * @param onProfileRequestListener
-	 * @param properties The {@link com.sromku.simple.fb.Properties}. <br>
-	 *            To create {@link com.sromku.simple.fb.Properties} instance use:
+	 * @param properties The {@link Properties}. <br>
+	 *            To create {@link Properties} instance use:
 	 * 
 	 *            <pre>
 	 * // define the profile picture we want to get
@@ -298,7 +314,7 @@ public class SimpleFacebook
 	 * <br>
 	 * <br>
 	 * If you need additional or other friend properties like: <em>education, location and more</em>, then use
-	 * this method: {@link #getFriends(com.sromku.simple.fb.Properties, com.sromku.simple.fb.SimpleFacebook.OnFriendsRequestListener)} <br>
+	 * this method: {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
 	 * <br>
 	 * 
 	 * @param onFriendsRequestListener
@@ -313,8 +329,8 @@ public class SimpleFacebook
 	 * For example, if you need: <em>id, last_name, picture, birthday</em>
 	 * 
 	 * @param onFriendsRequestListener
-	 * @param properties The {@link com.sromku.simple.fb.Properties}. <br>
-	 *            To create {@link com.sromku.simple.fb.Properties} instance use:
+	 * @param properties The {@link Properties}. <br>
+	 *            To create {@link Properties} instance use:
 	 * 
 	 *            <pre>
 	 * // define the friend picture we want to get
@@ -406,7 +422,7 @@ public class SimpleFacebook
 	 * Get albums
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#USER_PHOTOS}
+	 * {@link Permissions#USER_PHOTOS}
 	 */
 	public void getAlbums(final OnAlbumsRequestListener onAlbumsRequestListener)
 	{
@@ -555,7 +571,7 @@ public class SimpleFacebook
 		{
 			Session session = getOpenSession();
 			Bundle bundle = null;
-			Request request = new Request(session, "me/apprequests", null, HttpMethod.GET, new Request.Callback()
+			Request request = new Request(session, "me/apprequests", bundle, HttpMethod.GET, new Request.Callback()
 			{
 				@Override
 				public void onCompleted(Response response)
@@ -778,7 +794,7 @@ public class SimpleFacebook
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_ACTION}
+	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
 	 * 
 	 * @param score Score to be posted. <code>int</code>
@@ -876,13 +892,13 @@ public class SimpleFacebook
 
 	/**
 	 * 
-	 * Publish {@link com.sromku.simple.fb.entities.Feed} on the wall.<br>
+	 * Publish {@link Feed} on the wall.<br>
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_ACTION}
+	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
-	 * @param feed The feed to publish. Use {@link com.sromku.simple.fb.entities.Feed.Builder} to create a new <code>Feed</code>
+	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
 	 * @param onPublishListener The listener for publishing action
 	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
 	 */
@@ -965,8 +981,9 @@ public class SimpleFacebook
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_ACTION}
+	 * {@link Permissions#PUBLISH_ACTION}
 	 * 
+	 * @param openGraph
 	 * @param onPublishListener
 	 */
 	public void publish(final Story story, final OnPublishListener onPublishListener)
@@ -1045,20 +1062,20 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Publish photo to specific album. You can use {@link #getAlbums(com.sromku.simple.fb.SimpleFacebook.OnAlbumsRequestListener)} to retrieve
+	 * Publish photo to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
 	 * all user's albums.<br>
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * <b>Important:</b><br>
 	 * - The user must own the album<br>
-	 * - The album should not be full (Max: 200 photos). Check it by {@link com.sromku.simple.fb.entities.Album#getCount()}<br>
+	 * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
 	 * - The app can add photos to the album<br>
 	 * - The privacy setting of the app should be at minimum as the privacy setting of the album (
-	 * {@link com.sromku.simple.fb.entities.Album#getPrivacy()}
+	 * {@link Album#getPrivacy()}
 	 * 
 	 * @param photo The photo to upload
 	 * @param albumId The album to which the photo should be uploaded
@@ -1143,12 +1160,12 @@ public class SimpleFacebook
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * <b>Important:</b><br>
-	 * - The album should not be full (Max: 200 photos). Check it by {@link com.sromku.simple.fb.entities.Album#getCount()}<br>
-	 * {@link com.sromku.simple.fb.entities.Album#getPrivacy()}
+	 * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
+	 * {@link Album#getPrivacy()}
 	 * 
 	 * @param photo The photo to upload
 	 * @param onPublishListener The callback listener
@@ -1162,7 +1179,7 @@ public class SimpleFacebook
 	 * Publish video to "Videos" album. <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link com.sromku.simple.fb.Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permissions#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * @param video The video to upload
@@ -1326,9 +1343,9 @@ public class SimpleFacebook
 
 	/**
 	 * 
-	 * Requests {@link com.sromku.simple.fb.Permissions#PUBLISH_ACTION} and nothing else. Useful when you just want to request the
+	 * Requests {@link Permissions#PUBLISH_ACTION} and nothing else. Useful when you just want to request the
 	 * action and won't be publishing at the time, but still need the updated <b>access token</b> with the
-	 * permissions (possibly to pass back to your backend). You must add {@link com.sromku.simple.fb.Permissions#PUBLISH_ACTION} to
+	 * permissions (possibly to pass back to your backend). You must add {@link Permissions#PUBLISH_ACTION} to
 	 * your SimpleFacebook configuration before calling this.
 	 * 
 	 * <b>Must be logged to use.</b>
@@ -1400,7 +1417,7 @@ public class SimpleFacebook
 	}
 
 	/**
-	 * Call this inside your activity in {@link android.app.Activity#onActivityResult} method
+	 * Call this inside your activity in {@link Activity#onActivityResult} method
 	 * 
 	 * @param activity
 	 * @param requestCode
@@ -1410,8 +1427,14 @@ public class SimpleFacebook
 	 */
 	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data)
 	{
-		return Session.getActiveSession() != null 
-				&& Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
+		if (Session.getActiveSession() != null)
+		{
+			return Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -1442,7 +1465,7 @@ public class SimpleFacebook
 		}
 
 		/*
-		 * Check if we can reload the session when it will be necessary. We won't do it now.
+		 * Check if we can reload the session when it will be neccesary. We won't do it now.
 		 */
 		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED))
 		{
@@ -1466,7 +1489,7 @@ public class SimpleFacebook
 	/**
 	 * Get access token of open session
 	 * 
-	 * @return a {@link String} containing the Access Token of the current {@link com.facebook.Session} or null if no
+	 * @return a {@link String} containing the Access Token of the current {@link Session} or null if no
 	 *         session.
 	 */
 	public String getAccessToken()
@@ -1891,6 +1914,8 @@ public class SimpleFacebook
 
 	/**
 	 * Extend and ask user for PUBLISH permissions
+	 * 
+	 * @param activity
 	 */
 	private static void extendPublishPermissions()
 	{
@@ -2039,7 +2064,7 @@ public class SimpleFacebook
 			case OPENED_TOKEN_UPDATED:
 
 				/*
-				 * Check if came from publishing actions and we need to re-ask for publish permissions
+				 * Check if came from publishing actions and we need to reask for publish permissions
 				 */
 				if (mOnReopenSessionListener != null)
 				{
@@ -2204,7 +2229,7 @@ public class SimpleFacebook
 	public interface OnLoginListener extends OnActionListener
 	{
 		/**
-		 * If user performed {@link FacebookTools#login(android.app.Activity)} action, this callback method will be
+		 * If user performed {@link FacebookTools#login(Activity)} action, this callback method will be
 		 * invoked
 		 */
 		void onLogin();
