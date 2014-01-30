@@ -3,10 +3,14 @@ package com.sromku.simple.fb.utils;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -19,6 +23,7 @@ import com.facebook.Response;
 import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
+import com.sromku.simple.fb.entities.User;
 
 public class Utils {
     public static final String EMPTY = "";
@@ -137,20 +142,66 @@ public class Utils {
 	return buf.toString();
     }
 
-    /**
-     * Helper method
-     */
     public static <T extends GraphObject> List<T> typedListFromResponse(Response response, Class<T> clazz) {
 	GraphMultiResult multiResult = response.getGraphObjectAs(GraphMultiResult.class);
 	if (multiResult == null) {
 	    return null;
 	}
-
 	GraphObjectList<GraphObject> data = multiResult.getData();
 	if (data == null) {
 	    return null;
 	}
-
 	return data.castToListOf(clazz);
+    }
+
+    public static <T> List<T> createList(GraphObject graphObject, String property, Converter<T> converter) {
+	List<T> result = new ArrayList<T>();
+	GraphObjectList<GraphObject> commentsGraphObjects = graphObject.getPropertyAsList(property, GraphObject.class);
+	ListIterator<GraphObject> iterator = commentsGraphObjects.listIterator();
+	while (iterator.hasNext()) {
+	    GraphObject graphObjectItr = iterator.next();
+	    T t = converter.convert(graphObjectItr);
+	    result.add(t);
+	}
+	return result;
+    }
+
+    public interface Converter<T> {
+	T convert(GraphObject graphObject);
+    }
+
+    public static String getPropertyInsideProperty(GraphObject graphObject, String parent, String child) {
+	JSONObject jsonObject = (JSONObject) graphObject.getProperty(parent);
+	String value = String.valueOf(jsonObject.opt(child));
+	return value;
+    }
+    
+    public static String getPropertyString(GraphObject graphObject, String property) {
+	return String.valueOf(graphObject.getProperty(property));
+    }
+    
+    public static Long getPropertyLong(GraphObject graphObject, String property) {
+	return Long.valueOf(String.valueOf(graphObject.getProperty(property)));
+    }
+    
+    public static Integer getPropertyInteger(GraphObject graphObject, String property) {
+	return Integer.valueOf(String.valueOf(graphObject.getProperty(property)));
+    }
+
+    public static User createUser(GraphObject graphObject, String parent) {
+	final String id = getPropertyInsideProperty(graphObject, parent, "id");
+	final String name = getPropertyInsideProperty(graphObject, parent, "name");
+	User user = new User() {
+	    @Override
+	    public String getName() {
+		return name;
+	    }
+
+	    @Override
+	    public String getId() {
+		return id;
+	    }
+	};
+	return user;
     }
 }

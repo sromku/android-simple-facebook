@@ -14,14 +14,50 @@ import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
 
+/**
+ * @author sromku
+ * @see https://developers.facebook.com/docs/graph-api/reference/photo
+ */
 public class Photo implements Publishable {
+    private static final String ID = "id";
+    private static final String ALBUM = "album";
+    private static final String BACKDATED_TIME = "backdated_time";
+    private static final String BACKDATED_TIME_GRANULARITY = "backdate_time_granularity";
+    private static final String CREATED_TIME = "created_time";
+    private static final String FROM = "from";
+    private static final String HEIGHT = "height";
+    private static final String ICON = "icon";
+    private static final String IMAGES = "images";
+    private static final String LINK = "link";
+    private static final String NAME = "name";
+    private static final String NAME_TAGS = "name_tags";
+    private static final String PAGE_STORY_ID = "page_story_id";
     private static final String PICTURE = "picture";
     private static final String PLACE = "place";
-    private static final String MESSAGE = "message";
+    private static final String SOURCE = "source";
+    private static final String UPDATED_TIME = "updated_time";
+    private static final String WIDTH = "width";
+
+    private static final String MESSAGE = "message"; // same as NAME
     private static final String PRIVACY = "privacy";
 
     private String mId;
+    private Album mAlbum;
+    private Long mBackDatetime;
+    private BackDatetimeGranularityEnum mBackDatetimeGranularity;
+    private Long mCreatedTime;
+    private User mFrom;
+    private Integer mHeight;
+    private String mIcon;
+    private ImageSource[] mImageSources;
+    private String mLink;
+    private String mName;
+    private String mPageStoryId;
+    private String mPicture;
+    private Place mPlace;
     private String mSource;
+    private Long mUpdatedTime;
+    private Integer mWidth;
 
     private String mDescription = null;
     private String mPlaceId = null;
@@ -38,6 +74,40 @@ public class Photo implements Publishable {
 	mParcelable = builder.mParcelable;
 	mBytes = builder.mBytes;
 	mPrivacy = builder.mPrivacy;
+    }
+
+    public enum BackDatetimeGranularityEnum {
+	YEAR("year"),
+	MONTH("month"),
+	DAY("day"),
+	HOUR("hour"),
+	MIN("min"),
+	NONE("none");
+
+	private String mValue;
+
+	private BackDatetimeGranularityEnum(String value) {
+	    mValue = value;
+	}
+
+	public String getValue() {
+	    return mValue;
+	}
+
+	public static BackDatetimeGranularityEnum getBackDatetimeGranularityEnum(String value) {
+	    for (BackDatetimeGranularityEnum granularityEnum : values()) {
+		if (granularityEnum.mValue.equals(value)) {
+		    return granularityEnum;
+		}
+	    }
+	    return BackDatetimeGranularityEnum.NONE;
+	}
+    }
+
+    public static class ImageSource {
+	private Integer mHeight;
+	private String mSource;
+	private Integer mWidth;
     }
 
     @Override
@@ -97,8 +167,7 @@ public class Photo implements Publishable {
 	if (mParcelable != null) {
 	    bundle.putParcelable(PICTURE, mParcelable);
 	}
-
-	if (mBytes != null) {
+	else if (mBytes != null) {
 	    bundle.putByteArray(PICTURE, mBytes);
 	}
 

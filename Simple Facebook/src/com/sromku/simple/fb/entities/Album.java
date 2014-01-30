@@ -8,7 +8,7 @@ import com.facebook.model.GraphObject;
  * Album entity
  * 
  * @author sromku
- * @see https://developers.facebook.com/docs/reference/api/album/
+ * @see https://developers.facebook.com/docs/reference/api/album
  */
 public class Album {
     private final GraphObject mGraphObject;

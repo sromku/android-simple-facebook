@@ -1,8 +1,10 @@
 package com.sromku.simple.fb.entities;
 
-import org.json.JSONObject;
+import java.util.List;
 
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
+import com.sromku.simple.fb.utils.Utils.Converter;
 
 public class Checkins {
     public static final String ID = "id";
@@ -18,41 +20,68 @@ public class Checkins {
     public static final String TYPE = "type";
 
     private final GraphObject mGraphObject;
-    private String mId = null;
-    private String mFromId = null;
-    private String mMessage = null;
-    private String mAplicationId = null;
-    private Place mPlace = null;
-    private String mCreatedTime;
+
+    private Application mApplication;
+    private List<Comment> mComments;
+    private Long mCreatedTime;
+    private User mFrom;
+    private String mId;
+    private List<Like> mLikes;
+    private String mMessage;
+    private Place mPlace;
+    private List<Tag> mTags;
 
     private Checkins(GraphObject graphObject) {
 	mGraphObject = graphObject;
 
 	if (mGraphObject != null) {
-	    // id
-	    mId = String.valueOf(mGraphObject.getProperty("id"));
+
+	    // create application
+	    GraphObject applicationGraphObject = graphObject.getPropertyAs(APPLICATION, GraphObject.class);
+	    mApplication = Application.create(applicationGraphObject);
+
+	    // create comments
+	    Utils.createList(mGraphObject, COMMENTS, new Converter<Comment>() {
+		@Override
+		public Comment convert(GraphObject graphObject) {
+		    return Comment.create(graphObject);
+		}
+	    });
+
+	    // created time
+	    mCreatedTime = Long.valueOf(String.valueOf(mGraphObject.getProperty(CREATED_TIME)));
 
 	    // from
-	    JSONObject jsonObject = (JSONObject) mGraphObject.getProperty("from");
-	    mFromId = String.valueOf(jsonObject.optString("id"));
+	    mFrom = Utils.createUser(graphObject, FROM);
+
+	    // id
+	    mId = String.valueOf(mGraphObject.getProperty(ID));
+
+	    // create likes
+	    Utils.createList(mGraphObject, LIKES, new Converter<Like>() {
+		@Override
+		public Like convert(GraphObject graphObject) {
+		    return Like.create(graphObject);
+		}
+	    });
 
 	    // message
-	    mMessage = String.valueOf(mGraphObject.getProperty("message"));
+	    mMessage = String.valueOf(mGraphObject.getProperty(MESSAGE));
 
-	    // aplication
-	    jsonObject = (JSONObject) mGraphObject.getProperty("application");
-	    mAplicationId = String.valueOf(jsonObject.optString("id"));
-
-	    /*
-	     * place
-	     */
-	    GraphObject graphObjectPlace = graphObject.getPropertyAs("place", GraphObject.class);
+	    // place
+	    GraphObject graphObjectPlace = graphObject.getPropertyAs(PLACE, GraphObject.class);
 	    if (graphObjectPlace != null) {
 		mPlace = Place.create(graphObjectPlace);
 	    }
 
-	    // created time
-	    mCreatedTime = String.valueOf(mGraphObject.getProperty("created_time"));
+	    // create tags
+	    Utils.createList(mGraphObject, TAGS, new Converter<Tag>() {
+		@Override
+		public Tag convert(GraphObject graphObject) {
+		    return Tag.create(graphObject);
+		}
+	    });
+
 	}
     }
 
@@ -60,52 +89,40 @@ public class Checkins {
 	return new Checkins(graphObject);
     }
 
+    public Application getApplication() {
+	return mApplication;
+    }
+    
+    public List<Comment> getComments() {
+	return mComments;
+    }
+    
+    public Long getCreatedTime() {
+	return mCreatedTime;
+    }
+    
+    public User getFrom() {
+	return mFrom;
+    }
+    
     public String getId() {
 	return mId;
     }
-
-    public void setId(String mId) {
-	this.mId = mId;
+    
+    public List<Like> getLikes() {
+	return mLikes;
+    }
+    
+    public String getMessage() {
+	return mMessage;
     }
 
     public Place getPlace() {
 	return mPlace;
     }
 
-    public void setPlace(Place mPlace) {
-	this.mPlace = mPlace;
+    public List<Tag> getTags() {
+	return mTags;
     }
-
-    public String getFromId() {
-	return mFromId;
-    }
-
-    public void setFromId(String mFromId) {
-	this.mFromId = mFromId;
-    }
-
-    public String getMessage() {
-	return mMessage;
-    }
-
-    public void setMessage(String mMessage) {
-	this.mMessage = mMessage;
-    }
-
-    public String getAplicationId() {
-	return mAplicationId;
-    }
-
-    public void setAplicationId(String mAplicationId) {
-	this.mAplicationId = mAplicationId;
-    }
-
-    public String getCreatedTime() {
-	return mCreatedTime;
-    }
-
-    public void setCreatedTime(String mCreatedTime) {
-	this.mCreatedTime = mCreatedTime;
-    }
-
+    
 }

@@ -59,6 +59,10 @@ public class Work {
 	property = graphObject.getProperty(END_DATE);
 	mEndDate = String.valueOf(property);
     }
+    
+    public static Work create(GraphObject graphObject) {
+	return new Work(graphObject);
+    }
 
     private static String getName(GraphObject graphObject, String property) {
 	JSONObject jsonObject = (JSONObject) graphObject.getProperty(property);
@@ -67,10 +71,6 @@ public class Work {
 	    return name;
 	}
 	return null;
-    }
-
-    public static Work create(GraphObject graphObject) {
-	return new Work(graphObject);
     }
 
     public String getEmployer() {

@@ -1,21 +1,17 @@
 package com.sromku.simple.fb.entities;
 
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 public class AppRequest {
 
     private static final String ID = "id";
-    private static final String NAME = "name";
 
     private final GraphObject mGraphObject;
-    private String mRequestId = null;
-    private String mAppId = null;
-    private String mAppName = null;
-    private String mAppNamespace = null;
-    private User mTo = null;
-    private User mFrom = null;
+    private String mRequestId;
+    private Application mApplication;
+    private User mTo;
+    private User mFrom;
     private String mData;
     private String mMessage;
     private Long mCreatedTime;
@@ -26,24 +22,15 @@ public class AppRequest {
 	// request id
 	mRequestId = String.valueOf(graphObject.getProperty(ID));
 	
-	// application name
-	mAppName = getPropertyInsideProperty(graphObject, "application", NAME);
-	
-	// application namespace
-	mAppNamespace = getPropertyInsideProperty(graphObject, "application", "namespace");
-	
-	// application id
-	mAppId = getPropertyInsideProperty(graphObject, "application", ID);
+	// create application
+	GraphObject applicationGraphObject = graphObject.getPropertyAs("application", GraphObject.class);
+	mApplication = Application.create(applicationGraphObject);
 	
 	// to
-	String toId = getPropertyInsideProperty(graphObject, "to", ID);
-	String toName = getPropertyInsideProperty(graphObject, "to", NAME);
-	mTo = createUser(toId, toName);
+	mTo = Utils.createUser(graphObject, "to");
 	
 	// from
-	String fromId = getPropertyInsideProperty(graphObject, "from", ID);
-	String fromName = getPropertyInsideProperty(graphObject, "from", NAME);
-	mFrom = createUser(fromId, fromName);
+	mFrom = Utils.createUser(graphObject, "from");
 	
 	// data
 	mData = String.valueOf(graphObject.getProperty("data"));
@@ -67,16 +54,8 @@ public class AppRequest {
 	return mRequestId;
     }
 
-    public String getAppId() {
-	return mAppId;
-    }
-
-    public String getAppName() {
-	return mAppName;
-    }
-
-    public String getAppNamespace() {
-	return mAppNamespace;
+    public Application getApplication() {
+	return mApplication;
     }
 
     public User getTo() {
@@ -97,27 +76,5 @@ public class AppRequest {
 
     public Long getCreatedTime() {
 	return mCreatedTime;
-    }
-
-    private User createUser(final String id, final String name) {
-	User user = new User() {
-
-	    @Override
-	    public String getName() {
-		return name;
-	    }
-
-	    @Override
-	    public String getId() {
-		return id;
-	    }
-	};
-	return user;
-    }
-    
-    private String getPropertyInsideProperty(GraphObject graphObject, String parent, String child) {
-	JSONObject jsonObject = (JSONObject) graphObject.getProperty(parent);
-	String value = String.valueOf(jsonObject.opt(child));
-	return value;
     }
 }
