@@ -7,9 +7,10 @@ import com.sromku.simple.fb.Permission;
 public interface Publishable {
 
     /**
-     * Is used for publishing actions
+     * Is used for publishing actions. This bundle is actually contains what is
+     * published to Facebook.
      * 
-     * @return
+     * @return The bundle with the data.
      */
     Bundle getBundle();
 

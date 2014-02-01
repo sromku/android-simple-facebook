@@ -184,13 +184,27 @@ public class Utils {
 	return Long.valueOf(String.valueOf(graphObject.getProperty(property)));
     }
     
+    public static Boolean getPropertyBoolean(GraphObject graphObject, String property) {
+	return Boolean.valueOf(String.valueOf(graphObject.getProperty(property)));
+    }
+    
     public static Integer getPropertyInteger(GraphObject graphObject, String property) {
 	return Integer.valueOf(String.valueOf(graphObject.getProperty(property)));
     }
+    
+    public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
+	return graphObject.getPropertyAs(property, GraphObject.class);
+    }
 
     public static User createUser(GraphObject graphObject, String parent) {
-	final String id = getPropertyInsideProperty(graphObject, parent, "id");
-	final String name = getPropertyInsideProperty(graphObject, parent, "name");
+	GraphObject userGraphObject = getPropertyGraphObject(graphObject, parent);
+	return createUser(userGraphObject);
+    }
+    
+    public static User createUser(GraphObject graphObject) {
+	final String id = String.valueOf(graphObject.getProperty("id"));
+	final String name = String.valueOf(graphObject.getProperty("name"));
+	
 	User user = new User() {
 	    @Override
 	    public String getName() {
@@ -202,6 +216,7 @@ public class Utils {
 		return id;
 	    }
 	};
+	
 	return user;
     }
 }

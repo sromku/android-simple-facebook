@@ -3,9 +3,13 @@ package com.sromku.simple.fb;
 import com.facebook.internal.SessionAuthorizationType;
 
 /**
+ * Hopefully all facebook permissions. 
  * @author sromku
+ * @see https://developers.facebook.com/docs/reference/login/
+ * @see https://developers.facebook.com/docs/reference/fql/permissions/
  */
 public enum Permission {
+    
     BASIC_INFO("basic_info", Type.READ),
 
     USER_ABOUT_ME("user_about_me", Type.READ),
@@ -87,6 +91,7 @@ public enum Permission {
 
     PUBLISH_ACTION("publish_actions", Type.PUBLISH),
     PUBLISH_STREAM("publish_stream", Type.PUBLISH),
+    
     ADS_MANAGMENT("ads_management", Type.PUBLISH),
     CREATE_EVENT("create_event", Type.PUBLISH),
     RSVP_EVENT("rsvp_event", Type.PUBLISH),

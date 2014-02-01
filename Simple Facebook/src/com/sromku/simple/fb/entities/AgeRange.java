@@ -1,5 +1,8 @@
 package com.sromku.simple.fb.entities;
 
+/**
+ * @author sromku
+ */
 public class AgeRange {
 
     private final String mMin;

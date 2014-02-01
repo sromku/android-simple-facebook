@@ -2,6 +2,7 @@ package com.sromku.simple.fb.entities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,15 +11,17 @@ import android.os.Parcelable;
 
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.Privacy;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Utils;
+import com.sromku.simple.fb.utils.Utils.Converter;
 
 /**
  * @author sromku
  * @see https://developers.facebook.com/docs/graph-api/reference/photo
  */
 public class Photo implements Publishable {
+
     private static final String ID = "id";
     private static final String ALBUM = "album";
     private static final String BACKDATED_TIME = "backdated_time";
@@ -29,85 +32,114 @@ public class Photo implements Publishable {
     private static final String ICON = "icon";
     private static final String IMAGES = "images";
     private static final String LINK = "link";
-    private static final String NAME = "name";
-    private static final String NAME_TAGS = "name_tags";
     private static final String PAGE_STORY_ID = "page_story_id";
     private static final String PICTURE = "picture";
     private static final String PLACE = "place";
     private static final String SOURCE = "source";
     private static final String UPDATED_TIME = "updated_time";
     private static final String WIDTH = "width";
-
+    private static final String NAME = "name";
     private static final String MESSAGE = "message"; // same as NAME
     private static final String PRIVACY = "privacy";
 
     private String mId;
     private Album mAlbum;
     private Long mBackDatetime;
-    private BackDatetimeGranularityEnum mBackDatetimeGranularity;
+    private BackDatetimeGranularity mBackDatetimeGranularity;
     private Long mCreatedTime;
     private User mFrom;
     private Integer mHeight;
     private String mIcon;
-    private ImageSource[] mImageSources;
+    private List<ImageSource> mImageSources;
     private String mLink;
     private String mName;
     private String mPageStoryId;
     private String mPicture;
-    private Place mPlace;
     private String mSource;
     private Long mUpdatedTime;
     private Integer mWidth;
+    private Place mPlace;
 
-    private String mDescription = null;
     private String mPlaceId = null;
     private Parcelable mParcelable = null;
     private byte[] mBytes = null;
     private Privacy mPrivacy = null;
 
-    private Photo() {
+    private Photo(GraphObject graphObject) {
+
+	// id
+	mId = Utils.getPropertyString(graphObject, ID);
+
+	// album
+	mAlbum = Album.create(graphObject.getPropertyAs(ALBUM, GraphObject.class));
+
+	// back date time
+	mBackDatetime = Utils.getPropertyLong(graphObject, BACKDATED_TIME);
+
+	// back date time granularity
+	String granularity = Utils.getPropertyString(graphObject, BACKDATED_TIME_GRANULARITY);
+	mBackDatetimeGranularity = BackDatetimeGranularity.fromValue(granularity);
+
+	// created time
+	mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
+
+	// from
+	mFrom = Utils.createUser(graphObject, FROM);
+
+	// height
+	mHeight = Utils.getPropertyInteger(graphObject, HEIGHT);
+
+	// icon
+	mIcon = Utils.getPropertyString(graphObject, ICON);
+
+	// image sources
+	mImageSources = Utils.createList(graphObject, IMAGES, new Converter<ImageSource>() {
+	    @Override
+	    public ImageSource convert(GraphObject graphObject) {
+		ImageSource imageSource = new ImageSource();
+		imageSource.mHeight = Utils.getPropertyInteger(graphObject, HEIGHT);
+		imageSource.mWidth = Utils.getPropertyInteger(graphObject, WIDTH);
+		imageSource.mSource = Utils.getPropertyString(graphObject, SOURCE);
+		return imageSource;
+	    }
+	});
+
+	// link
+	mLink = Utils.getPropertyString(graphObject, LINK);
+
+	// name
+	mName = Utils.getPropertyString(graphObject, NAME);
+
+	// page story id
+	mPageStoryId = Utils.getPropertyString(graphObject, PAGE_STORY_ID);
+
+	// picture
+	mPicture = Utils.getPropertyString(graphObject, PICTURE);
+
+	// source
+	mSource = Utils.getPropertyString(graphObject, SOURCE);
+
+	// updated time
+	mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
+
+	// width
+	mWidth = Utils.getPropertyInteger(graphObject, WIDTH);
+
+	// place
+	mPlace = Place.create(graphObject.getPropertyAs(PLACE, GraphObject.class));
+
     }
 
-    public Photo(Builder builder) {
-	mDescription = builder.mDescription;
+    private Photo(Builder builder) {
+	mName = builder.mName;
 	mPlaceId = builder.mPlaceId;
 	mParcelable = builder.mParcelable;
 	mBytes = builder.mBytes;
 	mPrivacy = builder.mPrivacy;
     }
 
-    public enum BackDatetimeGranularityEnum {
-	YEAR("year"),
-	MONTH("month"),
-	DAY("day"),
-	HOUR("hour"),
-	MIN("min"),
-	NONE("none");
-
-	private String mValue;
-
-	private BackDatetimeGranularityEnum(String value) {
-	    mValue = value;
-	}
-
-	public String getValue() {
-	    return mValue;
-	}
-
-	public static BackDatetimeGranularityEnum getBackDatetimeGranularityEnum(String value) {
-	    for (BackDatetimeGranularityEnum granularityEnum : values()) {
-		if (granularityEnum.mValue.equals(value)) {
-		    return granularityEnum;
-		}
-	    }
-	    return BackDatetimeGranularityEnum.NONE;
-	}
-    }
-
-    public static class ImageSource {
-	private Integer mHeight;
-	private String mSource;
-	private Integer mWidth;
+    public static Photo create(GraphObject graphObject) {
+	return new Photo(graphObject);
     }
 
     @Override
@@ -120,13 +152,6 @@ public class Photo implements Publishable {
 	return Permission.PUBLISH_STREAM;
     }
 
-    public static Photo create(GraphObject graphObject) {
-	Photo photo = new Photo();
-	photo.mId = String.valueOf(graphObject.getProperty("id"));
-	photo.mSource = String.valueOf(graphObject.getProperty("source"));
-	return photo;
-    }
-
     /**
      * Get id of the photo
      * 
@@ -136,21 +161,76 @@ public class Photo implements Publishable {
 	return mId;
     }
 
-    /**
-     * Get source of the photo
-     * 
-     * @return
-     */
+    public Album getAlbum() {
+	return mAlbum;
+    }
+
+    public Long getBackDateTime() {
+	return mBackDatetime;
+    }
+
+    public BackDatetimeGranularity getBackDatetimeGranularity() {
+	return mBackDatetimeGranularity;
+    }
+
+    public Long getCreatedTime() {
+	return mCreatedTime;
+    }
+
+    public User getFrom() {
+	return mFrom;
+    }
+
+    public Integer getHeight() {
+	return mHeight;
+    }
+
+    public String getIcon() {
+	return mIcon;
+    }
+
+    public List<ImageSource> getImageSources() {
+	return mImageSources;
+    }
+
+    public String getLink() {
+	return mLink;
+    }
+
+    public String getName() {
+	return mName;
+    }
+
+    public String getPageStoryId() {
+	return mPageStoryId;
+    }
+
+    public String getPicture() {
+	return mPicture;
+    }
+
+    public Place getPlace() {
+	return mPlace;
+    }
+
     public String getSource() {
 	return mSource;
+    }
+
+    public Long getUpdatedTime() {
+	return mUpdatedTime;
+    }
+
+    public Integer getWidth() {
+	return mWidth;
     }
 
     public Bundle getBundle() {
 	Bundle bundle = new Bundle();
 
 	// add description
-	if (mDescription != null) {
-	    bundle.putString(MESSAGE, mDescription);
+	if (mName != null) {
+	    bundle.putString(MESSAGE, mName);
 	}
 
 	// add place
@@ -174,8 +254,58 @@ public class Photo implements Publishable {
 	return bundle;
     }
 
+    public enum BackDatetimeGranularity {
+	YEAR("year"),
+	MONTH("month"),
+	DAY("day"),
+	HOUR("hour"),
+	MIN("min"),
+	NONE("none");
+
+	private String mValue;
+
+	private BackDatetimeGranularity(String value) {
+	    mValue = value;
+	}
+
+	public String getValue() {
+	    return mValue;
+	}
+
+	public static BackDatetimeGranularity fromValue(String value) {
+	    for (BackDatetimeGranularity granularityEnum : values()) {
+		if (granularityEnum.mValue.equals(value)) {
+		    return granularityEnum;
+		}
+	    }
+	    return BackDatetimeGranularity.NONE;
+	}
+    }
+
+    public static class ImageSource {
+
+	private Integer mHeight;
+	private String mSource;
+	private Integer mWidth;
+
+	public Integer getHeight() {
+	    return mHeight;
+	}
+
+	public Integer getWidth() {
+	    return mWidth;
+	}
+
+	public String getSource() {
+	    return mSource;
+	}
+    }
+
+    /**
+     * Builder for preparing the Photo object to be published.
+     */
     public static class Builder {
-	private String mDescription = null;
+	private String mName = null;
 	private String mPlaceId = null;
 
 	private Parcelable mParcelable = null;
@@ -198,7 +328,7 @@ public class Photo implements Publishable {
 	/**
 	 * Set photo to be published
 	 * 
-	 * @param bitmap
+	 * @param file
 	 */
 	public Builder setImage(File file) {
 	    try {
@@ -213,7 +343,7 @@ public class Photo implements Publishable {
 	/**
 	 * Set photo to be published
 	 * 
-	 * @param bitmap
+	 * @param bytes
 	 */
 	public Builder setImage(byte[] bytes) {
 	    mBytes = bytes;
@@ -221,13 +351,13 @@ public class Photo implements Publishable {
 	}
 
 	/**
-	 * Add description to the photo
+	 * Add name/description to the photo
 	 * 
-	 * @param description
-	 *            The description of the photo
+	 * @param name
+	 *            The name/description of the photo
 	 */
-	public Builder setDescription(String description) {
-	    mDescription = description;
+	public Builder setName(String name) {
+	    mName = name;
 	    return this;
 	}
 
@@ -247,7 +377,7 @@ public class Photo implements Publishable {
 	 * 
 	 * @param privacy
 	 *            The privacy setting of the photo
-	 * @see com.sromku.simple.fb.Privacy
+	 * @see com.sromku.simple.fb.entities.Privacy
 	 */
 	public Builder setPrivacy(Privacy privacy) {
 	    mPrivacy = privacy;

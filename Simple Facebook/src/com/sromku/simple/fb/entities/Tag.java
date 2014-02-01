@@ -1,27 +1,14 @@
 package com.sromku.simple.fb.entities;
 
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 public class Tag {
 
     private User mUser;
     
     private Tag(GraphObject graphObject) {
-	
-	final String id = String.valueOf(graphObject.getProperty("id"));
-	final String name = String.valueOf(graphObject.getProperty("name"));
-	
-	mUser = new User() {
-	    @Override
-	    public String getName() {
-		return name;
-	    }
-
-	    @Override
-	    public String getId() {
-		return id;
-	    }
-	};
+	mUser = Utils.createUser(graphObject);
     }
     
     public static Tag create(GraphObject graphObject) {
