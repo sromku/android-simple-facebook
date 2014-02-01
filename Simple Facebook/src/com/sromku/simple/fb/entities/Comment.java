@@ -33,7 +33,7 @@ public class Comment {
     private Boolean mCanRemove;
     private Integer mCommentCount;
     private Long mCreatedTime;
-    private String mFrom;
+    private User mFrom;
     private Integer mLikeCount;
     private String mMessage;
     private List<String> mMessageTags;
@@ -42,28 +42,28 @@ public class Comment {
 
     private Comment(GraphObject graphObject) {
 	// id
-	mId = String.valueOf(graphObject.getProperty(ID));
+	mId = Utils.getPropertyString(graphObject, ID);
 
 	// can comment
-	mCanComment = Boolean.valueOf(String.valueOf(graphObject.getProperty(CAN_COMMENT)));
+	mCanComment = Utils.getPropertyBoolean(graphObject, CAN_COMMENT);
 
 	// can remove
-	mCanRemove = Boolean.valueOf(String.valueOf(graphObject.getProperty(CAN_REMOVE)));
+	mCanRemove = Utils.getPropertyBoolean(graphObject, CAN_REMOVE);
 
 	// comment count
-	mCommentCount = Integer.valueOf(String.valueOf(graphObject.getProperty(COMMENT_COUNT)));
+	mCommentCount = Utils.getPropertyInteger(graphObject, COMMENT_COUNT);
 
 	// created time
-	mCreatedTime = Long.valueOf(String.valueOf(graphObject.getProperty(CREATED_TIME)));
+	mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
 
 	// from
-	mFrom = String.valueOf(graphObject.getProperty(FROM));
+	mFrom = Utils.createUser(graphObject,FROM);
 
 	// like count
-	mLikeCount = Integer.valueOf(String.valueOf(graphObject.getProperty(LIKE_COUNT)));
+	mLikeCount = Utils.getPropertyInteger(graphObject, LIKE_COUNT);
 
 	// message
-	mMessage = String.valueOf(graphObject.getProperty(MESSAGE));
+	mMessage = Utils.getPropertyString(graphObject, MESSAGE);
 
 	// message tags
 	mMessageTags = Utils.createList(graphObject, MESSAGE_TAGS, new Converter<String>() {
@@ -74,56 +74,89 @@ public class Comment {
 	});
 
 	// parent
-	mParent = Comment.create(graphObject.getPropertyAs(PARENT, GraphObject.class));
+	mParent = Comment.create(Utils.getPropertyGraphObject(graphObject, PARENT));
 
 	// user likes
-	mUserLikes = Boolean.valueOf(String.valueOf(graphObject.getProperty(USER_LIKES)));
+	mUserLikes = Utils.getPropertyBoolean(graphObject, USER_LIKES);
     }
 
     public static Comment create(GraphObject graphObject) {
 	return new Comment(graphObject);
     }
 
+    /**
+     * The comment Id.
+     */
     public String getId() {
 	return mId;
     }
 
+    /**
+     * Whether the viewer can reply to this comment.
+     */
     public Boolean getCanComment() {
 	return mCanComment;
     }
 
+    /**
+     * Whether the viewer can remove this comment.
+     */
     public Boolean getCanRemove() {
 	return mCanRemove;
     }
 
+    /**
+     * Number of replies to this comment.
+     */
     public Integer getCommentCount() {
 	return mCommentCount;
     }
 
+    /**
+     * The time this comment was made.
+     */
     public Long getCreatedTime() {
 	return mCreatedTime;
     }
 
-    public String getFrom() {
+    /**
+     * The person that made this comment.
+     */
+    public User getFrom() {
 	return mFrom;
     }
 
+    /**
+     * Number of times this comment was liked.
+     */
     public Integer getLikeCount() {
 	return mLikeCount;
     }
 
+    /**
+     * The comment text.
+     */
     public String getMessage() {
 	return mMessage;
     }
 
+    /**
+     * Profiles tagged in mentions in the message.
+     */
     public List<String> getMessageTags() {
 	return mMessageTags;
     }
 
+    /**
+     * For comment replies, this the comment that this is a reply to.
+     */
     public Comment getParent() {
 	return mParent;
     }
 
+    /**
+     * Whether the viewer has liked this comment.
+     */
     public Boolean getUserLikes() {
 	return mUserLikes;
     }

@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.entities;
 
 /**
+ * Age range (min-max) of the user.
  * @author sromku
  */
 public class AgeRange {

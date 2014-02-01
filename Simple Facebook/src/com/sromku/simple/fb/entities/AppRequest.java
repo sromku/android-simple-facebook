@@ -3,9 +3,18 @@ package com.sromku.simple.fb.entities;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 
+/**
+ * Application request that is sent by one user to another.
+ */
 public class AppRequest {
 
     private static final String ID = "id";
+    private static final String APPLICATION = "application";
+    private static final String TO = "to";
+    private static final String FROM = "from";
+    private static final String DATA = "data";
+    private static final String MESSAGE = "message";
+    private static final String CREATED_TIME = "created_time";
 
     private final GraphObject mGraphObject;
     private String mRequestId;
@@ -20,26 +29,25 @@ public class AppRequest {
 	mGraphObject = graphObject;
 
 	// request id
-	mRequestId = String.valueOf(graphObject.getProperty(ID));
+	mRequestId = Utils.getPropertyString(graphObject, ID);
 	
 	// create application
-	GraphObject applicationGraphObject = graphObject.getPropertyAs("application", GraphObject.class);
-	mApplication = Application.create(applicationGraphObject);
+	mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
 	
 	// to
-	mTo = Utils.createUser(graphObject, "to");
+	mTo = Utils.createUser(graphObject, TO);
 	
 	// from
-	mFrom = Utils.createUser(graphObject, "from");
+	mFrom = Utils.createUser(graphObject, FROM);
 	
 	// data
-	mData = String.valueOf(graphObject.getProperty("data"));
+	mData = Utils.getPropertyString(graphObject, DATA);
 	
 	// message
-	mMessage = String.valueOf(graphObject.getProperty("message"));
+	mMessage = Utils.getPropertyString(graphObject, MESSAGE);
 	
 	// create time
-	mCreatedTime = Long.valueOf(String.valueOf(mGraphObject.getProperty("created_time"))); 
+	mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME); 
     }
 
     public static AppRequest create(GraphObject graphObject) {
@@ -54,26 +62,44 @@ public class AppRequest {
 	return mRequestId;
     }
 
+    /**
+     * The application used to send the request.
+     */
     public Application getApplication() {
 	return mApplication;
     }
 
+    /**
+     * The user who got the request.
+     */
     public User getTo() {
 	return mTo;
     }
 
+    /**
+     * The user who sent the request. 
+     */
     public User getFrom() {
 	return mFrom;
     }
 
+    /**
+     * Optional data passed with the request for tracking purposes.
+     */
     public String getData() {
 	return mData;
     }
 
+    /**
+     * The message included with the request.
+     */
     public String getMessage() {
 	return mMessage;
     }
 
+    /**
+     * Timestamp that indicates when the request was sent.
+     */
     public Long getCreatedTime() {
 	return mCreatedTime;
     }

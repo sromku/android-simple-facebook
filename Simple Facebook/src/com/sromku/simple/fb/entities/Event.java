@@ -34,7 +34,7 @@ public class Event {
      * picture in the fields param; example: ?fields=id,name,picture)
      */
     private String mPicture;
-    private EventPrivacyType mPrivacy;
+    private EventPrivacy mPrivacy;
     private Long mStartTime;
     private String mTicketUri;
     private Long mUpdatedTime;
@@ -42,48 +42,48 @@ public class Event {
 
     private Event(GraphObject graphObject) {
 	// description
-	mDescription = String.valueOf(String.valueOf(graphObject.getProperty(DESCRIPTION)));
+	mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
 
 	// end time
-	mEndTime = Long.valueOf(String.valueOf(graphObject.getProperty(END_TIME)));
+	mEndTime = Utils.getPropertyLong(graphObject, END_TIME);
 
 	// id
-	mId = String.valueOf(String.valueOf(graphObject.getProperty(ID)));
+	mId = Utils.getPropertyString(graphObject, ID);
 
 	// location
-	mLocation = String.valueOf(String.valueOf(graphObject.getProperty(LOCATION)));
+	mLocation = Utils.getPropertyString(graphObject, LOCATION);
 
 	// name
-	mName = String.valueOf(String.valueOf(graphObject.getProperty(NAME)));
+	mName = Utils.getPropertyString(graphObject, NAME);
 
 	// owner
 	mOwner = Utils.createUser(graphObject, OWNER);
 
 	// picture
-	mPicture = String.valueOf(String.valueOf(graphObject.getProperty(PICTURE)));
+	mPicture = Utils.getPropertyString(graphObject, PICTURE);
 
 	// private
-	String privacy = String.valueOf(String.valueOf(graphObject.getProperty(PRIVACY)));
-	mPrivacy = EventPrivacyType.fromValue(privacy);
+	String privacy = Utils.getPropertyString(graphObject, PRIVACY);
+	mPrivacy = EventPrivacy.fromValue(privacy);
 
 	// start time
-	mStartTime = Long.valueOf(String.valueOf(graphObject.getProperty(START_TIME)));
+	mStartTime = Utils.getPropertyLong(graphObject, START_TIME);
 
 	// ticket uri
-	mTicketUri = String.valueOf(String.valueOf(graphObject.getProperty(TICKET_URI)));
+	mTicketUri = Utils.getPropertyString(graphObject, TICKET_URI);
 
 	// updated time
-	mUpdatedTime = Long.valueOf(String.valueOf(graphObject.getProperty(UPDATED_TIME)));
+	mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
 
 	// venue
-	mVenue = Place.create(graphObject.getPropertyAs(VENUE, GraphObject.class));
+	mVenue = Place.create(Utils.getPropertyGraphObject(graphObject, VENUE));
     }
 
     public static Event create(GraphObject graphObject) {
 	return new Event(graphObject);
     }
 
-    public static enum EventPrivacyType {
+    public static enum EventPrivacy {
 	OPEN("open"),
 	SECRET("secret"),
 	FRIENDS("friends"),
@@ -91,7 +91,7 @@ public class Event {
 
 	private String value;
 
-	private EventPrivacyType(String value) {
+	private EventPrivacy(String value) {
 	    this.value = value;
 	}
 
@@ -99,8 +99,8 @@ public class Event {
 	    return value;
 	}
 
-	public static EventPrivacyType fromValue(String value) {
-	    for (EventPrivacyType privacyEnum : values()) {
+	public static EventPrivacy fromValue(String value) {
+	    for (EventPrivacy privacyEnum : values()) {
 		if (privacyEnum.value.equals(value)) {
 		    return privacyEnum;
 		}
@@ -109,50 +109,86 @@ public class Event {
 	}
     }
 
+    /**
+     * The long-form description of the event.
+     */
     public String getDescription() {
 	return mDescription;
     }
 
+    /**
+     * The end time of the event, if one has been set.
+     */
     public Long getEndTime() {
 	return mEndTime;
     }
 
+    /**
+     * The event Id.
+     */
     public String getId() {
 	return mId;
     }
 
+    /**
+     * The location for this event.
+     */
     public String getLocation() {
 	return mLocation;
     }
 
+    /**
+     * The event title.
+     */
     public String getName() {
 	return mName;
     }
 
+    /**
+     * The profile that created the event.
+     */
     public User getOwner() {
 	return mOwner;
     }
 
+    /**
+     * The URL of the event's picture.
+     */
     public String getPicture() {
 	return mPicture;
     }
 
-    public EventPrivacyType getPrivacy() {
+    /**
+     * The visibility of this event.
+     */
+    public EventPrivacy getPrivacy() {
 	return mPrivacy;
     }
-    
+
+    /**
+     * The start time of the event, as you want it to be displayed on facebook.
+     */
     public Long getStartTime() {
 	return mStartTime;
     }
-    
+
+    /**
+     * The URL to a location to buy tickets for this event (on Events for Pages only).
+     */
     public String getTicketUri() {
 	return mTicketUri;
     }
 
+    /**
+     * The last time the event was updated.
+     */
     public Long getUpdatedTime() {
 	return mUpdatedTime;
     }
 
+    /**
+     * The location of this event.
+     */
     public Place getVenue() {
 	return mVenue;
     }

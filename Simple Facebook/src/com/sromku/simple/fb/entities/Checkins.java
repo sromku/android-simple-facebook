@@ -6,6 +6,11 @@ import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
+/**
+ * A Checkin represents a single visit to a location.
+ * 
+ * @see https://developers.facebook.com/docs/reference/api/checkin
+ */
 public class Checkins {
     public static final String ID = "id";
     public static final String NAME = "name";
@@ -20,7 +25,6 @@ public class Checkins {
     public static final String TYPE = "type";
 
     private final GraphObject mGraphObject;
-
     private Application mApplication;
     private List<Comment> mComments;
     private Long mCreatedTime;
@@ -29,7 +33,7 @@ public class Checkins {
     private List<Like> mLikes;
     private String mMessage;
     private Place mPlace;
-    private List<Tag> mTags;
+    private List<User> mTags;
 
     private Checkins(GraphObject graphObject) {
 	mGraphObject = graphObject;
@@ -37,8 +41,7 @@ public class Checkins {
 	if (mGraphObject != null) {
 
 	    // create application
-	    GraphObject applicationGraphObject = graphObject.getPropertyAs(APPLICATION, GraphObject.class);
-	    mApplication = Application.create(applicationGraphObject);
+	    mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
 
 	    // create comments
 	    Utils.createList(mGraphObject, COMMENTS, new Converter<Comment>() {
@@ -49,13 +52,13 @@ public class Checkins {
 	    });
 
 	    // created time
-	    mCreatedTime = Long.valueOf(String.valueOf(mGraphObject.getProperty(CREATED_TIME)));
+	    mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
 
 	    // from
 	    mFrom = Utils.createUser(graphObject, FROM);
 
 	    // id
-	    mId = String.valueOf(mGraphObject.getProperty(ID));
+	    mId = Utils.getPropertyString(graphObject, ID);
 
 	    // create likes
 	    Utils.createList(mGraphObject, LIKES, new Converter<Like>() {
@@ -66,19 +69,16 @@ public class Checkins {
 	    });
 
 	    // message
-	    mMessage = String.valueOf(mGraphObject.getProperty(MESSAGE));
+	    mMessage = Utils.getPropertyString(graphObject, MESSAGE);
 
 	    // place
-	    GraphObject graphObjectPlace = graphObject.getPropertyAs(PLACE, GraphObject.class);
-	    if (graphObjectPlace != null) {
-		mPlace = Place.create(graphObjectPlace);
-	    }
+	    mPlace = Place.create(Utils.getPropertyGraphObject(graphObject, PLACE));
 
 	    // create tags
-	    Utils.createList(mGraphObject, TAGS, new Converter<Tag>() {
+	    Utils.createList(mGraphObject, TAGS, new Converter<User>() {
 		@Override
-		public Tag convert(GraphObject graphObject) {
-		    return Tag.create(graphObject);
+		public User convert(GraphObject graphObject) {
+		    return Utils.createUser(graphObject);
 		}
 	    });
 
@@ -89,40 +89,67 @@ public class Checkins {
 	return new Checkins(graphObject);
     }
 
+    /**
+     * Information about the application that made the checkin.
+     */
     public Application getApplication() {
 	return mApplication;
     }
-    
+
+    /**
+     * All of the comments on this checkin.
+     */
     public List<Comment> getComments() {
 	return mComments;
     }
-    
+
+    /**
+     * The time the checkin was created.
+     */
     public Long getCreatedTime() {
 	return mCreatedTime;
     }
-    
+
+    /**
+     * The ID and name of the user who made the checkin.
+     */
     public User getFrom() {
 	return mFrom;
     }
-    
+
+    /**
+     * The checkin Id.
+     */
     public String getId() {
 	return mId;
     }
-    
+
+    /**
+     * Users who like the checkin.
+     */
     public List<Like> getLikes() {
 	return mLikes;
     }
-    
+
+    /**
+     * The message the user added to the checkin.
+     */
     public String getMessage() {
 	return mMessage;
     }
 
+    /**
+     * Information about the Facebook Page that represents the location of the checkin.
+     */
     public Place getPlace() {
 	return mPlace;
     }
 
-    public List<Tag> getTags() {
+    /**
+     * The users the author tagged in the checkin.
+     */
+    public List<User> getTags() {
 	return mTags;
     }
-    
+
 }

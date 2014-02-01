@@ -1,19 +1,33 @@
 package com.sromku.simple.fb.entities;
 
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 /**
- * Album entity
+ * Album entity.
  * 
  * @author sromku
  * @see https://developers.facebook.com/docs/reference/api/album
  */
 public class Album {
+
+    private static final String ID = "id";
+    private static final String FROM = "from";
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String LOCATION = "location";
+    private static final String LINK = "link";
+    private static final String COUNT = "count";
+    private static final String PRIVACY = "privacy";
+    private static final String COVER_PHOTO = "cover_photo";
+    private static final String TYPE = "type";
+    private static final String CREATED_TIME = "created_time";
+    private static final String UPDATED_TIME = "updated_time";
+    private static final String CAN_UPLOAD = "can_upload";
+
     private final GraphObject mGraphObject;
     private String mId = null;
-    private String mFromId = null;
+    private User mFrom = null;
     private String mName = null;
     private String mDescription = null;
     private String mLocation = null;
@@ -30,46 +44,43 @@ public class Album {
 	mGraphObject = graphObject;
 
 	// id
-	mId = String.valueOf(mGraphObject.getProperty("id"));
+	mId = Utils.getPropertyString(graphObject, ID);
 
 	// from
-	JSONObject jsonObject = (JSONObject) mGraphObject.getProperty("from");
-	mFromId = String.valueOf(jsonObject.optString("id"));
+	mFrom = Utils.createUser(graphObject, FROM);
 
 	// name
-	mName = String.valueOf(mGraphObject.getProperty("name"));
+	mName = Utils.getPropertyString(graphObject, NAME);
 
 	// description
-	mDescription = String.valueOf(mGraphObject.getProperty("description"));
+	mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
 
 	// location
-	mLocation = String.valueOf(mGraphObject.getProperty("location"));
+	mLocation = Utils.getPropertyString(graphObject, LOCATION);
 
 	// link
-	mLink = String.valueOf(mGraphObject.getProperty("link"));
+	mLink = Utils.getPropertyString(graphObject, LINK);
 
 	// count
-	if (mGraphObject.getProperty("count") != null) {
-	    mCount = Integer.valueOf(String.valueOf(mGraphObject.getProperty("count")));
-	}
+	mCount = Utils.getPropertyInteger(graphObject, COUNT);
 
 	// privacy
-	mPrivacy = String.valueOf(mGraphObject.getProperty("privacy"));
+	mPrivacy = Utils.getPropertyString(graphObject, PRIVACY);
 
 	// cover photo
-	mCoverPhotoId = String.valueOf(mGraphObject.getProperty("cover_photo"));
+	mCoverPhotoId = Utils.getPropertyString(graphObject, COVER_PHOTO);
 
 	// type
-	mType = String.valueOf(mGraphObject.getProperty("type"));
+	mType = Utils.getPropertyString(graphObject, TYPE);
 
 	// created time
-	mCreatedTime = Long.valueOf(String.valueOf(mGraphObject.getProperty("created_time")));
+	mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
 
 	// updated time
-	mUpdatedTime = Long.valueOf(String.valueOf(mGraphObject.getProperty("updated_time")));
+	mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
 
 	// can upload
-	mCanUpload = Boolean.valueOf(String.valueOf(mGraphObject.getProperty("can_upload")));
+	mCanUpload = Utils.getPropertyBoolean(graphObject, CAN_UPLOAD);
     }
 
     /**
@@ -84,16 +95,14 @@ public class Album {
     }
 
     /**
-     * Return the graph object
-     * 
-     * @return
+     * Return the graph object.
      */
     public GraphObject getGraphObject() {
 	return mGraphObject;
     }
 
     /**
-     * The album id<br>
+     * The album id.
      * 
      * @return The album id
      */
@@ -102,16 +111,16 @@ public class Album {
     }
 
     /**
-     * The profile id that created this album
+     * The user who created this album.
      * 
-     * @return The profile id that created this album
+     * @return The user who created this album
      */
-    public String getFromId() {
-	return mFromId;
+    public User getFrom() {
+	return mFrom;
     }
 
     /**
-     * The title of the album
+     * The title of the album.
      * 
      * @return The title of the album
      */
@@ -120,7 +129,7 @@ public class Album {
     }
 
     /**
-     * The description of the album
+     * The description of the album.
      * 
      * @return The description of the album
      */
@@ -129,7 +138,7 @@ public class Album {
     }
 
     /**
-     * The location of the album
+     * The location of the album.
      * 
      * @return The location of the album
      */
@@ -138,7 +147,7 @@ public class Album {
     }
 
     /**
-     * A link to this album on Facebook
+     * A link to this album on Facebook.
      * 
      * @return A link to this album on Facebook
      */
@@ -147,7 +156,7 @@ public class Album {
     }
 
     /**
-     * The number of photos in this album
+     * The number of photos in this album.
      * 
      * @return The number of photos in this album
      */
@@ -156,7 +165,7 @@ public class Album {
     }
 
     /**
-     * The privacy settings for the album
+     * The privacy settings for the album.
      * 
      * @return The privacy settings for the album
      */
@@ -165,7 +174,7 @@ public class Album {
     }
 
     /**
-     * The album cover photo id
+     * The album cover photo id.
      * 
      * @return The album cover photo id
      */
@@ -174,7 +183,7 @@ public class Album {
     }
 
     /**
-     * The type of the album
+     * The type of the album.
      * 
      * @return The type of the album
      */
@@ -183,7 +192,7 @@ public class Album {
     }
 
     /**
-     * The time the photo album was initially created
+     * The time the photo album was initially created.
      * 
      * @return The time the photo album was initially created
      */
@@ -192,7 +201,7 @@ public class Album {
     }
 
     /**
-     * The last time the photo album was updated
+     * The last time the photo album was updated.
      * 
      * @return The last time the photo album was updated
      */

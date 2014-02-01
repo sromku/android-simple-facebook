@@ -6,6 +6,10 @@ import org.json.JSONObject;
 
 import com.facebook.model.GraphObject;
 
+/**
+ * @author sromku
+ * @see https://developers.facebook.com/docs/graph-api/reference/page
+ */
 public class Page {
 
     private final GraphObject mGraphObject;

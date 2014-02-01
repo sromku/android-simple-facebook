@@ -6,6 +6,10 @@ import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
+/**
+ * @author sromku
+ * @see https://developers.facebook.com/docs/reference/api/link
+ */
 public class Link {
 
     public static final String COMMENTS = "comments";
@@ -90,38 +94,65 @@ public class Link {
 	return mLikes;
     }
     
+    /**
+     * The time the message was published.
+     */
     public Long getCreatedTime() {
 	return mCreateTime;
     }
     
+    /**
+     * A description of the link (appears beneath the link caption).
+     */
     public String getDescription() {
 	return mDescription;
     }
     
+    /**
+     * The user that created the link.
+     */
     public User getFrom() {
 	return mFrom;
     }
     
+    /**
+     * A URL to the link icon that Facebook displays in the news feed.
+     */
     public String getIcon() {
 	return mIcon;
     }
     
+    /**
+     * The link Id.
+     */
     public String getId() {
 	return mId;
     }
     
+    /**
+     * The URL that was shared.
+     */
     public String getLink() {
 	return mLink;
     }
     
+    /**
+     * The optional message from the user about this link.
+     */
     public String getMessage() {
 	return mMessage;
     }
     
+    /**
+     * The name of the link.
+     */
     public String getName() {
 	return mName;
     }
     
+    /**
+     * A URL to the thumbnail image used in the link post.
+     */
     public String getPicture() {
 	return mPicture;
     }

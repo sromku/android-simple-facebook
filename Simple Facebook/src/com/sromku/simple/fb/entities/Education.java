@@ -1,13 +1,15 @@
 package com.sromku.simple.fb.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
+import com.sromku.simple.fb.utils.Utils.Converter;
 
+/**
+ * @author sromku
+ * @see https://developers.facebook.com/docs/reference/fql/user/
+ */
 public class Education {
     public static final String SCHOOL = "school";
     public static final String DEGREE = "degree";
@@ -15,57 +17,46 @@ public class Education {
     public static final String CONCENTRATION = "concentration";
     public static final String TYPE = "type";
     public static final String NAME = "name";
+    public static final String WITH = "with";
 
     private String mSchool;
     private String mDegree;
     private String mYear;
-    private List<String> mConcentration = new ArrayList<String>();
+    private List<String> mConcentration;
+    private List<User> mWith;
     private String mType;
 
     private Education(GraphObject graphObject) {
-	/*
-	 * school
-	 */
-	JSONObject jsonObject = (JSONObject) graphObject.getProperty(SCHOOL);
-	if (jsonObject != null) {
-	    mSchool = jsonObject.optString(NAME);
-	}
 
-	/*
-	 * degree
-	 */
-	jsonObject = (JSONObject) graphObject.getProperty(DEGREE);
-	if (jsonObject != null) {
-	    mDegree = jsonObject.optString(NAME);
-	}
+	// school
+	mSchool = Utils.getPropertyInsideProperty(graphObject, SCHOOL, NAME);
 
-	/*
-	 * degree
-	 */
-	jsonObject = (JSONObject) graphObject.getProperty(YEAR);
-	if (jsonObject != null) {
-	    mYear = jsonObject.optString(NAME);
-	}
+	// degree
+	mDegree = Utils.getPropertyInsideProperty(graphObject, DEGREE, NAME);
+
+	// year
+	mYear = Utils.getPropertyInsideProperty(graphObject, YEAR, NAME);
 
 	/*
 	 * concentration
 	 */
-	JSONArray jsonArray = (JSONArray) graphObject.getProperty(CONCENTRATION);
-	if (jsonArray != null) {
-	    for (int i = 0; i < jsonArray.length(); i++) {
-		jsonObject = jsonArray.optJSONObject(i);
-		if (jsonObject != null) {
-		    String concentration = jsonObject.optString(NAME);
-		    mConcentration.add(concentration);
-		}
+	mConcentration = Utils.createList(graphObject, CONCENTRATION, new Converter<String>() {
+	    @Override
+	    public String convert(GraphObject graphObject) {
+		return Utils.getPropertyString(graphObject, NAME);
 	    }
-	}
+	});
 
-	/*
-	 * type
-	 */
-	String type = String.valueOf(graphObject.getProperty(TYPE));
-	mType = type;
+	// with
+	mWith = Utils.createList(graphObject, WITH, new Converter<User>() {
+	    @Override
+	    public User convert(GraphObject graphObject) {
+		return Utils.createUser(graphObject);
+	    }
+	});
+	
+	// type
+	mType = Utils.getPropertyString(graphObject, TYPE);
     }
 
     public static Education create(GraphObject graphObject) {
@@ -86,6 +77,10 @@ public class Education {
 
     public List<String> getConcentrations() {
 	return mConcentration;
+    }
+    
+    public List<User> getWith() {
+	return mWith;
     }
 
     public String getType() {

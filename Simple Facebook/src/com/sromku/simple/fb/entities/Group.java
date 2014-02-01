@@ -64,38 +64,65 @@ public class Group {
 	return new Group(graphObject);
     }
 
+    /**
+     * The URL for the group's cover photo.
+     */
     public String getCover() {
 	return mCover;
     }
 
+    /**
+     * A brief description of the group. 
+     */
     public String getDescription() {
 	return mDescription;
     }
 
+    /**
+     * The URL for the group's icon.
+     */
     public String getIcon() {
 	return mIcon;
     }
     
+    /**
+     * The group Id.
+     */
     public String getId() {
 	return mId;
     }
 
+    /**
+     * The URL for the group's website.
+     */
     public String getLink() {
 	return mLink;
     }
 
+    /**
+     * The name of the group.
+     */
     public String getName() {
 	return mName;
     }
 
+    /**
+     * The profile that created this group.
+     */
     public User getOwner() {
 	return mOwner;
     }
 
+    /**
+     * The privacy setting of the group.
+     */
     public GroupPrivacy getPrivacy() {
 	return mPrivacy;
     }
 
+    /**
+     * The last time the group was updated.
+     */
     public Long getUpdatedTime() {
 	return mUpdatedTime;
     }
