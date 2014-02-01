@@ -1,8 +1,10 @@
 package com.sromku.simple.fb.entities;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import android.os.Bundle;
+import com.sromku.simple.fb.utils.Logger;
 
 /**
  * Open graph story
@@ -12,26 +14,27 @@ import android.os.Bundle;
  */
 public class Story
 {
-	private final ActionOpenGraph _action;
-	private final ObjectOpenGraph _object;
+	public static final String CHARSET_NAME = "UTF-8";
+	private final ActionOpenGraph mAction;
+	private final ObjectOpenGraph mObject;
 
 	private Story(ActionOpenGraph action, ObjectOpenGraph object)
 	{
-		_action = action;
-		_object = object;
+		mAction = action;
+		mObject = object;
 
 		// Connect between object and action
-		_action.putProperty(_object.getObjectName(), _object.getObjectUrl());
+		mAction.putProperty(mObject.getObjectName(), mObject.getObjectUrl());
 	}
 
 	public String getGraphPath(String appNamespace)
 	{
-		return "me" + "/" + appNamespace + ":" + _action.getActionName();
+		return "me" + "/" + appNamespace + ":" + mAction.getActionName();
 	}
 
 	public Bundle getActionBundle()
 	{
-		return _action.getProperties();
+		return mAction.getProperties();
 	}
 
 	public static class Builder
@@ -114,11 +117,7 @@ public class Story
 
 		boolean isEmpty(String str)
 		{
-			if (str == null || str.length() == 0)
-			{
-				return true;
-			}
-			return false;
+			return str == null || str.length() == 0;
 		}
 	}
 
@@ -228,7 +227,16 @@ public class Story
 				{
 					sb.append("&");
 				}
-				sb.append(URLEncoder.encode(key) + "=" + URLEncoder.encode(parameters.getString(key)));
+				try
+				{
+					sb.append(URLEncoder.encode(key, CHARSET_NAME))
+							.append("=")
+							.append(URLEncoder.encode(parameters.getString(key), CHARSET_NAME));
+				}
+				catch (UnsupportedEncodingException e)
+				{
+					Logger.logError(Story.class, "Error enconding URL", e);
+				}
 			}
 			return sb.toString();
 		}
