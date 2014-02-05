@@ -202,7 +202,8 @@ public class Story
 			return mHostFileUrl + "?" + encodeUrl(mBundle);
 		}
 
-		private static String encodeUrl(Bundle parameters)
+		@SuppressWarnings("deprecation")
+        private static String encodeUrl(Bundle parameters)
 		{
 			if (parameters == null)
 			{

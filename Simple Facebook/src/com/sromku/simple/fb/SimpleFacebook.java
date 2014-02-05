@@ -32,6 +32,8 @@ import com.facebook.widget.WebDialog;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkins;
 import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Group;
+import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Story;
@@ -417,6 +419,100 @@ public class SimpleFacebook
 			}
 		}
 	}
+
+	/**
+     * Get my groups from Facebook
+     * 
+     * @param OnGroupsRequestListener
+     * 
+     */
+    public void getGroups(final OnGroupsRequestListener onGroupsRequestListener)
+    {
+        // if we are logged in
+        if (isLogin())
+        {
+            // move these params to method call parameters
+            Session session = getOpenSession();
+            Request request = new Request(session, "me/groups", null, HttpMethod.GET, new Request.Callback()
+            {
+                @Override
+                public void onCompleted(Response response)
+                {
+                    FacebookRequestError error = response.getError();
+                    if (error != null)
+                    {
+                        // log
+                        logError("failed to get groups", error.getException());
+
+                        // callback with 'exception'
+                        if (onGroupsRequestListener != null)
+                        {
+                            onGroupsRequestListener.onException(error.getException());
+                        }
+                    }
+                    else
+                    {
+                        GraphObject graphObject = response.getGraphObject();                    
+                        if (graphObject != null)
+                        {                       
+                            JSONObject graphResponse = graphObject.getInnerJSONObject();
+                            try {
+                                JSONArray result = graphResponse.getJSONArray("data");
+                                if (result != null)
+                                {
+                                    List<Group> groups = new ArrayList<Group>();
+                                    int size = result.length();
+                                    for (int i = 0; i < size; i++) 
+                                    {
+                                        groups.add(Group.create(result.getJSONObject(i)));
+                                    }
+                                    
+                                    if (onGroupsRequestListener != null)
+                                    {
+                                        onGroupsRequestListener.onComplete(groups);
+                                    }
+                                } 
+                                else if (onGroupsRequestListener != null)
+                                {
+                                    logError("data array is null", null);
+                                    onGroupsRequestListener.onFail("data array is null");
+                                }
+                            } catch (JSONException e) {
+                                if (onGroupsRequestListener != null)
+                                {
+                                    logError("Exception while parsing json object", e);
+                                    onGroupsRequestListener.onException(e);
+                                }
+                            }
+                        } else if (onGroupsRequestListener != null) {
+                            logError("graphObject is null", null);
+                            onGroupsRequestListener.onFail("graphObject in null");
+                        }
+                    }
+                }
+            });
+
+            RequestAsyncTask task = new RequestAsyncTask(request);
+            task.execute();
+
+            // callback with 'thinking'
+            if (onGroupsRequestListener != null)
+            {
+                onGroupsRequestListener.onThinking();
+            }
+        }
+        else
+        {
+            String reason = Errors.getError(ErrorMsg.LOGIN);
+            logError(reason, null);
+
+            // callback with 'fail' due to not being loged
+            if (onGroupsRequestListener != null)
+            {
+                onGroupsRequestListener.onFail(reason);
+            }
+        }
+    }
 
 	/**
 	 * Get albums
@@ -889,6 +985,127 @@ public class SimpleFacebook
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * Publish {@link Like}.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#PUBLISH_ACTION}
+	 * 
+	 * @param like The like object to publish. Use {@link Like.Builder} to create a new <code>Like</code>
+	 * @param onPublishListener The listener for publishing action
+     * @See https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes
+     */
+	public void publish(final Like like, final OnPublishListener onPublishListener)
+    {
+        publish(like, onPublishListener, true);
+    }
+    
+    /**
+    * 
+    * Publish {@link Like}.<br>
+    * <br>
+    * 
+    * <b>Permission:</b><br>
+    * {@link Permissions#PUBLISH_ACTION}
+    * 
+    * @param like The like object to publish. Use {@link Like.Builder} to create a new <code>Like</code>
+    * @param onPublishListener The listener for publishing action
+    * @param async should the call be made via async task
+    * @See https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes
+    */
+   public void publish(final Like like, final OnPublishListener onPublishListener, final boolean async)
+   {
+       // if we are logged in
+       if (isLogin())
+       {
+           // if we defined the publish permission
+           if (mConfiguration.getPublishPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+           {
+               // callback with 'thinking'
+               if (onPublishListener != null)
+               {
+                   onPublishListener.onThinking();
+               }
+               
+               /*
+                * Check if session to facebook has 'publish_action' permission. If not, we will ask user for
+                * this permission.
+                */
+               if (!getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue()))
+               {
+                   mSessionStatusCallback.mOnReopenSessionListener = new OnReopenSessionListener()
+                   {
+                       @Override
+                       public void onSuccess()
+                       {
+                           publishImpl(like, onPublishListener, async);
+                       }
+                       
+                       @Override
+                       public void onNotAcceptingPermissions()
+                       {
+                           // this fail can happen when user doesn't accept the publish permissions
+                           String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(mConfiguration.getPublishPermissions()));
+                           logError(reason, null);
+                           if (onPublishListener != null)
+                           {
+                               onPublishListener.onFail(reason);
+                           }
+                       }
+                   };
+                   
+                   // extend publish permissions automatically
+                   extendPublishPermissions();
+               }
+               else
+               {
+                   publishImpl(like, onPublishListener, async);
+               }
+           }
+           else
+           {
+               String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, Permissions.PUBLISH_ACTION.getValue());
+               logError(reason, null);
+               
+               // callback with 'fail' due to insufficient permissions
+               if (onPublishListener != null)
+               {
+                   onPublishListener.onFail(reason);
+               }
+           }
+       }
+       else
+       {
+           // callback with 'fail' due to not being loged
+           if (onPublishListener != null)
+           {
+               String reason = Errors.getError(ErrorMsg.LOGIN);
+               logError(reason, null);
+
+               onPublishListener.onFail(reason);
+           }
+       }
+   }
+	
+	/**
+     * 
+     * Publish {@link Feed} on the wall.<br>
+     * <br>
+     * 
+     * <b>Permission:</b><br>
+     * {@link Permissions#PUBLISH_ACTION}
+     * 
+     * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
+     * @param onPublishListener The listener for publishing action
+     * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
+     */
+    public void publish(final Feed feed, final OnPublishListener onPublishListener)
+    {
+        publish(feed, onPublishListener, true);
+    }
 
 	/**
 	 * 
@@ -900,9 +1117,10 @@ public class SimpleFacebook
 	 * 
 	 * @param feed The feed to publish. Use {@link Feed.Builder} to create a new <code>Feed</code>
 	 * @param onPublishListener The listener for publishing action
+	 * @param async should the call be made in an async task.
 	 * @see https://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to-feed/
 	 */
-	public void publish(final Feed feed, final OnPublishListener onPublishListener)
+	public void publish(final Feed feed, final OnPublishListener onPublishListener, final boolean async)
 	{
 		// if we are logged in
 		if (isLogin())
@@ -927,7 +1145,7 @@ public class SimpleFacebook
 						@Override
 						public void onSuccess()
 						{
-							publishImpl(feed, onPublishListener);
+							publishImpl(feed, onPublishListener, async);
 						}
 
 						@Override
@@ -948,7 +1166,7 @@ public class SimpleFacebook
 				}
 				else
 				{
-					publishImpl(feed, onPublishListener);
+					publishImpl(feed, onPublishListener, async);
 				}
 			}
 			else
@@ -975,6 +1193,20 @@ public class SimpleFacebook
 			}
 		}
 	}
+	
+	   /**
+     * Publish open graph story.<br>
+     * <br>
+     * 
+     * <b>Permission:</b><br>
+     * {@link Permissions#PUBLISH_ACTION}
+     * 
+     * @param openGraph
+     * @param onPublishListener
+     */
+    public void publish(final Story story, final OnPublishListener onPublishListener) {
+        publish(story, onPublishListener, true);
+    }
 
 	/**
 	 * Publish open graph story.<br>
@@ -985,8 +1217,9 @@ public class SimpleFacebook
 	 * 
 	 * @param story
 	 * @param onPublishListener
+	 * @param async
 	 */
-	public void publish(final Story story, final OnPublishListener onPublishListener)
+	public void publish(final Story story, final OnPublishListener onPublishListener, final boolean async)
 	{
 		if (isLogin())
 		{
@@ -1011,7 +1244,7 @@ public class SimpleFacebook
 						@Override
 						public void onSuccess()
 						{
-							publishImpl(story, onPublishListener);
+							publishImpl(story, onPublishListener, async);
 						}
 
 						@Override
@@ -1033,7 +1266,7 @@ public class SimpleFacebook
 				}
 				else
 				{
-					publishImpl(story, onPublishListener);
+					publishImpl(story, onPublishListener, async);
 				}
 			}
 			else
@@ -1060,6 +1293,39 @@ public class SimpleFacebook
 			}
 		}
 	}
+	
+	public boolean checkForPublishPermissions() {
+	    return getOpenSessionPermissions().contains(Permissions.PUBLISH_ACTION.getValue());
+	}
+	
+	public void requestPublishPermissions() {
+	    extendPublishPermissions();
+	}
+	
+     /**
+     * Publish photo to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
+     * all user's albums.<br>
+     * <br>
+     * 
+     * <b>Permission:</b><br>
+     * {@link Permissions#PUBLISH_STREAM}<br>
+     * <br>
+     * 
+     * <b>Important:</b><br>
+     * - The user must own the album<br>
+     * - The album should not be full (Max: 200 photos). Check it by {@link Album#getCount()}<br>
+     * - The app can add photos to the album<br>
+     * - The privacy setting of the app should be at minimum as the privacy setting of the album (
+     * {@link Album#getPrivacy()}
+     * 
+     * @param photo The photo to upload
+     * @param albumId The album to which the photo should be uploaded
+     * @param onPublishListener The callback listener
+     */
+    public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener)
+    {
+        publish(photo, albumId, onPublishListener, true);
+    }
 
 	/**
 	 * Publish photo to specific album. You can use {@link #getAlbums(OnAlbumsRequestListener)} to retrieve
@@ -1080,8 +1346,9 @@ public class SimpleFacebook
 	 * @param photo The photo to upload
 	 * @param albumId The album to which the photo should be uploaded
 	 * @param onPublishListener The callback listener
+	 * @param async should the call be made in async task
 	 */
-	public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener)
+	public void publish(final Photo photo, final String albumId, final OnPublishListener onPublishListener, final boolean async)
 	{
 		if (isLogin())
 		{
@@ -1105,7 +1372,7 @@ public class SimpleFacebook
 						@Override
 						public void onSuccess()
 						{
-							publishImpl(photo, albumId, onPublishListener);
+							publishImpl(photo, albumId, onPublishListener, async);
 						}
 
 						@Override
@@ -1127,7 +1394,7 @@ public class SimpleFacebook
 				}
 				else
 				{
-					publishImpl(photo, albumId, onPublishListener);
+					publishImpl(photo, albumId, onPublishListener, async);
 				}
 			}
 			else
@@ -1518,191 +1785,134 @@ public class SimpleFacebook
 	public void clean()
 	{
 		mActivity = null;
+	}	
+	
+	private static void publishImpl(Like like, final OnPublishListener onPublishListener, boolean async) {
+	    if (async)
+	    {
+	        publishAsync("me/og.likes", like.getBundle(), onPublishListener);
+	    }
+	    else
+	    {
+	        publishSync("me/og.likes", like.getBundle(), onPublishListener);
+	    }
 	}
-
-	private static void publishImpl(Feed feed, final OnPublishListener onPublishListener)
+	
+	private static void publishImpl(Feed feed, final OnPublishListener onPublishListener, boolean async)
 	{
-		Session session = getOpenSession();
-		Request request = new Request(session, "me/feed", feed.getBundle(), HttpMethod.POST, new Request.Callback()
-		{
-			@Override
-			public void onCompleted(Response response)
-			{
-				GraphObject graphObject = response.getGraphObject();
-				if (graphObject != null)
-				{
-					JSONObject graphResponse = graphObject.getInnerJSONObject();
-					String postId = null;
-					try
-					{
-						postId = graphResponse.getString("id");
-					}
-					catch (JSONException e)
-					{
-						// log
-						logError("JSON error", e);
-					}
-
-					FacebookRequestError error = response.getError();
-					if (error != null)
-					{
-						// log
-						logError("Failed to publish", error.getException());
-
-						// callback with 'exception'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onException(error.getException());
-						}
-					}
-					else
-					{
-						// callback with 'complete'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onComplete(postId);
-						}
-					}
-				}
-				else
-				{
-					// log
-					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-					if (onPublishListener != null)
-					{
-						onPublishListener.onComplete("0");
-					}
-				}
-			}
-		});
-
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
+	    if (async) 
+	    {
+	        publishAsync(feed.getGraphPath(), feed.getBundle(), onPublishListener);
+	    }
+	    else 
+	    {
+	        publishSync(feed.getGraphPath(), feed.getBundle(), onPublishListener);
+	    }
 	}
-
-	private static void publishImpl(Story story, final OnPublishListener onPublishListener)
+	
+	private static void handlePublishResponse(Response response, OnPublishListener onPublishListener) 
 	{
-		Session session = getOpenSession();
+        GraphObject graphObject = response.getGraphObject();
+        if (graphObject != null)
+        {
+            JSONObject graphResponse = graphObject.getInnerJSONObject();
+            String postId = null;
+            try
+            {
+                postId = graphResponse.getString("id");
+            }
+            catch (JSONException e)
+            {
+                // log
+                logError("JSON error", e);
+            }
+
+            FacebookRequestError error = response.getError();
+            if (error != null)
+            {
+                // log
+                logError("Failed to publish", error.getException());
+
+                // callback with 'exception'
+                if (onPublishListener != null)
+                {
+                    onPublishListener.onException(error.getException());
+                }
+            }
+            else
+            {
+                // callback with 'complete'
+                if (onPublishListener != null)
+                {
+                    onPublishListener.onComplete(postId);
+                }
+            }
+        }
+        else
+        {
+            // log
+            logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
+
+            if (onPublishListener != null)
+            {
+                onPublishListener.onComplete("0");
+            }
+        }
+	}
+	
+	private static class RequestCallback implements Request.Callback {
+	    private OnPublishListener onPublishListener;
+	    
+	    public RequestCallback(OnPublishListener onPublishListener) {
+	        this.onPublishListener = onPublishListener;
+	    }
+	    
+        @Override
+        public void onCompleted(Response response)
+        {
+            handlePublishResponse(response, onPublishListener);
+        }
+	}
+	
+	private static void publishSync(String graphPath, Bundle parameters, final OnPublishListener onPublishListener)
+	{
+	    Session session = getOpenSession();
+	    Request request = new Request(session, graphPath, parameters, HttpMethod.POST);
+	    handlePublishResponse(request.executeAndWait(), onPublishListener);
+	}
+	    
+	private static void publishAsync(String graphPath, Bundle parameters, final OnPublishListener onPublishListener)
+	{
+	    Session session = getOpenSession();
+	    Request request = new Request(session, graphPath, parameters, HttpMethod.POST, new RequestCallback(onPublishListener));
+	    RequestAsyncTask task = new RequestAsyncTask(request);
+	    task.execute();
+	}
+	
+	private static void publishImpl(Story story, final OnPublishListener onPublishListener, boolean async)
+	{
 		String appNamespace = mConfiguration.getNamespace();
 
-		Request request = new Request(session, story.getGraphPath(appNamespace), story.getActionBundle(), HttpMethod.POST, new Request.Callback()
+		if (async) 
 		{
-			@Override
-			public void onCompleted(Response response)
-			{
-				GraphObject graphObject = response.getGraphObject();
-				if (graphObject != null)
-				{
-					JSONObject graphResponse = graphObject.getInnerJSONObject();
-					String postId = null;
-					try
-					{
-						postId = graphResponse.getString("id");
-					}
-					catch (JSONException e)
-					{
-						// log
-						logError("JSON error", e);
-					}
-
-					FacebookRequestError error = response.getError();
-					if (error != null)
-					{
-						// log
-						logError("Failed to publish", error.getException());
-
-						// callback with 'exception'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onException(error.getException());
-						}
-					}
-					else
-					{
-						// callback with 'complete'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onComplete(postId);
-						}
-					}
-				}
-				else
-				{
-					// log
-					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-					if (onPublishListener != null)
-					{
-						onPublishListener.onComplete("0");
-					}
-				}
-			}
-		});
-
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
+		    publishAsync(story.getGraphPath(appNamespace), story.getActionBundle(), onPublishListener);
+		} 
+		else 
+		{
+		    publishSync(story.getGraphPath(appNamespace), story.getActionBundle(), onPublishListener);
+		}
 	}
 
-	private static void publishImpl(Photo photo, String albumId, final OnPublishListener onPublishListener)
+	private static void publishImpl(Photo photo, String albumId, final OnPublishListener onPublishListener, boolean async)
 	{
-		Session session = getOpenSession();
-		Request request = new Request(session, albumId + "/photos", photo.getBundle(), HttpMethod.POST, new Request.Callback()
-		{
-			@Override
-			public void onCompleted(Response response)
-			{
-				GraphObject graphObject = response.getGraphObject();
-				if (graphObject != null)
-				{
-					JSONObject graphResponse = graphObject.getInnerJSONObject();
-					String postId = null;
-					try
-					{
-						postId = graphResponse.getString("id");
-					}
-					catch (JSONException e)
-					{
-						// log
-						logError("JSON error", e);
-					}
-
-					FacebookRequestError error = response.getError();
-					if (error != null)
-					{
-						// log
-						logError("Failed to publish", error.getException());
-
-						// callback with 'exception'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onException(error.getException());
-						}
-					}
-					else
-					{
-						// callback with 'complete'
-						if (onPublishListener != null)
-						{
-							onPublishListener.onComplete(postId);
-						}
-					}
-				}
-				else
-				{
-					// log
-					logError("The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-
-					if (onPublishListener != null)
-					{
-						onPublishListener.onComplete("0");
-					}
-				}
-			}
-		});
-
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
+	    if (async)
+	    {
+	        publishAsync(albumId + "/photos", photo.getBundle(), onPublishListener);
+	    }
+	    else
+	    {
+	        publishAsync(albumId + "/photos", photo.getBundle(), onPublishListener);
+	    }
 	}
 
 	private static void publishImpl(Video video, final OnPublishListener onPublishListener)
@@ -2143,6 +2353,17 @@ public class SimpleFacebook
 	{
 		void onComplete(List<Profile> friends);
 	}
+	
+	   /**
+     * On groups request listener
+     * 
+     * @author tamir7
+     * 
+     */
+    public interface OnGroupsRequestListener extends OnActionListener
+    {
+        void onComplete(List<Group> groups);
+    }
 	
 	/**
 	 * On check-ins request listener

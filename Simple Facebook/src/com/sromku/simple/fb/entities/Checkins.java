@@ -3,7 +3,6 @@ package com.sromku.simple.fb.entities;
 import org.json.JSONObject;
 
 import com.facebook.model.GraphObject;
-import com.sromku.simple.fb.utils.Utils;
 
 public class Checkins {
 	public static final String ID = "id";
