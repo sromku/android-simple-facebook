@@ -1,24 +1,20 @@
 package com.sromku.simple.fb.entities;
 
 import java.security.Permissions;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.os.Bundle;
 
 import com.facebook.model.GraphLocation;
 import com.facebook.model.GraphObject;
-import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.utils.Attributes;
 import com.sromku.simple.fb.utils.Utils;
+import com.sromku.simple.fb.utils.Utils.Converter;
 
 /**
  * The facebook user
@@ -30,8 +26,176 @@ public class Profile implements User {
 
     private final GraphUser mGraphUser;
 
+    private String mId;
+    private String mName;
+    private String mFirstName;
+    private String mMiddleName;
+    private String mLastName;
+    private String mGender;
+    private String mLocale;
+    private List<Language> mLanguages;
+    private String mLink;
+    private String mUsername;
+    private AgeRange mAgeRange;
+    private String mThirdPartyId;
+    private Boolean mIsInstalled;
+    private Integer mTimeZone;
+    private String mUpdatedTime;
+    private Boolean mVerified;
+    private String mBio;
+    private String mBirthday;
+    private Photo mCover;
+    private String mCurrency;
+    private List<Education> mEducation;
+    private String mEmail;
+    private String mHometown;
+    private Location mLocation;
+    private String mPolitical;
+    private List<String> mFavoriteAthletess;
+    private List<String> mFavoriteTeams;
+    private String mPicture;
+    private String mQuotes;
+    private String mRelationshipStatus;
+    private String mReligion;
+    private String mWebsite;
+    private List<Work> mWorks;
+
     private Profile(GraphUser graphUser) {
 	mGraphUser = graphUser;
+
+	// id
+	mId = mGraphUser.getId();
+
+	// name
+	mName = mGraphUser.getName();
+
+	// first name
+	mFirstName = mGraphUser.getFirstName();
+
+	// middle name
+	mMiddleName = mGraphUser.getMiddleName();
+
+	// last name
+	mLastName = mGraphUser.getLastName();
+
+	// gender
+	mGender = Utils.getPropertyString(graphUser, Properties.GENDER);
+
+	// locale
+	mLocale = Utils.getPropertyString(graphUser, Properties.LOCALE);
+
+	// languages
+	mLanguages = Utils.createList(graphUser, Properties.LANGUAGE, new Converter<Language>() {
+	    @Override
+	    public Language convert(GraphObject graphObject) {
+		Language language = new Language();
+		language.setId(Utils.getPropertyString(graphObject, "id"));
+		language.setName(Utils.getPropertyString(graphObject, "name"));
+		return language;
+	    }
+	});
+
+	// link
+	mLink = mGraphUser.getLink();
+
+	// username
+	mUsername = mGraphUser.getUsername();
+
+	// age range
+	GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(graphUser, Properties.AGE_RANGE);
+	if (ageRangeGraphObject != null) {
+	    mAgeRange = new AgeRange(Utils.getPropertyString(ageRangeGraphObject, "min"), Utils.getPropertyString(ageRangeGraphObject, "max"));
+	}
+
+	// third party id
+	mThirdPartyId = Utils.getPropertyString(graphUser, Properties.THIRD_PARTY_ID);
+
+	// installed
+	mIsInstalled = Utils.getPropertyBoolean(graphUser, Properties.INSTALLED);
+
+	// time zone
+	mTimeZone = Utils.getPropertyInteger(graphUser, Properties.TIMEZONE);
+
+	// updated time
+	mUpdatedTime = Utils.getPropertyString(graphUser, Properties.UPDATED_TIME);
+
+	// verified
+	mVerified = Utils.getPropertyBoolean(graphUser, Properties.INSTALLED);
+
+	// bio
+	mBio = Utils.getPropertyString(graphUser, Properties.BIO);
+
+	// birthday
+	mBirthday = mGraphUser.getBirthday();
+
+	// cover
+	mCover = Photo.create(Utils.getPropertyGraphObject(graphUser, Properties.COVER));
+
+	// currency
+	mCurrency = Utils.getPropertyInsideProperty(graphUser, Properties.CURRENCY, "user_currency");
+
+	// education
+	mEducation = Utils.createList(graphUser, Properties.EDUCATION, new Converter<Education>() {
+	    @Override
+	    public Education convert(GraphObject graphObject) {
+		return Education.create(graphObject);
+	    }
+	});
+
+	// email
+	mEmail = Utils.getPropertyString(graphUser, Properties.EMAIL);
+
+	// hometown
+	mHometown = Utils.getPropertyString(graphUser, Properties.HOMETOWN);
+
+	// location
+	GraphLocation graphLocation = mGraphUser.getLocation();
+	if (graphLocation != null) {
+	    mLocation = Location.create(graphLocation);
+	}
+
+	// political
+	mPolitical = Utils.getPropertyString(graphUser, Properties.POLITICAL);
+
+	// favorite athletes
+	mFavoriteAthletess = Utils.createList(graphUser, Properties.FAVORITE_ATHLETES, new Converter<String>() {
+	    @Override
+	    public String convert(GraphObject graphObject) {
+		return Utils.getPropertyString(graphObject, Properties.NAME);
+	    }
+	});
+
+	// favorite teams
+	mFavoriteTeams = Utils.createList(graphUser, Properties.FAVORITE_TEAMS, new Converter<String>() {
+	    @Override
+	    public String convert(GraphObject graphObject) {
+		return Utils.getPropertyString(graphObject, Properties.NAME);
+	    }
+	});
+
+	// picture
+	GraphObject data = Utils.getPropertyGraphObject(graphUser, Properties.PICTURE);
+	mPicture = Utils.getPropertyInsideProperty(data, "data", "url");
+
+	// quotes
+	mQuotes = Utils.getPropertyString(graphUser, Properties.QUOTES);
+
+	// relationship status
+	mRelationshipStatus = Utils.getPropertyString(graphUser, Properties.RELATIONSHIP_STATUS);
+
+	// religion
+	mReligion = Utils.getPropertyString(graphUser, Properties.RELIGION);
+
+	// website
+	mWebsite = Utils.getPropertyString(graphUser, Properties.WEBSITE);
+
+	// work
+	mWorks = Utils.createList(graphUser, Properties.WORK, new Converter<Work>() {
+	    @Override
+	    public Work convert(GraphObject graphObject) {
+		return Work.create(graphObject);
+	    }
+	});
     }
 
     /**
@@ -63,7 +227,7 @@ public class Profile implements User {
      * @return the ID of the user
      */
     public String getId() {
-	return mGraphUser.getId();
+	return mId;
     }
 
     /**
@@ -75,7 +239,7 @@ public class Profile implements User {
      * @return the name of the user
      */
     public String getName() {
-	return mGraphUser.getName();
+	return mName;
     }
 
     /**
@@ -87,7 +251,7 @@ public class Profile implements User {
      * @return the first name of the user
      */
     public String getFirstName() {
-	return mGraphUser.getFirstName();
+	return mFirstName;
     }
 
     /**
@@ -99,7 +263,7 @@ public class Profile implements User {
      * @return the middle name of the user
      */
     public String getMiddleName() {
-	return mGraphUser.getMiddleName();
+	return mMiddleName;
     }
 
     /**
@@ -111,7 +275,7 @@ public class Profile implements User {
      * @return the last name of the user
      */
     public String getLastName() {
-	return mGraphUser.getLastName();
+	return mLastName;
     }
 
     /**
@@ -123,8 +287,7 @@ public class Profile implements User {
      * @return the gender of the user
      */
     public String getGender() {
-	String gender = String.valueOf(mGraphUser.getProperty(Properties.GENDER));
-	return gender;
+	return mGender;
     }
 
     /**
@@ -136,8 +299,7 @@ public class Profile implements User {
      * @return the ISO language code and ISO country code of the user
      */
     public String getLocale() {
-	String locale = String.valueOf(mGraphUser.getProperty(Properties.LOCALE));
-	return locale;
+	return mLocale;
     }
 
     /**
@@ -149,23 +311,7 @@ public class Profile implements User {
      * @return the languages of the user
      */
     public List<Language> getLanguages() {
-	List<Language> languages = new ArrayList<Language>();
-
-	JSONArray jsonArray = (JSONArray) mGraphUser.getProperty(Properties.LANGUAGE);
-	if (jsonArray != null) {
-	    for (int i = 0; i < jsonArray.length(); i++) {
-		JSONObject jsonObject = jsonArray.optJSONObject(i);
-		int id = jsonObject.optInt(Properties.ID);
-		String name = jsonObject.optString(Properties.NAME);
-
-		Language language = new Language();
-		language.setId(id);
-		language.setName(name);
-		languages.add(language);
-	    }
-	}
-
-	return languages;
+	return mLanguages;
     }
 
     /**
@@ -177,7 +323,7 @@ public class Profile implements User {
      * @return the Facebook URL of the user
      */
     public String getLink() {
-	return mGraphUser.getLink();
+	return mLink;
     }
 
     /**
@@ -189,7 +335,7 @@ public class Profile implements User {
      * @return the Facebook username of the user
      */
     public String getUsername() {
-	return mGraphUser.getUsername();
+	return mUsername;
     }
 
     /**
@@ -201,11 +347,7 @@ public class Profile implements User {
      * @return the user's age range
      */
     public AgeRange getAgeRange() {
-	JSONObject jsonObject = (JSONObject) mGraphUser.getProperty(Properties.AGE_RANGE);
-	String min = jsonObject.optString("min");
-	String max = jsonObject.optString("max");
-	AgeRange ageRange = new AgeRange(min, max);
-	return ageRange;
+	return mAgeRange;
     }
 
     /**
@@ -217,8 +359,7 @@ public class Profile implements User {
      * @return the an anonymous, but unique identifier for the user
      */
     public String getThirdPartyId() {
-	Object property = mGraphUser.getProperty(Properties.THIRD_PARTY_ID);
-	return String.valueOf(property);
+	return mThirdPartyId;
     }
 
     /**
@@ -231,11 +372,7 @@ public class Profile implements User {
      * @return <code>True</code> if installed, otherwise <code>False</code>
      */
     public boolean getInstalled() {
-	Boolean property = (Boolean) mGraphUser.asMap().get(Properties.INSTALLED);
-	if (property != null) {
-	    return property;
-	}
-	return false;
+	return mIsInstalled;
     }
 
     /**
@@ -252,8 +389,7 @@ public class Profile implements User {
      * @return the timezone of the user
      */
     public int getTimeZone() {
-	int timeZone = Integer.valueOf(mGraphUser.getProperty(Properties.TIMEZONE).toString());
-	return timeZone;
+	return mTimeZone;
     }
 
     /**
@@ -271,8 +407,7 @@ public class Profile implements User {
      * @return string containing an ISO-8601 datetime
      */
     public String getUpdatedTime() {
-	String property = String.valueOf(mGraphUser.getProperty(Properties.UPDATED_TIME));
-	return property;
+	return mUpdatedTime;
     }
 
     /**
@@ -292,11 +427,7 @@ public class Profile implements User {
      * @return The user's account verification status
      */
     public Boolean getVerified() {
-	Boolean property = (Boolean) mGraphUser.asMap().get(Properties.INSTALLED);
-	if (property != null) {
-	    return property;
-	}
-	return null;
+	return mVerified;
     }
 
     /**
@@ -309,8 +440,7 @@ public class Profile implements User {
      * @return the biography of the user
      */
     public String getBio() {
-	String bio = String.valueOf(mGraphUser.getProperty(Properties.BIO));
-	return bio;
+	return mBio;
     }
 
     /**
@@ -323,7 +453,7 @@ public class Profile implements User {
      * @return the birthday of the user
      */
     public String getBirthday() {
-	return mGraphUser.getBirthday();
+	return mBirthday;
     }
 
     /**
@@ -335,9 +465,7 @@ public class Profile implements User {
      * @return The user's cover photo
      */
     public Photo getCover() {
-	GraphObject graphObject = mGraphUser.getPropertyAs(Properties.COVER, GraphObject.class);
-	Photo photo = Photo.create(graphObject);
-	return photo;
+	return mCover;
     }
 
     /**
@@ -349,12 +477,7 @@ public class Profile implements User {
      * @return The user's currency settings
      */
     public String getCurrency() {
-	JSONObject jsonObject = (JSONObject) mGraphUser.getProperty(Properties.CURRENCY);
-	if (jsonObject != null) {
-	    String userCurrency = jsonObject.optString("user_currency");
-	    return userCurrency;
-	}
-	return null;
+	return mCurrency;
     }
 
     /**
@@ -367,13 +490,7 @@ public class Profile implements User {
      * @return The user's education history
      */
     public List<Education> getEducation() {
-	List<Education> educations = new ArrayList<Education>();
-	GraphObjectList<GraphObject> graphObjectList = mGraphUser.getPropertyAsList(Properties.EDUCATION, GraphObject.class);
-	for (GraphObject graphObject : graphObjectList) {
-	    Education education = Education.create(graphObject);
-	    educations.add(education);
-	}
-	return educations;
+	return mEducation;
     }
 
     /**
@@ -385,8 +502,7 @@ public class Profile implements User {
      * @return the email of the user
      */
     public String getEmail() {
-	String email = String.valueOf(mGraphUser.getProperty(Properties.EMAIL));
-	return email;
+	return mEmail;
     }
 
     /**
@@ -399,8 +515,7 @@ public class Profile implements User {
      * @return The user's hometown
      */
     public String getHometown() {
-	String hometown = String.valueOf(mGraphUser.getProperty(Properties.HOMETOWN));
-	return hometown;
+	return mHometown;
     }
 
     /**
@@ -413,13 +528,7 @@ public class Profile implements User {
      * @return the current city of the user
      */
     public Location getLocation() {
-	GraphLocation graphLocation = mGraphUser.getLocation();
-	if (graphLocation != null) {
-	    Location location = Location.create(graphLocation);
-	    return location;
-	}
-
-	return null;
+	return mLocation;
     }
 
     /**
@@ -432,8 +541,7 @@ public class Profile implements User {
      * @return The user's political view
      */
     public String getPolitical() {
-	String political = String.valueOf(mGraphUser.getProperty(Properties.POLITICAL));
-	return political;
+	return mPolitical;
     }
 
     /**
@@ -446,18 +554,7 @@ public class Profile implements User {
      * @return The user's favorite athletes
      */
     public List<String> getFavoriteAthletes() {
-	List<String> athletes = new ArrayList<String>();
-	JSONArray jsonArray = (JSONArray) mGraphUser.getProperty(Properties.FAVORITE_ATHLETES);
-	if (jsonArray != null) {
-	    for (int i = 0; i < jsonArray.length(); i++) {
-		JSONObject jsonObject = jsonArray.optJSONObject(i);
-		if (jsonObject != null) {
-		    String name = jsonObject.optString(Properties.NAME);
-		    athletes.add(name);
-		}
-	    }
-	}
-	return athletes;
+	return mFavoriteAthletess;
     }
 
     /**
@@ -470,18 +567,7 @@ public class Profile implements User {
      * @return The user's favorite teams
      */
     public List<String> getFavoriteTeams() {
-	List<String> athletes = new ArrayList<String>();
-	JSONArray jsonArray = (JSONArray) mGraphUser.getProperty(Properties.FAVORITE_TEAMS);
-	if (jsonArray != null) {
-	    for (int i = 0; i < jsonArray.length(); i++) {
-		JSONObject jsonObject = jsonArray.optJSONObject(i);
-		if (jsonObject != null) {
-		    String name = jsonObject.optString(Properties.NAME);
-		    athletes.add(name);
-		}
-	    }
-	}
-	return athletes;
+	return mFavoriteTeams;
     }
 
     /**
@@ -493,10 +579,7 @@ public class Profile implements User {
      * @return The user's profile pic
      */
     public String getPicture() {
-	JSONObject result = (JSONObject) mGraphUser.getProperty(Properties.PICTURE);
-	JSONObject data = result.optJSONObject("data");
-	String url = data.optString("url");
-	return url;
+	return mPicture;
     }
 
     /**
@@ -509,8 +592,7 @@ public class Profile implements User {
      * @return The user's favorite quotes
      */
     public String getQuotes() {
-	String quotes = String.valueOf(mGraphUser.getProperty(Properties.QUOTES));
-	return quotes;
+	return mQuotes;
     }
 
     /**
@@ -527,8 +609,7 @@ public class Profile implements User {
      * @return The user's relationship status
      */
     public String getRelationshipStatus() {
-	String relationshipStatus = String.valueOf(mGraphUser.getProperty(Properties.RELATIONSHIP_STATUS));
-	return relationshipStatus;
+	return mRelationshipStatus;
     }
 
     /**
@@ -541,8 +622,7 @@ public class Profile implements User {
      * @return The user's religion
      */
     public String getReligion() {
-	String religion = String.valueOf(mGraphUser.getProperty(Properties.RELIGION));
-	return religion;
+	return mReligion;
     }
 
     /**
@@ -555,8 +635,7 @@ public class Profile implements User {
      * @return The URL of the user's personal website
      */
     public String getWebsite() {
-	String website = String.valueOf(mGraphUser.getProperty(Properties.WEBSITE));
-	return website;
+	return mWebsite;
     }
 
     /**
@@ -569,13 +648,7 @@ public class Profile implements User {
      * @return The user's work history
      */
     public List<Work> getWork() {
-	List<Work> works = new ArrayList<Work>();
-	GraphObjectList<GraphObject> graphObjectList = mGraphUser.getPropertyAsList(Properties.WORK, GraphObject.class);
-	for (GraphObject graphObject : graphObjectList) {
-	    Work work = Work.create(graphObject);
-	    works.add(work);
-	}
-	return works;
+	return mWorks;
     }
 
     public static class Properties {

@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.facebook.model.GraphObject;
 
 public class Place {
-    
+
     private String mId;
     private String mName;
     private String mStreet;
@@ -20,18 +20,10 @@ public class Place {
 	return mStreet;
     }
 
-    public void setStreet(String mStreet) {
-	this.mStreet = mStreet;
-    }
-
     public String getCity() {
 	return mCity;
     }
 
-    public void setCity(String mCity) {
-	this.mCity = mCity;
-    }
-    
     /**
      * @return the state
      */
@@ -43,48 +35,24 @@ public class Place {
 	return mCountry;
     }
 
-    public void setCountry(String mCountry) {
-	this.mCountry = mCountry;
-    }
-
     public int getZip() {
 	return mZip;
-    }
-
-    public void setZip(int mZip) {
-	this.mZip = mZip;
     }
 
     public long getLatitude() {
 	return mLatitude;
     }
 
-    public void setLatitude(long mLatitude) {
-	this.mLatitude = mLatitude;
-    }
-
     public long getLongitude() {
 	return mLongitude;
-    }
-
-    public void setLongitude(long mLongitude) {
-	this.mLongitude = mLongitude;
     }
 
     public String getId() {
 	return mId;
     }
 
-    public void setId(String mId) {
-	this.mId = mId;
-    }
-
     public String getName() {
 	return mName;
-    }
-
-    public void setName(String mName) {
-	this.mName = mName;
     }
 
     public static Place create(GraphObject graphObject) {

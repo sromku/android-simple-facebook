@@ -1,13 +1,13 @@
 package com.sromku.simple.fb.entities;
 
 public class Language {
-    private int mId;
+    private String mId;
     private String mName;
 
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
 	return mId;
     }
 
@@ -15,7 +15,7 @@ public class Language {
      * @param id
      *            the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
 	mId = id;
     }
 
