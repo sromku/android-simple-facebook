@@ -18,8 +18,19 @@ import com.sromku.simple.fb.utils.Logger;
 
 public abstract class GetAction<T> extends AbstractAction {
 
+    private String mTarget = "me"; // default
+    private OnActionListener<T> mOnActionListener = null;
+    
     public GetAction(SessionManager sessionManager) {
 	super(sessionManager);
+    }
+    
+    public void setTarget(String target) {
+	mTarget = target;
+    }
+    
+    public void setActionListener(OnActionListener<T> actionListener) {
+	mOnActionListener = actionListener;
     }
 
     @Override
@@ -32,14 +43,14 @@ public abstract class GetAction<T> extends AbstractAction {
 		public void onCompleted(Response response) {
 		    FacebookRequestError error = response.getError();
 		    if (error != null) {
-			Logger.logError(GetAppRequestsAction.class, "failed to get what you have requested", error.getException());
+			Logger.logError(GetAction.class, "Failed to get what you have requested", error.getException());
 			if (actionListener != null) {
 			    actionListener.onException(error.getException());
 			}
 		    }
 		    else {
 			if (response.getGraphObject() == null) {
-			    Logger.logError(getClass(), "The response GraphObject has null value. Response=" + response.toString(), null);
+			    Logger.logError(GetAction.class, "The response GraphObject has null value. Response=" + response.toString(), null);
 			}
 			else {
 			    if (actionListener != null) {
@@ -69,12 +80,18 @@ public abstract class GetAction<T> extends AbstractAction {
 	    }
 	}
     }
+    
+    protected String getTarget() {
+	return mTarget;
+    }
 
     protected abstract String getGraphPath();
 
     protected abstract Bundle getBundle();
 
-    protected abstract OnActionListener<T> getActionListener();
+    protected OnActionListener<T> getActionListener() {
+	return mOnActionListener;
+    }
 
     protected abstract T processResponse(Response response) throws JSONException;
 

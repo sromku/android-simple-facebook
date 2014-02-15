@@ -207,7 +207,7 @@ public class SimpleFacebook {
     public void getProfile(Properties properties, OnProfileRequestListener onProfileRequestListener) {
 	GetProfileAction getProfileAction = new GetProfileAction(mSessionManager);
 	getProfileAction.setProperties(properties);
-	getProfileAction.setOnProfileRequestListener(onProfileRequestListener);
+	getProfileAction.setActionListener(onProfileRequestListener);
 	getProfileAction.execute();
     }
 
@@ -253,7 +253,7 @@ public class SimpleFacebook {
     public void getFriends(Properties properties, OnFriendsRequestListener onFriendsRequestListener) {
 	GetFriendsAction getFriendsAction = new GetFriendsAction(mSessionManager);
 	getFriendsAction.setProperties(properties);
-	getFriendsAction.setOnFriendsRequestListener(onFriendsRequestListener);
+	getFriendsAction.setActionListener(onFriendsRequestListener);
 	getFriendsAction.execute();
     }
 
@@ -265,7 +265,7 @@ public class SimpleFacebook {
      */
     public void getAlbums(OnAlbumsRequestListener onAlbumsRequestListener) {
 	GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
-	getAlbumsAction.setOnAlbumsRequestListener(onAlbumsRequestListener);
+	getAlbumsAction.setActionListener(onAlbumsRequestListener);
 	getAlbumsAction.execute();
     }
 
@@ -276,7 +276,7 @@ public class SimpleFacebook {
      */
     public void getAppRequests(OnAppRequestsListener onAppRequestsListener) {
 	GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
-	getAppRequestsAction.setOnAppRequestsListener(onAppRequestsListener);
+	getAppRequestsAction.setActionListener(onAppRequestsListener);
 	getAppRequestsAction.execute();
     }
 
@@ -292,7 +292,7 @@ public class SimpleFacebook {
      */
     public void getScores(OnScoresRequestListener onScoresRequestListener) {
 	GetScoresAction getScoresAction = new GetScoresAction(mSessionManager);
-	getScoresAction.setOnScoresRequestListener(onScoresRequestListener);
+	getScoresAction.setActionListener(onScoresRequestListener);
 	getScoresAction.execute();
     }
 
