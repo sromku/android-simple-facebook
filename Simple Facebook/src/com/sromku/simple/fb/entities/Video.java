@@ -2,14 +2,18 @@ package com.sromku.simple.fb.entities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 
+import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Utils;
+import com.sromku.simple.fb.utils.Utils.Converter;
 
 /**
  * <ul>
@@ -51,25 +55,99 @@ import com.sromku.simple.fb.utils.Logger;
  * @see https://developers.facebook.com/docs/reference/api/video
  */
 public class Video implements Publishable {
-    private static final String TITLE = "title";
+
+    private static final String COMMENTS = "comments";
+    private static final String CREATED_TIME = "created_time";
     private static final String DESCRIPTION = "description";
+    private static final String EMBED_HTML = "embed_html";
+    private static final String FROM = "from";
+    private static final String ICON = "icon";
+    private static final String ID = "id";
+    private static final String NAME = "name"; // same as NAME
+    private static final String PICTURE = "picture";
+    private static final String SOURCE = "source";
+    private static final String TAGS = "tags";
+    private static final String UPDATED_TIME = "updated_time";
+    private static final String TITLE = "title"; // same as TITLE
     private static final String PRIVACY = "privacy";
 
+    private List<Comment> mComments;
+    private Long mCreatedTime = null;
     private String mDescription = null;
-    private String mTitle = null;
+    private String mEmbedHtml = null;
+    private User mFrom = null;
+    private String mIcon = null;
+    private String mId = null;
+    private String mName = null;
+    private String mPicture = null;
+    private String mSource = null;
+    private List<User> mTags = null;
+    private Long mUpdatedTime = null;
     private String mFileName = null;
     private Privacy mPrivacy = null;
 
     private Parcelable mParcelable = null;
     private byte[] mBytes = null;
 
-    public Video(Builder builder) {
+    private Video(GraphObject graphObject) {
+	// comments
+	mComments = Utils.createList(graphObject, COMMENTS, new Converter<Comment>() {
+	    @Override
+	    public Comment convert(GraphObject graphObject) {
+		return Comment.create(graphObject);
+	    }
+	});
+
+	// created time
+	mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
+
+	// description
+	mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
+
+	// embed html
+	mEmbedHtml = Utils.getPropertyString(graphObject, EMBED_HTML);
+
+	// from
+	mFrom = Utils.createUser(graphObject, FROM);
+
+	// icon
+	mIcon = Utils.getPropertyString(graphObject, ICON);
+	
+	// id
+	mId = Utils.getPropertyString(graphObject, ID);
+
+	// name
+	mName = Utils.getPropertyString(graphObject, NAME);
+
+	// picture
+	mPicture = Utils.getPropertyString(graphObject, PICTURE);
+
+	// source
+	mSource = Utils.getPropertyString(graphObject, SOURCE);
+
+	// tags
+	mTags = Utils.createList(graphObject, TAGS, new Converter<User>() {
+	    @Override
+	    public User convert(GraphObject graphObject) {
+		return Utils.createUser(graphObject);
+	    }
+	});
+
+	// updated time
+	mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
+    }
+
+    private Video(Builder builder) {
 	mDescription = builder.mDescription;
-	mTitle = builder.mTitle;
+	mName = builder.mTitle;
 	mFileName = builder.mFileName;
 	mPrivacy = builder.mPrivacy;
 	mParcelable = builder.mParcelable;
 	mBytes = builder.mBytes;
+    }
+
+    public static Video create(GraphObject graphObject) {
+	return new Video(graphObject);
     }
 
     @Override
@@ -86,8 +164,8 @@ public class Video implements Publishable {
 	Bundle bundle = new Bundle();
 
 	// add title
-	if (mTitle != null) {
-	    bundle.putString(TITLE, mTitle);
+	if (mName != null) {
+	    bundle.putString(TITLE, mName);
 	}
 
 	// add description
@@ -109,6 +187,90 @@ public class Video implements Publishable {
 	}
 
 	return bundle;
+    }
+
+    /**
+     * All of the comments on this video 
+     */
+    public List<Comment> getComments() {
+	return mComments;
+    }
+
+    /**
+     * The time the video was initially published
+     */
+    public Long getCreatedTime() {
+	return mCreatedTime;
+    }
+
+    /**
+     * The description of the video
+     */
+    public String getDescription() {
+	return mDescription;
+    }
+
+    /**
+     * The html element that may be embedded in an Web page to play the video
+     */
+    public String getEmbedHtml() {
+	return mEmbedHtml;
+    }
+
+    /**
+     * The profile (user or page) that created the video
+     */
+    public User getFrom() {
+	return mFrom;
+    }
+
+    /**
+     * The icon that Facebook displays when video are published to the Feed
+     */
+    public String getIcon() {
+	return mIcon;
+    }
+    
+    /**
+     * The video ID
+     */
+    public String getId() {
+	return mId;
+    }
+
+    /**
+     * The video title or caption
+     */
+    public String getName() {
+	return mName;
+    }
+
+    /**
+     * The URL for the thumbnail picture for the video
+     */
+    public String getPicture() {
+	return mPicture;
+    }
+
+    /**
+     * A URL to the raw, playable video file
+     */
+    public String getSource() {
+	return mSource;
+    }
+
+    /**
+     * The users who are tagged in this video
+     */
+    public List<User> getTags() {
+	return mTags;
+    }
+
+    /**
+     * The last time the video or its caption were updated
+     */
+    public Long getUpdateTime() {
+	return mUpdatedTime;
     }
 
     public static class Builder {
@@ -169,13 +331,13 @@ public class Video implements Publishable {
 	}
 
 	/**
-	 * Set title of the video.
+	 * Set name of the video.
 	 * 
-	 * @param title
-	 *            The title of the video
+	 * @param name
+	 *            The name of the video
 	 */
-	public Builder setTitle(String title) {
-	    mTitle = title;
+	public Builder setName(String name) {
+	    mTitle = name;
 	    return this;
 	}
 
