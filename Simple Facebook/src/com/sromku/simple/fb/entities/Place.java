@@ -1,10 +1,20 @@
 package com.sromku.simple.fb.entities;
 
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 public class Place {
+
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String LOCATION = "location";
+    private static final String STREET = "street";
+    private static final String CITY = "city";
+    private static final String STATE = "state";
+    private static final String COUNTRY = "country";
+    private static final String ZIP = "zip";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
 
     private String mId;
     private String mName;
@@ -15,6 +25,42 @@ public class Place {
     private int mZip;
     private long mLatitude;
     private long mLongitude;
+
+    private Place(GraphObject graphObject) {
+	// id
+	mId = Utils.getPropertyString(graphObject, ID);
+
+	// name
+	mName = Utils.getPropertyString(graphObject, NAME);
+
+	// location
+	GraphObject location = Utils.getPropertyGraphObject(graphObject, LOCATION);
+
+	// street
+	mStreet = Utils.getPropertyString(location, STREET);
+	
+	// city
+	mCity = Utils.getPropertyString(location, CITY);
+	
+	// country
+	mCountry = Utils.getPropertyString(location, COUNTRY);
+	
+	// zip
+	mZip = Utils.getPropertyInteger(location, ZIP);
+	
+	// state
+	mState = Utils.getPropertyString(location, STATE);
+	
+	// latitude
+	mLatitude = Utils.getPropertyLong(location, LATITUDE);
+	
+	// longitude
+	mLongitude = Utils.getPropertyLong(location, LONGITUDE);
+    }
+    
+    public static Place create(GraphObject graphObject) {
+	return new Place(graphObject);
+    }
 
     public String getStreet() {
 	return mStreet;
@@ -55,23 +101,4 @@ public class Place {
 	return mName;
     }
 
-    public static Place create(GraphObject graphObject) {
-	return new Place(graphObject);
-    }
-
-    private Place(GraphObject graphObject) {
-	mId = String.valueOf(graphObject.getProperty("id"));
-	mName = String.valueOf(graphObject.getProperty("name"));
-
-	JSONObject jsonObject = (JSONObject) graphObject.getProperty("location");
-	if (jsonObject != null) {
-	    mStreet = jsonObject.optString("street");
-	    mCity = jsonObject.optString("city");
-	    mCountry = jsonObject.optString("country");
-	    mZip = jsonObject.optInt("zip");
-	    mState = jsonObject.optString("state");
-	    mLatitude = jsonObject.optLong("latitude");
-	    mLongitude = jsonObject.optLong("longitude");
-	}
-    }
 }

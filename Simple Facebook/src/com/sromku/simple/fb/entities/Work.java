@@ -1,8 +1,7 @@
 package com.sromku.simple.fb.entities;
 
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 public class Work {
     public static final String NAME = "name";
@@ -13,7 +12,7 @@ public class Work {
     public static final String START_DATE = "start_date";
     public static final String END_DATE = "end_date";
 
-    private String mEmployer;
+    private User mEmployer;
     private Location mLocation;
     private String mPosition;
     private String mDescription;
@@ -21,59 +20,32 @@ public class Work {
     private String mEndDate;
 
     private Work(GraphObject graphObject) {
-	/*
-	 * employer
-	 */
-	mEmployer = getName(graphObject, EMPLOYER);
+	
+	 // employer
+	mEmployer = Utils.createUser(graphObject, EMPLOYER);
 
-	/*
-	 * location
-	 */
-	if (graphObject != null) {
-	    GraphObject graphObjectLocation = graphObject.getPropertyAs(LOCATION, GraphObject.class);
-	    if (graphObjectLocation != null) {
-		mLocation = Location.create(graphObjectLocation);
-	    }
-	}
+	// location
+	GraphObject location = Utils.getPropertyGraphObject(graphObject, LOCATION);
+	mLocation = Location.create(location);
 
-	/*
-	 * position
-	 */
-	mPosition = getName(graphObject, POSITION);
+	// position
+	mPosition = Utils.getPropertyInsideProperty(graphObject, POSITION, NAME);
 
-	/*
-	 * description
-	 */
-	Object property = graphObject.getProperty(DESCRIPTION);
-	mDescription = String.valueOf(property);
+	 // description
+	mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
 
-	/*
-	 * start date
-	 */
-	property = graphObject.getProperty(START_DATE);
-	mStartDate = String.valueOf(property);
+	 // start date
+	mStartDate = Utils.getPropertyString(graphObject, START_DATE);
 
-	/*
-	 * end date
-	 */
-	property = graphObject.getProperty(END_DATE);
-	mEndDate = String.valueOf(property);
+	 // end date
+	mEndDate = Utils.getPropertyString(graphObject, END_DATE);
     }
     
     public static Work create(GraphObject graphObject) {
 	return new Work(graphObject);
     }
 
-    private static String getName(GraphObject graphObject, String property) {
-	JSONObject jsonObject = (JSONObject) graphObject.getProperty(property);
-	if (jsonObject != null) {
-	    String name = jsonObject.optString(NAME);
-	    return name;
-	}
-	return null;
-    }
-
-    public String getEmployer() {
+    public User getEmployer() {
 	return mEmployer;
     }
 
