@@ -11,26 +11,18 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Album;
-import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 public class GetAlbumsAction extends GetAction<List<Album>> {
 
-    private OnAlbumsRequestListener mOnAlbumsRequestListener;
-
     public GetAlbumsAction(SessionManager sessionManager) {
 	super(sessionManager);
     }
 
-    public void setOnAlbumsRequestListener(OnAlbumsRequestListener onAlbumsRequestListener) {
-	mOnAlbumsRequestListener = onAlbumsRequestListener;
-    }
-
     @Override
     protected String getGraphPath() {
-	return String.format("%s/%s", "me", GraphPath.ALBUMS);
+	return String.format("%s/%s", getTarget(), GraphPath.ALBUMS);
     }
 
     @Override
@@ -38,11 +30,6 @@ public class GetAlbumsAction extends GetAction<List<Album>> {
 	Bundle bundle = new Bundle();
 	bundle.putString("date_format", "U");
 	return bundle;
-    }
-
-    @Override
-    protected OnActionListener<List<Album>> getActionListener() {
-	return mOnAlbumsRequestListener;
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.sromku.simple.fb.entities.AppRequest;
  * On get app requests listener
  * 
  * @author koraybalci
- * 
  */
 public interface OnAppRequestsListener extends OnActionListener<List<AppRequest>> {
 }

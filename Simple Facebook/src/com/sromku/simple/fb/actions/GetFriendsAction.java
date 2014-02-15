@@ -12,14 +12,11 @@ import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Profile.Properties;
-import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 public class GetFriendsAction extends GetAction<List<Profile>> {
 
-    private OnFriendsRequestListener mOnFriendsRequestListener;
     private Properties mProperties;
 
     public GetFriendsAction(SessionManager sessionManager) {
@@ -30,13 +27,9 @@ public class GetFriendsAction extends GetAction<List<Profile>> {
 	mProperties = properties;
     }
 
-    public void setOnFriendsRequestListener(OnFriendsRequestListener onFriendsRequestListener) {
-	mOnFriendsRequestListener = onFriendsRequestListener;
-    }
-
     @Override
     protected String getGraphPath() {
-	return String.format("%s/%s", "me", GraphPath.FRIENDS);
+	return String.format("%s/%s", getTarget(), GraphPath.FRIENDS);
     }
 
     @Override
@@ -45,11 +38,6 @@ public class GetFriendsAction extends GetAction<List<Profile>> {
 	    return mProperties.getBundle();
 	}
 	return null;
-    }
-
-    @Override
-    protected OnActionListener<List<Profile>> getActionListener() {
-	return mOnFriendsRequestListener;
     }
 
     @Override

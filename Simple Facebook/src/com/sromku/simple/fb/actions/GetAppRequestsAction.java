@@ -11,26 +11,18 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.AppRequest;
-import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 public class GetAppRequestsAction extends GetAction<List<AppRequest>> {
 
-    private OnAppRequestsListener mOnAppRequestsListener;
-
     public GetAppRequestsAction(SessionManager sessionManager) {
 	super(sessionManager);
     }
 
-    public void setOnAppRequestsListener(OnAppRequestsListener onAppRequestsListener) {
-	mOnAppRequestsListener = onAppRequestsListener;
-    }
-
     @Override
     protected String getGraphPath() {
-	return String.format("%s/%s", "me", GraphPath.APPREQUESTS);
+	return String.format("%s/%s", getTarget(), GraphPath.APPREQUESTS);
     }
 
     @Override
@@ -38,11 +30,6 @@ public class GetAppRequestsAction extends GetAction<List<AppRequest>> {
 	Bundle bundle = new Bundle();
 	bundle.putString("date_format", "U");
 	return bundle;
-    }
-
-    @Override
-    protected OnActionListener<List<AppRequest>> getActionListener() {
-	return mOnAppRequestsListener;
     }
 
     @Override

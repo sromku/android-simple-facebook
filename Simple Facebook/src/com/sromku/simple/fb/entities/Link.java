@@ -12,17 +12,17 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  */
 public class Link {
 
-    public static final String COMMENTS = "comments";
-    public static final String LIKES = "likes";
-    public static final String CREATED_TIME = "created_time";
-    public static final String DESCRIPTION = "description";
-    public static final String FROM = "from";
-    public static final String ICON = "icon";
-    public static final String ID = "id";
-    public static final String LINK = "link";
-    public static final String MESSAGE = "messages";
-    public static final String NAME = "name";
-    public static final String PICTURE = "picture";
+    private static final String COMMENTS = "comments";
+    private static final String LIKES = "likes";
+    private static final String CREATED_TIME = "created_time";
+    private static final String DESCRIPTION = "description";
+    private static final String FROM = "from";
+    private static final String ICON = "icon";
+    private static final String ID = "id";
+    private static final String LINK = "link";
+    private static final String MESSAGE = "messages";
+    private static final String NAME = "name";
+    private static final String PICTURE = "picture";
     
     private List<Comment> mComments;
     private List<Like> mLikes;

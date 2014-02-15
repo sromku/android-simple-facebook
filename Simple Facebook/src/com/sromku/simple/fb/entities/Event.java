@@ -9,18 +9,18 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Event {
 
-    public static final String DESCRIPTION = "description";
-    public static final String END_TIME = "end_time";
-    public static final String ID = "id";
-    public static final String LOCATION = "location";
-    public static final String NAME = "name";
-    public static final String OWNER = "owner";
-    public static final String PICTURE = "picture";
-    public static final String PRIVACY = "privacy";
-    public static final String START_TIME = "start_time";
-    public static final String TICKET_URI = "ticket_uri";
-    public static final String UPDATED_TIME = "updated_time";
-    public static final String VENUE = "venue";
+    private static final String DESCRIPTION = "description";
+    private static final String END_TIME = "end_time";
+    private static final String ID = "id";
+    private static final String LOCATION = "location";
+    private static final String NAME = "name";
+    private static final String OWNER = "owner";
+    private static final String PICTURE = "picture";
+    private static final String PRIVACY = "privacy";
+    private static final String START_TIME = "start_time";
+    private static final String TICKET_URI = "ticket_uri";
+    private static final String UPDATED_TIME = "updated_time";
+    private static final String VENUE = "venue";
 
     private String mDescription;
     private Long mEndTime;
@@ -81,6 +81,28 @@ public class Event {
 
     public static Event create(GraphObject graphObject) {
 	return new Event(graphObject);
+    }
+
+    /**
+     * The attendance options of the user. He can accept and <b>attend</b> the event,
+     * or say <b>maybe</b>, or totally <b>decline</b> the invitation.
+     * 
+     * @author sromku
+     */
+    public static enum EventDesicion {
+        ATTENDING("attending"),
+        MAYBE("maybe"),
+        DECLINED("declined");
+        
+        private String graphNode;
+        
+        private EventDesicion(String graphNode) {
+            this.graphNode = graphNode;
+        }
+        
+        public String getGraphNode() {
+            return graphNode;
+        }
     }
 
     public static enum EventPrivacy {
@@ -173,7 +195,8 @@ public class Event {
     }
 
     /**
-     * The URL to a location to buy tickets for this event (on Events for Pages only).
+     * The URL to a location to buy tickets for this event (on Events for Pages
+     * only).
      */
     public String getTicketUri() {
 	return mTicketUri;

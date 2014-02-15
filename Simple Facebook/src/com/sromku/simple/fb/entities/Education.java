@@ -11,13 +11,14 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  * @see https://developers.facebook.com/docs/reference/fql/user/
  */
 public class Education {
-    public static final String SCHOOL = "school";
-    public static final String DEGREE = "degree";
-    public static final String YEAR = "year";
-    public static final String CONCENTRATION = "concentration";
-    public static final String TYPE = "type";
-    public static final String NAME = "name";
-    public static final String WITH = "with";
+    
+    private static final String SCHOOL = "school";
+    private static final String DEGREE = "degree";
+    private static final String YEAR = "year";
+    private static final String CONCENTRATION = "concentration";
+    private static final String TYPE = "type";
+    private static final String NAME = "name";
+    private static final String WITH = "with";
 
     private String mSchool;
     private String mDegree;

@@ -9,12 +9,9 @@ import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Profile.Properties;
-import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 
 public class GetProfileAction extends GetAction<Profile> {
 
-    private OnProfileRequestListener mOnProfileRequestListener;
     private Properties mProperties;
 
     public GetProfileAction(SessionManager sessionManager) {
@@ -25,13 +22,9 @@ public class GetProfileAction extends GetAction<Profile> {
 	mProperties = properties;
     }
 
-    public void setOnProfileRequestListener(OnProfileRequestListener onProfileRequestListener) {
-	mOnProfileRequestListener = onProfileRequestListener;
-    }
-
     @Override
     protected String getGraphPath() {
-	return String.format("%s", "me");
+	return getTarget();
     }
 
     @Override
@@ -40,11 +33,6 @@ public class GetProfileAction extends GetAction<Profile> {
 	    return mProperties.getBundle();
 	}
 	return null;
-    }
-
-    @Override
-    protected OnActionListener<Profile> getActionListener() {
-	return mOnProfileRequestListener;
     }
 
     @Override

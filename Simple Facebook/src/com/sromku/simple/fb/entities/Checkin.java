@@ -11,18 +11,17 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  * 
  * @see https://developers.facebook.com/docs/reference/api/checkin
  */
-public class Checkins {
-    public static final String ID = "id";
-    public static final String NAME = "name";
-    public static final String APPLICATION = "application";
-    public static final String COMMENTS = "comments";
-    public static final String CREATED_TIME = "created_time";
-    public static final String FROM = "from";
-    public static final String LIKES = "likes";
-    public static final String MESSAGE = "message";
-    public static final String PLACE = "place";
-    public static final String TAGS = "tags";
-    public static final String TYPE = "type";
+public class Checkin {
+    
+    private static final String ID = "id";
+    private static final String APPLICATION = "application";
+    private static final String COMMENTS = "comments";
+    private static final String CREATED_TIME = "created_time";
+    private static final String FROM = "from";
+    private static final String LIKES = "likes";
+    private static final String MESSAGE = "message";
+    private static final String PLACE = "place";
+    private static final String TAGS = "tags";
 
     private final GraphObject mGraphObject;
     private Application mApplication;
@@ -35,7 +34,7 @@ public class Checkins {
     private Place mPlace;
     private List<User> mTags;
 
-    private Checkins(GraphObject graphObject) {
+    private Checkin(GraphObject graphObject) {
 	mGraphObject = graphObject;
 
 	if (mGraphObject != null) {
@@ -85,8 +84,8 @@ public class Checkins {
 	}
     }
 
-    public static Checkins create(GraphObject graphObject) {
-	return new Checkins(graphObject);
+    public static Checkin create(GraphObject graphObject) {
+	return new Checkin(graphObject);
     }
 
     /**

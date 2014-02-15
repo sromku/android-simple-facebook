@@ -4,13 +4,14 @@ import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 
 public class Work {
-    public static final String NAME = "name";
-    public static final String EMPLOYER = "employer";
-    public static final String LOCATION = "location";
-    public static final String POSITION = "position";
-    public static final String DESCRIPTION = "description";
-    public static final String START_DATE = "start_date";
-    public static final String END_DATE = "end_date";
+    
+    private static final String NAME = "name";
+    private static final String EMPLOYER = "employer";
+    private static final String LOCATION = "location";
+    private static final String POSITION = "position";
+    private static final String DESCRIPTION = "description";
+    private static final String START_DATE = "start_date";
+    private static final String END_DATE = "end_date";
 
     private User mEmployer;
     private Location mLocation;

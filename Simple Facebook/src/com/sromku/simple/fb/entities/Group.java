@@ -9,15 +9,15 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Group {
 
-    public static final String COVER = "cover";
-    public static final String DESCRIPTION = "description";
-    public static final String ICON = "icon";
-    public static final String ID = "id";
-    public static final String LINK = "link";
-    public static final String NAME = "name";
-    public static final String OWNER = "owner";
-    public static final String PRIVACY = "privacy";
-    public static final String UPDATED_TIME = "updated_time";
+    private static final String COVER = "cover";
+    private static final String DESCRIPTION = "description";
+    private static final String ICON = "icon";
+    private static final String ID = "id";
+    private static final String LINK = "link";
+    private static final String NAME = "name";
+    private static final String OWNER = "owner";
+    private static final String PRIVACY = "privacy";
+    private static final String UPDATED_TIME = "updated_time";
 
     private String mCover;
     private String mDescription;
