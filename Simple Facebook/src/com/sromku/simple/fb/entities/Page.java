@@ -1,10 +1,7 @@
 package com.sromku.simple.fb.entities;
 
-import java.util.List;
-
-import org.json.JSONObject;
-
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Utils;
 
 /**
  * @author sromku
@@ -13,13 +10,172 @@ import com.facebook.model.GraphObject;
 public class Page {
 
     private final GraphObject mGraphObject;
+    private String mId;
+    private String mAbout;
+    private String mAttire;
+    private String mBandMembers;
+    private String mBirthday;
+    private String mBookingAgent;
+    private Boolean mCanPost;
+    private String mCategory;
+    private Integer mNumCheckins;
+    private String mCompanyOverview;
+    private String mCover;
+    private String mCurrentLocation;
+    private String mDescription;
+    private String mDirectedBy;
+    private String mFounded;
+    private String mGeneralInfo;
+    private String mGeneralManager;
+    private String mHometown;
+    // private List<String> mHours;
+    private Boolean mIsPermanetlyClosed;
+    private Boolean mIsPublished;
+    private Boolean mIsUnclaimed;
+    private Integer mLikes;
+    private String mLink;
+    private Location mLocation;
+    private String mMission;
+    private String mName;
+    private Parking mParking;
+    private String mPhone;
+    private String mPressContact;
+    private String mPriceRange;
+    private String mProduct;
+    private RestaurantService mRestaurantService;
+    private RestaurantSpecialties mRestaurantSpecialties;
+    private Integer mTalkingAboutCount;
+    private String mUsername;
+    private String mWebsite;
+    private Integer mWereHereCount;
 
     private Page(GraphObject graphObject) {
 	mGraphObject = graphObject;
+	
+	// id
+	mId = Utils.getPropertyString(graphObject, Properties.ID);
+	
+	// about
+	mAbout = Utils.getPropertyString(graphObject, Properties.ABOUT);
+	
+	// attire
+	mAttire = Utils.getPropertyString(graphObject, Properties.ATTIRE);
+	
+	// band member
+	mBandMembers = Utils.getPropertyString(graphObject, Properties.BAND_MEMBERS);
+	
+	// birthday
+	mBirthday = Utils.getPropertyString(graphObject, Properties.BIRTHDAY);
+	
+	// booking agent
+	mBookingAgent = Utils.getPropertyString(graphObject, Properties.BOOKING_AGENT);
+	
+	// can post
+	mCanPost = Utils.getPropertyBoolean(graphObject, Properties.CAN_POST);
+	
+	// category
+	mCategory = Utils.getPropertyString(graphObject, Properties.CATEGORY);
+	
+	// num checkins
+	mNumCheckins = Utils.getPropertyInteger(graphObject, Properties.CHECKINS);
+	
+	// company overview
+	mCompanyOverview = Utils.getPropertyString(graphObject, Properties.COMPANY_OVERVIEW);
+	
+	// cover
+	mCover = Utils.getPropertyInsideProperty(graphObject, Properties.COVER, "source");
+	
+	// current location
+	mCurrentLocation = Utils.getPropertyString(graphObject, Properties.CURRENT_LOCATION);
+	
+	// description
+	mDescription = Utils.getPropertyString(graphObject, Properties.DESCRIPTION);
+	
+	// directed by
+	mDirectedBy = Utils.getPropertyString(graphObject, Properties.DIRECTED_BY);
+	
+	// founded
+	mFounded = Utils.getPropertyString(graphObject, Properties.FOUNDED);
+	
+	// general info
+	mGeneralInfo = Utils.getPropertyString(graphObject, Properties.GENERAL_INFO);
+	
+	// general manager
+	mGeneralManager = Utils.getPropertyString(graphObject, Properties.GENERAL_MANAGER);
+	
+	// hometown
+	mHometown = Utils.getPropertyString(graphObject, Properties.HOMETOWN);
+	
+	// hours
+	
+	// is permanently closed
+	mIsPermanetlyClosed = Utils.getPropertyBoolean(graphObject, Properties.IS_PERMANENTLY_CLOSED);
+	
+	// is published
+	mIsPublished = Utils.getPropertyBoolean(graphObject, Properties.IS_PUBLISHED);
+	
+	// is unclaimed
+	mIsUnclaimed = Utils.getPropertyBoolean(graphObject, Properties.IS_UNCLAIMED);
+	
+	// likes
+	mLikes = Utils.getPropertyInteger(graphObject, Properties.LIKES);
+	
+	// link
+	mLink = Utils.getPropertyString(graphObject, Properties.LINK);
+	
+	// location
+	GraphObject location = Utils.getPropertyGraphObject(graphObject, Properties.LOCATION);
+	mLocation = Location.create(location);
+	
+	// mission
+	mMission = Utils.getPropertyString(graphObject, Properties.MISSION);
+	
+	// name
+	mName = Utils.getPropertyString(graphObject, Properties.NAME);
+	
+	// parking
+	GraphObject parking = Utils.getPropertyGraphObject(graphObject, Properties.PARKING);
+	mParking = Parking.create(parking);
+	
+	// phone
+	mPhone = Utils.getPropertyString(graphObject, Properties.PHONE);
+	
+	// press contact
+	mPressContact = Utils.getPropertyString(graphObject, Properties.PRESS_CONTACT);
+	
+	// price range
+	mPriceRange = Utils.getPropertyString(graphObject, Properties.PRICE_RANGE);
+	
+	// product
+	mProduct = Utils.getPropertyString(graphObject, Properties.PRODUCTS);
+	
+	// restaurant service
+	GraphObject service = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SERVICES);
+	mRestaurantService = RestaurantService.create(service);
+	
+	// restaurant specialties
+	GraphObject specialties = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SPECIALTIES);
+	mRestaurantSpecialties = RestaurantSpecialties.create(specialties);
+	
+	// talking about count
+	mTalkingAboutCount = Utils.getPropertyInteger(graphObject, Properties.TALKING_ABOUT_COUNT);
+	
+	// username
+	mUsername = Utils.getPropertyString(graphObject, Properties.USERNAME);
+	
+	// website
+	mWebsite = Utils.getPropertyString(graphObject, Properties.WEBSITE);
+	
+	// were here count
+	mWereHereCount = Utils.getPropertyInteger(graphObject, Properties.WERE_HERE_COUNT);
     }
 
     public static Page create(GraphObject graphObject) {
 	return new Page(graphObject);
+    }
+    
+    public GraphObject getGraphObject(){
+	return mGraphObject;
     }
 
     /**
@@ -28,7 +184,7 @@ public class Page {
      * @return
      */
     public String getId() {
-	return String.valueOf(mGraphObject.getProperty(Properties.ID));
+	return mId;
     }
 
     /**
@@ -37,7 +193,7 @@ public class Page {
      * @return
      */
     public String getAbout() {
-	return String.valueOf(mGraphObject.getProperty(Properties.ABOUT));
+	return mAbout;
     }
 
     /**
@@ -47,7 +203,7 @@ public class Page {
      * @return
      */
     public String getAttire() {
-	return String.valueOf(mGraphObject.getProperty(Properties.ATTIRE));
+	return mAttire;
     }
 
     /**
@@ -56,7 +212,7 @@ public class Page {
      * @return
      */
     public String getBandMembers() {
-	return String.valueOf(mGraphObject.getProperty(Properties.BAND_MEMBERS));
+	return mBandMembers;
     }
 
     /**
@@ -65,7 +221,7 @@ public class Page {
      * @return
      */
     public String getBirthday() {
-	return String.valueOf(mGraphObject.getProperty(Properties.BIRTHDAY));
+	return mBirthday;
     }
 
     /**
@@ -74,7 +230,7 @@ public class Page {
      * @return
      */
     public String getBookingAgent() {
-	return String.valueOf(mGraphObject.getProperty(Properties.BOOKING_AGENT));
+	return mBookingAgent;
     }
 
     /**
@@ -83,11 +239,7 @@ public class Page {
      * @return
      */
     public Boolean canPost() {
-	Boolean property = (Boolean) mGraphObject.getProperty(Properties.CAN_POST);
-	if (property != null) {
-	    return property;
-	}
-	return false;
+	return mCanPost;
     }
 
     /**
@@ -96,7 +248,7 @@ public class Page {
      * @return
      */
     public String getCategory() {
-	return String.valueOf(mGraphObject.getProperty(Properties.CATEGORY));
+	return mCategory;
     }
 
     /**
@@ -105,7 +257,7 @@ public class Page {
      * @return
      */
     public Integer getNumCheckins() {
-	return Integer.valueOf(String.valueOf(mGraphObject.getProperty(Properties.CHECKINS)));
+	return mNumCheckins;
     }
 
     /**
@@ -114,7 +266,7 @@ public class Page {
      * @return
      */
     public String getCompanyOverview() {
-	return String.valueOf(mGraphObject.getProperty(Properties.COMPANY_OVERVIEW));
+	return mCompanyOverview;
     }
 
     /**
@@ -123,8 +275,7 @@ public class Page {
      * @return
      */
     public String getCover() {
-	JSONObject jsonObject = (JSONObject) mGraphObject.getProperty(Properties.COVER);
-	return jsonObject.optString("source");	
+	return mCover;
     }
 
     /**
@@ -133,7 +284,7 @@ public class Page {
      * @return
      */
     public String getCurrentLocation() {
-	return String.valueOf(mGraphObject.getProperty(Properties.CURRENT_LOCATION));
+	return mCurrentLocation;
     }
 
     /**
@@ -142,7 +293,7 @@ public class Page {
      * @return
      */
     public String getDescription() {
-	return String.valueOf(mGraphObject.getProperty(Properties.DESCRIPTION));
+	return mDescription;
     }
 
     /**
@@ -151,7 +302,7 @@ public class Page {
      * @return
      */
     public String getDirectedBy() {
-	return String.valueOf(mGraphObject.getProperty(Properties.DIRECTED_BY));
+	return mDirectedBy;
     }
 
     /**
@@ -160,7 +311,7 @@ public class Page {
      * @return
      */
     public String getFounded() {
-	return String.valueOf(mGraphObject.getProperty(Properties.FOUNDED));
+	return mFounded;
     }
 
     /**
@@ -169,7 +320,7 @@ public class Page {
      * @return
      */
     public String getGeneralInfo() {
-	return String.valueOf(mGraphObject.getProperty(Properties.GENERAL_INFO));
+	return mGeneralInfo;
     }
 
     /**
@@ -178,7 +329,7 @@ public class Page {
      * @return
      */
     public String getGeneralManager() {
-	return String.valueOf(mGraphObject.getProperty(Properties.GENERAL_MANAGER));
+	return mGeneralManager;
     }
 
     /**
@@ -187,24 +338,24 @@ public class Page {
      * @return
      */
     public String getHometown() {
-	return String.valueOf(mGraphObject.getProperty(Properties.HOMETOWN));
+	return mHometown;
     }
 
-    /**
-     * {day}_{number}_{status}_{time} <br>
-     * Indicates a single range of opening hours for a day. Each day can have 2
-     * different hours ranges. {day} should be the first 3 characters of the day
-     * of the week, {number} should be either 1 or 2 to allow for the two
-     * different hours ranges per day. {status} should be either open or close
-     * to delineate the start or end of a time range. An example would be
-     * mon_1_open with value 17:00 and mon_1_close with value 21:15 which would
-     * represent a single opening range of 5pm to 9:15pm on Mondays.
-     * 
-     * @return
-     */
-    public List<String> getHours() {
-	return null;
-    }
+//    /**
+//     * {day}_{number}_{status}_{time} <br>
+//     * Indicates a single range of opening hours for a day. Each day can have 2
+//     * different hours ranges. {day} should be the first 3 characters of the day
+//     * of the week, {number} should be either 1 or 2 to allow for the two
+//     * different hours ranges per day. {status} should be either open or close
+//     * to delineate the start or end of a time range. An example would be
+//     * mon_1_open with value 17:00 and mon_1_close with value 21:15 which would
+//     * represent a single opening range of 5pm to 9:15pm on Mondays.
+//     * 
+//     * @return
+//     */
+//    public List<String> getHours() {
+//	return null;
+//    }
 
     /**
      * For businesses that are no longer operating.
@@ -212,7 +363,7 @@ public class Page {
      * @return
      */
     public Boolean isPermanentlyClosed() {
-	return Boolean.valueOf(String.valueOf(mGraphObject.getProperty(Properties.IS_PERMANENTLY_CLOSED)));
+	return mIsPermanetlyClosed;
     }
 
     /**
@@ -221,7 +372,7 @@ public class Page {
      * @return
      */
     public Boolean isPublished() {
-	return Boolean.valueOf(String.valueOf(mGraphObject.getProperty(Properties.IS_PUBLISHED)));
+	return mIsPublished;
     }
 
     /**
@@ -230,7 +381,7 @@ public class Page {
      * @return
      */
     public Boolean isUnclaimed() {
-	return Boolean.valueOf(String.valueOf(mGraphObject.getProperty(Properties.IS_UNCLAIMED)));
+	return mIsUnclaimed;
     }
 
     /**
@@ -240,7 +391,7 @@ public class Page {
      * @return
      */
     public Integer getLikes() {
-	return Integer.valueOf(String.valueOf(mGraphObject.getProperty(Properties.LIKES)));
+	return mLikes;
     }
 
     /**
@@ -249,7 +400,7 @@ public class Page {
      * @return
      */
     public String getLink() {
-	return String.valueOf(mGraphObject.getProperty(Properties.LINK));
+	return mLink;
     }
 
     /**
@@ -258,7 +409,7 @@ public class Page {
      * @return
      */
     public Location getLocation() {
-	return null;
+	return mLocation;
     }
 
     /**
@@ -267,7 +418,7 @@ public class Page {
      * @return
      */
     public String getMission() {
-	return String.valueOf(mGraphObject.getProperty(Properties.MISSION));
+	return mMission;
     }
 
     /**
@@ -276,7 +427,7 @@ public class Page {
      * @return
      */
     public String getName() {
-	return String.valueOf(mGraphObject.getProperty(Properties.NAME));
+	return mName;
     }
 
     /**
@@ -285,8 +436,7 @@ public class Page {
      * @return
      */
     public Parking getParking() {
-	GraphObject graphObject = mGraphObject.getPropertyAs(Properties.PARKING, GraphObject.class);
-	return Parking.create(graphObject);
+	return mParking;
     }
 
     /**
@@ -295,7 +445,7 @@ public class Page {
      * @return
      */
     public String getPhone() {
-	return String.valueOf(mGraphObject.getProperty(Properties.PHONE));
+	return mPhone;
     }
 
     /**
@@ -304,7 +454,7 @@ public class Page {
      * @return
      */
     public String getPressContanct() {
-	return String.valueOf(mGraphObject.getProperty(Properties.PRESS_CONTACT));
+	return mPressContact;
     }
 
     /**
@@ -313,7 +463,7 @@ public class Page {
      * @return
      */
     public String getPriceRange() {
-	return String.valueOf(mGraphObject.getProperty(Properties.PRICE_RANGE));
+	return mPriceRange;
     }
 
     /**
@@ -322,7 +472,7 @@ public class Page {
      * @return
      */
     public String getProducts() {
-	return String.valueOf(mGraphObject.getProperty(Properties.PRODUCTS));
+	return mProduct;
     }
 
     /**
@@ -331,8 +481,7 @@ public class Page {
      * @return
      */
     public RestaurantService getRestaurantService() {
-	GraphObject graphObject = mGraphObject.getPropertyAs(Properties.RESTAURANT_SERVICES, GraphObject.class);
-	return RestaurantService.create(graphObject);
+	return mRestaurantService;
     }
 
     /**
@@ -341,8 +490,7 @@ public class Page {
      * @return
      */
     public RestaurantSpecialties getRestaurantSpecialties() {
-	GraphObject graphObject = mGraphObject.getPropertyAs(Properties.RESTAURANT_SPECIALTIES, GraphObject.class);
-	return RestaurantSpecialties.create(graphObject);
+	return mRestaurantSpecialties;
     }
 
     /**
@@ -351,7 +499,7 @@ public class Page {
      * @return
      */
     public Integer getTalkingAboutCount() {
-	return Integer.valueOf(String.valueOf(mGraphObject.getProperty(Properties.TALKING_ABOUT_COUNT)));
+	return mTalkingAboutCount;
     }
 
     /**
@@ -361,7 +509,7 @@ public class Page {
      * @return
      */
     public String getUsername() {
-	return String.valueOf(mGraphObject.getProperty(Properties.USERNAME));
+	return mUsername;
     }
 
     /**
@@ -370,7 +518,7 @@ public class Page {
      * @return
      */
     public String getWebsite() {
-	return String.valueOf(mGraphObject.getProperty(Properties.WEBSITE));
+	return mWebsite;
     }
 
     /**
@@ -379,7 +527,7 @@ public class Page {
      * @return
      */
     public Integer getWereHereCount() {
-	return Integer.valueOf(String.valueOf(mGraphObject.getProperty(Properties.WERE_HERE_COUNT)));
+	return mWereHereCount;
     }
 
     public static class Properties {
