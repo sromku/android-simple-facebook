@@ -11,13 +11,21 @@ import com.facebook.AppEventsLogger;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
+import com.sromku.simple.fb.actions.GetCommentsAction;
+import com.sromku.simple.fb.actions.GetEventsAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
+import com.sromku.simple.fb.actions.GetGroupsAction;
+import com.sromku.simple.fb.actions.GetLikesAction;
+import com.sromku.simple.fb.actions.GetPhotosAction;
+import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
+import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Event.EventDesicion;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile.Properties;
@@ -27,15 +35,22 @@ import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
+import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnDeleteRequestListener;
+import com.sromku.simple.fb.listeners.OnEventsListener;
 import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
+import com.sromku.simple.fb.listeners.OnGroupsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
+import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
+import com.sromku.simple.fb.listeners.OnPhotosListener;
+import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnScoresRequestListener;
+import com.sromku.simple.fb.listeners.OnVideosListener;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK 3.6
@@ -159,6 +174,134 @@ public class SimpleFacebook {
     }
 
     /**
+     * Get albums
+     * 
+     * <b>Permission:</b><br>
+     * {@link Permissions#USER_PHOTOS}
+     */
+    public void getAlbums(OnAlbumsRequestListener onAlbumsRequestListener) {
+	GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
+	getAlbumsAction.setActionListener(onAlbumsRequestListener);
+	getAlbumsAction.execute();
+    }
+
+    /**
+     * Get app requests
+     * 
+     * @param onAppRequestsListener
+     */
+    public void getAppRequests(OnAppRequestsListener onAppRequestsListener) {
+	GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
+	getAppRequestsAction.setActionListener(onAppRequestsListener);
+	getAppRequestsAction.execute();
+    }
+
+    /**
+     * Get comments of specific entity.
+     * 
+     * @param entityId
+     * @param onCommentsListener
+     */
+    public void getComments(String entityId, OnCommentsListener onCommentsListener) {
+	GetCommentsAction getCommentsAction = new GetCommentsAction(mSessionManager);
+	getCommentsAction.setActionListener(onCommentsListener);
+	getCommentsAction.execute();
+    }
+
+    /**
+     * Get events of the user.
+     * 
+     * @param eventDesicion
+     * @param onEventsListener
+     */
+    public void getEvents(EventDesicion eventDesicion, OnEventsListener onEventsListener) {
+	GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
+	getEventsAction.setActionListener(onEventsListener);
+	getEventsAction.setEventDesicion(eventDesicion);
+	getEventsAction.execute();
+    }
+
+    /**
+     * Get my friends from facebook.<br>
+     * This method will return profile with next default properties depends on
+     * permissions you have:<br>
+     * <em>id, name</em>
+     * 
+     * <br>
+     * <br>
+     * If you need additional or other friend properties like:
+     * <em>education, location and more</em>, then use this method:
+     * {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
+     * <br>
+     * 
+     * @param onFriendsRequestListener
+     */
+    public void getFriends(OnFriendsRequestListener onFriendsRequestListener) {
+	getFriends(null, onFriendsRequestListener);
+    }
+
+    /**
+     * Get my friends from facebook by mentioning specific parameters. <br>
+     * For example, if you need: <em>id, last_name, picture, birthday</em>
+     * 
+     * @param onFriendsRequestListener
+     * @param properties
+     *            The {@link Properties}. <br>
+     *            To create {@link Properties} instance use:
+     * 
+     *            <pre>
+     * // define the friend picture we want to get
+     * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+     * pictureAttributes.setType(PictureType.SQUARE);
+     * pictureAttributes.setHeight(500);
+     * pictureAttributes.setWidth(500);
+     * 
+     * // create properties
+     * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.LAST_NAME).add(Properties.PICTURE, attributes).add(Properties.BIRTHDAY).build();
+     * </pre>
+     */
+    public void getFriends(Properties properties, OnFriendsRequestListener onFriendsRequestListener) {
+	GetFriendsAction getFriendsAction = new GetFriendsAction(mSessionManager);
+	getFriendsAction.setProperties(properties);
+	getFriendsAction.setActionListener(onFriendsRequestListener);
+	getFriendsAction.execute();
+    }
+
+    /**
+     * Get groups that user belongs to.
+     * 
+     * @param onGroupsListener
+     */
+    public void getGroups(OnGroupsListener onGroupsListener) {
+	GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
+	getGroupsAction.setActionListener(onGroupsListener);
+	getGroupsAction.execute();
+    }
+
+    /**
+     * Get likes of specific entity.
+     * 
+     * @param entityId
+     * @param onLikesListener
+     */
+    public void getLikes(String entityId, OnLikesListener onLikesListener) {
+	GetLikesAction getLikesAction = new GetLikesAction(mSessionManager);
+	getLikesAction.setActionListener(onLikesListener);
+	getLikesAction.execute();
+    }
+
+    /**
+     * Get photos of the user.
+     * 
+     * @param onPhotosListener
+     */
+    public void getPhotos(OnPhotosListener onPhotosListener) {
+	GetPhotosAction getPhotosAction = new GetPhotosAction(mSessionManager);
+	getPhotosAction.setActionListener(onPhotosListener);
+	getPhotosAction.execute();
+    }
+
+    /**
      * Get my profile from facebook.<br>
      * This method will return profile with next default properties depends on
      * permissions you have:<br>
@@ -212,72 +355,14 @@ public class SimpleFacebook {
     }
 
     /**
-     * Get my friends from facebook.<br>
-     * This method will return profile with next default properties depends on
-     * permissions you have:<br>
-     * <em>id, name</em>
+     * Get all posts of the user.
      * 
-     * <br>
-     * <br>
-     * If you need additional or other friend properties like:
-     * <em>education, location and more</em>, then use this method:
-     * {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
-     * <br>
-     * 
-     * @param onFriendsRequestListener
+     * @param onPostsListener
      */
-    public void getFriends(OnFriendsRequestListener onFriendsRequestListener) {
-	getFriends(null, onFriendsRequestListener);
-    }
-
-    /**
-     * Get my friends from facebook by mentioning specific parameters. <br>
-     * For example, if you need: <em>id, last_name, picture, birthday</em>
-     * 
-     * @param onFriendsRequestListener
-     * @param properties
-     *            The {@link Properties}. <br>
-     *            To create {@link Properties} instance use:
-     * 
-     *            <pre>
-     * // define the friend picture we want to get
-     * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
-     * pictureAttributes.setType(PictureType.SQUARE);
-     * pictureAttributes.setHeight(500);
-     * pictureAttributes.setWidth(500);
-     * 
-     * // create properties
-     * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.LAST_NAME).add(Properties.PICTURE, attributes).add(Properties.BIRTHDAY).build();
-     * </pre>
-     */
-    public void getFriends(Properties properties, OnFriendsRequestListener onFriendsRequestListener) {
-	GetFriendsAction getFriendsAction = new GetFriendsAction(mSessionManager);
-	getFriendsAction.setProperties(properties);
-	getFriendsAction.setActionListener(onFriendsRequestListener);
-	getFriendsAction.execute();
-    }
-
-    /**
-     * Get albums
-     * 
-     * <b>Permission:</b><br>
-     * {@link Permissions#USER_PHOTOS}
-     */
-    public void getAlbums(OnAlbumsRequestListener onAlbumsRequestListener) {
-	GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
-	getAlbumsAction.setActionListener(onAlbumsRequestListener);
-	getAlbumsAction.execute();
-    }
-
-    /**
-     * Get app requests
-     * 
-     * @param onAppRequestsListener
-     */
-    public void getAppRequests(OnAppRequestsListener onAppRequestsListener) {
-	GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
-	getAppRequestsAction.setActionListener(onAppRequestsListener);
-	getAppRequestsAction.execute();
+    public void getPosts(OnPostsListener onPostsListener) {
+	GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
+	getPostsAction.setActionListener(onPostsListener);
+	getPostsAction.execute();
     }
 
     /**
@@ -294,6 +379,17 @@ public class SimpleFacebook {
 	GetScoresAction getScoresAction = new GetScoresAction(mSessionManager);
 	getScoresAction.setActionListener(onScoresRequestListener);
 	getScoresAction.execute();
+    }
+
+    /**
+     * Get videos of the user.
+     * 
+     * @param onVideosListener
+     */
+    public void getVideos(OnVideosListener onVideosListener) {
+	GetVideosAction getVideosAction = new GetVideosAction(mSessionManager);
+	getVideosAction.setActionListener(onVideosListener);
+	getVideosAction.execute();
     }
 
     /**

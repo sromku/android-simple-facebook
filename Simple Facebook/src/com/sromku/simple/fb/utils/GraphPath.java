@@ -13,5 +13,7 @@ public class GraphPath {
     public static final String EVENTS = "events";
     public static final String GROUPS = "groups";
     public static final String POSTS = "posts";
+    public static final String COMMENTS = "comments";
+    public static final String LIKES = "likes";
     
 }
