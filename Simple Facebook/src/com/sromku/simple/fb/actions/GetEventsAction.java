@@ -16,7 +16,7 @@ import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 /**
- * Get the events of the profile. <br>
+ * Get the events of the profile/group/page. <br>
  * <br>
  * The default retrieved events will be events that the user is attending. If
  * you want to get events that the user said 'maybe' or totally declined, then

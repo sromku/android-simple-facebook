@@ -9,6 +9,8 @@ import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
 /**
+ * An individual entry in a profile's feed as represented in the Graph API.
+ * 
  * @author sromku
  * @see https://developers.facebook.com/docs/reference/api/post
  */
