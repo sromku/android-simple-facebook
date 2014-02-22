@@ -46,6 +46,11 @@ public class PublishAction extends AbstractAction {
 	if (sessionManager.isLogin(true)) {
 	    if (sessionManager.canMakeAdditionalRequest()) {
 		// if we defined the publish permission
+		
+		/*
+		 * FIXME - we need also add one more check of next case:
+		 * - if we gave extended permissions but we don't have in the configuration
+		 */
 		if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
 		    if (mOnPublishListener != null) {
 			mOnPublishListener.onThinking();

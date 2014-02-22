@@ -20,13 +20,13 @@ public class Application {
 
     private Application(GraphObject graphObject) {
 	// application name
-	mAppName = Utils.getPropertyInsideProperty(graphObject, "application", NAME);
+	mAppName = Utils.getPropertyString(graphObject, NAME);
 
 	// application namespace
-	mAppNamespace = Utils.getPropertyInsideProperty(graphObject, "application", NAMESPACE);
+	mAppNamespace = Utils.getPropertyString(graphObject, NAMESPACE);
 
 	// application id
-	mAppId = Utils.getPropertyInsideProperty(graphObject, "application", ID);
+	mAppId = Utils.getPropertyString(graphObject, ID);
     }
 
     public static Application create(GraphObject graphObject) {

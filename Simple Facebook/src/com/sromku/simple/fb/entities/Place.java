@@ -22,11 +22,15 @@ public class Place {
     private String mCity;
     private String mState;
     private String mCountry;
-    private int mZip;
-    private long mLatitude;
-    private long mLongitude;
+    private Integer mZip;
+    private Double mLatitude;
+    private Double mLongitude;
 
     private Place(GraphObject graphObject) {
+	if (graphObject == null) {
+	    return;
+	}
+	
 	// id
 	mId = Utils.getPropertyString(graphObject, ID);
 
@@ -52,10 +56,10 @@ public class Place {
 	mState = Utils.getPropertyString(location, STATE);
 	
 	// latitude
-	mLatitude = Utils.getPropertyLong(location, LATITUDE);
+	mLatitude = Utils.getPropertyDouble(location, LATITUDE);
 	
 	// longitude
-	mLongitude = Utils.getPropertyLong(location, LONGITUDE);
+	mLongitude = Utils.getPropertyDouble(location, LONGITUDE);
     }
     
     public static Place create(GraphObject graphObject) {
@@ -81,15 +85,15 @@ public class Place {
 	return mCountry;
     }
 
-    public int getZip() {
+    public Integer getZip() {
 	return mZip;
     }
 
-    public long getLatitude() {
+    public Double getLatitude() {
 	return mLatitude;
     }
 
-    public long getLongitude() {
+    public Double getLongitude() {
 	return mLongitude;
     }
 

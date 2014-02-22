@@ -11,6 +11,7 @@ import com.facebook.AppEventsLogger;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
+import com.sromku.simple.fb.actions.GetCheckinsAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
 import com.sromku.simple.fb.actions.GetEventsAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
@@ -35,6 +36,7 @@ import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
+import com.sromku.simple.fb.listeners.OnCheckinsListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnDeleteRequestListener;
 import com.sromku.simple.fb.listeners.OnEventsListener;
@@ -194,6 +196,17 @@ public class SimpleFacebook {
 	GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
 	getAppRequestsAction.setActionListener(onAppRequestsListener);
 	getAppRequestsAction.execute();
+    }
+
+    /**
+     * Get checkins of the user.
+     * 
+     * @param onCheckinsListener
+     */
+    public void getCheckins(OnCheckinsListener onCheckinsListener) {
+	GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
+	getCheckinsAction.setActionListener(onCheckinsListener);
+	getCheckinsAction.execute();
     }
 
     /**

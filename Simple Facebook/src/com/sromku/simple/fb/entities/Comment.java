@@ -74,7 +74,10 @@ public class Comment {
 	});
 
 	// parent
-	mParent = Comment.create(Utils.getPropertyGraphObject(graphObject, PARENT));
+	GraphObject commentGraph = Utils.getPropertyGraphObject(graphObject, PARENT);
+	if (commentGraph != null) {
+	    mParent = Comment.create(commentGraph);
+	}
 
 	// user likes
 	mUserLikes = Utils.getPropertyBoolean(graphObject, USER_LIKES);

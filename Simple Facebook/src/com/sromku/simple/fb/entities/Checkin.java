@@ -43,7 +43,7 @@ public class Checkin {
 	    mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
 
 	    // create comments
-	    Utils.createList(mGraphObject, COMMENTS, new Converter<Comment>() {
+	    mComments = Utils.createList(mGraphObject, COMMENTS, "data", new Converter<Comment>() {
 		@Override
 		public Comment convert(GraphObject graphObject) {
 		    return Comment.create(graphObject);
@@ -60,7 +60,7 @@ public class Checkin {
 	    mId = Utils.getPropertyString(graphObject, ID);
 
 	    // create likes
-	    Utils.createList(mGraphObject, LIKES, new Converter<Like>() {
+	    mLikes = Utils.createList(mGraphObject, LIKES, "data", new Converter<Like>() {
 		@Override
 		public Like convert(GraphObject graphObject) {
 		    return Like.create(graphObject);
@@ -74,7 +74,7 @@ public class Checkin {
 	    mPlace = Place.create(Utils.getPropertyGraphObject(graphObject, PLACE));
 
 	    // create tags
-	    Utils.createList(mGraphObject, TAGS, new Converter<User>() {
+	    mTags = Utils.createList(mGraphObject, TAGS, "data", new Converter<User>() {
 		@Override
 		public User convert(GraphObject graphObject) {
 		    return Utils.createUser(graphObject);

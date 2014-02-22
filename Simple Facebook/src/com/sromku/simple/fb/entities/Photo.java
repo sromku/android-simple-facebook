@@ -67,6 +67,8 @@ public class Photo implements Publishable {
 
     private Photo(GraphObject graphObject) {
 
+	if (graphObject == null) return;
+	
 	// id
 	mId = Utils.getPropertyString(graphObject, ID);
 

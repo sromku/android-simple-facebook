@@ -22,6 +22,10 @@ public class Location {
 
     public static Location create(GraphObject graphObject) {
 	Location location = new Location();
+	if (graphObject == null) {
+	    return location;
+	}
+	
 	location.mId = String.valueOf(graphObject.getProperty("id"));
 	location.mName = String.valueOf(graphObject.getProperty("name"));
 	return location;

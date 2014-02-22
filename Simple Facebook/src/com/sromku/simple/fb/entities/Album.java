@@ -42,7 +42,10 @@ public class Album {
 
     private Album(GraphObject graphObject) {
 	mGraphObject = graphObject;
-
+	if (graphObject == null) {
+	    return;
+	}
+	
 	// id
 	mId = Utils.getPropertyString(graphObject, ID);
 

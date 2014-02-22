@@ -156,8 +156,41 @@ public class Utils {
 
     public static <T> List<T> createList(GraphObject graphObject, String property, Converter<T> converter) {
 	List<T> result = new ArrayList<T>();
-	GraphObjectList<GraphObject> commentsGraphObjects = graphObject.getPropertyAsList(property, GraphObject.class);
-	ListIterator<GraphObject> iterator = commentsGraphObjects.listIterator();
+	if (graphObject == null) {
+	    return result;
+	}
+	
+	GraphObjectList<GraphObject> graphObjects = graphObject.getPropertyAsList(property, GraphObject.class);
+	if (graphObjects == null || graphObjects.size() == 0) {
+	    return result;
+	}
+	
+	ListIterator<GraphObject> iterator = graphObjects.listIterator();
+	while (iterator.hasNext()) {
+	    GraphObject graphObjectItr = iterator.next();
+	    T t = converter.convert(graphObjectItr);
+	    result.add(t);
+	}
+	return result;
+    }
+    
+    public static <T> List<T> createList(GraphObject graphObject, String property, String rootCollectionJsonProperty, Converter<T> converter) {
+	List<T> result = new ArrayList<T>();
+	if (graphObject == null) {
+	    return result;
+	}
+	
+	GraphObject collectionGraph = getPropertyGraphObject(graphObject, property);
+	if (collectionGraph == null) {
+	    return result;
+	}
+	
+	GraphObjectList<GraphObject> graphObjects = collectionGraph.getPropertyAsList(rootCollectionJsonProperty, GraphObject.class);
+	if (graphObjects == null || graphObjects.size() == 0) {
+	    return result;
+	}
+	
+	ListIterator<GraphObject> iterator = graphObjects.listIterator();
 	while (iterator.hasNext()) {
 	    GraphObject graphObjectItr = iterator.next();
 	    T t = converter.convert(graphObjectItr);
@@ -171,33 +204,83 @@ public class Utils {
     }
 
     public static String getPropertyInsideProperty(GraphObject graphObject, String parent, String child) {
+	if (graphObject == null) {
+	    return null; 
+	}
+	
 	JSONObject jsonObject = (JSONObject) graphObject.getProperty(parent);
-	String value = String.valueOf(jsonObject.opt(child));
-	return value;
+	if (jsonObject != null) {
+	    return String.valueOf(jsonObject.opt(child));
+	}
+	return null;
     }
     
     public static String getPropertyString(GraphObject graphObject, String property) {
+	if (graphObject == null) {
+	    return null; 
+	}
 	return String.valueOf(graphObject.getProperty(property));
     }
     
     public static Long getPropertyLong(GraphObject graphObject, String property) {
-	return Long.valueOf(String.valueOf(graphObject.getProperty(property)));
+	if (graphObject == null) {
+	    return null; 
+	}
+	Object value = graphObject.getProperty(property);
+	if (value == null || value.equals(EMPTY)) {
+	    return null;
+	}
+	return Long.valueOf(String.valueOf(value));
     }
     
     public static Boolean getPropertyBoolean(GraphObject graphObject, String property) {
-	return Boolean.valueOf(String.valueOf(graphObject.getProperty(property)));
+	if (graphObject == null) {
+	    return null; 
+	}
+	Object value = graphObject.getProperty(property);
+	if (value == null || value.equals(EMPTY)) {
+	    return null;
+	}
+	return Boolean.valueOf(String.valueOf(value));
     }
     
     public static Integer getPropertyInteger(GraphObject graphObject, String property) {
-	return Integer.valueOf(String.valueOf(graphObject.getProperty(property)));
+	if (graphObject == null) {
+	    return null; 
+	}
+	Object value = graphObject.getProperty(property);
+	if (value == null || value.equals(EMPTY)) {
+	    return null;
+	}
+	return Integer.valueOf(String.valueOf(value));
+    }
+    
+    public static Double getPropertyDouble(GraphObject graphObject, String property) {
+	if (graphObject == null) {
+	    return null; 
+	}
+	Object value = graphObject.getProperty(property);
+	if (value == null || value.equals(EMPTY)) {
+	    return null;
+	}
+	return Double.valueOf(String.valueOf(value));
     }
     
     public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
+	if (graphObject == null) {
+	    return null; 
+	}
 	return graphObject.getPropertyAs(property, GraphObject.class);
     }
 
     public static User createUser(GraphObject graphObject, String parent) {
+	if (graphObject == null) {
+	    return null; 
+	}
 	GraphObject userGraphObject = getPropertyGraphObject(graphObject, parent);
+	if (userGraphObject == null) {
+	    return null; 
+	}
 	return createUser(userGraphObject);
     }
     
@@ -219,4 +302,5 @@ public class Utils {
 	
 	return user;
     }
+    
 }
