@@ -21,19 +21,35 @@ import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.Permission.Type;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Checkin;
+import com.sromku.simple.fb.entities.Comment;
+import com.sromku.simple.fb.entities.Event;
+import com.sromku.simple.fb.entities.Group;
+import com.sromku.simple.fb.entities.Like;
+import com.sromku.simple.fb.entities.Post;
+import com.sromku.simple.fb.entities.Video;
+import com.sromku.simple.fb.entities.Event.EventDesicion;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.friends.FriendsActivity;
 import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
+import com.sromku.simple.fb.listeners.OnCheckinsListener;
+import com.sromku.simple.fb.listeners.OnCommentsListener;
+import com.sromku.simple.fb.listeners.OnEventsListener;
 import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
+import com.sromku.simple.fb.listeners.OnGroupsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
+import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
+import com.sromku.simple.fb.listeners.OnPhotosListener;
+import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileRequestListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
+import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.Attributes;
 import com.sromku.simple.fb.utils.PictureAttributes;
 import com.sromku.simple.fb.utils.PictureAttributes.PictureType;
@@ -58,6 +74,16 @@ public class MainActivity extends Activity {
     private Button mButtonGetFriends;
     private Button mButtonGetAlbums;
     private Button mButtonFragments;
+
+    // new stuff
+    private Button mButtonGetCheckins;
+    private Button mButtonGetComments;
+    private Button mButtonGetEvents;
+    private Button mButtonGetGroups;
+    private Button mButtonGetLikes;
+    private Button mButtonGetPhotos;
+    private Button mButtonGetPosts;
+    private Button mButtonGetVideos;
 
     // Login listener
     private OnLoginListener mOnLoginListener = new OnLoginListener() {
@@ -171,6 +197,30 @@ public class MainActivity extends Activity {
 
 	// 10. Get Albums example
 	getAlbumsExample();
+
+	// 11. Get checkins example
+	getCheckinsExample();
+
+	// 12. Get comments example
+	getCommentsExample();
+
+	// 13. Get events example
+	getEventsExample();
+
+	// 14. Get groups example
+	getGroupsExample();
+
+	// 15. Get likes example
+	getLikesExample();
+
+	// 16. Get photos example
+	getPhotosExample();
+
+	// 17. Get posts example
+	getPostsExample();
+
+	// 18. Get videos example
+	getVideosExample();
     }
 
     @Override
@@ -249,8 +299,7 @@ public class MainActivity extends Activity {
 		.setMessage("Clone it out...")
 		.setName("Simple Facebook SDK for Android")
 		.setCaption("Code less, do the same.")
-		.setDescription(
-			"The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
+		.setDescription("The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
 		.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png").setLink("https://github.com/sromku/android-simple-facebook").build();
 
 	// click on button and publish
@@ -266,46 +315,43 @@ public class MainActivity extends Activity {
      * Publish story (open graph) example
      */
     private void publishStoryExample() {
-	
-	mButtonPublishStory.setOnClickListener(new View.OnClickListener() {
-	    
-	    @Override
-	    public void onClick(View view) {
-		Permission[] newPermissions = new Permission[] {
-			Permission.USER_PHOTOS,
-			Permission.PUBLISH_ACTION
-		};
-		
-		mSimpleFacebook.requestNewPermissions(newPermissions, true, new OnNewPermissionsListener() {
-		    
-		    @Override
-		    public void onFail(String reason) {
-			toast(reason);			
-		    }
-		    
-		    @Override
-		    public void onException(Throwable throwable) {
-			toast(throwable.getMessage());			
-		    }
-		    
-		    @Override
-		    public void onThinking() {
-			toast("thinking");			
-		    }
-		    
-		    @Override
-		    public void onSuccess(String accessToken) {
-			toast(accessToken);			
-		    }
-		    
-		    @Override
-		    public void onNotAcceptingPermissions(Type type) {
-			toast(type.name());
-		    }
-		});
-	    }
-	});
-	
+
+//	mButtonPublishStory.setOnClickListener(new View.OnClickListener() {
+//
+//	    @Override
+//	    public void onClick(View view) {
+//		Permission[] newPermissions = new Permission[] { Permission.USER_PHOTOS, Permission.PUBLISH_ACTION };
+//
+//		mSimpleFacebook.requestNewPermissions(newPermissions, true, new OnNewPermissionsListener() {
+//
+//		    @Override
+//		    public void onFail(String reason) {
+//			toast(reason);
+//		    }
+//
+//		    @Override
+//		    public void onException(Throwable throwable) {
+//			toast(throwable.getMessage());
+//		    }
+//
+//		    @Override
+//		    public void onThinking() {
+//			toast("thinking");
+//		    }
+//
+//		    @Override
+//		    public void onSuccess(String accessToken) {
+//			toast(accessToken);
+//		    }
+//
+//		    @Override
+//		    public void onNotAcceptingPermissions(Type type) {
+//			toast(type.name());
+//		    }
+//		});
+//	    }
+//	});
+
     }
 
     /**
@@ -322,7 +368,7 @@ public class MainActivity extends Activity {
 		// create Photo instance and add some properties
 		Photo photo = new Photo.Builder()
 			.setImage(bitmap)
-			.setDescription("Screenshot from #android_simple_facebook sample application")
+			.setName("Screenshot from #android_simple_facebook sample application")
 			.setPlace("110619208966868")
 			.build();
 
@@ -403,7 +449,11 @@ public class MainActivity extends Activity {
 	mButtonInviteSuggested.setOnClickListener(new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-		String[] friends = new String[] { "630243197", "584419361", "1456233371", "100000490891462" };
+		String[] friends = new String[] { 
+			"630243197", 
+			"584419361", 
+			"1456233371", 
+			"100000490891462" };
 		mSimpleFacebook.invite(friends, "I invite you to use this app", onInviteListener, "secret data");
 	    }
 	});
@@ -524,7 +574,7 @@ public class MainActivity extends Activity {
 		// this is just to show the results
 		AlertDialog dialog = Utils.buildProfileResultDialog(MainActivity.this, 
 			new Pair<String, String>(Profile.Properties.ID, id), 
-			new Pair<String, String>(Profile.Properties.FIRST_NAME, firstName),
+			new Pair<String, String>(Profile.Properties.FIRST_NAME, firstName), 
 			new Pair<String, String>(Profile.Properties.COVER, photo.getSource()), 
 			new Pair<String, String>(Profile.Properties.PICTURE, pictureUrl));
 		dialog.show();
@@ -615,7 +665,6 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onFail(String reason) {
 		hideDialog();
-		// insure that you are logged in before getting the friends
 		Log.w(TAG, reason);
 	    }
 
@@ -628,8 +677,6 @@ public class MainActivity extends Activity {
 	    @Override
 	    public void onThinking() {
 		showDialog();
-		// show progress bar or something to the user while fetching
-		// profile
 		Log.i(TAG, "Thinking...");
 	    }
 
@@ -651,6 +698,307 @@ public class MainActivity extends Activity {
 	    }
 	});
 
+    }
+
+    private void getCheckinsExample() {
+	final OnCheckinsListener onCheckinsListener = new OnCheckinsListener() {
+
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+
+	    @Override
+	    public void onComplete(List<Checkin> response) {
+		hideDialog();
+		Log.i(TAG, "Number of checkins = " + response.size());
+		toast("Number of checkins = " + response.size());
+	    }
+	};
+
+	mButtonGetCheckins.setOnClickListener(new OnClickListener() {
+
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getCheckins(onCheckinsListener);
+	    }
+	});
+    }
+
+    private void getCommentsExample() {
+	final String entityId = "0"; // TODO - change
+	final OnCommentsListener onCommentsListener = new OnCommentsListener() {
+
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+
+	    @Override
+	    public void onComplete(List<Comment> response) {
+		hideDialog();
+		Log.i(TAG, "Number of comments = " + response.size());
+		toast("Number of comments = " + response.size());
+	    }
+	};
+
+	mButtonGetComments.setOnClickListener(new OnClickListener() {
+
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getComments(entityId, onCommentsListener);
+	    }
+	});
+    }
+
+    private void getEventsExample() {
+	final EventDesicion eventDesicion = EventDesicion.ATTENDING;
+	final OnEventsListener onEventsListener = new OnEventsListener() {
+
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+
+	    @Override
+	    public void onComplete(List<Event> response) {
+		hideDialog();
+		Log.i(TAG, "Number of events = " + response.size());
+		toast("Number of events = " + response.size());
+	    }
+	};
+	
+	mButtonGetEvents.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getEvents(eventDesicion, onEventsListener);
+	    }
+	});
+    }
+
+    private void getGroupsExample() {
+	final OnGroupsListener onGroupsListener = new OnGroupsListener() {
+	    
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+	    
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+	    
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+	    
+	    @Override
+	    public void onComplete(List<Group> response) {
+		hideDialog();
+		Log.i(TAG, "Number of groups = " + response.size());
+		toast("Number of groups = " + response.size());
+	    }
+	};
+
+	mButtonGetGroups.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getGroups(onGroupsListener);
+	    }
+	});
+    }
+
+    private void getLikesExample() {
+	final String entityId = "0"; // TODO
+	final OnLikesListener onLikesListener = new OnLikesListener() {
+	    
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+	    
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+	    
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+	    
+	    @Override
+	    public void onComplete(List<Like> response) {
+		hideDialog();
+		Log.i(TAG, "Number of likes = " + response.size());
+		toast("Number of likes = " + response.size());
+	    }
+	};
+
+	mButtonGetLikes.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getLikes(entityId, onLikesListener);
+	    }
+	});
+    }
+
+    private void getPhotosExample() {
+	final OnPhotosListener onPhotosListener = new OnPhotosListener() {
+	    
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+	    
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+	    
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+	    
+	    @Override
+	    public void onComplete(List<Photo> response) {
+		hideDialog();
+		Log.i(TAG, "Number of photos = " + response.size());
+		toast("Number of photos = " + response.size());
+	    }
+	};
+	
+	mButtonGetPhotos.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getPhotos(onPhotosListener);
+	    }
+	});
+    }
+
+    private void getPostsExample() {
+	final OnPostsListener onPostsListener = new OnPostsListener() {
+	    
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+	    
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+	    
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+	    
+	    @Override
+	    public void onComplete(List<Post> response) {
+		hideDialog();
+		Log.i(TAG, "Number of posts = " + response.size());
+		toast("Number of posts = " + response.size());
+	    }
+	};
+	
+	mButtonGetPosts.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getPosts(onPostsListener);
+	    }
+	});
+    }
+
+    private void getVideosExample() {
+	final OnVideosListener onVideosListener = new OnVideosListener() {
+	    
+	    @Override
+	    public void onFail(String reason) {
+		hideDialog();
+		Log.w(TAG, reason);
+	    }
+	    
+	    @Override
+	    public void onException(Throwable throwable) {
+		hideDialog();
+		Log.e(TAG, "Bad thing happened", throwable);
+	    }
+	    
+	    @Override
+	    public void onThinking() {
+		showDialog();
+		Log.i(TAG, "Thinking...");
+	    }
+	    
+	    @Override
+	    public void onComplete(List<Video> response) {
+		hideDialog();
+		Log.i(TAG, "Number of videos = " + response.size());
+		toast("Number of videos = " + response.size());
+	    }
+	};
+
+	mButtonGetVideos.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		mSimpleFacebook.getVideos(onVideosListener);
+	    }
+	});
     }
 
     private void initUI() {
@@ -676,12 +1024,21 @@ public class MainActivity extends Activity {
 	    }
 	});
 
+	mButtonGetCheckins = (Button) findViewById(R.id.button_get_checkins);
+	mButtonGetComments = (Button) findViewById(R.id.button_get_comments);
+	mButtonGetEvents = (Button) findViewById(R.id.button_get_events);
+	mButtonGetGroups = (Button) findViewById(R.id.button_get_groups);
+	mButtonGetLikes = (Button) findViewById(R.id.button_get_likes);
+	mButtonGetPhotos = (Button) findViewById(R.id.button_get_photos);
+	mButtonGetPosts = (Button) findViewById(R.id.button_get_posts);
+	mButtonGetVideos = (Button) findViewById(R.id.button_get_videos);
     }
 
     private void setUIState() {
 	if (mSimpleFacebook.isLogin()) {
 	    loggedInUIState();
-	} else {
+	}
+	else {
 	    loggedOutUIState();
 	}
     }
@@ -708,6 +1065,16 @@ public class MainActivity extends Activity {
 	mButtonGetProfileProperties.setEnabled(true);
 	mButtonGetFriends.setEnabled(true);
 	mButtonGetAlbums.setEnabled(true);
+
+	mButtonGetCheckins.setEnabled(true);
+	mButtonGetComments.setEnabled(true);
+	mButtonGetEvents.setEnabled(true);
+	mButtonGetGroups.setEnabled(true);
+	mButtonGetLikes.setEnabled(true);
+	mButtonGetPhotos.setEnabled(true);
+	mButtonGetPosts.setEnabled(true);
+	mButtonGetVideos.setEnabled(true);
+
 	mTextStatus.setText("Logged in");
     }
 
@@ -724,6 +1091,15 @@ public class MainActivity extends Activity {
 	mButtonGetProfileProperties.setEnabled(false);
 	mButtonGetFriends.setEnabled(false);
 	mButtonGetAlbums.setEnabled(false);
+
+	mButtonGetCheckins.setEnabled(false);
+	mButtonGetComments.setEnabled(false);
+	mButtonGetEvents.setEnabled(false);
+	mButtonGetGroups.setEnabled(false);
+	mButtonGetLikes.setEnabled(false);
+	mButtonGetPhotos.setEnabled(false);
+	mButtonGetPosts.setEnabled(false);
+	mButtonGetVideos.setEnabled(false);
 	mTextStatus.setText("Logged out");
     }
 

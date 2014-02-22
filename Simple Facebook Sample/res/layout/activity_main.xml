@@ -159,6 +159,94 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="@string/fragment_example_" />
+        
+        <!-- Get checkins -->
+
+        <Button
+            android:id="@+id/button_get_checkins"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_fragments"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get checkins" />
+        
+        <!-- Get comments -->
+
+        <Button
+            android:id="@+id/button_get_comments"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_checkins"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get comments" />
+        
+        <!-- Get events -->
+
+        <Button
+            android:id="@+id/button_get_events"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_comments"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get events" />
+        
+        <!-- Get groups -->
+
+        <Button
+            android:id="@+id/button_get_groups"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_events"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get groups" />
+        
+        <!-- Get likes -->
+
+        <Button
+            android:id="@+id/button_get_likes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_groups"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get likes" />
+        
+        <!-- Get photos -->
+
+        <Button
+            android:id="@+id/button_get_photos"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_likes"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get photos" />
+        
+        <!-- Get posts -->
+
+        <Button
+            android:id="@+id/button_get_posts"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_photos"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get posts" />
+        
+        <!-- Get videos -->
+
+        <Button
+            android:id="@+id/button_get_videos"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_get_posts"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Get videos" />
     </RelativeLayout>
 
 </ScrollView>
