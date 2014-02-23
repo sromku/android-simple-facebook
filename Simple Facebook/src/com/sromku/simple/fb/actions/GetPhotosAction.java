@@ -16,31 +16,31 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class GetPhotosAction extends GetAction<List<Photo>> {
 
-    public GetPhotosAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
-
-    @Override
-    protected String getGraphPath() {
-	return getTarget() + "/" + GraphPath.PHOTOS;
-    }
-
-    @Override
-    protected Bundle getBundle() {
-	Bundle bundle = new Bundle();
-	bundle.putString("date_format", "U");
-	return bundle;
-    }
-
-    @Override
-    protected List<Photo> processResponse(Response response) throws JSONException {
-	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-	List<Photo> photos = new ArrayList<Photo>(graphObjects.size());
-	for (GraphObject graphObject : graphObjects) {
-	    Photo photo = Photo.create(graphObject);
-	    photos.add(photo);
+	public GetPhotosAction(SessionManager sessionManager) {
+		super(sessionManager);
 	}
-	return photos;
-    }
+
+	@Override
+	protected String getGraphPath() {
+		return getTarget() + "/" + GraphPath.PHOTOS;
+	}
+
+	@Override
+	protected Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString("date_format", "U");
+		return bundle;
+	}
+
+	@Override
+	protected List<Photo> processResponse(Response response) throws JSONException {
+		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+		List<Photo> photos = new ArrayList<Photo>(graphObjects.size());
+		for (GraphObject graphObject : graphObjects) {
+			Photo photo = Photo.create(graphObject);
+			photos.add(photo);
+		}
+		return photos;
+	}
 
 }

@@ -16,31 +16,31 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class GetAppRequestsAction extends GetAction<List<AppRequest>> {
 
-    public GetAppRequestsAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
-
-    @Override
-    protected String getGraphPath() {
-	return String.format("%s/%s", getTarget(), GraphPath.APPREQUESTS);
-    }
-
-    @Override
-    protected Bundle getBundle() {
-	Bundle bundle = new Bundle();
-	bundle.putString("date_format", "U");
-	return bundle;
-    }
-
-    @Override
-    protected List<AppRequest> processResponse(Response response) throws JSONException {
-	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-	List<AppRequest> appRequests = new ArrayList<AppRequest>(graphObjects.size());
-	for (GraphObject graphObject : graphObjects) {
-	    AppRequest graphRequest = AppRequest.create(graphObject);
-	    appRequests.add(graphRequest);
+	public GetAppRequestsAction(SessionManager sessionManager) {
+		super(sessionManager);
 	}
-	return appRequests;
-    }
+
+	@Override
+	protected String getGraphPath() {
+		return String.format("%s/%s", getTarget(), GraphPath.APPREQUESTS);
+	}
+
+	@Override
+	protected Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString("date_format", "U");
+		return bundle;
+	}
+
+	@Override
+	protected List<AppRequest> processResponse(Response response) throws JSONException {
+		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+		List<AppRequest> appRequests = new ArrayList<AppRequest>(graphObjects.size());
+		for (GraphObject graphObject : graphObjects) {
+			AppRequest graphRequest = AppRequest.create(graphObject);
+			appRequests.add(graphRequest);
+		}
+		return appRequests;
+	}
 
 }

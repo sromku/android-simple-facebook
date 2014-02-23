@@ -9,734 +9,739 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Page {
 
-    private final GraphObject mGraphObject;
-    private String mId;
-    private String mAbout;
-    private String mAttire;
-    private String mBandMembers;
-    private String mBirthday;
-    private String mBookingAgent;
-    private Boolean mCanPost;
-    private String mCategory;
-    private Integer mNumCheckins;
-    private String mCompanyOverview;
-    private String mCover;
-    private String mCurrentLocation;
-    private String mDescription;
-    private String mDirectedBy;
-    private String mFounded;
-    private String mGeneralInfo;
-    private String mGeneralManager;
-    private String mHometown;
-    // private List<String> mHours;
-    private Boolean mIsPermanetlyClosed;
-    private Boolean mIsPublished;
-    private Boolean mIsUnclaimed;
-    private Integer mLikes;
-    private String mLink;
-    private Location mLocation;
-    private String mMission;
-    private String mName;
-    private Parking mParking;
-    private String mPhone;
-    private String mPressContact;
-    private String mPriceRange;
-    private String mProduct;
-    private RestaurantService mRestaurantService;
-    private RestaurantSpecialties mRestaurantSpecialties;
-    private Integer mTalkingAboutCount;
-    private String mUsername;
-    private String mWebsite;
-    private Integer mWereHereCount;
+	private final GraphObject mGraphObject;
+	private String mId;
+	private String mAbout;
+	private String mAttire;
+	private String mBandMembers;
+	private String mBirthday;
+	private String mBookingAgent;
+	private Boolean mCanPost;
+	private String mCategory;
+	private Integer mNumCheckins;
+	private String mCompanyOverview;
+	private String mCover;
+	private String mCurrentLocation;
+	private String mDescription;
+	private String mDirectedBy;
+	private String mFounded;
+	private String mGeneralInfo;
+	private String mGeneralManager;
+	private String mHometown;
+	// private List<String> mHours;
+	private Boolean mIsPermanetlyClosed;
+	private Boolean mIsPublished;
+	private Boolean mIsUnclaimed;
+	private Integer mLikes;
+	private String mLink;
+	private Location mLocation;
+	private String mMission;
+	private String mName;
+	private Parking mParking;
+	private String mPhone;
+	private String mPressContact;
+	private String mPriceRange;
+	private String mProduct;
+	private RestaurantService mRestaurantService;
+	private RestaurantSpecialties mRestaurantSpecialties;
+	private Integer mTalkingAboutCount;
+	private String mUsername;
+	private String mWebsite;
+	private Integer mWereHereCount;
 
-    private Page(GraphObject graphObject) {
-	mGraphObject = graphObject;
-	
-	// id
-	mId = Utils.getPropertyString(graphObject, Properties.ID);
-	
-	// about
-	mAbout = Utils.getPropertyString(graphObject, Properties.ABOUT);
-	
-	// attire
-	mAttire = Utils.getPropertyString(graphObject, Properties.ATTIRE);
-	
-	// band member
-	mBandMembers = Utils.getPropertyString(graphObject, Properties.BAND_MEMBERS);
-	
-	// birthday
-	mBirthday = Utils.getPropertyString(graphObject, Properties.BIRTHDAY);
-	
-	// booking agent
-	mBookingAgent = Utils.getPropertyString(graphObject, Properties.BOOKING_AGENT);
-	
-	// can post
-	mCanPost = Utils.getPropertyBoolean(graphObject, Properties.CAN_POST);
-	
-	// category
-	mCategory = Utils.getPropertyString(graphObject, Properties.CATEGORY);
-	
-	// num checkins
-	mNumCheckins = Utils.getPropertyInteger(graphObject, Properties.CHECKINS);
-	
-	// company overview
-	mCompanyOverview = Utils.getPropertyString(graphObject, Properties.COMPANY_OVERVIEW);
-	
-	// cover
-	mCover = Utils.getPropertyInsideProperty(graphObject, Properties.COVER, "source");
-	
-	// current location
-	mCurrentLocation = Utils.getPropertyString(graphObject, Properties.CURRENT_LOCATION);
-	
-	// description
-	mDescription = Utils.getPropertyString(graphObject, Properties.DESCRIPTION);
-	
-	// directed by
-	mDirectedBy = Utils.getPropertyString(graphObject, Properties.DIRECTED_BY);
-	
-	// founded
-	mFounded = Utils.getPropertyString(graphObject, Properties.FOUNDED);
-	
-	// general info
-	mGeneralInfo = Utils.getPropertyString(graphObject, Properties.GENERAL_INFO);
-	
-	// general manager
-	mGeneralManager = Utils.getPropertyString(graphObject, Properties.GENERAL_MANAGER);
-	
-	// hometown
-	mHometown = Utils.getPropertyString(graphObject, Properties.HOMETOWN);
-	
-	// hours
-	
-	// is permanently closed
-	mIsPermanetlyClosed = Utils.getPropertyBoolean(graphObject, Properties.IS_PERMANENTLY_CLOSED);
-	
-	// is published
-	mIsPublished = Utils.getPropertyBoolean(graphObject, Properties.IS_PUBLISHED);
-	
-	// is unclaimed
-	mIsUnclaimed = Utils.getPropertyBoolean(graphObject, Properties.IS_UNCLAIMED);
-	
-	// likes
-	mLikes = Utils.getPropertyInteger(graphObject, Properties.LIKES);
-	
-	// link
-	mLink = Utils.getPropertyString(graphObject, Properties.LINK);
-	
-	// location
-	GraphObject location = Utils.getPropertyGraphObject(graphObject, Properties.LOCATION);
-	mLocation = Location.create(location);
-	
-	// mission
-	mMission = Utils.getPropertyString(graphObject, Properties.MISSION);
-	
-	// name
-	mName = Utils.getPropertyString(graphObject, Properties.NAME);
-	
-	// parking
-	GraphObject parking = Utils.getPropertyGraphObject(graphObject, Properties.PARKING);
-	mParking = Parking.create(parking);
-	
-	// phone
-	mPhone = Utils.getPropertyString(graphObject, Properties.PHONE);
-	
-	// press contact
-	mPressContact = Utils.getPropertyString(graphObject, Properties.PRESS_CONTACT);
-	
-	// price range
-	mPriceRange = Utils.getPropertyString(graphObject, Properties.PRICE_RANGE);
-	
-	// product
-	mProduct = Utils.getPropertyString(graphObject, Properties.PRODUCTS);
-	
-	// restaurant service
-	GraphObject service = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SERVICES);
-	mRestaurantService = RestaurantService.create(service);
-	
-	// restaurant specialties
-	GraphObject specialties = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SPECIALTIES);
-	mRestaurantSpecialties = RestaurantSpecialties.create(specialties);
-	
-	// talking about count
-	mTalkingAboutCount = Utils.getPropertyInteger(graphObject, Properties.TALKING_ABOUT_COUNT);
-	
-	// username
-	mUsername = Utils.getPropertyString(graphObject, Properties.USERNAME);
-	
-	// website
-	mWebsite = Utils.getPropertyString(graphObject, Properties.WEBSITE);
-	
-	// were here count
-	mWereHereCount = Utils.getPropertyInteger(graphObject, Properties.WERE_HERE_COUNT);
-    }
+	private Page(GraphObject graphObject) {
+		mGraphObject = graphObject;
 
-    public static Page create(GraphObject graphObject) {
-	return new Page(graphObject);
-    }
-    
-    public GraphObject getGraphObject(){
-	return mGraphObject;
-    }
+		// id
+		mId = Utils.getPropertyString(graphObject, Properties.ID);
 
-    /**
-     * The Page ID
-     * 
-     * @return
-     */
-    public String getId() {
-	return mId;
-    }
+		// about
+		mAbout = Utils.getPropertyString(graphObject, Properties.ABOUT);
 
-    /**
-     * Information about the Page
-     * 
-     * @return
-     */
-    public String getAbout() {
-	return mAbout;
-    }
+		// attire
+		mAttire = Utils.getPropertyString(graphObject, Properties.ATTIRE);
 
-    /**
-     * Dress code of the business. Applicable to Restaurants or Nightlife. Can
-     * be one of Casual, Dressy or Unspecified
-     * 
-     * @return
-     */
-    public String getAttire() {
-	return mAttire;
-    }
+		// band member
+		mBandMembers = Utils.getPropertyString(graphObject, Properties.BAND_MEMBERS);
 
-    /**
-     * Members of the band. Applicable to Bands
-     * 
-     * @return
-     */
-    public String getBandMembers() {
-	return mBandMembers;
-    }
+		// birthday
+		mBirthday = Utils.getPropertyString(graphObject, Properties.BIRTHDAY);
 
-    /**
-     * Birthday of this person. Applicable to Pages representing people
-     * 
-     * @return
-     */
-    public String getBirthday() {
-	return mBirthday;
-    }
+		// booking agent
+		mBookingAgent = Utils.getPropertyString(graphObject, Properties.BOOKING_AGENT);
 
-    /**
-     * Booking agent of the band. Applicable to Bands
-     * 
-     * @return
-     */
-    public String getBookingAgent() {
-	return mBookingAgent;
-    }
+		// can post
+		mCanPost = Utils.getPropertyBoolean(graphObject, Properties.CAN_POST);
 
-    /**
-     * Whether the current session user can post on this Page
-     * 
-     * @return
-     */
-    public Boolean canPost() {
-	return mCanPost;
-    }
+		// category
+		mCategory = Utils.getPropertyString(graphObject, Properties.CATEGORY);
 
-    /**
-     * The Page's category. e.g. Product/Service, Computers/Technology
-     * 
-     * @return
-     */
-    public String getCategory() {
-	return mCategory;
-    }
+		// num checkins
+		mNumCheckins = Utils.getPropertyInteger(graphObject, Properties.CHECKINS);
 
-    /**
-     * Number of checkins at a place represented by a Page
-     * 
-     * @return
-     */
-    public Integer getNumCheckins() {
-	return mNumCheckins;
-    }
+		// company overview
+		mCompanyOverview = Utils.getPropertyString(graphObject, Properties.COMPANY_OVERVIEW);
 
-    /**
-     * The company overview. Applicable to Companies
-     * 
-     * @return
-     */
-    public String getCompanyOverview() {
-	return mCompanyOverview;
-    }
+		// cover
+		mCover = Utils.getPropertyInsideProperty(graphObject, Properties.COVER, "source");
 
-    /**
-     * URL to the Photo that represents this cover photo.
-     * 
-     * @return
-     */
-    public String getCover() {
-	return mCover;
-    }
+		// current location
+		mCurrentLocation = Utils.getPropertyString(graphObject, Properties.CURRENT_LOCATION);
 
-    /**
-     * Current location of the Page
-     * 
-     * @return
-     */
-    public String getCurrentLocation() {
-	return mCurrentLocation;
-    }
+		// description
+		mDescription = Utils.getPropertyString(graphObject, Properties.DESCRIPTION);
 
-    /**
-     * The description of the Page
-     * 
-     * @return
-     */
-    public String getDescription() {
-	return mDescription;
-    }
+		// directed by
+		mDirectedBy = Utils.getPropertyString(graphObject, Properties.DIRECTED_BY);
 
-    /**
-     * The director of the film. Applicable to Films
-     * 
-     * @return
-     */
-    public String getDirectedBy() {
-	return mDirectedBy;
-    }
+		// founded
+		mFounded = Utils.getPropertyString(graphObject, Properties.FOUNDED);
 
-    /**
-     * When the company is founded. Applicable to Companies
-     * 
-     * @return
-     */
-    public String getFounded() {
-	return mFounded;
-    }
+		// general info
+		mGeneralInfo = Utils.getPropertyString(graphObject, Properties.GENERAL_INFO);
 
-    /**
-     * General information provided by the Page
-     * 
-     * @return
-     */
-    public String getGeneralInfo() {
-	return mGeneralInfo;
-    }
+		// general manager
+		mGeneralManager = Utils.getPropertyString(graphObject, Properties.GENERAL_MANAGER);
 
-    /**
-     * General manager of the business. Applicable to Restaurants or Nightlife
-     * 
-     * @return
-     */
-    public String getGeneralManager() {
-	return mGeneralManager;
-    }
+		// hometown
+		mHometown = Utils.getPropertyString(graphObject, Properties.HOMETOWN);
 
-    /**
-     * Hometown of the band. Applicable to Bands
-     * 
-     * @return
-     */
-    public String getHometown() {
-	return mHometown;
-    }
+		// hours
 
-//    /**
-//     * {day}_{number}_{status}_{time} <br>
-//     * Indicates a single range of opening hours for a day. Each day can have 2
-//     * different hours ranges. {day} should be the first 3 characters of the day
-//     * of the week, {number} should be either 1 or 2 to allow for the two
-//     * different hours ranges per day. {status} should be either open or close
-//     * to delineate the start or end of a time range. An example would be
-//     * mon_1_open with value 17:00 and mon_1_close with value 21:15 which would
-//     * represent a single opening range of 5pm to 9:15pm on Mondays.
-//     * 
-//     * @return
-//     */
-//    public List<String> getHours() {
-//	return null;
-//    }
+		// is permanently closed
+		mIsPermanetlyClosed = Utils.getPropertyBoolean(graphObject, Properties.IS_PERMANENTLY_CLOSED);
 
-    /**
-     * For businesses that are no longer operating.
-     * 
-     * @return
-     */
-    public Boolean isPermanentlyClosed() {
-	return mIsPermanetlyClosed;
-    }
+		// is published
+		mIsPublished = Utils.getPropertyBoolean(graphObject, Properties.IS_PUBLISHED);
 
-    /**
-     * Indicates whether the Page is published and visible to non-admins
-     * 
-     * @return
-     */
-    public Boolean isPublished() {
-	return mIsPublished;
-    }
+		// is unclaimed
+		mIsUnclaimed = Utils.getPropertyBoolean(graphObject, Properties.IS_UNCLAIMED);
 
-    /**
-     * Indicates whether the Page is unclaimed
-     * 
-     * @return
-     */
-    public Boolean isUnclaimed() {
-	return mIsUnclaimed;
-    }
+		// likes
+		mLikes = Utils.getPropertyInteger(graphObject, Properties.LIKES);
 
-    /**
-     * The number of users who like the Page. For Global Brand Pages this is the
-     * count for all pages across the brand
-     * 
-     * @return
-     */
-    public Integer getLikes() {
-	return mLikes;
-    }
+		// link
+		mLink = Utils.getPropertyString(graphObject, Properties.LINK);
 
-    /**
-     * The Page's Facebook URL
-     * 
-     * @return
-     */
-    public String getLink() {
-	return mLink;
-    }
+		// location
+		GraphObject location = Utils.getPropertyGraphObject(graphObject, Properties.LOCATION);
+		mLocation = Location.create(location);
 
-    /**
-     * The location of this place. Applicable to all Places
-     * 
-     * @return
-     */
-    public Location getLocation() {
-	return mLocation;
-    }
+		// mission
+		mMission = Utils.getPropertyString(graphObject, Properties.MISSION);
 
-    /**
-     * The company mission. Applicable to Companies
-     * 
-     * @return
-     */
-    public String getMission() {
-	return mMission;
-    }
+		// name
+		mName = Utils.getPropertyString(graphObject, Properties.NAME);
 
-    /**
-     * The name of the Page.
-     * 
-     * @return
-     */
-    public String getName() {
-	return mName;
-    }
+		// parking
+		GraphObject parking = Utils.getPropertyGraphObject(graphObject, Properties.PARKING);
+		mParking = Parking.create(parking);
 
-    /**
-     * Information about the parking available at a place
-     * 
-     * @return
-     */
-    public Parking getParking() {
-	return mParking;
-    }
+		// phone
+		mPhone = Utils.getPropertyString(graphObject, Properties.PHONE);
 
-    /**
-     * Phone number provided by a Page
-     * 
-     * @return
-     */
-    public String getPhone() {
-	return mPhone;
-    }
+		// press contact
+		mPressContact = Utils.getPropertyString(graphObject, Properties.PRESS_CONTACT);
 
-    /**
-     * Press contact information of the band. Applicable to Bands
-     * 
-     * @return
-     */
-    public String getPressContanct() {
-	return mPressContact;
-    }
+		// price range
+		mPriceRange = Utils.getPropertyString(graphObject, Properties.PRICE_RANGE);
 
-    /**
-     * Price range of the business. Applicable to Restaurants or Nightlife.
-     * 
-     * @return
-     */
-    public String getPriceRange() {
-	return mPriceRange;
-    }
+		// product
+		mProduct = Utils.getPropertyString(graphObject, Properties.PRODUCTS);
 
-    /**
-     * The products of this company. Applicable to Companies
-     * 
-     * @return
-     */
-    public String getProducts() {
-	return mProduct;
-    }
+		// restaurant service
+		GraphObject service = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SERVICES);
+		mRestaurantService = RestaurantService.create(service);
 
-    /**
-     * Services the restaurant provides. Applicable to Restaurants
-     * 
-     * @return
-     */
-    public RestaurantService getRestaurantService() {
-	return mRestaurantService;
-    }
+		// restaurant specialties
+		GraphObject specialties = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SPECIALTIES);
+		mRestaurantSpecialties = RestaurantSpecialties.create(specialties);
 
-    /**
-     * The restaurant's specialties. Applicable to Restaurants
-     * 
-     * @return
-     */
-    public RestaurantSpecialties getRestaurantSpecialties() {
-	return mRestaurantSpecialties;
-    }
+		// talking about count
+		mTalkingAboutCount = Utils.getPropertyInteger(graphObject, Properties.TALKING_ABOUT_COUNT);
 
-    /**
-     * The number of people talking about this Page
-     * 
-     * @return
-     */
-    public Integer getTalkingAboutCount() {
-	return mTalkingAboutCount;
-    }
+		// username
+		mUsername = Utils.getPropertyString(graphObject, Properties.USERNAME);
 
-    /**
-     * The alias of the Page. For example, for www.facebook.com/platform the
-     * username is 'platform'
-     * 
-     * @return
-     */
-    public String getUsername() {
-	return mUsername;
-    }
+		// website
+		mWebsite = Utils.getPropertyString(graphObject, Properties.WEBSITE);
 
-    /**
-     * The URL of the Page's website
-     * 
-     * @return
-     */
-    public String getWebsite() {
-	return mWebsite;
-    }
+		// were here count
+		mWereHereCount = Utils.getPropertyInteger(graphObject, Properties.WERE_HERE_COUNT);
+	}
 
-    /**
-     * The number of visits to this Page's location
-     * 
-     * @return
-     */
-    public Integer getWereHereCount() {
-	return mWereHereCount;
-    }
+	public static Page create(GraphObject graphObject) {
+		return new Page(graphObject);
+	}
 
-    public static class Properties {
+	public GraphObject getGraphObject() {
+		return mGraphObject;
+	}
 
 	/**
 	 * The Page ID
+	 * 
+	 * @return
 	 */
-	public static final String ID = "id";
+	public String getId() {
+		return mId;
+	}
 
 	/**
 	 * Information about the Page
+	 * 
+	 * @return
 	 */
-	public static final String ABOUT = "about";
+	public String getAbout() {
+		return mAbout;
+	}
 
 	/**
-	 * Dress code of the business. Applicable to Restaurants or Nightlife.
-	 * Can be one of Casual, Dressy or Unspecified
+	 * Dress code of the business. Applicable to Restaurants or Nightlife. Can
+	 * be one of Casual, Dressy or Unspecified
+	 * 
+	 * @return
 	 */
-	public static final String ATTIRE = "attire";
+	public String getAttire() {
+		return mAttire;
+	}
 
 	/**
 	 * Members of the band. Applicable to Bands
+	 * 
+	 * @return
 	 */
-	public static final String BAND_MEMBERS = "band_members";
-
-	/**
-	 * The best available Page on Facebook for the concept represented by
-	 * this Page. The best available Page takes into account authenticity
-	 * and fan count
-	 */
-	public static final String BEST_PAGE = "best_page";
+	public String getBandMembers() {
+		return mBandMembers;
+	}
 
 	/**
 	 * Birthday of this person. Applicable to Pages representing people
+	 * 
+	 * @return
 	 */
-	public static final String BIRTHDAY = "birthday";
+	public String getBirthday() {
+		return mBirthday;
+	}
 
 	/**
 	 * Booking agent of the band. Applicable to Bands
+	 * 
+	 * @return
 	 */
-	public static final String BOOKING_AGENT = "booking_agent";
+	public String getBookingAgent() {
+		return mBookingAgent;
+	}
 
 	/**
 	 * Whether the current session user can post on this Page
+	 * 
+	 * @return
 	 */
-	public static final String CAN_POST = "can_post";
+	public Boolean canPost() {
+		return mCanPost;
+	}
 
 	/**
 	 * The Page's category. e.g. Product/Service, Computers/Technology
+	 * 
+	 * @return
 	 */
-	public static final String CATEGORY = "category";
+	public String getCategory() {
+		return mCategory;
+	}
 
 	/**
 	 * Number of checkins at a place represented by a Page
+	 * 
+	 * @return
 	 */
-	public static final String CHECKINS = "checkins";
+	public Integer getNumCheckins() {
+		return mNumCheckins;
+	}
 
 	/**
 	 * The company overview. Applicable to Companies
+	 * 
+	 * @return
 	 */
-	public static final String COMPANY_OVERVIEW = "company_overview";
+	public String getCompanyOverview() {
+		return mCompanyOverview;
+	}
 
 	/**
 	 * URL to the Photo that represents this cover photo.
+	 * 
+	 * @return
 	 */
-	public static final String COVER = "cover";
+	public String getCover() {
+		return mCover;
+	}
 
 	/**
 	 * Current location of the Page
+	 * 
+	 * @return
 	 */
-	public static final String CURRENT_LOCATION = "current_location";
+	public String getCurrentLocation() {
+		return mCurrentLocation;
+	}
 
 	/**
 	 * The description of the Page
+	 * 
+	 * @return
 	 */
-	public static final String DESCRIPTION = "description";
+	public String getDescription() {
+		return mDescription;
+	}
 
 	/**
 	 * The director of the film. Applicable to Films
+	 * 
+	 * @return
 	 */
-	public static final String DIRECTED_BY = "directed_by";
+	public String getDirectedBy() {
+		return mDirectedBy;
+	}
 
 	/**
 	 * When the company is founded. Applicable to Companies
+	 * 
+	 * @return
 	 */
-	public static final String FOUNDED = "founded";
+	public String getFounded() {
+		return mFounded;
+	}
 
 	/**
 	 * General information provided by the Page
+	 * 
+	 * @return
 	 */
-	public static final String GENERAL_INFO = "general_info";
+	public String getGeneralInfo() {
+		return mGeneralInfo;
+	}
 
 	/**
-	 * General manager of the business. Applicable to Restaurants or
-	 * Nightlife
+	 * General manager of the business. Applicable to Restaurants or Nightlife
+	 * 
+	 * @return
 	 */
-	public static final String GENERAL_MANAGER = "general_manager";
+	public String getGeneralManager() {
+		return mGeneralManager;
+	}
 
 	/**
 	 * Hometown of the band. Applicable to Bands
+	 * 
+	 * @return
 	 */
-	public static final String HOMETOWN = "hometown";
+	public String getHometown() {
+		return mHometown;
+	}
+
+	// /**
+	// * {day}_{number}_{status}_{time} <br>
+	// * Indicates a single range of opening hours for a day. Each day can have
+	// 2
+	// * different hours ranges. {day} should be the first 3 characters of the
+	// day
+	// * of the week, {number} should be either 1 or 2 to allow for the two
+	// * different hours ranges per day. {status} should be either open or close
+	// * to delineate the start or end of a time range. An example would be
+	// * mon_1_open with value 17:00 and mon_1_close with value 21:15 which
+	// would
+	// * represent a single opening range of 5pm to 9:15pm on Mondays.
+	// *
+	// * @return
+	// */
+	// public List<String> getHours() {
+	// return null;
+	// }
 
 	/**
-	 * {day}_{number}_{status}_{time} <br>
-	 * Indicates a single range of opening hours for a day. Each day can
-	 * have 2 different hours ranges. {day} should be the first 3 characters
-	 * of the day of the week, {number} should be either 1 or 2 to allow for
-	 * the two different hours ranges per day. {status} should be either
-	 * open or close to delineate the start or end of a time range. An
-	 * example would be mon_1_open with value 17:00 and mon_1_close with
-	 * value 21:15 which would represent a single opening range of 5pm to
-	 * 9:15pm on Mondays.
+	 * For businesses that are no longer operating.
+	 * 
+	 * @return
 	 */
-	public static final String HOURS = "hours";
-	
-	/**
-	 * For businesses that are no longer operating
-	 */
-	public static final String IS_PERMANENTLY_CLOSED = "is_permanently_closed";
-	
+	public Boolean isPermanentlyClosed() {
+		return mIsPermanetlyClosed;
+	}
+
 	/**
 	 * Indicates whether the Page is published and visible to non-admins
+	 * 
+	 * @return
 	 */
-	public static final String IS_PUBLISHED = "is_published";
-	
+	public Boolean isPublished() {
+		return mIsPublished;
+	}
+
 	/**
 	 * Indicates whether the Page is unclaimed
+	 * 
+	 * @return
 	 */
-	public static final String IS_UNCLAIMED = "is_unclaimed";
-	
+	public Boolean isUnclaimed() {
+		return mIsUnclaimed;
+	}
+
 	/**
-	 * The number of users who like the Page. For Global Brand Pages this is the count for all pages across the brand
+	 * The number of users who like the Page. For Global Brand Pages this is the
+	 * count for all pages across the brand
+	 * 
+	 * @return
 	 */
-	public static final String LIKES = "likes";
-	
+	public Integer getLikes() {
+		return mLikes;
+	}
+
 	/**
 	 * The Page's Facebook URL
+	 * 
+	 * @return
 	 */
-	public static final String LINK = "link";
-	
+	public String getLink() {
+		return mLink;
+	}
+
 	/**
 	 * The location of this place. Applicable to all Places
+	 * 
+	 * @return
 	 */
-	public static final String LOCATION = "location";
-	
+	public Location getLocation() {
+		return mLocation;
+	}
+
 	/**
 	 * The company mission. Applicable to Companies
+	 * 
+	 * @return
 	 */
-	public static final String MISSION = "mission";
-	
+	public String getMission() {
+		return mMission;
+	}
+
 	/**
-	 * The name of the Page
+	 * The name of the Page.
+	 * 
+	 * @return
 	 */
-	public static final String NAME = "name";
-	
+	public String getName() {
+		return mName;
+	}
+
 	/**
 	 * Information about the parking available at a place
+	 * 
+	 * @return
 	 */
-	public static final String PARKING = "parking";
-	
+	public Parking getParking() {
+		return mParking;
+	}
+
 	/**
 	 * Phone number provided by a Page
+	 * 
+	 * @return
 	 */
-	public static final String PHONE = "phone";
-	
+	public String getPhone() {
+		return mPhone;
+	}
+
 	/**
 	 * Press contact information of the band. Applicable to Bands
+	 * 
+	 * @return
 	 */
-	public static final String PRESS_CONTACT = "press_contact";
-	
+	public String getPressContanct() {
+		return mPressContact;
+	}
+
 	/**
-	 * Price range of the business. Applicable to Restaurants or Nightlife
+	 * Price range of the business. Applicable to Restaurants or Nightlife.
+	 * 
+	 * @return
 	 */
-	public static final String PRICE_RANGE = "price_range";
-	
+	public String getPriceRange() {
+		return mPriceRange;
+	}
+
 	/**
 	 * The products of this company. Applicable to Companies
+	 * 
+	 * @return
 	 */
-	public static final String PRODUCTS = "products";
-	
+	public String getProducts() {
+		return mProduct;
+	}
+
 	/**
 	 * Services the restaurant provides. Applicable to Restaurants
+	 * 
+	 * @return
 	 */
-	public static final String RESTAURANT_SERVICES = "restaurant_services";
-	
+	public RestaurantService getRestaurantService() {
+		return mRestaurantService;
+	}
+
 	/**
 	 * The restaurant's specialties. Applicable to Restaurants
+	 * 
+	 * @return
 	 */
-	public static final String RESTAURANT_SPECIALTIES = "restaurant_specialties";
-	
+	public RestaurantSpecialties getRestaurantSpecialties() {
+		return mRestaurantSpecialties;
+	}
+
 	/**
 	 * The number of people talking about this Page
+	 * 
+	 * @return
 	 */
-	public static final String TALKING_ABOUT_COUNT = "talking_about_count";
-	
+	public Integer getTalkingAboutCount() {
+		return mTalkingAboutCount;
+	}
+
 	/**
-	 * The alias of the Page. For example, for www.facebook.com/platform the username is 'platform'
+	 * The alias of the Page. For example, for www.facebook.com/platform the
+	 * username is 'platform'
+	 * 
+	 * @return
 	 */
-	public static final String USERNAME = "username";
-	
+	public String getUsername() {
+		return mUsername;
+	}
+
 	/**
 	 * The URL of the Page's website
+	 * 
+	 * @return
 	 */
-	public static final String WEBSITE = "website";
-	
+	public String getWebsite() {
+		return mWebsite;
+	}
+
 	/**
 	 * The number of visits to this Page's location
+	 * 
+	 * @return
 	 */
-	public static final String WERE_HERE_COUNT = "were_here_count";
-    }
+	public Integer getWereHereCount() {
+		return mWereHereCount;
+	}
+
+	public static class Properties {
+
+		/**
+		 * The Page ID
+		 */
+		public static final String ID = "id";
+
+		/**
+		 * Information about the Page
+		 */
+		public static final String ABOUT = "about";
+
+		/**
+		 * Dress code of the business. Applicable to Restaurants or Nightlife.
+		 * Can be one of Casual, Dressy or Unspecified
+		 */
+		public static final String ATTIRE = "attire";
+
+		/**
+		 * Members of the band. Applicable to Bands
+		 */
+		public static final String BAND_MEMBERS = "band_members";
+
+		/**
+		 * The best available Page on Facebook for the concept represented by
+		 * this Page. The best available Page takes into account authenticity
+		 * and fan count
+		 */
+		public static final String BEST_PAGE = "best_page";
+
+		/**
+		 * Birthday of this person. Applicable to Pages representing people
+		 */
+		public static final String BIRTHDAY = "birthday";
+
+		/**
+		 * Booking agent of the band. Applicable to Bands
+		 */
+		public static final String BOOKING_AGENT = "booking_agent";
+
+		/**
+		 * Whether the current session user can post on this Page
+		 */
+		public static final String CAN_POST = "can_post";
+
+		/**
+		 * The Page's category. e.g. Product/Service, Computers/Technology
+		 */
+		public static final String CATEGORY = "category";
+
+		/**
+		 * Number of checkins at a place represented by a Page
+		 */
+		public static final String CHECKINS = "checkins";
+
+		/**
+		 * The company overview. Applicable to Companies
+		 */
+		public static final String COMPANY_OVERVIEW = "company_overview";
+
+		/**
+		 * URL to the Photo that represents this cover photo.
+		 */
+		public static final String COVER = "cover";
+
+		/**
+		 * Current location of the Page
+		 */
+		public static final String CURRENT_LOCATION = "current_location";
+
+		/**
+		 * The description of the Page
+		 */
+		public static final String DESCRIPTION = "description";
+
+		/**
+		 * The director of the film. Applicable to Films
+		 */
+		public static final String DIRECTED_BY = "directed_by";
+
+		/**
+		 * When the company is founded. Applicable to Companies
+		 */
+		public static final String FOUNDED = "founded";
+
+		/**
+		 * General information provided by the Page
+		 */
+		public static final String GENERAL_INFO = "general_info";
+
+		/**
+		 * General manager of the business. Applicable to Restaurants or
+		 * Nightlife
+		 */
+		public static final String GENERAL_MANAGER = "general_manager";
+
+		/**
+		 * Hometown of the band. Applicable to Bands
+		 */
+		public static final String HOMETOWN = "hometown";
+
+		/**
+		 * {day}_{number}_{status}_{time} <br>
+		 * Indicates a single range of opening hours for a day. Each day can
+		 * have 2 different hours ranges. {day} should be the first 3 characters
+		 * of the day of the week, {number} should be either 1 or 2 to allow for
+		 * the two different hours ranges per day. {status} should be either
+		 * open or close to delineate the start or end of a time range. An
+		 * example would be mon_1_open with value 17:00 and mon_1_close with
+		 * value 21:15 which would represent a single opening range of 5pm to
+		 * 9:15pm on Mondays.
+		 */
+		public static final String HOURS = "hours";
+
+		/**
+		 * For businesses that are no longer operating
+		 */
+		public static final String IS_PERMANENTLY_CLOSED = "is_permanently_closed";
+
+		/**
+		 * Indicates whether the Page is published and visible to non-admins
+		 */
+		public static final String IS_PUBLISHED = "is_published";
+
+		/**
+		 * Indicates whether the Page is unclaimed
+		 */
+		public static final String IS_UNCLAIMED = "is_unclaimed";
+
+		/**
+		 * The number of users who like the Page. For Global Brand Pages this is
+		 * the count for all pages across the brand
+		 */
+		public static final String LIKES = "likes";
+
+		/**
+		 * The Page's Facebook URL
+		 */
+		public static final String LINK = "link";
+
+		/**
+		 * The location of this place. Applicable to all Places
+		 */
+		public static final String LOCATION = "location";
+
+		/**
+		 * The company mission. Applicable to Companies
+		 */
+		public static final String MISSION = "mission";
+
+		/**
+		 * The name of the Page
+		 */
+		public static final String NAME = "name";
+
+		/**
+		 * Information about the parking available at a place
+		 */
+		public static final String PARKING = "parking";
+
+		/**
+		 * Phone number provided by a Page
+		 */
+		public static final String PHONE = "phone";
+
+		/**
+		 * Press contact information of the band. Applicable to Bands
+		 */
+		public static final String PRESS_CONTACT = "press_contact";
+
+		/**
+		 * Price range of the business. Applicable to Restaurants or Nightlife
+		 */
+		public static final String PRICE_RANGE = "price_range";
+
+		/**
+		 * The products of this company. Applicable to Companies
+		 */
+		public static final String PRODUCTS = "products";
+
+		/**
+		 * Services the restaurant provides. Applicable to Restaurants
+		 */
+		public static final String RESTAURANT_SERVICES = "restaurant_services";
+
+		/**
+		 * The restaurant's specialties. Applicable to Restaurants
+		 */
+		public static final String RESTAURANT_SPECIALTIES = "restaurant_specialties";
+
+		/**
+		 * The number of people talking about this Page
+		 */
+		public static final String TALKING_ABOUT_COUNT = "talking_about_count";
+
+		/**
+		 * The alias of the Page. For example, for www.facebook.com/platform the
+		 * username is 'platform'
+		 */
+		public static final String USERNAME = "username";
+
+		/**
+		 * The URL of the Page's website
+		 */
+		public static final String WEBSITE = "website";
+
+		/**
+		 * The number of visits to this Page's location
+		 */
+		public static final String WERE_HERE_COUNT = "were_here_count";
+	}
 }

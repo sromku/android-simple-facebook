@@ -4,69 +4,69 @@ import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 
 public class Work {
-    
-    private static final String NAME = "name";
-    private static final String EMPLOYER = "employer";
-    private static final String LOCATION = "location";
-    private static final String POSITION = "position";
-    private static final String DESCRIPTION = "description";
-    private static final String START_DATE = "start_date";
-    private static final String END_DATE = "end_date";
 
-    private User mEmployer;
-    private Location mLocation;
-    private String mPosition;
-    private String mDescription;
-    private String mStartDate;
-    private String mEndDate;
+	private static final String NAME = "name";
+	private static final String EMPLOYER = "employer";
+	private static final String LOCATION = "location";
+	private static final String POSITION = "position";
+	private static final String DESCRIPTION = "description";
+	private static final String START_DATE = "start_date";
+	private static final String END_DATE = "end_date";
 
-    private Work(GraphObject graphObject) {
-	
-	 // employer
-	mEmployer = Utils.createUser(graphObject, EMPLOYER);
+	private User mEmployer;
+	private Location mLocation;
+	private String mPosition;
+	private String mDescription;
+	private String mStartDate;
+	private String mEndDate;
 
-	// location
-	GraphObject location = Utils.getPropertyGraphObject(graphObject, LOCATION);
-	mLocation = Location.create(location);
+	private Work(GraphObject graphObject) {
 
-	// position
-	mPosition = Utils.getPropertyInsideProperty(graphObject, POSITION, NAME);
+		// employer
+		mEmployer = Utils.createUser(graphObject, EMPLOYER);
 
-	 // description
-	mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
+		// location
+		GraphObject location = Utils.getPropertyGraphObject(graphObject, LOCATION);
+		mLocation = Location.create(location);
 
-	 // start date
-	mStartDate = Utils.getPropertyString(graphObject, START_DATE);
+		// position
+		mPosition = Utils.getPropertyInsideProperty(graphObject, POSITION, NAME);
 
-	 // end date
-	mEndDate = Utils.getPropertyString(graphObject, END_DATE);
-    }
-    
-    public static Work create(GraphObject graphObject) {
-	return new Work(graphObject);
-    }
+		// description
+		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
 
-    public User getEmployer() {
-	return mEmployer;
-    }
+		// start date
+		mStartDate = Utils.getPropertyString(graphObject, START_DATE);
 
-    public Location getLocation() {
-	return mLocation;
-    }
+		// end date
+		mEndDate = Utils.getPropertyString(graphObject, END_DATE);
+	}
 
-    public String getPosition() {
-	return mPosition;
-    }
+	public static Work create(GraphObject graphObject) {
+		return new Work(graphObject);
+	}
 
-    public String getDescription() {
-	return mDescription;
-    }
+	public User getEmployer() {
+		return mEmployer;
+	}
 
-    public String getStartDate() {
-	return mStartDate;
-    }
+	public Location getLocation() {
+		return mLocation;
+	}
 
-    public String getEndDate() {
-	return mEndDate;
-    }
+	public String getPosition() {
+		return mPosition;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public String getStartDate() {
+		return mStartDate;
+	}
+
+	public String getEndDate() {
+		return mEndDate;
+	}
 }

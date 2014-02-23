@@ -27,45 +27,45 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class GetEventsAction extends GetAction<List<Event>> {
 
-    private EventDesicion mEventDesicion = EventDesicion.ATTENDING; // default
+	private EventDesicion mEventDesicion = EventDesicion.ATTENDING; // default
 
-    public GetEventsAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
-
-    /**
-     * Get the events of the user based on his/her decision. You can not ask for
-     * all events of the user and only then filter, you have to filter by
-     * attendance of the user.
-     * 
-     * @param eventDesicion
-     */
-    public void setEventDesicion(EventDesicion eventDesicion) {
-	mEventDesicion = eventDesicion;
-    }
-
-    @Override
-    protected String getGraphPath() {
-	// example path: {user-id}/events/attending
-	return getTarget() + "/" + GraphPath.EVENTS + "/" + mEventDesicion.getGraphNode();
-    }
-
-    @Override
-    protected Bundle getBundle() {
-	Bundle bundle = new Bundle();
-	bundle.putString("date_format", "U");
-	return bundle;
-    }
-
-    @Override
-    protected List<Event> processResponse(Response response) throws JSONException {
-	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-	List<Event> events = new ArrayList<Event>(graphObjects.size());
-	for (GraphObject graphObject : graphObjects) {
-	    Event event = Event.create(graphObject);
-	    events.add(event);
+	public GetEventsAction(SessionManager sessionManager) {
+		super(sessionManager);
 	}
-	return events;
-    }
+
+	/**
+	 * Get the events of the user based on his/her decision. You can not ask for
+	 * all events of the user and only then filter, you have to filter by
+	 * attendance of the user.
+	 * 
+	 * @param eventDesicion
+	 */
+	public void setEventDesicion(EventDesicion eventDesicion) {
+		mEventDesicion = eventDesicion;
+	}
+
+	@Override
+	protected String getGraphPath() {
+		// example path: {user-id}/events/attending
+		return getTarget() + "/" + GraphPath.EVENTS + "/" + mEventDesicion.getGraphNode();
+	}
+
+	@Override
+	protected Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString("date_format", "U");
+		return bundle;
+	}
+
+	@Override
+	protected List<Event> processResponse(Response response) throws JSONException {
+		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+		List<Event> events = new ArrayList<Event>(graphObjects.size());
+		for (GraphObject graphObject : graphObjects) {
+			Event event = Event.create(graphObject);
+			events.add(event);
+		}
+		return events;
+	}
 
 }

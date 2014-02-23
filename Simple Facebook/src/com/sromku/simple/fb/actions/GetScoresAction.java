@@ -15,37 +15,37 @@ import com.sromku.simple.fb.utils.GraphPath;
 
 public class GetScoresAction extends GetAction<JSONArray> {
 
-    private OnScoresRequestListener mOnScoresRequestListener;
+	private OnScoresRequestListener mOnScoresRequestListener;
 
-    public GetScoresAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
+	public GetScoresAction(SessionManager sessionManager) {
+		super(sessionManager);
+	}
 
-    public void setOnScoresRequestListener(OnScoresRequestListener onScoresRequestListener) {
-	mOnScoresRequestListener = onScoresRequestListener;
-    }
+	public void setOnScoresRequestListener(OnScoresRequestListener onScoresRequestListener) {
+		mOnScoresRequestListener = onScoresRequestListener;
+	}
 
-    @Override
-    protected String getGraphPath() {
-	return String.format("%s/%s", configuration.getAppId(), GraphPath.SCORES);
-    }
+	@Override
+	protected String getGraphPath() {
+		return String.format("%s/%s", configuration.getAppId(), GraphPath.SCORES);
+	}
 
-    @Override
-    protected Bundle getBundle() {
-	return null;
-    }
+	@Override
+	protected Bundle getBundle() {
+		return null;
+	}
 
-    @Override
-    protected OnActionListener<JSONArray> getActionListener() {
-	return mOnScoresRequestListener;
-    }
+	@Override
+	protected OnActionListener<JSONArray> getActionListener() {
+		return mOnScoresRequestListener;
+	}
 
-    @Override
-    protected JSONArray processResponse(Response response) throws JSONException {
-	GraphObject graphObject = response.getGraphObject();
-	JSONObject graphResponse = graphObject.getInnerJSONObject();
-	JSONArray result = graphResponse.getJSONArray("data");
-	return result;
-    }
+	@Override
+	protected JSONArray processResponse(Response response) throws JSONException {
+		GraphObject graphObject = response.getGraphObject();
+		JSONObject graphResponse = graphObject.getInnerJSONObject();
+		JSONArray result = graphResponse.getJSONArray("data");
+		return result;
+	}
 
 }

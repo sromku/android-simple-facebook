@@ -16,28 +16,28 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class GetLikesAction extends GetAction<List<Like>> {
 
-    public GetLikesAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
-
-    @Override
-    protected String getGraphPath() {
-	return getTarget() + "/" + GraphPath.LIKES;
-    }
-
-    @Override
-    protected Bundle getBundle() {
-	return null;
-    }
-
-    @Override
-    protected List<Like> processResponse(Response response) throws JSONException {
-	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-	List<Like> likes = new ArrayList<Like>(graphObjects.size());
-	for (GraphObject graphObject : graphObjects) {
-	    Like like = Like.create(graphObject);
-	    likes.add(like);
+	public GetLikesAction(SessionManager sessionManager) {
+		super(sessionManager);
 	}
-	return likes;
-    }
+
+	@Override
+	protected String getGraphPath() {
+		return getTarget() + "/" + GraphPath.LIKES;
+	}
+
+	@Override
+	protected Bundle getBundle() {
+		return null;
+	}
+
+	@Override
+	protected List<Like> processResponse(Response response) throws JSONException {
+		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+		List<Like> likes = new ArrayList<Like>(graphObjects.size());
+		for (GraphObject graphObject : graphObjects) {
+			Like like = Like.create(graphObject);
+			likes.add(like);
+		}
+		return likes;
+	}
 }

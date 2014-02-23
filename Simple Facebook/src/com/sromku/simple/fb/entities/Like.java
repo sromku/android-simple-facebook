@@ -5,17 +5,17 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class Like {
 
-    private User mUser;
+	private User mUser;
 
-    private Like(GraphObject graphObject) {
-	mUser = Utils.createUser(graphObject);
-    }
+	private Like(GraphObject graphObject) {
+		mUser = Utils.createUser(graphObject);
+	}
 
-    public static Like create(GraphObject graphObject) {
-	return new Like(graphObject);
-    }
+	public static Like create(GraphObject graphObject) {
+		return new Like(graphObject);
+	}
 
-    public User getUser() {
-	return mUser;
-    }
+	public User getUser() {
+		return mUser;
+	}
 }

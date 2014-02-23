@@ -16,31 +16,31 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class GetGroupsAction extends GetAction<List<Group>> {
 
-    public GetGroupsAction(SessionManager sessionManager) {
-	super(sessionManager);
-    }
-
-    @Override
-    protected String getGraphPath() {
-	return getTarget() + "/" + GraphPath.GROUPS;
-    }
-
-    @Override
-    protected Bundle getBundle() {
-	Bundle bundle = new Bundle();
-	bundle.putString("date_format", "U");
-	return bundle;
-    }
-
-    @Override
-    protected List<Group> processResponse(Response response) throws JSONException {
-	List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-	List<Group> groups = new ArrayList<Group>(graphObjects.size());
-	for (GraphObject graphObject : graphObjects) {
-	    Group group = Group.create(graphObject);
-	    groups.add(group);
+	public GetGroupsAction(SessionManager sessionManager) {
+		super(sessionManager);
 	}
-	return groups;
-    }
+
+	@Override
+	protected String getGraphPath() {
+		return getTarget() + "/" + GraphPath.GROUPS;
+	}
+
+	@Override
+	protected Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString("date_format", "U");
+		return bundle;
+	}
+
+	@Override
+	protected List<Group> processResponse(Response response) throws JSONException {
+		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+		List<Group> groups = new ArrayList<Group>(graphObjects.size());
+		for (GraphObject graphObject : graphObjects) {
+			Group group = Group.create(graphObject);
+			groups.add(group);
+		}
+		return groups;
+	}
 
 }
