@@ -186,6 +186,20 @@ public class SimpleFacebook {
 		getAlbumsAction.setActionListener(onAlbumsRequestListener);
 		getAlbumsAction.execute();
 	}
+	
+	/**
+	 * Get albums
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permissions#USER_PHOTOS}
+	 */
+	public void getAlbums(String entityId, OnAlbumsRequestListener onAlbumsRequestListener) {
+		GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
+		getAlbumsAction.setActionListener(onAlbumsRequestListener);
+		getAlbumsAction.setTarget(entityId); 
+		getAlbumsAction.execute();
+	}
+
 
 	/**
 	 * Get app requests
@@ -208,6 +222,18 @@ public class SimpleFacebook {
 		getCheckinsAction.setActionListener(onCheckinsListener);
 		getCheckinsAction.execute();
 	}
+	
+	/**
+	 * Get checkins.
+	 * 
+	 * @param onCheckinsListener
+	 */
+	public void getCheckins(String entityId, OnCheckinsListener onCheckinsListener) {
+		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
+		getCheckinsAction.setActionListener(onCheckinsListener);
+		getCheckinsAction.setTarget(entityId);
+		getCheckinsAction.execute();
+	}
 
 	/**
 	 * Get comments of specific entity.
@@ -218,6 +244,7 @@ public class SimpleFacebook {
 	public void getComments(String entityId, OnCommentsListener onCommentsListener) {
 		GetCommentsAction getCommentsAction = new GetCommentsAction(mSessionManager);
 		getCommentsAction.setActionListener(onCommentsListener);
+		getCommentsAction.setTarget(entityId);
 		getCommentsAction.execute();
 	}
 
@@ -231,6 +258,20 @@ public class SimpleFacebook {
 		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
 		getEventsAction.setActionListener(onEventsListener);
 		getEventsAction.setEventDesicion(eventDesicion);
+		getEventsAction.execute();
+	}
+	
+	/**
+	 * Get events of the user.
+	 * 
+	 * @param eventDesicion
+	 * @param onEventsListener
+	 */
+	public void getEvents(String entityId, EventDesicion eventDesicion, OnEventsListener onEventsListener) {
+		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
+		getEventsAction.setActionListener(onEventsListener);
+		getEventsAction.setEventDesicion(eventDesicion);
+		getEventsAction.setTarget(entityId);
 		getEventsAction.execute();
 	}
 
@@ -285,11 +326,24 @@ public class SimpleFacebook {
 	 * 
 	 * @param onGroupsListener
 	 */
+	public void getGroups(String entityId, OnGroupsListener onGroupsListener) {
+		GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
+		getGroupsAction.setActionListener(onGroupsListener);
+		getGroupsAction.setTarget(entityId);
+		getGroupsAction.execute();
+	}
+	
+	/**
+	 * Get groups.
+	 * 
+	 * @param onGroupsListener
+	 */
 	public void getGroups(OnGroupsListener onGroupsListener) {
 		GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
 		getGroupsAction.setActionListener(onGroupsListener);
 		getGroupsAction.execute();
 	}
+
 
 	/**
 	 * Get likes of specific entity.
@@ -300,6 +354,7 @@ public class SimpleFacebook {
 	public void getLikes(String entityId, OnLikesListener onLikesListener) {
 		GetLikesAction getLikesAction = new GetLikesAction(mSessionManager);
 		getLikesAction.setActionListener(onLikesListener);
+		getLikesAction.setTarget(entityId);
 		getLikesAction.execute();
 	}
 
@@ -311,6 +366,18 @@ public class SimpleFacebook {
 	public void getPhotos(OnPhotosListener onPhotosListener) {
 		GetPhotosAction getPhotosAction = new GetPhotosAction(mSessionManager);
 		getPhotosAction.setActionListener(onPhotosListener);
+		getPhotosAction.execute();
+	}
+	
+	/**
+	 * Get photos.
+	 * 
+	 * @param onPhotosListener
+	 */
+	public void getPhotos(String entityId, OnPhotosListener onPhotosListener) {
+		GetPhotosAction getPhotosAction = new GetPhotosAction(mSessionManager);
+		getPhotosAction.setActionListener(onPhotosListener);
+		getPhotosAction.setTarget(entityId);
 		getPhotosAction.execute();
 	}
 
@@ -377,6 +444,19 @@ public class SimpleFacebook {
 		getPostsAction.setActionListener(onPostsListener);
 		getPostsAction.execute();
 	}
+	
+	/**
+	 * Get all posts.
+	 * 
+	 * @param onPostsListener
+	 */
+	public void getPosts(String entityId, OnPostsListener onPostsListener) {
+		GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
+		getPostsAction.setActionListener(onPostsListener);
+		getPostsAction.setTarget(entityId);
+		getPostsAction.execute();
+	}
+
 
 	/**
 	 * 
@@ -402,6 +482,18 @@ public class SimpleFacebook {
 	public void getVideos(OnVideosListener onVideosListener) {
 		GetVideosAction getVideosAction = new GetVideosAction(mSessionManager);
 		getVideosAction.setActionListener(onVideosListener);
+		getVideosAction.execute();
+	}
+	
+	/**
+	 * Get videos of the user.
+	 * 
+	 * @param onVideosListener
+	 */
+	public void getVideos(String entityId, OnVideosListener onVideosListener) {
+		GetVideosAction getVideosAction = new GetVideosAction(mSessionManager);
+		getVideosAction.setActionListener(onVideosListener);
+		getVideosAction.setTarget(entityId);
 		getVideosAction.execute();
 	}
 
