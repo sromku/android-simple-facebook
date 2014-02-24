@@ -91,7 +91,7 @@ public class Video implements Publishable {
 
 	private Video(GraphObject graphObject) {
 		// comments
-		mComments = Utils.createList(graphObject, COMMENTS, new Converter<Comment>() {
+		mComments = Utils.createList(graphObject, COMMENTS, "data", new Converter<Comment>() {
 			@Override
 			public Comment convert(GraphObject graphObject) {
 				return Comment.create(graphObject);
@@ -126,7 +126,7 @@ public class Video implements Publishable {
 		mSource = Utils.getPropertyString(graphObject, SOURCE);
 
 		// tags
-		mTags = Utils.createList(graphObject, TAGS, new Converter<User>() {
+		mTags = Utils.createList(graphObject, TAGS, "data", new Converter<User>() {
 			@Override
 			public User convert(GraphObject graphObject) {
 				return Utils.createUser(graphObject);

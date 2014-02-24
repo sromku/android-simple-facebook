@@ -20,6 +20,7 @@ public class Post {
 	private static final String APPLICATION = "application";
 	private static final String CAPTION = "caption";
 	private static final String COMMENTS = "comments";
+	private static final String LIKES = "likes";
 	private static final String CREATED_TIME = "created_time";
 	private static final String DESCRIPTION = "description";
 	private static final String FROM = "from";
@@ -47,6 +48,7 @@ public class Post {
 	private Application mApplication;
 	private String mCaption;
 	private List<Comment> mComments;
+	private List<Like> mLikes;
 	private Long mCreatedTime;
 	private String mDescription;
 	private User mFrom;
@@ -91,10 +93,18 @@ public class Post {
 		mCaption = Utils.getPropertyString(graphObject, CAPTION);
 
 		// comments
-		mComments = Utils.createList(graphObject, COMMENTS, new Converter<Comment>() {
+		mComments = Utils.createList(graphObject, COMMENTS, "data", new Converter<Comment>() {
 			@Override
 			public Comment convert(GraphObject graphObject) {
 				return Comment.create(graphObject);
+			}
+		});
+
+		// likes
+		mLikes = Utils.createList(graphObject, LIKES, "data", new Converter<Like>() {
+			@Override
+			public Like convert(GraphObject graphObject) {
+				return Like.create(graphObject);
 			}
 		});
 
@@ -123,7 +133,7 @@ public class Post {
 		mMessage = Utils.getPropertyString(graphObject, MESSAGE);
 
 		// message tags
-		mMessageTags = Utils.createList(graphObject, MESSAGE_TAGS, new Converter<InlineTag>() {
+		mMessageTags = Utils.createListAggregateValues(graphObject, MESSAGE_TAGS, new Converter<InlineTag>() {
 			@Override
 			public InlineTag convert(GraphObject graphObject) {
 				return InlineTag.create(graphObject);
@@ -169,7 +179,7 @@ public class Post {
 		mStory = Utils.getPropertyString(graphObject, STORY);
 
 		// story tags
-		mStoryTags = Utils.createList(graphObject, STORY_TAGS, new Converter<InlineTag>() {
+		mStoryTags = Utils.createListAggregateValues(graphObject, STORY_TAGS, new Converter<InlineTag>() {
 			@Override
 			public InlineTag convert(GraphObject graphObject) {
 				return InlineTag.create(graphObject);
@@ -177,7 +187,7 @@ public class Post {
 		});
 
 		// to
-		mTo = Utils.createList(graphObject, TO, new Converter<User>() {
+		mTo = Utils.createList(graphObject, TO, "data", new Converter<User>() {
 			@Override
 			public User convert(GraphObject graphObject) {
 				return null;
@@ -188,7 +198,7 @@ public class Post {
 		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
 
 		// with tags
-		mWithTags = Utils.createList(graphObject, WITH_TAGS, new Converter<User>() {
+		mWithTags = Utils.createList(graphObject, WITH_TAGS, "data", new Converter<User>() {
 			@Override
 			public User convert(GraphObject graphObject) {
 				return Utils.createUser(graphObject);
@@ -227,6 +237,13 @@ public class Post {
 	 */
 	public List<Comment> getComments() {
 		return mComments;
+	}
+	
+	/**
+	 * Likes of this post 
+	 */
+	public List<Like> getLikes() {
+		return mLikes;
 	}
 
 	/**

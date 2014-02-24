@@ -4,11 +4,15 @@ import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.json.JSONObject;
 
@@ -198,6 +202,46 @@ public class Utils {
 		}
 		return result;
 	}
+	
+	public static <T> List<T> createListAggregateValues(GraphObject graphObject, String property, Converter<T> converter) {
+		List<T> result = new ArrayList<T>();
+		if (graphObject == null) {
+			return result;
+		}
+		
+		GraphObject mapGraph = graphObject.getPropertyAs(property, GraphObject.class);
+		if (mapGraph == null) {
+			return result;
+		}
+		
+		// get the map of objects and have them in ordered way
+		Map<String, Object> map = mapGraph.asMap();
+		Set<String> keySet = map.keySet();
+		SortedSet<String> keys = new TreeSet<String>(new Comparator<String>() {
+			@Override
+			public int compare(String lhs, String rhs) {
+				return Integer.valueOf(lhs) - Integer.valueOf(rhs);
+			}
+		});
+		keys.addAll(keySet);
+
+		// iterate and create entity
+		for (String key : keys) {
+			GraphObjectList<GraphObject> graphObjects = mapGraph.getPropertyAsList(key, GraphObject.class);
+			if (graphObjects == null || graphObjects.size() == 0) {
+				continue;
+			}
+			
+			ListIterator<GraphObject> iterator = graphObjects.listIterator();
+			while (iterator.hasNext()) {
+				GraphObject graphObjectItr = iterator.next();
+				T t = converter.convert(graphObjectItr);
+				result.add(t);
+			}
+		}
+		
+		return result;
+	}
 
 	public interface Converter<T> {
 		T convert(GraphObject graphObject);
@@ -230,7 +274,13 @@ public class Utils {
 		if (value == null || value.equals(EMPTY)) {
 			return null;
 		}
-		return Long.valueOf(String.valueOf(value));
+
+		try {
+			return Long.valueOf(String.valueOf(value));
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 	public static Boolean getPropertyBoolean(GraphObject graphObject, String property) {
@@ -252,7 +302,14 @@ public class Utils {
 		if (value == null || value.equals(EMPTY)) {
 			return null;
 		}
-		return Integer.valueOf(String.valueOf(value));
+
+		try {
+			return Integer.valueOf(String.valueOf(value));
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+
 	}
 
 	public static Double getPropertyDouble(GraphObject graphObject, String property) {
