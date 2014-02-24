@@ -27,7 +27,8 @@ public class SampleApplication extends Application {
 		Permission.USER_GROUPS,
 		Permission.USER_LIKES,
 		Permission.USER_PHOTOS,
-		Permission.USER_VIDEOS
+		Permission.USER_VIDEOS,
+		Permission.FRIENDS_EVENTS
 	};
 
 	SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
