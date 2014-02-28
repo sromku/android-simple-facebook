@@ -87,11 +87,23 @@ public class Event {
 	 * The attendance options of the user. He can accept and <b>attend</b> the
 	 * event, or say <b>maybe</b>, or totally <b>decline</b> the invitation.
 	 * 
+	 * <li>{@link #ATTENDING}</li> <li>{@link #MAYBE}</li> <li>{@link #DECLINED}
+	 * </li><br>
+	 * 
 	 * @author sromku
 	 */
 	public static enum EventDesicion {
+		/**
+		 * Events that user decided to attend
+		 */
 		ATTENDING("attending"),
+		/**
+		 * Events that user said maybe
+		 */
 		MAYBE("maybe"),
+		/**
+		 * Events that user declined
+		 */
 		DECLINED("declined");
 
 		private String graphNode;

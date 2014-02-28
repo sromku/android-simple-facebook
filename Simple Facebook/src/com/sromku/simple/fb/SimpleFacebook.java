@@ -1,6 +1,5 @@
 package com.sromku.simple.fb;
 
-import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +25,17 @@ import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.entities.Album;
+import com.sromku.simple.fb.entities.Checkin;
+import com.sromku.simple.fb.entities.Comment;
+import com.sromku.simple.fb.entities.Event;
 import com.sromku.simple.fb.entities.Event.EventDesicion;
 import com.sromku.simple.fb.entities.Feed;
+import com.sromku.simple.fb.entities.Group;
+import com.sromku.simple.fb.entities.Link;
+import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Post;
+import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
@@ -176,35 +183,52 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get albums
+	 * Get my albums.<br>
+	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#USER_PHOTOS}
+	 * {@link Permission#USER_PHOTOS}
+	 * 
+	 * @param onAlbumsRequestListener
+	 *            The callback listener
 	 */
 	public void getAlbums(OnAlbumsRequestListener onAlbumsRequestListener) {
 		GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
 		getAlbumsAction.setActionListener(onAlbumsRequestListener);
 		getAlbumsAction.execute();
 	}
-	
+
 	/**
-	 * Get albums
+	 * Get albums of entity. <br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
+	 * id of the profile: {@link Profile#getId()}<br>
+	 * - <b>Page</b>. It can be any page. To get the page id:
+	 * {@link Page#getId()}<br>
+	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#USER_PHOTOS}
+	 * {@link Permission#USER_PHOTOS}<br>
+	 * {@link Permission#FRIENDS_PHOTOS}
+	 * 
+	 * @param entityId
+	 *            profile id or page id.
+	 * @param onAlbumsRequestListener
+	 *            The callback listener.
 	 */
 	public void getAlbums(String entityId, OnAlbumsRequestListener onAlbumsRequestListener) {
 		GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
 		getAlbumsAction.setActionListener(onAlbumsRequestListener);
-		getAlbumsAction.setTarget(entityId); 
+		getAlbumsAction.setTarget(entityId);
 		getAlbumsAction.execute();
 	}
 
-
 	/**
-	 * Get app requests
+	 * Get all app requests made by me to others or by others to me.
 	 * 
 	 * @param onAppRequestsListener
+	 *            The callback listener.
 	 */
 	public void getAppRequests(OnAppRequestsListener onAppRequestsListener) {
 		GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
@@ -213,20 +237,40 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get checkins of the user.
+	 * Get checkins of the user.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_CHECKINS}<br>
+	 * {@link Permission#FRIENDS_CHECKINS}
 	 * 
 	 * @param onCheckinsListener
+	 *            The callback listener.
 	 */
 	public void getCheckins(OnCheckinsListener onCheckinsListener) {
 		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
 		getCheckinsAction.setActionListener(onCheckinsListener);
 		getCheckinsAction.execute();
 	}
-	
+
 	/**
-	 * Get checkins.
+	 * Get checkins of entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
+	 * id of the profile: {@link Profile#getId()}<br>
+	 * - <b>Page</b>. It can be any page. To get the page id:
+	 * {@link Page#getId()}<br>
+	 * <br>
 	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_CHECKINS}<br>
+	 * {@link Permission#FRIENDS_CHECKINS}
+	 * 
+	 * @param entityId
+	 *            profile id or page id.
 	 * @param onCheckinsListener
+	 *            The callback listener.
 	 */
 	public void getCheckins(String entityId, OnCheckinsListener onCheckinsListener) {
 		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
@@ -236,10 +280,30 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get comments of specific entity.
+	 * Get comments of specific entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Album</b>. Any album. To get the album id: {@link Album#getId()}<br>
+	 * - <b>Checkin</b>. Any checkin. To get the checkin id:
+	 * {@link Checkin#getId()}<br>
+	 * - <b>Comment</b>. Get all replied comments to this original comment. To
+	 * get comment id: {@link Comment#getId()} <br>
+	 * - <b>Link</b>. To get link id: {@link Link#getId()} <br>
+	 * - <b>Photo</b>. Any photo. To get the photo id: {@link Photo#getId()} <br>
+	 * - <b>Post</b>. Any post. To get the post id: {@link Post#getId()} <br>
+	 * - <b>Video</b>. Any video. To get the video id: {@link Video#getId()} <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * No special permission is needed, except the permission you asked for
+	 * getting the entity itself. For example, if you want to get comments of
+	 * album, you need to have the {@link Permission#USER_PHOTOS} or
+	 * {@link Permission#FRIENDS_PHOTOS} for getting the comments of this album.
 	 * 
 	 * @param entityId
+	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
 	 * @param onCommentsListener
+	 *            The callback listener.
 	 */
 	public void getComments(String entityId, OnCommentsListener onCommentsListener) {
 		GetCommentsAction getCommentsAction = new GetCommentsAction(mSessionManager);
@@ -249,10 +313,18 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get events of the user.
+	 * Get events of the user. Select which events you want to get by passing
+	 * {@link EventDesicion}.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_EVENTS}<br>
+	 * {@link Permission#FRIENDS_EVENTS}
 	 * 
 	 * @param eventDesicion
+	 *            The type of event: attending, maybe, declined.
 	 * @param onEventsListener
+	 *            The callback listener.
 	 */
 	public void getEvents(EventDesicion eventDesicion, OnEventsListener onEventsListener) {
 		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
@@ -260,12 +332,27 @@ public class SimpleFacebook {
 		getEventsAction.setEventDesicion(eventDesicion);
 		getEventsAction.execute();
 	}
-	
+
 	/**
-	 * Get events of the user.
+	 * Get events of specific entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
+	 * id of the profile: {@link Profile#getId()}<br>
+	 * - <b>Page</b>. Any page. To get the page id: {@link Page#getId()}<br>
+	 * - <b>Group</b>. Any group. To get the group id: {@link Group#getId()}<br>
+	 * <br>
 	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_EVENTS}<br>
+	 * {@link Permission#FRIENDS_EVENTS}
+	 * 
+	 * @param entityId
+	 *            Profile, Page or Group.
 	 * @param eventDesicion
+	 *            The type of event: attending, maybe, declined.
 	 * @param onEventsListener
+	 *            The callback listener.
 	 */
 	public void getEvents(String entityId, EventDesicion eventDesicion, OnEventsListener onEventsListener) {
 		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
@@ -278,17 +365,16 @@ public class SimpleFacebook {
 	/**
 	 * Get my friends from facebook.<br>
 	 * This method will return profile with next default properties depends on
-	 * permissions you have:<br>
-	 * <em>id, name</em>
+	 * permissions you have: <b><em>id, name</em></b><br>
+	 * <br>
 	 * 
-	 * <br>
-	 * <br>
 	 * If you need additional or other friend properties like:
 	 * <em>education, location and more</em>, then use this method:
 	 * {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
 	 * <br>
 	 * 
 	 * @param onFriendsRequestListener
+	 *            The callback listener.
 	 */
 	public void getFriends(OnFriendsRequestListener onFriendsRequestListener) {
 		getFriends(null, onFriendsRequestListener);
@@ -299,6 +385,7 @@ public class SimpleFacebook {
 	 * For example, if you need: <em>id, last_name, picture, birthday</em>
 	 * 
 	 * @param onFriendsRequestListener
+	 *            The callback listener.
 	 * @param properties
 	 *            The {@link Properties}. <br>
 	 *            To create {@link Properties} instance use:
@@ -322,21 +409,14 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get groups that user belongs to.
+	 * Get my groups.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_GROUPS}
 	 * 
 	 * @param onGroupsListener
-	 */
-	public void getGroups(String entityId, OnGroupsListener onGroupsListener) {
-		GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
-		getGroupsAction.setActionListener(onGroupsListener);
-		getGroupsAction.setTarget(entityId);
-		getGroupsAction.execute();
-	}
-	
-	/**
-	 * Get groups.
-	 * 
-	 * @param onGroupsListener
+	 *            The callback listener.
 	 */
 	public void getGroups(OnGroupsListener onGroupsListener) {
 		GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
@@ -344,12 +424,56 @@ public class SimpleFacebook {
 		getGroupsAction.execute();
 	}
 
-
 	/**
-	 * Get likes of specific entity.
+	 * Get groups that user belongs to.<br>
+	 * <br>
+	 * 
+	 * The entity can be:<br>
+	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
+	 * id of the profile: {@link Profile#getId()}<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_GROUPS}<br>
+	 * {@link Permission#FRIENDS_GROUPS}
 	 * 
 	 * @param entityId
-	 * @param onLikesListener
+	 *            Profile
+	 * @param onGroupsListener
+	 *            The callback listener.
+	 */
+	public void getGroups(String entityId, OnGroupsListener onGroupsListener) {
+		GetGroupsAction getGroupsAction = new GetGroupsAction(mSessionManager);
+		getGroupsAction.setActionListener(onGroupsListener);
+		getGroupsAction.setTarget(entityId);
+		getGroupsAction.execute();
+	}
+
+	/**
+	 * Get likes of specific entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Album</b>. Any album. To get the album id: {@link Album#getId()}<br>
+	 * - <b>Checkin</b>. Any checkin. To get the checkin id:
+	 * {@link Checkin#getId()}<br>
+	 * - <b>Comment</b>. Get all likes of the comment. To get comment id:
+	 * {@link Comment#getId()} <br>
+	 * - <b>Link</b>. To get link id: {@link Link#getId()} <br>
+	 * - <b>Photo</b>. Any photo. To get the photo id: {@link Photo#getId()} <br>
+	 * - <b>Post</b>. Any post. To get the post id: {@link Post#getId()} <br>
+	 * - <b>Video</b>. Any video. To get the video id: {@link Video#getId()} <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * No special permission is needed, except the permission you asked for
+	 * getting the entity itself. For example, if you want to get likes of
+	 * album, you need to have the {@link Permission#USER_PHOTOS} or
+	 * {@link Permission#FRIENDS_PHOTOS} for getting likes of this album.
+	 * 
+	 * @param entityId
+	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
+	 * @param onCommentsListener
+	 *            The callback listener.
 	 */
 	public void getLikes(String entityId, OnLikesListener onLikesListener) {
 		GetLikesAction getLikesAction = new GetLikesAction(mSessionManager);
@@ -359,20 +483,38 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get photos of the user.
+	 * Get my photos.
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_PHOTOS}
 	 * 
 	 * @param onPhotosListener
+	 *            The callback listener.
 	 */
 	public void getPhotos(OnPhotosListener onPhotosListener) {
 		GetPhotosAction getPhotosAction = new GetPhotosAction(mSessionManager);
 		getPhotosAction.setActionListener(onPhotosListener);
 		getPhotosAction.execute();
 	}
-	
+
 	/**
-	 * Get photos.
+	 * Get photos of specific entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Album</b>. Any album. To get the album id: {@link Album#getId()}<br>
+	 * - <b>Event</b>. Any event. To get the event id: {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
+	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * <br>
 	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_PHOTOS}<br>
+	 * {@link Permission#FRIENDS_PHOTOS}
+	 * 
+	 * @param entityId
+	 *            Album, Event, Page, Profile
 	 * @param onPhotosListener
+	 *            The callback listener.
 	 */
 	public void getPhotos(String entityId, OnPhotosListener onPhotosListener) {
 		GetPhotosAction getPhotosAction = new GetPhotosAction(mSessionManager);
@@ -402,6 +544,7 @@ public class SimpleFacebook {
 	 * only needed properties.
 	 * 
 	 * @param onProfileRequestListener
+	 *            The callback listener.
 	 */
 	public void getProfile(OnProfileRequestListener onProfileRequestListener) {
 		getProfile(null, onProfileRequestListener);
@@ -412,6 +555,7 @@ public class SimpleFacebook {
 	 * For example, if you need: <em>square picture 500x500 pixels</em>
 	 * 
 	 * @param onProfileRequestListener
+	 *            The callback listener.
 	 * @param properties
 	 *            The {@link Properties}. <br>
 	 *            To create {@link Properties} instance use:
@@ -435,20 +579,25 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get all posts of the user.
+	 * Get all my posts.
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#READ_STREAM}
 	 * 
 	 * @param onPostsListener
+	 *            The callback listener.
 	 */
 	public void getPosts(OnPostsListener onPostsListener) {
 		GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
 		getPostsAction.setActionListener(onPostsListener);
 		getPostsAction.execute();
 	}
-	
+
 	/**
-	 * Get all posts.
+	 * Get all posts of specific entity.
 	 * 
 	 * @param onPostsListener
+	 *            The callback listener.
 	 */
 	public void getPosts(String entityId, OnPostsListener onPostsListener) {
 		GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
@@ -456,7 +605,6 @@ public class SimpleFacebook {
 		getPostsAction.setTarget(entityId);
 		getPostsAction.execute();
 	}
-
 
 	/**
 	 * 
@@ -484,7 +632,7 @@ public class SimpleFacebook {
 		getVideosAction.setActionListener(onVideosListener);
 		getVideosAction.execute();
 	}
-	
+
 	/**
 	 * Get videos of the user.
 	 * 
@@ -504,7 +652,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_ACTION}
+	 * {@link Permission#PUBLISH_ACTION}
 	 * 
 	 * 
 	 * @param score
@@ -523,7 +671,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_ACTION}
+	 * {@link Permission#PUBLISH_ACTION}
 	 * 
 	 * @param feed
 	 *            The feed to publish. Use {@link Feed.Builder} to create a new
@@ -541,7 +689,7 @@ public class SimpleFacebook {
 	/**
 	 * Share to feed by using dialog or do it silently without dialog. <br>
 	 * If you use dialog for sharing, you don't have to configure
-	 * {@link Permissions#PUBLISH_ACTION} since user does the share by himself.<br>
+	 * {@link Permission#PUBLISH_ACTION} since user does the share by himself.<br>
 	 * <br>
 	 * <b>Important:</b><br>
 	 * By setting <code>withDialog=true</code> the default implementation will
@@ -588,7 +736,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_ACTION}
+	 * {@link Permission#PUBLISH_ACTION}
 	 * 
 	 * @param openGraph
 	 * @param onPublishListener
@@ -604,7 +752,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permission#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * <b>Important:</b><br>
@@ -631,7 +779,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permission#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * <b>Important:</b><br>
@@ -652,7 +800,7 @@ public class SimpleFacebook {
 	 * Publish video to "Videos" album. <br>
 	 * 
 	 * <b>Permission:</b><br>
-	 * {@link Permissions#PUBLISH_STREAM}<br>
+	 * {@link Permission#PUBLISH_STREAM}<br>
 	 * <br>
 	 * 
 	 * @param video
