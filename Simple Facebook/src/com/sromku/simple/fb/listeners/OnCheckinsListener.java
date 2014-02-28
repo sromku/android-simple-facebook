@@ -7,5 +7,5 @@ import com.sromku.simple.fb.entities.Checkin;
 /**
  * Callback listener for getting checking
  */
-public interface OnCheckinsListener extends OnActionListener<List<Checkin>> {
+public abstract class OnCheckinsListener extends OnActionListener<List<Checkin>> {
 }

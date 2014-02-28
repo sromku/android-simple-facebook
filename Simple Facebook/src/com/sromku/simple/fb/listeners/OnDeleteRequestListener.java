@@ -6,5 +6,5 @@ package com.sromku.simple.fb.listeners;
  * @author koraybalci
  * 
  */
-public interface OnDeleteRequestListener extends OnActionListener<Void> {
+public abstract class OnDeleteRequestListener extends OnActionListener<Void> {
 }

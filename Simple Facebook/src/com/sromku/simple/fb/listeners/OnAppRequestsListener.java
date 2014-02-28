@@ -9,5 +9,5 @@ import com.sromku.simple.fb.entities.AppRequest;
  * 
  * @author koraybalci
  */
-public interface OnAppRequestsListener extends OnActionListener<List<AppRequest>> {
+public abstract class OnAppRequestsListener extends OnActionListener<List<AppRequest>> {
 }

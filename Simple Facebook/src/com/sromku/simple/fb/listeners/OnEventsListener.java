@@ -7,5 +7,5 @@ import com.sromku.simple.fb.entities.Event;
 /**
  * Callback listener for getting user events
  */
-public interface OnEventsListener extends OnActionListener<List<Event>> {
+public abstract class OnEventsListener extends OnActionListener<List<Event>> {
 }

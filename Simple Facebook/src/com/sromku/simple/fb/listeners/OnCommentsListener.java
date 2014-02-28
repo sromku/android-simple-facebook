@@ -7,5 +7,5 @@ import com.sromku.simple.fb.entities.Comment;
 /**
  * Callback listener for getting comments
  */
-public interface OnCommentsListener extends OnActionListener<List<Comment>> {
+public abstract class OnCommentsListener extends OnActionListener<List<Comment>> {
 }

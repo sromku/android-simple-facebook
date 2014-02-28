@@ -6,5 +6,5 @@ package com.sromku.simple.fb.listeners;
  * @author koraybalci
  * 
  */
-public interface OnPostScoreListener extends OnActionListener<Void> {
+public abstract class OnPostScoreListener extends OnActionListener<Void> {
 }

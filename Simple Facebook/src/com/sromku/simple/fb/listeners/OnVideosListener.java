@@ -9,5 +9,5 @@ import com.sromku.simple.fb.entities.Video;
  * 
  * @author sromku
  */
-public interface OnVideosListener extends OnActionListener<List<Video>> {
+public abstract class OnVideosListener extends OnActionListener<List<Video>> {
 }

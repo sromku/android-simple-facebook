@@ -9,5 +9,5 @@ import com.sromku.simple.fb.entities.Photo;
  * 
  * @author sromku
  */
-public interface OnPhotosListener extends OnActionListener<List<Photo>> {
+public abstract class OnPhotosListener extends OnActionListener<List<Photo>> {
 }

@@ -8,5 +8,5 @@ import com.sromku.simple.fb.entities.Profile;
  * @author sromku
  * 
  */
-public interface OnProfileRequestListener extends OnActionListener<Profile> {
+public abstract class OnProfileRequestListener extends OnActionListener<Profile> {
 }

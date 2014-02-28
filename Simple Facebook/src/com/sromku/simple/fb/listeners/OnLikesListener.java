@@ -7,5 +7,5 @@ import com.sromku.simple.fb.entities.Like;
 /**
  * Callback listener for getting likes
  */
-public interface OnLikesListener extends OnActionListener<List<Like>> {
+public abstract class OnLikesListener extends OnActionListener<List<Like>> {
 }

@@ -5,5 +5,5 @@ package com.sromku.simple.fb.listeners;
  * 
  * @author sromku
  */
-public interface OnPublishListener extends OnActionListener<String> {
+public abstract class OnPublishListener extends OnActionListener<String> {
 }

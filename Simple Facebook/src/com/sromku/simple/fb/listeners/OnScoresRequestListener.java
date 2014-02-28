@@ -8,5 +8,5 @@ import org.json.JSONArray;
  * @author koraybalci
  * 
  */
-public interface OnScoresRequestListener extends OnActionListener<JSONArray> {
+public abstract class OnScoresRequestListener extends OnActionListener<JSONArray> {
 }

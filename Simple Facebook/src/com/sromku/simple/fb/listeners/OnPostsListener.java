@@ -9,5 +9,5 @@ import com.sromku.simple.fb.entities.Post;
  * 
  * @author sromku
  */
-public interface OnPostsListener extends OnActionListener<List<Post>> {
+public abstract class OnPostsListener extends OnActionListener<List<Post>> {
 }
