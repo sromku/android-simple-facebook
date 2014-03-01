@@ -14,7 +14,7 @@ public class SimpleFacebookConfiguration {
 	private SessionDefaultAudience mDefaultAudience = null;
 	private SessionLoginBehavior mLoginBehavior = null;
 	private boolean mHasPublishPermissions = false;
-	boolean allAtOnce = false;
+	boolean mAllAtOnce = false;
 
 	private SimpleFacebookConfiguration(Builder builder) {
 		this.mAppId = builder.mAppId;
@@ -23,7 +23,7 @@ public class SimpleFacebookConfiguration {
 		this.mPublishPermissions = builder.mPublishPermissions;
 		this.mDefaultAudience = builder.mDefaultAudience;
 		this.mLoginBehavior = builder.mLoginBehavior;
-		this.allAtOnce = builder.mAllAtOnce;
+		this.mAllAtOnce = builder.mAllAtOnce;
 
 		if (this.mPublishPermissions.size() > 0) {
 			this.mHasPublishPermissions = true;
@@ -98,7 +98,7 @@ public class SimpleFacebookConfiguration {
 	 * asked one after another in the same time after logging in.
 	 */
 	boolean isAllPermissionsAtOnce() {
-		return allAtOnce;
+		return mAllAtOnce;
 	}
 
 	/**

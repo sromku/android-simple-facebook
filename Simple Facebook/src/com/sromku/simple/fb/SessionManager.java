@@ -15,6 +15,7 @@ import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.FacebookDialog.Callback;
 import com.facebook.widget.FacebookDialog.PendingCall;
 import com.sromku.simple.fb.Permission.Type;
+import com.sromku.simple.fb.SimpleFacebookConfiguration.Builder;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
@@ -239,9 +240,9 @@ public class SessionManager {
 	}
 
 	/**
-	 * 
 	 * Requests any new permission in a runtime. <br>
 	 * <br>
+	 * 
 	 * Useful when you just want to request the action and won't be publishing
 	 * at the time, but still need the updated <b>access token</b> with the
 	 * permissions (possibly to pass back to your backend).
@@ -261,45 +262,50 @@ public class SessionManager {
 	 *            away</b> or <b>later</b>, at first time of real publish
 	 *            action.<br>
 	 * <br>
-	 * @param onNewPermissionsListener
-	 *            The listener for the requesting new permission action.
+	 *            The configuration of
+	 *            {@link Builder#setAskForAllPermissionsAtOnce(boolean)} will
+	 *            not take effect for this method, because you define here by
+	 *            setting <code>showPublish</code> what would you like to see. <br><br>
+	 * @param onNewPermissionListener
+	 *            The callback listener for the requesting new permission
+	 *            action.
 	 */
 	public void requestNewPermissions(Permission[] permissions, final boolean showPublish, final OnNewPermissionsListener onNewPermissionListener) {
 		configuration.addNewPermissions(permissions);
 		logout(new OnLogoutAdapter() {
 			@Override
 			public void onLogout() {
-				final boolean prevValue = configuration.allAtOnce;
-				configuration.allAtOnce = showPublish;
+				final boolean prevValue = configuration.mAllAtOnce;
+				configuration.mAllAtOnce = showPublish;
 				login(new OnLoginListener() {
 
 					@Override
 					public void onFail(String reason) {
-						configuration.allAtOnce = prevValue;
+						configuration.mAllAtOnce = prevValue;
 						onNewPermissionListener.onFail(reason);
 					}
 
 					@Override
 					public void onException(Throwable throwable) {
-						configuration.allAtOnce = prevValue;
+						configuration.mAllAtOnce = prevValue;
 						onNewPermissionListener.onException(throwable);
 					}
 
 					@Override
 					public void onThinking() {
-						configuration.allAtOnce = prevValue;
+						configuration.mAllAtOnce = prevValue;
 						onNewPermissionListener.onThinking();
 					}
 
 					@Override
 					public void onNotAcceptingPermissions(Type type) {
-						configuration.allAtOnce = prevValue;
+						configuration.mAllAtOnce = prevValue;
 						onNewPermissionListener.onNotAcceptingPermissions(type);
 					}
 
 					@Override
 					public void onLogin() {
-						configuration.allAtOnce = prevValue;
+						configuration.mAllAtOnce = prevValue;
 						onNewPermissionListener.onSuccess(getAccessToken());
 					}
 				});

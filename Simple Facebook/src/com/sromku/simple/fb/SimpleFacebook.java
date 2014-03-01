@@ -666,7 +666,6 @@ public class SimpleFacebook {
 	 * Gets scores using Scores API for games. <br>
 	 * <br>
 	 * 
-	 * 
 	 * @param onScoresRequestListener
 	 *            The callback listener.
 	 * @see https://developers.facebook.com/docs/games/scores/
@@ -1042,10 +1041,10 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Notifies the events system that the app has launched & logs an
-	 * activatedApp event. Should be called whenever your app becomes active,
-	 * typically in the onResume() method of each long-running Activity of your
-	 * app.
+	 * Install report to facebook. Notifies the events system that the app has
+	 * launched & logs an activatedApp event. Should be called whenever your app
+	 * becomes active, typically in the onResume() method of each long-running
+	 * Activity of your app.
 	 */
 	public void eventAppLaunched() {
 		AppEventsLogger.activateApp(mActivity.getApplicationContext(), mConfiguration.getAppId());
