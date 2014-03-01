@@ -31,10 +31,10 @@ import com.sromku.simple.fb.entities.Event;
 import com.sromku.simple.fb.entities.Event.EventDesicion;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
-import com.sromku.simple.fb.entities.Link;
 import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Post;
+import com.sromku.simple.fb.entities.Post.PostType;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.entities.Publishable;
@@ -288,7 +288,6 @@ public class SimpleFacebook {
 	 * {@link Checkin#getId()}<br>
 	 * - <b>Comment</b>. Get all replied comments to this original comment. To
 	 * get comment id: {@link Comment#getId()} <br>
-	 * - <b>Link</b>. To get link id: {@link Link#getId()} <br>
 	 * - <b>Photo</b>. Any photo. To get the photo id: {@link Photo#getId()} <br>
 	 * - <b>Post</b>. Any post. To get the post id: {@link Post#getId()} <br>
 	 * - <b>Video</b>. Any video. To get the video id: {@link Video#getId()} <br>
@@ -458,7 +457,6 @@ public class SimpleFacebook {
 	 * {@link Checkin#getId()}<br>
 	 * - <b>Comment</b>. Get all likes of the comment. To get comment id:
 	 * {@link Comment#getId()} <br>
-	 * - <b>Link</b>. To get link id: {@link Link#getId()} <br>
 	 * - <b>Photo</b>. Any photo. To get the photo id: {@link Photo#getId()} <br>
 	 * - <b>Post</b>. Any post. To get the post id: {@link Post#getId()} <br>
 	 * - <b>Video</b>. Any video. To get the video id: {@link Video#getId()} <br>
@@ -579,9 +577,13 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get all my posts.
+	 * Get all my feeds on the wall. It includes: links, statuses, photos..
+	 * everything that appears on my wall.<br>
+	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
+	 * No special permissions are needed for getting the public posts. If you
+	 * want to get more private posts, then you need
 	 * {@link Permission#READ_STREAM}
 	 * 
 	 * @param onPostsListener
@@ -594,15 +596,68 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get all posts of specific entity.
+	 * Get all feeds on the wall of specific entity. It includes: links,
+	 * statuses, photos.. everything that appears on that wall.<br>
 	 * 
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Group</b>. Any group. To get the group id: {@link Group#getId()}<br>
+	 * - <b>Event</b>. Any event. To get the event id: {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
+	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * 
+	 * @param entityId
+	 *            Event, Group, Page, Profile
 	 * @param onPostsListener
 	 *            The callback listener.
 	 */
 	public void getPosts(String entityId, OnPostsListener onPostsListener) {
+		getPosts(entityId, PostType.ALL, onPostsListener);
+	}
+
+	/**
+	 * Get posts of specific entity filtered by {@link PostType}.<br>
+	 * 
+	 * <br>
+	 * In case of:
+	 * 
+	 * <pre>
+	 * {@link PostType#ALL}
+	 * </pre>
+	 * 
+	 * the entity can be one of:<br>
+	 * - <b>Group</b>. Any group. To get the group id: {@link Group#getId()}<br>
+	 * - <b>Event</b>. Any event. To get the event id: {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
+	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * <br>
+	 * ---------<br>
+	 * In case of:
+	 * 
+	 * <pre>
+	 * 	{@link PostType#LINKS} 
+	 * 	{@link PostType#POSTS}
+	 * 	{@link PostType#STATUSES}
+	 * 	{@link PostType#TAGGED}
+	 * </pre>
+	 * 
+	 * the entity can be one of:<br>
+	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
+	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * <br>
+	 * 
+	 * @param entityId
+	 *            Event, Group, Page, Profile
+	 * @param postType
+	 *            Filter all wall feeds and get posts that you need.
+	 * @param onPostsListener
+	 *            The callback listener.
+	 */
+	public void getPosts(String entityId, PostType postType, OnPostsListener onPostsListener) {
 		GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
 		getPostsAction.setActionListener(onPostsListener);
 		getPostsAction.setTarget(entityId);
+		getPostsAction.setPostType(postType);
 		getPostsAction.execute();
 	}
 
@@ -613,7 +668,7 @@ public class SimpleFacebook {
 	 * 
 	 * 
 	 * @param onScoresRequestListener
-	 *            The listener for getting scores
+	 *            The callback listener.
 	 * @see https://developers.facebook.com/docs/games/scores/
 	 */
 	public void getScores(OnScoresRequestListener onScoresRequestListener) {
@@ -623,9 +678,14 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get videos of the user.
+	 * Get my videos.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_VIDEOS}
 	 * 
 	 * @param onVideosListener
+	 *            The callback listener.
 	 */
 	public void getVideos(OnVideosListener onVideosListener) {
 		GetVideosAction getVideosAction = new GetVideosAction(mSessionManager);
@@ -634,9 +694,23 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get videos of the user.
+	 * Get videos of specific entity.<br>
+	 * <br>
 	 * 
+	 * The entity can be one of:<br>
+	 * - <b>Event</b>. Any event. To get the event id: {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
+	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_VIDEOS}<br>
+	 * {@link Permission#FRIENDS_VIDEOS}
+	 * 
+	 * @param entityId
+	 *            Profile, Page, Event
 	 * @param onVideosListener
+	 *            The callback listener.
 	 */
 	public void getVideos(String entityId, OnVideosListener onVideosListener) {
 		GetVideosAction getVideosAction = new GetVideosAction(mSessionManager);

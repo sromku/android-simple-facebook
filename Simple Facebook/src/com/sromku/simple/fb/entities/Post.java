@@ -5,6 +5,7 @@ import java.util.List;
 import android.util.Pair;
 
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
@@ -15,6 +16,24 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  * @see https://developers.facebook.com/docs/reference/api/post
  */
 public class Post {
+
+	public static enum PostType {
+		ALL(GraphPath.FEED),
+		LINKS(GraphPath.LINKS),
+		POSTS(GraphPath.POSTS),
+		STATUSES(GraphPath.STATUSES),
+		TAGGED(GraphPath.TAGGED);
+
+		private String graphPath;
+
+		private PostType(String graphPath) {
+			this.graphPath = graphPath;
+		}
+
+		public String getGraphPath() {
+			return graphPath;
+		}
+	}
 
 	private static final String ACTIONS = "actions";
 	private static final String APPLICATION = "application";
@@ -34,6 +53,7 @@ public class Post {
 	private static final String OBJECT_ID = "object_id";
 	private static final String PICTURE = "picture";
 	private static final String PLACE = "place";
+	// private static final String PRIVACY = "privacy";
 	private static final String PROPERTIES = "properties";
 	private static final String SHARES = "shares";
 	private static final String SOURCE = "source";
@@ -41,6 +61,7 @@ public class Post {
 	private static final String STORY = "story";
 	private static final String STORY_TAGS = "story_tags";
 	private static final String TO = "to";
+	private static final String TYPE = "type";
 	private static final String UPDATED_TIME = "updated_time";
 	private static final String WITH_TAGS = "with_tags";
 
@@ -194,6 +215,9 @@ public class Post {
 			}
 		});
 
+		// type
+		mType = Utils.getPropertyString(graphObject, TYPE);
+
 		// updated time
 		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
 
@@ -238,9 +262,9 @@ public class Post {
 	public List<Comment> getComments() {
 		return mComments;
 	}
-	
+
 	/**
-	 * Likes of this post 
+	 * Likes of this post
 	 */
 	public List<Like> getLikes() {
 		return mLikes;
