@@ -314,45 +314,6 @@ public class MainActivity extends Activity {
 	 * Publish story (open graph) example
 	 */
 	private void publishStoryExample() {
-
-		// mButtonPublishStory.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View view) {
-		// Permission[] newPermissions = new Permission[] {
-		// Permission.USER_PHOTOS, Permission.PUBLISH_ACTION };
-		//
-		// mSimpleFacebook.requestNewPermissions(newPermissions, true, new
-		// OnNewPermissionsListener() {
-		//
-		// @Override
-		// public void onFail(String reason) {
-		// toast(reason);
-		// }
-		//
-		// @Override
-		// public void onException(Throwable throwable) {
-		// toast(throwable.getMessage());
-		// }
-		//
-		// @Override
-		// public void onThinking() {
-		// toast("thinking");
-		// }
-		//
-		// @Override
-		// public void onSuccess(String accessToken) {
-		// toast(accessToken);
-		// }
-		//
-		// @Override
-		// public void onNotAcceptingPermissions(Type type) {
-		// toast(type.name());
-		// }
-		// });
-		// }
-		// });
-
 	}
 
 	/**
@@ -671,8 +632,10 @@ public class MainActivity extends Activity {
 				hideDialog();
 				Log.i(TAG, "Number of albums = " + albums.size());
 				toast("Number of albums = " + albums.size());
+				if (hasNext()) {
+					toast("Has more albums");
+				}
 			}
-
 		};
 
 		// set button
@@ -839,7 +802,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void getLikesExample() {
-		final String entityId = "14104316802_522484207864952"; 
+		final String entityId = "14104316802_522484207864952";
 		final OnLikesListener onLikesListener = new OnLikesListener() {
 
 			@Override
@@ -877,6 +840,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void getPhotosExample() {
+
 		final OnPhotosListener onPhotosListener = new OnPhotosListener() {
 
 			@Override
@@ -901,7 +865,11 @@ public class MainActivity extends Activity {
 			public void onComplete(List<Photo> response) {
 				hideDialog();
 				Log.i(TAG, "Number of photos = " + response.size());
-				toast("Number of photos = " + response.size());
+				toast("First photo id = " + response.get(0).getId());
+				if (hasNext()) {
+					toast("Has more photos");
+					// getNext();
+				}
 			}
 		};
 
@@ -1097,26 +1065,6 @@ public class MainActivity extends Activity {
 		if (mProgress != null) {
 			mProgress.hide();
 		}
-	}
-
-	public class OnProfileRequestAdapter implements OnProfileRequestListener {
-
-		@Override
-		public void onThinking() {
-		}
-
-		@Override
-		public void onException(Throwable throwable) {
-		}
-
-		@Override
-		public void onFail(String reason) {
-		}
-
-		@Override
-		public void onComplete(Profile profile) {
-		}
-
 	}
 
 }
