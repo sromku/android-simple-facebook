@@ -48,11 +48,12 @@ public class PublishAction extends AbstractAction {
 				// if we defined the publish permission
 
 				/*
-				 * FIXME - we need also add one more check of next case: - if we
-				 * gave extended permissions but we don't have in the
-				 * configuration
+				 * We need also add one more check of next case: - if we gave
+				 * extended permissions in runtime, but we don't have these
+				 * permissions in the configuration
 				 */
-				if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())) {
+				if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())
+						|| sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
 					if (mOnPublishListener != null) {
 						mOnPublishListener.onThinking();
 					}
