@@ -1,11 +1,13 @@
 package com.sromku.simple.fb.entities;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import android.os.Bundle;
 
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.utils.Logger;
 
 /**
  * Open graph story
@@ -14,6 +16,7 @@ import com.sromku.simple.fb.SimpleFacebook;
  * @see http://ogp.me/
  */
 public class Story implements Publishable {
+	public static final String CHARSET_NAME = "UTF-8";
 	private final ActionOpenGraph mAction;
 	private final ObjectOpenGraph mObject;
 
@@ -38,6 +41,14 @@ public class Story implements Publishable {
 	@Override
 	public Permission getPermission() {
 		return Permission.PUBLISH_ACTION;
+	}
+
+	public String getGraphPath(String appNamespace) {
+		return "me" + "/" + appNamespace + ":" + mAction.getActionName();
+	}
+
+	public Bundle getActionBundle() {
+		return mAction.getProperties();
 	}
 
 	public static class Builder {
@@ -79,9 +90,6 @@ public class Story implements Publishable {
 		}
 
 		public Story build() {
-			// // validate input
-			// validate();
-
 			// create story
 			ObjectOpenGraph object = new ObjectOpenGraph(mObjectName, mObjectUrl);
 			object.setProperties(mObjectBundle);
@@ -92,29 +100,8 @@ public class Story implements Publishable {
 			return new Story(action, object);
 		}
 
-		// private void validate()
-		// {
-		// if (isEmpty(mObjectName))
-		// {
-		// throw new RuntimeException("Object name must be set");
-		// }
-		//
-		// if (isEmpty(mObjectUrl))
-		// {
-		// throw new RuntimeException("Object url must be set");
-		// }
-		//
-		// if (isEmpty(mActionName))
-		// {
-		// throw new RuntimeException("Action must be set");
-		// }
-		// }
-
 		boolean isEmpty(String str) {
-			if (str == null || str.length() == 0) {
-				return true;
-			}
-			return false;
+			return str == null || str.length() == 0;
 		}
 	}
 
@@ -205,7 +192,12 @@ public class Story implements Publishable {
 				else {
 					sb.append("&");
 				}
-				sb.append(URLEncoder.encode(key) + "=" + URLEncoder.encode(parameters.getString(key)));
+				try {
+					sb.append(URLEncoder.encode(key, CHARSET_NAME)).append("=").append(URLEncoder.encode(parameters.getString(key), CHARSET_NAME));
+				}
+				catch (UnsupportedEncodingException e) {
+					Logger.logError(Story.class, "Error enconding URL", e);
+				}
 			}
 			return sb.toString();
 		}
