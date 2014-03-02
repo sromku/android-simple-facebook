@@ -92,7 +92,7 @@ public class Event {
 	 * 
 	 * @author sromku
 	 */
-	public static enum EventDesicion {
+	public static enum EventDecision {
 		/**
 		 * Events that user decided to attend
 		 */
@@ -108,7 +108,7 @@ public class Event {
 
 		private String graphNode;
 
-		private EventDesicion(String graphNode) {
+		private EventDecision(String graphNode) {
 			this.graphNode = graphNode;
 		}
 

@@ -11,7 +11,7 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Event;
-import com.sromku.simple.fb.entities.Event.EventDesicion;
+import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -20,14 +20,14 @@ import com.sromku.simple.fb.utils.Utils;
  * <br>
  * The default retrieved events will be events that the user is attending. If
  * you want to get events that the user said 'maybe' or totally declined, then
- * you need to set the method: {@link #setEventDesicion(EventDesicion)}.
+ * you need to set the method: {@link #setEventDecision(EventDecision)}.
  * 
  * @author sromku
  * @see https://developers.facebook.com/docs/graph-api/reference/user/events/
  */
 public class GetEventsAction extends GetAction<List<Event>> {
 
-	private EventDesicion mEventDesicion = EventDesicion.ATTENDING; // default
+	private EventDecision mEventDesicion = EventDecision.ATTENDING; // default
 
 	public GetEventsAction(SessionManager sessionManager) {
 		super(sessionManager);
@@ -40,7 +40,7 @@ public class GetEventsAction extends GetAction<List<Event>> {
 	 * 
 	 * @param eventDesicion
 	 */
-	public void setEventDesicion(EventDesicion eventDesicion) {
+	public void setEventDecision(EventDecision eventDesicion) {
 		mEventDesicion = eventDesicion;
 	}
 

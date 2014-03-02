@@ -28,7 +28,7 @@ import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
 import com.sromku.simple.fb.entities.Event;
-import com.sromku.simple.fb.entities.Event.EventDesicion;
+import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.entities.Page;
@@ -320,15 +320,15 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_EVENTS}<br>
 	 * {@link Permission#FRIENDS_EVENTS}
 	 * 
-	 * @param eventDesicion
+	 * @param eventDecision
 	 *            The type of event: attending, maybe, declined.
 	 * @param onEventsListener
 	 *            The callback listener.
 	 */
-	public void getEvents(EventDesicion eventDesicion, OnEventsListener onEventsListener) {
+	public void getEvents(EventDecision eventDecision, OnEventsListener onEventsListener) {
 		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
 		getEventsAction.setActionListener(onEventsListener);
-		getEventsAction.setEventDesicion(eventDesicion);
+		getEventsAction.setEventDecision(eventDecision);
 		getEventsAction.execute();
 	}
 
@@ -353,10 +353,10 @@ public class SimpleFacebook {
 	 * @param onEventsListener
 	 *            The callback listener.
 	 */
-	public void getEvents(String entityId, EventDesicion eventDesicion, OnEventsListener onEventsListener) {
+	public void getEvents(String entityId, EventDecision eventDecision, OnEventsListener onEventsListener) {
 		GetEventsAction getEventsAction = new GetEventsAction(mSessionManager);
 		getEventsAction.setActionListener(onEventsListener);
-		getEventsAction.setEventDesicion(eventDesicion);
+		getEventsAction.setEventDecision(eventDecision);
 		getEventsAction.setTarget(entityId);
 		getEventsAction.execute();
 	}
