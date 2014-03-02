@@ -1,11 +1,11 @@
 android-simple-facebook
 =======================
 
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.6**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.7**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
-Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, publish feeds and more, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
+Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
 Sample app:<br> 
 <a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
@@ -16,19 +16,28 @@ Sample app:<br>
 ## Features
 * [Login](#login-1)
 * [Logout](#logout-1)
-* [Publish feed](#publish-feed)
-* [Publish story (open graph)](#publish-story-open-graph)
-* [Publish photo](#publish-photo)
-* [Publish video](#publish-video)
-* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+* [Publish](#publish-feed)
+	* [Feed](#publish-feed)
+	* [Story (open graph)](#publish-story-open-graph)
+	* [Photo](#publish-photo)
+	* [Video](#publish-video)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
 	* [Invite one friend](#one-friend-only)
-* [Get profile](#get-my-profile-1)
-* [Get friends](#get-friends)
-* [Get albums](#get-albums)
-* [Get publish permissions](#request-publish)
+* [Get](#get-my-profile-1)
+	* [Profile](#get-my-profile-1)
+	* [Friends](#get-friends)
+	* [Albums](#get-albums)
+	* [Checkins](#get-checkins)
+	* [Comments](#get-comments)
+	* [Events](#get-events)
+	* [Groups](#get-groups)
+	* [Likes](#get-likes)
+	* [Photos](#get-photos)
+	* [Posts](#get-posts)
+	* [Scores](#get-scores)
+	* [Videos](#get-videos)
 
 *And,*
 * Based on latest Facebook SDK
@@ -40,7 +49,8 @@ Sample app:<br>
 Just to give you the feeling, how simple it is. For all options and examples, follow the [**usage**](#usage) paragraph.
 
 ### Login
-You can call `login(Activity)` method on click of any `View` and you don't need to use `LoginButton`
+
+You can login by clicking on any `View` and you don't need to use `LoginButton`.
 
 ``` java
 mSimpleFacebook.login(onLoginListener);
@@ -48,7 +58,8 @@ mSimpleFacebook.login(onLoginListener);
 
 ### Logout
 
-As login, just call it anywhere you need
+As login, just call it anywhere you need.
+
 ``` java
 mSimpleFacebook.logout(onLogoutListener);
 ```
@@ -90,7 +101,7 @@ More API actions is in the same simplicity. Just follow the explanation and exam
 
 --------------------
 ## Setup Project
-1. Clone [Facebook SDK 3.6](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+1. Clone [Facebook SDK 3.7](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
 2. Clone and import this (Simple Facebook) project to your workspace.
  
@@ -99,15 +110,25 @@ More API actions is in the same simplicity. Just follow the explanation and exam
     ![Screenshot](https://raw.github.com/sromku/android-simple-facebook/master/Refs/reference_to_sdk.png)
     
 4. Now, you can add reference from **your app** to `Simple Facebook` project.
-5. Update the `manifest.xml` of your application and add next lines:
+5. Add to your `string.xml` your app_id:
 
-	``` java
+	``` xml
+	<string name="app_id">625994234086470</string>
+	```
+
+6. Update the `manifest.xml` of your application and add next lines:
+
+	``` xml
 	<uses-permission android:name="android.permission.INTERNET" />
 
 	<activity
 		android:name="com.facebook.LoginActivity"
 		android:label="@string/app_name"
 		android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+	<meta-data
+        android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/app_id" />
 	```
 
 ## Configuration
@@ -159,19 +180,28 @@ public void onResume()
 
 * [Login](#login-1)
 * [Logout](#logout-1)
-* [Publish feed](#publish-feed)
-* [Publish story (open graph)](#publish-story-open-graph)
-* [Publish photo](#publish-photo)
-* [Publish video](#publish-video)
-* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+* [Publish](#publish-feed)
+	* [Feed](#publish-feed)
+	* [Story (open graph)](#publish-story-open-graph)
+	* [Photo](#publish-photo)
+	* [Video](#publish-video)
 * [Invite friend/s](#invite)
 	* [Invite all friends](#all)
 	* [Invite suggested friends](#suggested-friends)
 	* [Invite one friend](#one-friend-only)
-* [Get profile](#get-my-profile-1)
-* [Get friends](#get-friends)
-* [Get albums](#get-albums)
-* [Get Publish Permissions](#request-publish)
+* [Get](#get-my-profile-1)
+	* [Profile](#get-my-profile-1)
+	* [Friends](#get-friends)
+	* [Albums](#get-albums)
+	* [Checkins](#get-checkins)
+	* [Comments](#get-comments)
+	* [Events](#get-events)
+	* [Groups](#get-groups)
+	* [Likes](#get-likes)
+	* [Photos](#get-photos)
+	* [Posts](#get-posts)
+	* [Scores](#get-scores)
+	* [Videos](#get-videos)
 
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
@@ -183,36 +213,14 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 } 
 ```
 
-## Actions (Examples)
+## Actions
 
 ### Login
 
-Set `OnLoginOutListener` and call for `login(OnLoginOutListener)`
-
+Initialize callback listener:
 ``` java
-// login listener
 OnLoginListener onLoginListener = new SimpleFacebook.OnLoginListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while login is happening
-		Log.i(TAG, "In progress");
-	}
-
 	@Override
 	public void onLogin()
 	{
@@ -221,60 +229,54 @@ OnLoginListener onLoginListener = new SimpleFacebook.OnLoginListener()
 	}
 	
 	@Override
-	public void onNotAcceptingPermissions()
+	public void onNotAcceptingPermissions(Permission.Type type)
 	{
-		Log.w(TAG, "User didn't accept read permissions");
+		// user didn't accept READ or WRITE permission
+		Log.w(TAG, String.format("You didn't accept %s permissions", type.name()));
 	}
-	
-};
 
-// login
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */	
+};
+```
+
+Login:
+``` java
 mSimpleFacebook.login(onLoginListener);
 ```
 
 ### Logout
 
-Set `OnLogoutListener` and call for `logout(OnLogoutListener)` to disconnect from facebook.
-
+Initialize callback listener:
 ``` java
 // logout listener
 OnLogoutListener onLogoutListener = new SimpleFacebook.OnLogoutListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while login is happening
-		Log.i(TAG, "In progress");
-	}
-
 	@Override
 	public void onLogout()
 	{
 		Log.i(TAG, "You are logged out");
 	}
-	
-};
 
-// logout
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */	
+};
+```
+
+Logout:
+``` java
 mSimpleFacebook.logout(onLogoutListener);
 ```
 
 ### Publish feed
 
-Set `OnPublishListener` and call for `publish(Feed, OnPublishListener)`.
+Set `OnPublishListener` and call for:
+- `publish(Feed, OnPublishListener)` without dialog. 
+- `publish(Feed, true, OnPublishListener)` with dialog.
 
 #### Basic properties
 
@@ -285,39 +287,25 @@ Set `OnPublishListener` and call for `publish(Feed, OnPublishListener)`.
 * `picture` - The URL of a picture attached to this post. The picture must be at least 200px by 200px
 * `link` - The link attached to this post
 
+Initialize callback listener:
 ``` java
-// create publish listener
 OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before publishing
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while publishing
-		Log.i(TAG, "In progress");
-	}
-
 	@Override
 	public void onComplete(String postId)
 	{
 		Log.i(TAG, "Published successfully. The new post id = " + postId);
 	}
-};
 
-// build feed
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */
+};
+```
+
+Build feed:
+``` java
 Feed feed = new Feed.Builder()
 	.setMessage("Clone it out...")
 	.setName("Simple Facebook for Android")
@@ -326,9 +314,16 @@ Feed feed = new Feed.Builder()
 	.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
 	.setLink("https://github.com/sromku/android-simple-facebook")
 	.build();
+```
 
-// publish the feed
+Publish feed **without** dialog:
+``` java
 mSimpleFacebook.publish(feed, onPublishListener);
+```
+
+Publish feed **with** dialog:
+``` java
+mSimpleFacebook.publish(feed, true, onPublishListener);
 ```
 
 And, the **result** is:
@@ -342,8 +337,8 @@ And, the **result** is:
 * `properties` - The key/value pairs which will appear in the stream attachment beneath the description
 * `actions` - One action link which will appear next to the 'Comment' and 'Like' link under posts
 
+Build feed:
 ``` java
-// build feed
 Feed feed = new Feed.Builder()
 	.setMessage("Clone it out...")
 	.setName("Simple Facebook SDK for Android")
@@ -374,41 +369,25 @@ You can publish (upload) photo to default album or to any other album you have. 
 - `File`
 - `byte[]`
 
-#### App (default) album
-Set `OnPublishListener` and call for `publish(Photo, OnPublishListener)`.
-
+Initialize callback listener:
 ``` java
-// create publish listener
 OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before publishing
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while publishing
-		Log.i(TAG, "In progress");
-	}
-
 	@Override
 	public void onComplete(String id)
 	{
 		Log.i(TAG, "Published successfully. id = " + id);
 	}
-};
 
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */
+};
+```
+
+Build photo for publishing:
+``` java
 // This is the image you want to upload
 Bitmap bitmap = ...
 
@@ -416,15 +395,14 @@ Bitmap bitmap = ...
 Photo photo = new Photo(bitmap);
 photo.addDescription("Screenshot from #android_simple_facebook sample application");
 photo.addPlace("110619208966868");
+```
 
-// publish photo to app album
+Publish photo to **application** (default) album:
+``` java
 mSimpleFacebook.publish(photo, onPublishListener);
 ```
 
-#### Specific album
-
-Set `OnPublishListener` and call for `publish(Photo, String, OnPublishListener)`. While the `String` is the album id.
-
+Publish photo to **specific** album:
 ``` java
 String albumId = ...;
 
@@ -439,98 +417,36 @@ You can publish (upload) a video only to the default "Videos" album. <br>
 - `File`
 - `byte[]`
 
-Set `OnPublishListener` and call for `publish(Video, OnPublishListener)`.
-
+Initialize callback listener:
 ``` java
-// create publish listener
 OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before publishing
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while publishing
-		Log.i(TAG, "In progress");
-	}
-
 	@Override
 	public void onComplete(String id)
 	{
 		Log.i(TAG, "Published successfully. id = " + id);
 	}
-};
 
-// This is the Video you want to upload
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */
+};
+```
+
+Build video for publishing:
+``` java
 File videoFile = ...
 
 // create a Video instance and add some properties
 Video video = new Video(videoFile);
 video.addTitle("A video");
 video.addDescription("Video from #android_simple_facebook sample application");
+```
 
-// publish video to "Videos" album
+Publish video to "Videos" album
+``` java
 mSimpleFacebook.publish(video, onPublishListener);
-```
-
-### Set privacy settings of a single post
-You can set the privacy settings of a single post (set who can / can't see the post). <br/>
-Currently supported in:<br/>
-- `Feed`
-- `Photo`
-- `Video`
-
-``` java
-// This is the object you want to set privacy of and the publish listener
-Photo photo = ...
-OnPublishListener onPublishListener = ...
-```
-
-#### Predefined privacy settings
-You can use one of the following predefined privacy settings: <br/>
-- EVERYONE, 
-- ALL_FRIENDS, 
-- FRIENDS_OF_FRIENDS, 
-- SELF
-
-``` java
-Privacy privacy = new Privacy(Privacy.PrivacySettings.EVERYONE);
-
-photo.addPrivacy(privacy);
-
-// Publish photo
-mSimpleFacebook.publish(photo, onPublishListener);
-```
-
-#### Custom privacy settings
-``` java
-Privacy privacy = new Privacy(Privacy.PrivacySettings.CUSTOM);
-
-// All available options: 
-privacy.addAllowedUserOrListID({user ID or friend list ID that "can" see the post});
-privacy.addAllowedUserOrListIDs({mixed user IDs and friend list IDs that "can" see the post});
-privacy.addDeniedUserOrListID({user ID or friend list ID that "cannot" see the post});
-privacy.addDeniedUserOrListIDs({mixed user IDs and friend list IDs that "cannot" see the post});
-
-// List ID can also be "ALL_FRIENDS" or "FRIENDS_OF_FRIENDS" (only) to include all members of those sets:
-privacy.addAllowedUserOrListID(Privacy.PrivacySettings.ALL_FRIENDS);
-
-photo.addPrivacy(privacy);
-
-// Publish photo
-mSimpleFacebook.publish(photo, onPublishListener);
 ```
 
 ### Invite
@@ -543,20 +459,6 @@ For all options, set `OnInviteListener`:
 ``` java
 OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 {
-
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before inviting
-		Log.w(TAG, reason);
-	}
-
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-
 	@Override
 	public void onComplete(List<String> invitedFriends, String requestId)
 	{
@@ -568,7 +470,11 @@ OnInviteListener onInviteListener = new SimpleFacebook.OnInviteListener()
 	{
 		Log.i(TAG, "Canceled the dialog");
 	}
-	
+
+	/* 
+	 * You can override other methods here: 
+	 * onFail(String reason), onException(Throwable throwable)
+	 */
 };
 ```
 
@@ -611,50 +517,33 @@ Thus, **two** options are possible to get profile data.
 By using this way, you can get many properties like: *id*, *name*, *education* and more. Just ensure to have needed permissions. Read the javadoc to know what is needed.
 But, here you won't be able to get several properties like: *cover*, *picture* and other. 
 
-Set `OnProfileRequestListener` and call for `getMyProfile(OnProfileRequestListener)`
-
+Initialize callback listener:
 ``` java
-OnProfileRequestListener onProfileRequestListener = new SimpleFacebook.OnProfileRequestListener()
-{
-	
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before getting the profile
-		Log.w(TAG, reason);
-	}
-			
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-			
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while fetching profile
-		Log.i(TAG, "Thinking...");
-	}
-			
+OnProfileListener onProfileListener = new SimpleFacebook.OnProfileListener()
+{			
 	@Override
 	public void onComplete(Profile profile)
 	{
 		Log.i(TAG, "My profile id = " + profile.getId());
 	}
-			
-};
 
-// do the get profile action
-mSimpleFacebook.getProfile(onProfileRequestListener);
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+```
+
+Get the profile:
+``` java
+mSimpleFacebook.getProfile(onProfileListener);
 ```
 
 #### Be specific and get what you need
 By using this option, you define the properties you need, and you will get only them. Here, any property is possible to get.
-Set `OnProfileRequestListener` and call for `getMyProfile(Properties, OnProfileRequestListener)`
 
+Prepare the properties that you need:
 ``` java
-// prepare the properties that you need
 Properties properties = new Properties.Builder()
 	.add(Properties.ID)
 	.add(Properties.FIRST_NAME)
@@ -663,112 +552,294 @@ Properties properties = new Properties.Builder()
 	.add(Properties.EDUCATION)
 	.add(Properties.PICTURE)
 	.build();
-				
-// do the get profile action
-mSimpleFacebook.getProfile(properties, onProfileRequestListener);
+``` 
+
+Get the profile:
+``` java			
+mSimpleFacebook.getProfile(properties, onProfileListener);
 ```
 
 #### Be even more specific - Picture Attributes
-You can describe the picture you really need like: *`small`, `normal`, `large`* and set width and height.
+You can describe the picture you really need like: *`small`, `normal`, `large`, `square`* and set width and height.
 
+Prepare specific picture that you need:
 ``` java
-// prepare specific picture that we need
 PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
 pictureAttributes.setHeight(500);
 pictureAttributes.setWidth(500);
 pictureAttributes.setType(PictureType.SQUARE);
+```
 
-// prepare the properties that you need
+Prepare the properties that you need:
+``` java
 Properties properties = new Properties.Builder()
 	.add(Properties.ID)
 	.add(Properties.FIRST_NAME)
 	.add(Properties.PICTURE, pictureAttributes)
-	.build();
-				
-// do the get profile action
-mSimpleFacebook.getProfile(properties, onProfileRequestListener);
+	.build();			
+```
+
+Get the profile:
+``` java
+mSimpleFacebook.getProfile(properties, onProfileListener);
 ```
 
 
 ### Get friends
 
-Set `OnFriendsRequestListener` and call for `getFriends(OnFriendsRequestListener)`
-
+Initialize callback listener:
 ``` java
-OnFriendsRequestListener onFriendsRequestListener = new SimpleFacebook.OnFriendsRequestListener()
-{
-	
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before getting the friends
-		Log.w(TAG, reason);
-	}
-			
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-			
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while fetching friends
-		Log.i(TAG, "Thinking...");
-	}
-			
+OnFriendsListener onFriendsListener = new SimpleFacebook.OnFriendsListener()
+{			
 	@Override
 	public void onComplete(List<Profile> friends)
 	{
 		Log.i(TAG, "Number of friends = " + friends.size());
 	}
-			
-};
 
-mSimpleFacebook.getFriends(onFriendsRequestListener);
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */			
+};
+```
+
+Get the friends:
+``` java
+mSimpleFacebook.getFriends(onFriendsListener);
 ```
 
 ### Get albums
 
-Set `OnAlbumsRequestListener` and call for `getAlbums(OnAlbumsRequestListener)`
-
+Initialize callback listener:
 ``` java
-OnAlbumsRequestListener onAlbumsRequestListener = new SimpleFacebook.OnAlbumsRequestListener()
-{
-	
-	@Override
-	public void onFail(String reason)
-	{
-		// insure that you are logged in before getting the albums
-		Log.w(TAG, reason);
-	}
-			
-	@Override
-	public void onException(Throwable throwable)
-	{
-		Log.e(TAG, "Bad thing happened", throwable);
-	}
-			
-	@Override
-	public void onThinking()
-	{
-		// show progress bar or something to the user while fetching albums
-		Log.i(TAG, "Thinking...");
-	}
-			
+OnAlbumsListener onAlbumsListener = new SimpleFacebook.OnAlbumsListener()
+{			
 	@Override
 	public void onComplete(List<Album> albums)
 	{
 		Log.i(TAG, "Number of albums = " + albums.size());
 	}
-			
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
 };
-
-mSimpleFacebook.getAlbums(onAlbumsRequestListener);
 ```
 
-### Request publish
+Get my albums:
+``` java
+mSimpleFacebook.getAlbums(onAlbumsListener);
+```
+
+Get album of next entities by setting id:
+- `Profile`
+- `Page`
+``` java
+String entityId = ...;
+mSimpleFacebook.getAlbums(entityId, onAlbumsListener);
+```
+
+### Get checkins
+Set `OnCheckinsListener` and call for:
+- `getCheckins(OnCheckinsListener)` - get your checkins
+- `getCheckins(String, OnCheckinsListener)` - get checkins of any:
+	- `Profile`
+	- `Page`
+
+``` java
+OnCheckinsListener onCheckinsListener = new SimpleFacebook.OnCheckinsListener()
+{			
+	@Override
+	public void onComplete(List<Checkin> checkins)
+	{
+		Log.i(TAG, "Number of checkins = " + checkins.size());
+	}
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+
+// get my checkins
+mSimpleFacebook.getCheckins(onCheckinsListener);
+```
+
+### Get comments
+Set `OnCommentsListener` and call for:
+- `getComments(String, OnCommentsListener)` - get comments of any:
+	- `Album`
+	- `Checkin`
+	- `Comment`
+	- `Photo`
+	- `Post`
+	- `Video`
+
+``` java
+OnCommentsListener onCommentsListener = new SimpleFacebook.OnCommentsListener()
+{			
+	@Override
+	public void onComplete(List<Comment> comments)
+	{
+		Log.i(TAG, "Number of comments = " + comments.size());
+	}
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+
+// get comments of entity
+mSimpleFacebook.getComments(onCommentsListener);
+```
+
+### Get events
+Set `EventDecision` and `OnEventsListener` and call for:
+- `getEvents(EventDecision, OnEventsListener)` - get my events
+- `getEvents(String, EventDecision, OnEventsListener)` - get events of any:
+	- `Profile`
+	- `Page`
+	- `Group`
+
+``` java
+OnEventsListener onEventsListener = new SimpleFacebook.OnEventsListener()
+{			
+	@Override
+	public void onComplete(List<Event> events)
+	{
+		Log.i(TAG, "Number of events = " + events.size());
+	}
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+
+// get my events that I replied as 'attending'
+mSimpleFacebook.getEvents(EventDecision.ATTENDING, onEventsListener);
+```
+
+### Get groups
+Set `OnGroupsListener` and call for:
+- `getGroups(OnGroupsListener)` - get my groups
+- `getGroups(String, OnGroupsListener)` - get groups of any:
+	- `Profile`
+
+``` java
+OnGroupsListener onGroupsListener = new SimpleFacebook.OnGroupsListener()
+{			
+	@Override
+	public void onComplete(List<Group> groups)
+	{
+		Log.i(TAG, "Number of groups = " + groups.size());
+	}
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+
+// get my groups 
+mSimpleFacebook.getGroups(onGroupsListener);
+```
+
+### Get likes
+Set `OnLikesListener` and call for:
+- `getLikes(String, OnLikesListener)` - get likes of any:
+	- `Album`
+	- `Checkin`
+	- `Comment`
+	- `Photo`
+	- `Post`
+	- `Video`
+
+Initialize callback listener: 
+``` java
+OnLikesListener onLikesListener = new SimpleFacebook.OnLikesListener()
+{			
+	@Override
+	public void onComplete(List<Like> likes)
+	{
+		Log.i(TAG, "Number of likes = " + likes.size());
+	}
+	
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+```
+
+Get likes of entity
+``` java
+String entityId = ...;
+mSimpleFacebook.getLikes(entityId, onLikesListener);
+```
+
+### Get photos
+
+### Get posts
+
+### Get scores
+
+### Get videos
+
+### Adittional options
+
+#### Set privacy settings of a single post
+You can set the privacy settings of a single post (set who can / can't see the post). <br/>
+Currently supported in:<br/>
+- `Feed`
+- `Photo`
+- `Video`
+
+``` java
+// This is the object you want to set privacy of and the publish listener
+Photo photo = ...
+OnPublishListener onPublishListener = ...
+```
+
+**Predefined privacy settings**<br>
+You can use one of the following predefined privacy settings: <br/>
+- EVERYONE, 
+- ALL_FRIENDS, 
+- FRIENDS_OF_FRIENDS, 
+- SELF
+
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.EVERYONE);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
+```
+
+**Custom privacy settings**<br>
+``` java
+Privacy privacy = new Privacy(Privacy.PrivacySettings.CUSTOM);
+
+// All available options: 
+privacy.addAllowedUserOrListID({user ID or friend list ID that "can" see the post});
+privacy.addAllowedUserOrListIDs({mixed user IDs and friend list IDs that "can" see the post});
+privacy.addDeniedUserOrListID({user ID or friend list ID that "cannot" see the post});
+privacy.addDeniedUserOrListIDs({mixed user IDs and friend list IDs that "cannot" see the post});
+
+// List ID can also be "ALL_FRIENDS" or "FRIENDS_OF_FRIENDS" (only) to include all members of those sets:
+privacy.addAllowedUserOrListID(Privacy.PrivacySettings.ALL_FRIENDS);
+
+photo.addPrivacy(privacy);
+
+// Publish photo
+mSimpleFacebook.publish(photo, onPublishListener);
+```
+
+#### Request publish
 
 Use this method to request PUBLISH permissions, without having to perform any action yet. 
 Useful if you need the new access token to pass to your Backend.
@@ -815,8 +886,7 @@ private OnPermissionListener mOnPermissionListener = new OnPermissionListener() 
 mSimpleFacebook.requestPermission(mOnPermissionListener);
 ```
 
-
-## More options
+### More options
 
 * `isLogin()` – Check if you are logged in
 * `getAccessToken()` - Get current access token
