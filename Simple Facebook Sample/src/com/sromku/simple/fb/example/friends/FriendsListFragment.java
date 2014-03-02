@@ -19,7 +19,7 @@ import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.R;
-import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
+import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 
@@ -62,7 +62,7 @@ public class FriendsListFragment extends Fragment {
 		mButtonGetFriends.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mSimpleFacebook.getFriends(mOnFriendsRequestListener);
+				mSimpleFacebook.getFriends(mOnFriendsListener);
 			}
 		});
 
@@ -185,7 +185,7 @@ public class FriendsListFragment extends Fragment {
 	};
 
 	// get friends listener
-	private OnFriendsRequestListener mOnFriendsRequestListener = new OnFriendsRequestListener() {
+	private OnFriendsListener mOnFriendsListener = new OnFriendsListener() {
 
 		@Override
 		public void onFail(String reason) {

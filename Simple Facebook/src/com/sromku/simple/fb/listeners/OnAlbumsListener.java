@@ -10,5 +10,5 @@ import com.sromku.simple.fb.entities.Album;
  * @author sromku
  * 
  */
-public abstract class OnAlbumsRequestListener extends OnActionListener<List<Album>> {
+public abstract class OnAlbumsListener extends OnActionListener<List<Album>> {
 }

@@ -41,13 +41,13 @@ import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
-import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
+import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
-import com.sromku.simple.fb.listeners.OnDeleteRequestListener;
+import com.sromku.simple.fb.listeners.OnDeleteListener;
 import com.sromku.simple.fb.listeners.OnEventsListener;
-import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
+import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.listeners.OnGroupsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLikesListener;
@@ -56,9 +56,9 @@ import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
-import com.sromku.simple.fb.listeners.OnProfileRequestListener;
+import com.sromku.simple.fb.listeners.OnProfileListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
-import com.sromku.simple.fb.listeners.OnScoresRequestListener;
+import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 
 /**
@@ -189,12 +189,12 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_PHOTOS}
 	 * 
-	 * @param onAlbumsRequestListener
+	 * @param onAlbumsListener
 	 *            The callback listener
 	 */
-	public void getAlbums(OnAlbumsRequestListener onAlbumsRequestListener) {
+	public void getAlbums(OnAlbumsListener onAlbumsListener) {
 		GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
-		getAlbumsAction.setActionListener(onAlbumsRequestListener);
+		getAlbumsAction.setActionListener(onAlbumsListener);
 		getAlbumsAction.execute();
 	}
 
@@ -214,12 +214,12 @@ public class SimpleFacebook {
 	 * 
 	 * @param entityId
 	 *            profile id or page id.
-	 * @param onAlbumsRequestListener
+	 * @param onAlbumsListener
 	 *            The callback listener.
 	 */
-	public void getAlbums(String entityId, OnAlbumsRequestListener onAlbumsRequestListener) {
+	public void getAlbums(String entityId, OnAlbumsListener onAlbumsListener) {
 		GetAlbumsAction getAlbumsAction = new GetAlbumsAction(mSessionManager);
-		getAlbumsAction.setActionListener(onAlbumsRequestListener);
+		getAlbumsAction.setActionListener(onAlbumsListener);
 		getAlbumsAction.setTarget(entityId);
 		getAlbumsAction.execute();
 	}
@@ -372,18 +372,18 @@ public class SimpleFacebook {
 	 * {@link #getFriends(Properties, OnFriendsRequestListener)} <br>
 	 * <br>
 	 * 
-	 * @param onFriendsRequestListener
+	 * @param onFriendsListener
 	 *            The callback listener.
 	 */
-	public void getFriends(OnFriendsRequestListener onFriendsRequestListener) {
-		getFriends(null, onFriendsRequestListener);
+	public void getFriends(OnFriendsListener onFriendsListener) {
+		getFriends(null, onFriendsListener);
 	}
 
 	/**
 	 * Get my friends from facebook by mentioning specific parameters. <br>
 	 * For example, if you need: <em>id, last_name, picture, birthday</em>
 	 * 
-	 * @param onFriendsRequestListener
+	 * @param onFriendsListener
 	 *            The callback listener.
 	 * @param properties
 	 *            The {@link Properties}. <br>
@@ -400,10 +400,10 @@ public class SimpleFacebook {
 	 * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.LAST_NAME).add(Properties.PICTURE, attributes).add(Properties.BIRTHDAY).build();
 	 * </pre>
 	 */
-	public void getFriends(Properties properties, OnFriendsRequestListener onFriendsRequestListener) {
+	public void getFriends(Properties properties, OnFriendsListener onFriendsListener) {
 		GetFriendsAction getFriendsAction = new GetFriendsAction(mSessionManager);
 		getFriendsAction.setProperties(properties);
-		getFriendsAction.setActionListener(onFriendsRequestListener);
+		getFriendsAction.setActionListener(onFriendsListener);
 		getFriendsAction.execute();
 	}
 
@@ -541,18 +541,18 @@ public class SimpleFacebook {
 	 * {@link #getProfile(Properties, OnProfileRequestListener)} and mention
 	 * only needed properties.
 	 * 
-	 * @param onProfileRequestListener
+	 * @param onProfileListener
 	 *            The callback listener.
 	 */
-	public void getProfile(OnProfileRequestListener onProfileRequestListener) {
-		getProfile(null, onProfileRequestListener);
+	public void getProfile(OnProfileListener onProfileListener) {
+		getProfile(null, onProfileListener);
 	}
 
 	/**
 	 * Get my profile from facebook by mentioning specific parameters. <br>
 	 * For example, if you need: <em>square picture 500x500 pixels</em>
 	 * 
-	 * @param onProfileRequestListener
+	 * @param onProfileListener
 	 *            The callback listener.
 	 * @param properties
 	 *            The {@link Properties}. <br>
@@ -569,10 +569,10 @@ public class SimpleFacebook {
 	 * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.FIRST_NAME).add(Properties.PICTURE, attributes).build();
 	 * </pre>
 	 */
-	public void getProfile(Properties properties, OnProfileRequestListener onProfileRequestListener) {
+	public void getProfile(Properties properties, OnProfileListener onProfileListener) {
 		GetProfileAction getProfileAction = new GetProfileAction(mSessionManager);
 		getProfileAction.setProperties(properties);
-		getProfileAction.setActionListener(onProfileRequestListener);
+		getProfileAction.setActionListener(onProfileListener);
 		getProfileAction.execute();
 	}
 
@@ -666,13 +666,13 @@ public class SimpleFacebook {
 	 * Gets scores using Scores API for games. <br>
 	 * <br>
 	 * 
-	 * @param onScoresRequestListener
+	 * @param onScoresListener
 	 *            The callback listener.
 	 * @see https://developers.facebook.com/docs/games/scores/
 	 */
-	public void getScores(OnScoresRequestListener onScoresRequestListener) {
+	public void getScores(OnScoresListener onScoresListener) {
 		GetScoresAction getScoresAction = new GetScoresAction(mSessionManager);
-		getScoresAction.setActionListener(onScoresRequestListener);
+		getScoresAction.setActionListener(onScoresListener);
 		getScoresAction.execute();
 	}
 
@@ -971,15 +971,15 @@ public class SimpleFacebook {
 	 * @param inRequestId
 	 *            Input request id to be deleted. Note that it should have the
 	 *            form {USERID}_{REQUESTID} <code>String</code>
-	 * @param onDeleteRequestListener
+	 * @param onDeleteListener
 	 *            The listener for deletion action
 	 * @see https
 	 *      ://developers.facebook.com/docs/android/app-link-requests/#step3
 	 */
-	public void deleteRequest(String inRequestId, final OnDeleteRequestListener onDeleteRequestListener) {
+	public void deleteRequest(String inRequestId, final OnDeleteListener onDeleteListener) {
 		DeleteRequestAction deleteRequestAction = new DeleteRequestAction(mSessionManager);
 		deleteRequestAction.setRequestId(inRequestId);
-		deleteRequestAction.setOnDeleteRequestListener(onDeleteRequestListener);
+		deleteRequestAction.setOnDeleteListener(onDeleteListener);
 		deleteRequestAction.execute();
 	}
 

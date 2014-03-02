@@ -10,5 +10,5 @@ import com.sromku.simple.fb.entities.Profile;
  * @author sromku
  * 
  */
-public abstract class OnFriendsRequestListener extends OnActionListener<List<Profile>> {
+public abstract class OnFriendsListener extends OnActionListener<List<Profile>> {
 }

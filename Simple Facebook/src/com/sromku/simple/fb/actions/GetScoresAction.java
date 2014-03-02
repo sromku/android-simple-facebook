@@ -10,19 +10,19 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnScoresRequestListener;
+import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.utils.GraphPath;
 
 public class GetScoresAction extends GetAction<JSONArray> {
 
-	private OnScoresRequestListener mOnScoresRequestListener;
+	private OnScoresListener mOnScoresListener;
 
 	public GetScoresAction(SessionManager sessionManager) {
 		super(sessionManager);
 	}
 
-	public void setOnScoresRequestListener(OnScoresRequestListener onScoresRequestListener) {
-		mOnScoresRequestListener = onScoresRequestListener;
+	public void setOnScoresRequestListener(OnScoresListener onScoresListener) {
+		mOnScoresListener = onScoresListener;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class GetScoresAction extends GetAction<JSONArray> {
 
 	@Override
 	protected OnActionListener<JSONArray> getActionListener() {
-		return mOnScoresRequestListener;
+		return mOnScoresListener;
 	}
 
 	@Override
