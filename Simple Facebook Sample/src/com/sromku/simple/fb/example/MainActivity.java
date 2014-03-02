@@ -23,7 +23,7 @@ import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
 import com.sromku.simple.fb.entities.Event;
-import com.sromku.simple.fb.entities.Event.EventDesicion;
+import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.entities.Like;
@@ -33,11 +33,11 @@ import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.example.friends.FriendsActivity;
 import com.sromku.simple.fb.example.utils.Utils;
-import com.sromku.simple.fb.listeners.OnAlbumsRequestListener;
+import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnEventsListener;
-import com.sromku.simple.fb.listeners.OnFriendsRequestListener;
+import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.listeners.OnGroupsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLikesListener;
@@ -45,7 +45,7 @@ import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
-import com.sromku.simple.fb.listeners.OnProfileRequestListener;
+import com.sromku.simple.fb.listeners.OnProfileListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.Attributes;
@@ -338,6 +338,7 @@ public class MainActivity extends Activity {
 						hideDialog();
 						// insure that you are logged in before publishing
 						Log.w(TAG, "Failed to publish");
+						toast(reason);
 					}
 
 					@Override
@@ -428,7 +429,7 @@ public class MainActivity extends Activity {
 	 */
 	private void getProfileExample() {
 		// listener for profile request
-		final OnProfileRequestListener onProfileRequestListener = new OnProfileRequestListener() {
+		final OnProfileListener onProfileListener = new OnProfileListener() {
 
 			@Override
 			public void onFail(String reason) {
@@ -466,7 +467,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// example 1
-				mSimpleFacebook.getProfile(onProfileRequestListener);
+				mSimpleFacebook.getProfile(onProfileListener);
 
 				// // - example 2
 				// mSimpleFacebook.getProfile(new OnProfileRequestAdapter()
@@ -493,7 +494,7 @@ public class MainActivity extends Activity {
 	 */
 	private void getProfileWithPropertiesExample() {
 		// listener for profile request
-		final OnProfileRequestListener onProfileRequestListener = new OnProfileRequestListener() {
+		final OnProfileListener onProfileListener = new OnProfileListener() {
 
 			@Override
 			public void onFail(String reason) {
@@ -547,7 +548,7 @@ public class MainActivity extends Activity {
 						.add(Profile.Properties.PICTURE, pictureAttributes).build();
 
 				// do the get profile action
-				mSimpleFacebook.getProfile(properties, onProfileRequestListener);
+				mSimpleFacebook.getProfile(properties, onProfileListener);
 			}
 		});
 
@@ -558,7 +559,7 @@ public class MainActivity extends Activity {
 	 */
 	private void getFriendsExample() {
 		// listener for friends request
-		final OnFriendsRequestListener onFriendsRequestListener = new OnFriendsRequestListener() {
+		final OnFriendsListener onFriendsListener = new OnFriendsListener() {
 
 			@Override
 			public void onFail(String reason) {
@@ -595,7 +596,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				mSimpleFacebook.getFriends(onFriendsRequestListener);
+				mSimpleFacebook.getFriends(onFriendsListener);
 			}
 		});
 
@@ -607,7 +608,7 @@ public class MainActivity extends Activity {
 	 */
 	private void getAlbumsExample() {
 		// listener for friends request
-		final OnAlbumsRequestListener onAlbumsRequestListener = new OnAlbumsRequestListener() {
+		final OnAlbumsListener onAlbumsListener = new OnAlbumsListener() {
 
 			@Override
 			public void onFail(String reason) {
@@ -643,7 +644,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				mSimpleFacebook.getAlbums(onAlbumsRequestListener);
+				mSimpleFacebook.getAlbums(onAlbumsListener);
 			}
 		});
 
@@ -727,7 +728,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void getEventsExample() {
-		final EventDesicion eventDesicion = EventDesicion.ATTENDING;
+		final EventDecision eventDesicion = EventDecision.ATTENDING;
 		final OnEventsListener onEventsListener = new OnEventsListener() {
 
 			@Override
