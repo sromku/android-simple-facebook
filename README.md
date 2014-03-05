@@ -41,8 +41,9 @@ Sample app:<br>
 	* [Scores](#get-scores)
 	* [Videos](#get-videos)
 * [Additional options](additional-options)
-	* [Configuration options](#configuration-options)
+	* [Pagination](#pagination)
 	* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+	* [Configuration options](#configuration-options)
 	* [Permissions](#permissions)
 		* [Request new permissions](#request-new-permissions)
 		* [Granted persmissions](#granted-persmissions)
@@ -872,27 +873,43 @@ mSimpleFacebook.getVideos(entityId, onVideosListener);
 ```
 
 ## Additional options
-* [Configuration options](#configuration-options)
+* [Pagination](#pagination)
 * [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
+* [Configuration options](#configuration-options)
 * [Permissions](#permissions)
 	* [Request new permissions](#request-new-permissions)
 	* [Granted persmissions](#granted-persmissions)
 * [Misc](#misc)
 * [Debug](#debug)
 
-### Configuration options
+### Pagination
+When you ask for photos, albums and other list of entities, you will get the first page of results. Usualy it is **25** first results.
+For getting next or previous pages you can use methods below or get `Cursor` and start iterating.<br><br>
+Each `OnActionListener` has next methods:
+- `hasNext()` - return `true` if one more page exists
+- `hasPrev()` - return `true` if previous page exists
+- `getNext()` - execute request for getting next page and the results return to the same listener
+- `getPrev()` - execute request for getting previous page and the results return to the same listener
+- `getCursor()` - return `Cursor` which has the same methods above
 
-The configuration, you need to define once in your app. The best place for that will be in your extension to `Application` class.<br> 
-Configuration properties:
+#### Example:
+Let's say we are asking for comments by: `getCommets(entityId, onCommentsListener)`.<br>
+We want to check if there is more pages with comments. If so, we will ask for more. 
 
-| Property         | Description                                | Must/Optional | Default Value
- ------------------|--------------------------------------------|---------------|----------------------
-| app id 		   | Application id                             |  Must	        |
-| namespace        | Application namespace                      |  Must         |
-| permissions      | Set of permissions you want to use on login|  Must         |
-| default audience | Decide who will see your published posts   |  Optional     | FRIENDS
-| login behaviour  | Descide what to use: SSO or not            |  Optional     | SSO_WITH_FALLBACK
-| all at once      | Ask from user all permissions at once      |  Optional     | false
+And this is our listener:
+``` java
+OnCommentsListener onCommentsListener = new OnCommentsListener() {			
+	@Override
+	public void onComplete(List<Comment> comments) {
+		Log.i(TAG, "Number of comments = " + comments.size());
+		if (hasNext()) {
+			getNext();
+		}
+	}
+};
+```
+
+> Of course, it is just an example. In your app, you will maybe add a button that will say 'get more...' and then you will actually call for `getNext()` but it is up to you how to handle it. You can `getCursor()` and iterate to the next pages from other place in you app. Again, it's up to you :)
 
 
 ### Set privacy settings of a single post
@@ -952,6 +969,20 @@ Privacy privacy = new Privacy.Builder()
 ```
 > You can combine and define users, friendlist to be in allowed and denied lists without limits. Just don't forget to set `CUSTOM`.
 See javadocs for additional details.
+
+### Configuration options
+
+The configuration, you need to define once in your app. The best place for that will be in your extension to `Application` class.<br> 
+Configuration properties:
+
+| Property         | Description                                | Must/Optional | Default Value
+ ------------------|--------------------------------------------|---------------|----------------------
+| app id 		   | Application id                             |  Must	        |
+| namespace        | Application namespace                      |  Must         |
+| permissions      | Set of permissions you want to use on login|  Must         |
+| default audience | Decide who will see your published posts   |  Optional     | FRIENDS
+| login behaviour  | Descide what to use: SSO or not            |  Optional     | SSO_WITH_FALLBACK
+| all at once      | Ask from user all permissions at once      |  Optional     | false
 
 ### Permissions
 One of the main ideas of this library is to make life easier by simplifing usage of permissions. You can find that all permissions are predefined and you don't need to care for the order and code flow of READ and WRITE permissions.
