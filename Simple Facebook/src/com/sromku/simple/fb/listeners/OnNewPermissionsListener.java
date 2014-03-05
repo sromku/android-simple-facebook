@@ -13,7 +13,7 @@ public interface OnNewPermissionsListener extends OnThinkingListetener {
     /**
      * If the permission was granted, this callback is invoked.
      */
-    void onSuccess(final String accessToken);
+    void onSuccess(String accessToken);
 
     /**
      * If user pressed 'cancel' in PUBLISH permissions dialog

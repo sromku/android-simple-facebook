@@ -60,11 +60,12 @@ public class Privacy {
 
 		/**
 		 * The privacy parameter only applies for posts to the user's own
-		 * timeline<br/>
-		 * and is ultimately governed by the privacy ceiling a user has
-		 * configured for an app.<br/>
-		 * <b>Important:</b> If you choose "CUSTOM", you must call either<br/>
-		 * setAllowedUserOrListID(s) or setDeniedUserOrListID(s).
+		 * timeline and is ultimately governed by the privacy ceiling a user has
+		 * configured for an app.<br>
+		 * <br>
+		 * <b>Important:</b> If you choose {@link PrivacySettings#CUSTOM CUSTOM}
+		 * , you must call either <code>addAllowed()</code> or
+		 * <code>addDenied()</code>.
 		 * 
 		 * @param privacySettings
 		 *            The wanted privacy settings
@@ -75,71 +76,125 @@ public class Privacy {
 		}
 
 		/**
-		 * Add a user or a friend list to the allowed list
+		 * Add a user or a friend list to the allowed list.<br>
+		 * <b>Only applicable in case of selected {@link PrivacySettings#CUSTOM
+		 * CUSTOM} in {@link #setPrivacySettings(PrivacySettings)} method.</b> <br>
+		 * <br>
 		 * 
-		 * @param userOrListID
-		 *            user ID or friend list ID that "can" see the post
+		 * <b>Note:</b><br>
+		 * If you defined other privacy setting than
+		 * {@link PrivacySettings#CUSTOM CUSTOM} and still decided to use this
+		 * method, then the privacy will be changed with warning to
+		 * {@link PrivacySettings#CUSTOM CUSTOM}.
+		 * 
+		 * @param userOrListId
+		 *            user Id or friend list Id that <b>can</b> see the post.
 		 */
-		public Builder addAllowedUserOrListID(String userOrListID) {
+		public Builder addAllowed(String userOrListId) {
 			validateListsAccessRequest();
-			mAllowedUsers.add(userOrListID);
+			mAllowedUsers.add(userOrListId);
 			return this;
 		}
 
 		/**
 		 * Add a predefined friend list to the allowed list This can <b>only</b>
-		 * be ALL_FRIENDS or FRIENDS_OF_FRIENDS to include all members of those
-		 * sets.
+		 * be {@link PrivacySettings#ALL_FRIENDS ALL_FRIENDS} or
+		 * {@link PrivacySettings#FRIENDS_OF_FRIENDS FRIENDS_OF_FRIENDS} to
+		 * include all members of those sets. <br>
+		 * <b>Only applicable in case of selected {@link PrivacySettings#CUSTOM
+		 * CUSTOM} in {@link #setPrivacySettings(PrivacySettings)} method.</b> <br>
+		 * <br>
 		 * 
-		 * @param friendList
-		 *            ALL_FRIENDS or FRIENDS_OF_FRIENDS to include all members
-		 *            of those sets
+		 * <b>Note:</b><br>
+		 * If you defined other privacy setting than
+		 * {@link PrivacySettings#CUSTOM CUSTOM} and still decided to use this
+		 * method, then the privacy will be changed with warning to
+		 * {@link PrivacySettings#CUSTOM CUSTOM}.
+		 * 
+		 * @param privacySettings
+		 *            {@link PrivacySettings#ALL_FRIENDS ALL_FRIENDS} or
+		 *            {@link PrivacySettings#FRIENDS_OF_FRIENDS
+		 *            FRIENDS_OF_FRIENDS} to include all members of those sets.
+		 * @throws UnsupportedOperationException
+		 *             in case of using other values than
+		 *             {@link PrivacySettings#ALL_FRIENDS ALL_FRIENDS} or
+		 *             {@link PrivacySettings#FRIENDS_OF_FRIENDS
+		 *             FRIENDS_OF_FRIENDS}
 		 */
-		public Builder addAllowedUserOrListID(PrivacySettings friendList) {
+		public Builder addAllowed(PrivacySettings privacySettings) {
 			validateListsAccessRequest();
-			if (friendList != PrivacySettings.ALL_FRIENDS || friendList != PrivacySettings.FRIENDS_OF_FRIENDS) {
+			if (privacySettings != PrivacySettings.ALL_FRIENDS || privacySettings != PrivacySettings.FRIENDS_OF_FRIENDS) {
 				UnsupportedOperationException exception = new UnsupportedOperationException("Can't add this predefined friend list. Only allowed are: ALL_FRIENDS or FRIENDS_OF_FRIENDS");
 				Logger.logError(Privacy.class, "failed to add allowed users", exception);
 				throw exception;
 			}
 
-			mAllowedUsers.add(friendList.name());
+			mAllowedUsers.add(privacySettings.name());
 			return this;
 		}
 
 		/**
-		 * Add users and/or friend lists to the allowed list.
+		 * Add users and/or friend lists to the allowed list. <br>
+		 * <b>Only applicable in case of selected {@link PrivacySettings#CUSTOM
+		 * CUSTOM} in {@link #setPrivacySettings(PrivacySettings)} method.</b> <br>
+		 * <br>
 		 * 
-		 * @param userOrListIDs
-		 *            mixed user IDs and friend list IDs that "can" see the post
+		 * <b>Note:</b><br>
+		 * If you defined other privacy setting than
+		 * {@link PrivacySettings#CUSTOM CUSTOM} and still decided to use this
+		 * method, then the privacy will be changed with warning to
+		 * {@link PrivacySettings#CUSTOM CUSTOM}.
+		 * 
+		 * @param userOrListIds
+		 *            mixed user Ids and friend list Ids that <b>can</b> see the
+		 *            post.
 		 */
-		public Builder addAllowedUserOrListIDs(Collection<? extends String> userOrListIDs) {
+		public Builder addAllowed(Collection<? extends String> userOrListIds) {
 			validateListsAccessRequest();
-			mAllowedUsers.addAll(userOrListIDs);
+			mAllowedUsers.addAll(userOrListIds);
 			return this;
 		}
 
 		/**
-		 * Add a user or a friend list to the denied list
+		 * Add a user or a friend list to the denied list. <br>
+		 * <b>Only applicable in case of selected {@link PrivacySettings#CUSTOM
+		 * CUSTOM} in {@link #setPrivacySettings(PrivacySettings)} method.</b> <br>
+		 * <br>
 		 * 
-		 * @param userOrListID
-		 *            user ID or friend list ID that "cannot" see the post
+		 * <b>Note:</b><br>
+		 * If you defined other privacy setting than
+		 * {@link PrivacySettings#CUSTOM CUSTOM} and still decided to use this
+		 * method, then the privacy will be changed with warning to
+		 * {@link PrivacySettings#CUSTOM CUSTOM}.
+		 * 
+		 * @param userOrListId
+		 *            user Id or friend list Id that <b>cannot</b> see the post
 		 */
-		public Builder addDeniedUserOrListID(String userOrListID) {
+		public Builder addDenied(String userOrListId) {
 			validateListsAccessRequest();
-			mDeniedUsers.add(userOrListID);
+			mDeniedUsers.add(userOrListId);
 			return this;
 		}
 
 		/**
-		 * Add users and/or friend lists to the denied list
+		 * Add users and/or friend lists to the denied list. <br>
+		 * <b>Only applicable in case of selected {@link PrivacySettings#CUSTOM
+		 * CUSTOM} in {@link #setPrivacySettings(PrivacySettings)} method.</b> <br>
+		 * <br>
 		 * 
-		 * @param userOrListIDs
-		 *            mixed user IDs and friend list IDs that "can" see the post
+		 * <b>Note:</b><br>
+		 * If you defined other privacy setting than
+		 * {@link PrivacySettings#CUSTOM CUSTOM} and still decided to use this
+		 * method, then the privacy will be changed with warning to
+		 * {@link PrivacySettings#CUSTOM CUSTOM}.
+		 * 
+		 * @param userOrListIds
+		 *            mixed user Ids and friend list Ids that <b>can</b> see the
+		 *            post.
 		 */
-		public Builder addDeniedUserOrListIDs(Collection<? extends String> userOrListIDs) {
+		public Builder addDenied(Collection<? extends String> userOrListIds) {
 			validateListsAccessRequest();
-			mDeniedUsers.addAll(userOrListIDs);
+			mDeniedUsers.addAll(userOrListIds);
 			return this;
 		}
 
@@ -150,7 +205,8 @@ public class Privacy {
 		/**
 		 * Validates that the allowed / denied lists can be accessed.<br/>
 		 * In case you use a predefined privacy setting different than
-		 * {@code CUSTOM}, you <b>must not</b> use the custom lists.
+		 * {@link PrivacySettings#CUSTOM CUSTOM}, you <b>must not</b> use the
+		 * custom lists.
 		 */
 		private void validateListsAccessRequest() {
 			if (mPrivacySetting != PrivacySettings.CUSTOM) {

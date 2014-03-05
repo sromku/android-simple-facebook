@@ -605,6 +605,12 @@ public class SimpleFacebook {
 	 * - <b>Event</b>. Any event. To get the event id: {@link Event#getId()}<br>
 	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
 	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * No special permissions are needed for getting the public posts. If you
+	 * want to get more private posts, then you need
+	 * {@link Permission#READ_STREAM}
 	 * 
 	 * @param entityId
 	 *            Event, Group, Page, Profile
@@ -645,6 +651,11 @@ public class SimpleFacebook {
 	 * - <b>Page</b>. Any page. To get page id: {@link Page#getId()} <br>
 	 * - <b>Profile</b>. Any profile. To get profile id: {@link Profile#getId()} <br>
 	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * No special permissions are needed for getting the public posts. If you
+	 * want to get more private posts, then you need
+	 * {@link Permission#READ_STREAM}<br><br>
 	 * 
 	 * @param entityId
 	 *            Event, Group, Page, Profile

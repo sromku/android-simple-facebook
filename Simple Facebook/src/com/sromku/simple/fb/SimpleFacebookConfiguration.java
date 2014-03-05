@@ -214,8 +214,8 @@ public class SimpleFacebookConfiguration {
 		 * appear or not. <br>
 		 * <br>
 		 * <b>Note:</b>Facebook requests not to ask the user for read and then
-		 * publish permissions at once, this the default behavior will be false
-		 * for this flag.
+		 * publish permissions at once, thus the default value will be
+		 * <code>false</code> for this flag.
 		 * 
 		 * @param allAtOnce
 		 * @return {@link Builder}

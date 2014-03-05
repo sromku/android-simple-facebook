@@ -18,10 +18,26 @@ import com.sromku.simple.fb.utils.Utils.Converter;
 public class Post {
 
 	public static enum PostType {
+		/**
+		 * Everything that was published (links, statuses, photos...) that
+		 * appears on the users' wall.
+		 */
 		ALL(GraphPath.FEED),
+		/**
+		 * Link published by the user themselves.
+		 */
 		LINKS(GraphPath.LINKS),
+		/**
+		 * Posts published by the person themselves.
+		 */
 		POSTS(GraphPath.POSTS),
+		/**
+		 * Status update posts published by the person themselves.
+		 */
 		STATUSES(GraphPath.STATUSES),
+		/**
+		 * Posts in which the person is tagged.
+		 */
 		TAGGED(GraphPath.TAGGED);
 
 		private String graphPath;
