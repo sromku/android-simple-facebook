@@ -14,11 +14,10 @@ Sample app:<br>
 </a>
 
 ## Features
-* [Login](#login-1)
-* [Logout](#logout-1)
+* [Login](#login)
+* [Logout](#logout)
 * [Publish](#publish-feed)
 	* [Feed](#publish-feed)
-	* [Story (open graph)](#publish-story-open-graph)
 	* [Photo](#publish-photo)
 	* [Video](#publish-video)
 	* [Score](#publish-score)
@@ -47,6 +46,7 @@ Sample app:<br>
 	* [Permissions](#permissions)
 		* [Request new permissions](#request-new-permissions)
 		* [Granted persmissions](#granted-persmissions)
+	* [Open Graph](#open-graph)
 	* [Misc](#misc)
 	* [Debug](#debug)
 
@@ -279,9 +279,6 @@ And, the **result** is:
 <p align="center">
   <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed_advanced.png" alt="Published feed"/>
 </p>
-
-### Publish story (open graph)
-*TBE (to be explained)*
 
 ### Publish photo
 
@@ -879,6 +876,7 @@ mSimpleFacebook.getVideos(entityId, onVideosListener);
 * [Permissions](#permissions)
 	* [Request new permissions](#request-new-permissions)
 	* [Granted persmissions](#granted-persmissions)
+* [Open Graph](#open-graph)
 * [Misc](#misc)
 * [Debug](#debug)
 
@@ -926,10 +924,10 @@ You have <b>2 options</b> to define privacy.
 #### Basic settings
 
 Use one of the following predefined privacy settings: 
-- EVERYONE
-- ALL_FRIENDS
-- FRIENDS_OF_FRIENDS
-- SELF
+- `EVERYONE`
+- `ALL_FRIENDS`
+- `FRIENDS_OF_FRIENDS`
+- `SELF`
 
 Build `Privacy` instance:
 ``` java
@@ -985,7 +983,7 @@ Configuration properties:
 | all at once      | Ask from user all permissions at once      |  Optional     | false
 
 ### Permissions
-One of the main ideas of this library is to make life easier by simplifing usage of permissions. You can find that all permissions are predefined and you don't need to care for the order and code flow of READ and WRITE permissions.
+One of the main ideas of this library is to make life easier by simplifing usage of permissions. You can find that all permissions are predefined and you don't need to care for the order and code flow of READ and PUBLISH permissions.
 
 #### Request new permissions
 You can request new permissions in runtime. The popup with new set of permissions will be shown to user.
@@ -1035,6 +1033,10 @@ Check if all permissions from configuration are granted:
 ``` java
 boolean isAllGranted = mSimpleFacebook.isAllPermissionsGranted();
 ```
+
+### Open Graph
+Currently this feature exists in the library but still in experimental mode. <br>
+The used method is: `publish(Story)` and it is possible to build `Story` entity. It should work, because it works for me, but the final API of this action and `Story` entity isn't finalized yet. 
 
 ### Misc
 
