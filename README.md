@@ -43,9 +43,9 @@ Sample app:<br>
 * [Additional options](additional-options)
 	* [Configuration options](#configuration-options)
 	* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
-	* [Permission](#permission)
+	* [Permissions](#permissions)
 		* [Request new permissions](#request-new-permissions)
-		* [Get granted persmissions](#get-granted-persmissions)
+		* [Granted persmissions](#granted-persmissions)
 	* [Misc](#misc)
 	* [Debug](#debug)
 
@@ -93,8 +93,7 @@ Add next lines in your `Application` or `Activity` class.
 - Define and select permissions you need:
 
 	``` java
-	Permissions[] permissions = new Permissions[]
-	{
+	Permissions[] permissions = new Permissions[] {
 		Permissions.USER_PHOTOS,
 		Permissions.EMAIL,
 		Permissions.PUBLISH_ACTION
@@ -125,8 +124,7 @@ In each `Activity` where you want to use the library, just override the `onResum
 
 ``` java
 @Override
-public void onResume()
-{
+public void onResume() {
 	super.onResume();
 	mSimpleFacebook = SimpleFacebook.getInstance(this);
 }
@@ -137,8 +135,7 @@ public void onResume()
 #### 3.	Override `onActivityResult` method and add this line:
 ``` java
 @Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data)
-{
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data); 
 	super.onActivityResult(requestCode, resultCode, data);
 } 
@@ -150,8 +147,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
 
 Initialize callback listener:
 ``` java
-OnLoginListener onLoginListener = new OnLoginListener()
-{
+OnLoginListener onLoginListener = new OnLoginListener() {
 	@Override
 	public void onLogin() {
 		// change the state of the button or do whatever you want
@@ -181,8 +177,7 @@ mSimpleFacebook.login(onLoginListener);
 Initialize callback listener:
 ``` java
 // logout listener
-OnLogoutListener onLogoutListener = new OnLogoutListener()
-{
+OnLogoutListener onLogoutListener = new OnLogoutListener() {
 	@Override
 	public void onLogout() {
 		Log.i(TAG, "You are logged out");
@@ -217,8 +212,7 @@ Set `OnPublishListener` and call for:
 
 Initialize callback listener:
 ``` java
-OnPublishListener onPublishListener = new OnPublishListener()
-{
+OnPublishListener onPublishListener = new OnPublishListener() {
 	@Override
 	public void onComplete(String postId) {
 		Log.i(TAG, "Published successfully. The new post id = " + postId);
@@ -298,8 +292,7 @@ You can publish (upload) photo to default album or to any other album you have. 
 
 Initialize callback listener:
 ``` java
-OnPublishListener onPublishListener = new OnPublishListener()
-{
+OnPublishListener onPublishListener = new OnPublishListener() {
 	@Override
 	public void onComplete(String id) {
 		Log.i(TAG, "Published successfully. id = " + id);
@@ -345,8 +338,7 @@ You can publish (upload) a video only to the default "Videos" album. <br>
 
 Initialize callback listener:
 ``` java
-OnPublishListener onPublishListener = new OnPublishListener()
-{
+OnPublishListener onPublishListener = new OnPublishListener() {
 	@Override
 	public void onComplete(String id) {
 		Log.i(TAG, "Published successfully. id = " + id);
@@ -378,8 +370,7 @@ mSimpleFacebook.publish(video, onPublishListener);
 
 Initialize callback listener:
 ``` java
-OnPublishListener onPublishListener = new OnPublishListener()
-{
+OnPublishListener onPublishListener = new OnPublishListener() {
 	@Override
 	public void onComplete(String postId) {
 		Log.i(TAG, "Published successfully");
@@ -412,8 +403,7 @@ wants to invite. In other dialog you set suggested friends only and the last one
 For all options, set `OnInviteListener`:
 
 ``` java
-OnInviteListener onInviteListener = new OnInviteListener()
-{
+OnInviteListener onInviteListener = new OnInviteListener() {
 	@Override
 	public void onComplete(List<String> invitedFriends, String requestId) {
 		Log.i(TAG, "Invitation was sent to " + invitedFriends.size() + " users with request id " + requestId); 
@@ -442,8 +432,7 @@ mSimpleFacebook.invite("I invite you to use this app", onInviteListener);
 Show dialog with a list of suggested friends. Set array of user ids.
 
 ``` java
-String[] friends = new String[]
-{
+String[] friends = new String[] {
 	"630243197",
 	"584419361",
 	"1456233371",
@@ -464,8 +453,7 @@ mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener)
 
 Initialize callback listener:
 ``` java
-OnDeleteListener onDeleteListener = new OnDeleteListener()
-{
+OnDeleteListener onDeleteListener = new OnDeleteListener() {
 	@Override
 	public void onComplete(Void response) {
 		Log.i(TAG, "Deleted successfully");
@@ -496,8 +484,7 @@ But, here you won't be able to get several properties like: *cover*, *picture* a
 
 Initialize callback listener:
 ``` java
-OnProfileListener onProfileListener = new OnProfileListener()
-{			
+OnProfileListener onProfileListener = new OnProfileListener() {			
 	@Override
 	public void onComplete(Profile profile) {
 		Log.i(TAG, "My profile id = " + profile.getId());
@@ -565,8 +552,7 @@ mSimpleFacebook.getProfile(properties, onProfileListener);
 
 Initialize callback listener:
 ``` java
-OnFriendsListener onFriendsListener = new OnFriendsListener()
-{			
+OnFriendsListener onFriendsListener = new OnFriendsListener() {			
 	@Override
 	public void onComplete(List<Profile> friends) {
 		Log.i(TAG, "Number of friends = " + friends.size());
@@ -588,8 +574,7 @@ mSimpleFacebook.getFriends(onFriendsListener);
 
 Initialize callback listener:
 ``` java
-OnAlbumsListener onAlbumsListener = new OnAlbumsListener()
-{			
+OnAlbumsListener onAlbumsListener = new OnAlbumsListener() {			
 	@Override
 	public void onComplete(List<Album> albums) {
 		Log.i(TAG, "Number of albums = " + albums.size());
@@ -619,8 +604,7 @@ mSimpleFacebook.getAlbums(entityId, onAlbumsListener);
 
 Initialize callback listener:
 ``` java
-OnCheckinsListener onCheckinsListener = new OnCheckinsListener()
-{			
+OnCheckinsListener onCheckinsListener = new OnCheckinsListener() {			
 	@Override
 	public void onComplete(List<Checkin> checkins) {
 		Log.i(TAG, "Number of checkins = " + checkins.size());
@@ -650,8 +634,7 @@ mSimpleFacebook.getCheckins(entityId, onCheckinsListener);
 
 Initialize callback listener:
 ``` java
-OnCommentsListener onCommentsListener = new OnCommentsListener()
-{			
+OnCommentsListener onCommentsListener = new OnCommentsListener() {			
 	@Override
 	public void onComplete(List<Comment> comments) {
 		Log.i(TAG, "Number of comments = " + comments.size());
@@ -680,8 +663,7 @@ mSimpleFacebook.getComments(entityId, onCommentsListener);
 
 Initialize callback listener:
 ``` java
-OnEventsListener onEventsListener = new OnEventsListener()
-{			
+OnEventsListener onEventsListener = new OnEventsListener() {			
 	@Override
 	public void onComplete(List<Event> events) {
 		Log.i(TAG, "Number of events = " + events.size());
@@ -712,8 +694,7 @@ mSimpleFacebook.getEvents(entityId, EventDecision.ATTENDING, onEventsListener);
 
 Initialize callback listener:
 ``` java
-OnGroupsListener onGroupsListener = new OnGroupsListener()
-{			
+OnGroupsListener onGroupsListener = new OnGroupsListener() {			
 	@Override
 	public void onComplete(List<Group> groups) {
 		Log.i(TAG, "Number of groups = " + groups.size());
@@ -742,8 +723,7 @@ mSimpleFacebook.getGroups(entityId, onGroupsListener);
 
 Initialize callback listener:
 ``` java
-OnLikesListener onLikesListener = new OnLikesListener()
-{			
+OnLikesListener onLikesListener = new OnLikesListener() {			
 	@Override
 	public void onComplete(List<Like> likes) {
 		Log.i(TAG, "Number of likes = " + likes.size());
@@ -772,8 +752,7 @@ mSimpleFacebook.getLikes(entityId, onLikesListener);
 
 Initialize callback listener:
 ``` java
-OnPhotosListener onPhotosListener = new OnPhotosListener()
-{			
+OnPhotosListener onPhotosListener = new OnPhotosListener() {			
 	@Override
 	public void onComplete(List<Photo> photos) {
 		Log.i(TAG, "Number of photos = " + photos.size());
@@ -805,8 +784,7 @@ mSimpleFacebook.getPhotos(entityId, onPhotosListener);
 
 Initialize callback listener:
 ``` java
-OnPostsListener onPostsListener = new OnPostsListener()
-{			
+OnPostsListener onPostsListener = new OnPostsListener() {			
 	@Override
 	public void onComplete(List<Post> posts) {
 		Log.i(TAG, "Number of posts = " + posts.size());
@@ -844,8 +822,7 @@ mSimpleFacebook.getPosts(entityId, PostType.STATUSES, onPostsListener);
 
 Initialize callback listener:
 ``` java
-OnScoresListener onScoresListener = new OnScoresListener()
-{			
+OnScoresListener onScoresListener = new OnScoresListener() {			
 	@Override
 	public void onComplete(List<Score> scores) {
 		Log.i(TAG, "Number of scores = " + scores.size());
@@ -867,8 +844,7 @@ mSimpleFacebook.getScores(onScoresListener);
 
 Initialize callback listener:
 ``` java
-OnVideosListener onVideosListener = new OnVideosListener()
-{			
+OnVideosListener onVideosListener = new OnVideosListener() {			
 	@Override
 	public void onComplete(List<Video> videos) {
 		Log.i(TAG, "Number of videos = " + videos.size());
@@ -906,13 +882,13 @@ mSimpleFacebook.getVideos(entityId, onVideosListener);
 
 ### Configuration options
 
-The configuration you define once in your app. The best place for that will be your extention to `Application` class.<br> 
+The configuration, you need to define once in your app. The best place for that will be in your extension to `Application` class.<br> 
 Configuration properties:
 
 | Property         | Description                                | Must/Optional | Default Value
  ------------------|--------------------------------------------|---------------|----------------------
 | app id 		   | Application id                             |  Must	        |
-| namespace        | Application namespace                      |  must         |
+| namespace        | Application namespace                      |  Must         |
 | permissions      | Set of permissions you want to use on login|  Must         |
 | default audience | Decide who will see your published posts   |  Optional     | FRIENDS
 | login behaviour  | Descide what to use: SSO or not            |  Optional     | SSO_WITH_FALLBACK
@@ -974,7 +950,7 @@ Privacy privacy = new Privacy.Builder()
 	.addDenied(Collection<String>)
 	.build();
 ```
-You can combine and define users, friendlist to be in allowed and denied lists without limits. Just don't forget to set `CUSTOM`.
+> You can combine and define users, friendlist to be in allowed and denied lists without limits. Just don't forget to set `CUSTOM`.
 See javadocs for additional details.
 
 ### Permissions
@@ -1016,7 +992,7 @@ boolean showPublish = true;
 mSimpleFacebook.requestNewPermissions(permissions, showPublish, onNewPermissionsListener);
 ```
 
-`showPublish` flag - This flag is relevant only in cases when new permissions include PUBLISH permission. Then you can decide if you want the dialog of requesting publish permission to appear <b>right away</b> or <b>later</b>, at first time of real publish action.
+> `showPublish` flag - This flag is relevant only in cases when new permissions include PUBLISH permission. Then you can decide if you want the dialog of requesting publish permission to appear <b>right away</b> or <b>later</b>, at first time of real publish action.
 
 #### Granted persmissions
 Get all permissions that user already granted:
@@ -1053,19 +1029,17 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
 
 ## Applications using the library
 
-| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) <br>
+| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers)<br>
 | [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
 | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) <br>
 | [Fun Call](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
 | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
-| [Gelatto](https://play.google.com/store/apps/details?id=com.doit.gelatto) <br>
-| [Pony Racing](https://play.google.com/store/apps/details?id=com.tiarsoft.ponyrace) <br>
 | [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) <br>
 | [Dough Pro - Artisan Baking](https://play.google.com/store/apps/details?id=com.ollygrov.doughpro) <br>
 | [Mental Arithmetic](https://play.google.com/store/apps/details?id=nintenda.calculmental) <br>
+| **and more...**<br>
 
-
-If you `use` this library in `your` project and you found it helpful, it will be really great to `share it here` :) 
+> If you use this library in your project and you found it helpful, it will be really great to share it here :) 
 
 ## License
 
