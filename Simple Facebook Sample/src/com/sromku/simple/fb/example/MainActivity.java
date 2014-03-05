@@ -29,6 +29,8 @@ import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Post;
+import com.sromku.simple.fb.entities.Privacy;
+import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.example.friends.FriendsActivity;
@@ -327,8 +329,19 @@ public class MainActivity extends Activity {
 				// take screenshot
 				final Bitmap bitmap = Utils.takeScreenshot(MainActivity.this);
 
+				// set privacy
+				Privacy privacy = new Privacy.Builder()
+						.setPrivacySettings(PrivacySettings.SELF)
+						.build();
+				
+				
 				// create Photo instance and add some properties
-				Photo photo = new Photo.Builder().setImage(bitmap).setName("Screenshot from #android_simple_facebook sample application").setPlace("110619208966868").build();
+				Photo photo = new Photo.Builder()
+						.setImage(bitmap)
+						.setName("Screenshot from #android_simple_facebook sample application")
+						.setPlace("110619208966868")
+						.setPrivacy(privacy)
+						.build();
 
 				// publish
 				mSimpleFacebook.publish(photo, new OnPublishListener() {
@@ -760,7 +773,7 @@ public class MainActivity extends Activity {
 		mButtonGetEvents.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mSimpleFacebook.getEvents("1065493150", eventDesicion, onEventsListener);
+				mSimpleFacebook.getEvents(eventDesicion, onEventsListener);
 			}
 		});
 	}
