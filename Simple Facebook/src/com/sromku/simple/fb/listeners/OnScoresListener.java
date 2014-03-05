@@ -1,6 +1,8 @@
 package com.sromku.simple.fb.listeners;
 
-import org.json.JSONArray;
+import java.util.List;
+
+import com.sromku.simple.fb.entities.Score;
 
 /**
  * On get scores requests listener
@@ -8,5 +10,5 @@ import org.json.JSONArray;
  * @author koraybalci
  * 
  */
-public abstract class OnScoresListener extends OnActionListener<JSONArray> {
+public abstract class OnScoresListener extends OnActionListener<List<Score>> {
 }
