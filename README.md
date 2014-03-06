@@ -1037,7 +1037,7 @@ The used method is: `publish(Story)` and it is possible to build `Story` entity.
 ### Misc
 
 * `isLogin()` – Check if you are logged in
-* `getAccessToken()` - Get current access token
+* `getSession()` - Get active session
 * `clean()` - Clean all references like `Activity` to prevent memory leaks
 * `eventAppLaunched()` - Install report to facebook. Useful for statistics
 
