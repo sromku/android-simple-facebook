@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.Session;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
@@ -655,7 +656,8 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permissions are needed for getting the public posts. If you
 	 * want to get more private posts, then you need
-	 * {@link Permission#READ_STREAM}<br><br>
+	 * {@link Permission#READ_STREAM}<br>
+	 * <br>
 	 * 
 	 * @param entityId
 	 *            Event, Group, Page, Profile
@@ -1049,6 +1051,15 @@ public class SimpleFacebook {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Get the current 'Active' session. <br>
+	 * 
+	 * @return Active session or null.
+	 */
+	public Session getSession() {
+		return mSessionManager.getActiveSession();
 	}
 
 	/**
