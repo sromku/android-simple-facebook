@@ -1036,7 +1036,7 @@ boolean isAllGranted = mSimpleFacebook.isAllPermissionsGranted();
 
 ### Open Graph
 Currently this feature exists in the library but still in experimental mode. <br>
-The used method is: `publish(Story)` and it is possible to build `Story` entity. It should work, because it works for me, but the final API of this action and `Story` entity isn't finalized yet. 
+The used method is: `publish(Story)` and it is possible to build `Story` entity. It should work, because it works for me, but the final API of this action and `Story` entity aren't finalized yet. 
 
 ### Misc
 
