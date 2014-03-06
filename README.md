@@ -938,10 +938,6 @@ Privacy privacy = new Privacy.Builder()
 
 Set to `Photo`, `Video` or `Feed` and publish:
 ``` java
-Photo photo = ...
-photo.setPrivacy(privacy);
-
-// create Photo instance and add some properties
 Photo photo = new Photo.Builder()
 	.setPrivacy(privacy)
 	...
