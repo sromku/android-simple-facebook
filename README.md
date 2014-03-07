@@ -309,9 +309,11 @@ Build photo for publishing:
 Bitmap bitmap = ...
 
 // create Photo instance and add some properties
-Photo photo = new Photo(bitmap);
-photo.addDescription("Screenshot from #android_simple_facebook sample application");
-photo.addPlace("110619208966868");
+Photo photo = new Photo.Builder()
+	.setImage(bitmap)
+	.setName("Screenshot from #android_simple_facebook sample application")
+	.setPlace("110619208966868")
+	.build();
 ```
 
 Publish photo to **application** (default) album:
@@ -354,9 +356,11 @@ Build video for publishing:
 File videoFile = ...
 
 // create a Video instance and add some properties
-Video video = new Video(videoFile);
-video.addTitle("A video");
-video.addDescription("Video from #android_simple_facebook sample application");
+Video video = new Video.Builder()
+	.setVideo(videoFile)
+	.setDescription("Video from #android_simple_facebook sample application")
+	.setName("Cool video")
+	.build();
 ```
 
 Publish video to "Videos" album
