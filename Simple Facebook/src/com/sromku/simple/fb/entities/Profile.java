@@ -8,7 +8,6 @@ import java.util.Set;
 
 import android.os.Bundle;
 
-import com.facebook.model.GraphLocation;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.Permission;
@@ -24,7 +23,7 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  */
 public class Profile implements User {
 
-	private final GraphUser mGraphUser;
+	private final GraphObject mGraphObject;
 
 	private String mId;
 	private String mName;
@@ -60,32 +59,32 @@ public class Profile implements User {
 	private String mWebsite;
 	private List<Work> mWorks;
 
-	private Profile(GraphUser graphUser) {
-		mGraphUser = graphUser;
+	private Profile(GraphObject graphObject) {
+		mGraphObject = graphObject;
 
 		// id
-		mId = mGraphUser.getId();
+		mId =Utils.getPropertyString(mGraphObject, Properties.ID);
 
 		// name
-		mName = mGraphUser.getName();
+		mName = Utils.getPropertyString(mGraphObject, Properties.NAME);
 
 		// first name
-		mFirstName = mGraphUser.getFirstName();
+		mFirstName = Utils.getPropertyString(mGraphObject, Properties.FIRST_NAME);
 
 		// middle name
-		mMiddleName = mGraphUser.getMiddleName();
+		mMiddleName = Utils.getPropertyString(mGraphObject, Properties.MIDDLE_NAME);
 
 		// last name
-		mLastName = mGraphUser.getLastName();
+		mLastName = Utils.getPropertyString(mGraphObject, Properties.LAST_NAME);
 
 		// gender
-		mGender = Utils.getPropertyString(graphUser, Properties.GENDER);
+		mGender = Utils.getPropertyString(mGraphObject, Properties.GENDER);
 
 		// locale
-		mLocale = Utils.getPropertyString(graphUser, Properties.LOCALE);
+		mLocale = Utils.getPropertyString(mGraphObject, Properties.LOCALE);
 
 		// languages
-		mLanguages = Utils.createList(graphUser, Properties.LANGUAGE, new Converter<Language>() {
+		mLanguages = Utils.createList(mGraphObject, Properties.LANGUAGE, new Converter<Language>() {
 			@Override
 			public Language convert(GraphObject graphObject) {
 				Language language = new Language();
@@ -96,46 +95,46 @@ public class Profile implements User {
 		});
 
 		// link
-		mLink = mGraphUser.getLink();
+		mLink = Utils.getPropertyString(mGraphObject, Properties.LINK);
 
 		// username
-		mUsername = mGraphUser.getUsername();
+		mUsername = Utils.getPropertyString(mGraphObject, Properties.USER_NAME);
 
 		// age range
-		GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(graphUser, Properties.AGE_RANGE);
+		GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(mGraphObject, Properties.AGE_RANGE);
 		if (ageRangeGraphObject != null) {
 			mAgeRange = new AgeRange(Utils.getPropertyString(ageRangeGraphObject, "min"), Utils.getPropertyString(ageRangeGraphObject, "max"));
 		}
 
 		// third party id
-		mThirdPartyId = Utils.getPropertyString(graphUser, Properties.THIRD_PARTY_ID);
+		mThirdPartyId = Utils.getPropertyString(mGraphObject, Properties.THIRD_PARTY_ID);
 
 		// installed
-		mIsInstalled = Utils.getPropertyBoolean(graphUser, Properties.INSTALLED);
+		mIsInstalled = Utils.getPropertyBoolean(mGraphObject, Properties.INSTALLED);
 
 		// time zone
-		mTimeZone = Utils.getPropertyInteger(graphUser, Properties.TIMEZONE);
+		mTimeZone = Utils.getPropertyInteger(mGraphObject, Properties.TIMEZONE);
 
 		// updated time
-		mUpdatedTime = Utils.getPropertyString(graphUser, Properties.UPDATED_TIME);
+		mUpdatedTime = Utils.getPropertyString(mGraphObject, Properties.UPDATED_TIME);
 
 		// verified
-		mVerified = Utils.getPropertyBoolean(graphUser, Properties.INSTALLED);
+		mVerified = Utils.getPropertyBoolean(mGraphObject, Properties.INSTALLED);
 
 		// bio
-		mBio = Utils.getPropertyString(graphUser, Properties.BIO);
+		mBio = Utils.getPropertyString(mGraphObject, Properties.BIO);
 
 		// birthday
-		mBirthday = mGraphUser.getBirthday();
+		mBirthday = Utils.getPropertyString(mGraphObject, Properties.BIRTHDAY);
 
 		// cover
-		mCover = Photo.create(Utils.getPropertyGraphObject(graphUser, Properties.COVER));
+		mCover = Photo.create(Utils.getPropertyGraphObject(mGraphObject, Properties.COVER));
 
 		// currency
-		mCurrency = Utils.getPropertyInsideProperty(graphUser, Properties.CURRENCY, "user_currency");
+		mCurrency = Utils.getPropertyInsideProperty(mGraphObject, Properties.CURRENCY, "user_currency");
 
 		// education
-		mEducation = Utils.createList(graphUser, Properties.EDUCATION, new Converter<Education>() {
+		mEducation = Utils.createList(mGraphObject, Properties.EDUCATION, new Converter<Education>() {
 			@Override
 			public Education convert(GraphObject graphObject) {
 				return Education.create(graphObject);
@@ -143,22 +142,19 @@ public class Profile implements User {
 		});
 
 		// email
-		mEmail = Utils.getPropertyString(graphUser, Properties.EMAIL);
+		mEmail = Utils.getPropertyString(mGraphObject, Properties.EMAIL);
 
 		// hometown
-		mHometown = Utils.getPropertyString(graphUser, Properties.HOMETOWN);
+		mHometown = Utils.getPropertyString(mGraphObject, Properties.HOMETOWN);
 
 		// location
-		GraphLocation graphLocation = mGraphUser.getLocation();
-		if (graphLocation != null) {
-			mLocation = Location.create(graphLocation);
-		}
+		mLocation = Location.create(Utils.getPropertyGraphObject(mGraphObject, Properties.LOCATION));
 
 		// political
-		mPolitical = Utils.getPropertyString(graphUser, Properties.POLITICAL);
+		mPolitical = Utils.getPropertyString(mGraphObject, Properties.POLITICAL);
 
 		// favorite athletes
-		mFavoriteAthletess = Utils.createList(graphUser, Properties.FAVORITE_ATHLETES, new Converter<String>() {
+		mFavoriteAthletess = Utils.createList(mGraphObject, Properties.FAVORITE_ATHLETES, new Converter<String>() {
 			@Override
 			public String convert(GraphObject graphObject) {
 				return Utils.getPropertyString(graphObject, Properties.NAME);
@@ -166,7 +162,7 @@ public class Profile implements User {
 		});
 
 		// favorite teams
-		mFavoriteTeams = Utils.createList(graphUser, Properties.FAVORITE_TEAMS, new Converter<String>() {
+		mFavoriteTeams = Utils.createList(mGraphObject, Properties.FAVORITE_TEAMS, new Converter<String>() {
 			@Override
 			public String convert(GraphObject graphObject) {
 				return Utils.getPropertyString(graphObject, Properties.NAME);
@@ -174,23 +170,23 @@ public class Profile implements User {
 		});
 
 		// picture
-		GraphObject data = Utils.getPropertyGraphObject(graphUser, Properties.PICTURE);
+		GraphObject data = Utils.getPropertyGraphObject(mGraphObject, Properties.PICTURE);
 		mPicture = Utils.getPropertyInsideProperty(data, "data", "url");
 
 		// quotes
-		mQuotes = Utils.getPropertyString(graphUser, Properties.QUOTES);
+		mQuotes = Utils.getPropertyString(mGraphObject, Properties.QUOTES);
 
 		// relationship status
-		mRelationshipStatus = Utils.getPropertyString(graphUser, Properties.RELATIONSHIP_STATUS);
+		mRelationshipStatus = Utils.getPropertyString(mGraphObject, Properties.RELATIONSHIP_STATUS);
 
 		// religion
-		mReligion = Utils.getPropertyString(graphUser, Properties.RELIGION);
+		mReligion = Utils.getPropertyString(mGraphObject, Properties.RELIGION);
 
 		// website
-		mWebsite = Utils.getPropertyString(graphUser, Properties.WEBSITE);
+		mWebsite = Utils.getPropertyString(mGraphObject, Properties.WEBSITE);
 
 		// work
-		mWorks = Utils.createList(graphUser, Properties.WORK, new Converter<Work>() {
+		mWorks = Utils.createList(mGraphObject, Properties.WORK, new Converter<Work>() {
 			@Override
 			public Work convert(GraphObject graphObject) {
 				return Work.create(graphObject);
@@ -201,21 +197,21 @@ public class Profile implements User {
 	/**
 	 * Create new profile based on {@link GraphUser} instance.
 	 * 
-	 * @param graphUser
-	 *            The {@link GraphUser} instance
+	 * @param graphObject
+	 *            The {@link GraphObject} instance
 	 * @return {@link Profile} of the user
 	 */
-	public static Profile create(GraphUser graphUser) {
-		return new Profile(graphUser);
+	public static Profile create(GraphObject graphObject) {
+		return new Profile(graphObject);
 	}
 
 	/**
-	 * Return the graph user
+	 * Return the graph object
 	 * 
-	 * @return The graph user
+	 * @return The graph object
 	 */
-	public GraphUser getGraphUser() {
-		return mGraphUser;
+	public GraphObject getGraphObject() {
+		return mGraphObject;
 	}
 
 	/**
