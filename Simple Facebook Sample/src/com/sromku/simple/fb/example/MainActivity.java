@@ -27,6 +27,7 @@ import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.entities.Like;
+import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Post;
 import com.sromku.simple.fb.entities.Privacy;
@@ -45,6 +46,7 @@ import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
+import com.sromku.simple.fb.listeners.OnPageListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
@@ -84,6 +86,7 @@ public class MainActivity extends Activity {
 	private Button mButtonGetPhotos;
 	private Button mButtonGetPosts;
 	private Button mButtonGetVideos;
+	private Button mButtonGetPage;
 
 	// Login listener
 	private OnLoginListener mOnLoginListener = new OnLoginListener() {
@@ -221,6 +224,9 @@ public class MainActivity extends Activity {
 
 		// 18. Get videos example
 		getVideosExample();
+		
+		// 19. Get page example
+		getPage();
 	}
 
 	@Override
@@ -658,6 +664,13 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				mSimpleFacebook.getAlbums(onAlbumsListener);
+//				
+//				mSimpleFacebook.get("me", "music", new OnActionListener<List<Page>>() {
+//					@Override
+//					public void onComplete(List<Page> response) {
+//						System.out.println("sss");
+//					}
+//				});
 			}
 		});
 
@@ -969,6 +982,44 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	private void getPage() {
+		final String pageId = "109984829031269";
+		final OnPageListener onPageListener = new OnPageListener() {
+			@Override
+			public void onFail(String reason) {
+				hideDialog();
+				Log.w(TAG, reason);
+			}
+
+			@Override
+			public void onException(Throwable throwable) {
+				hideDialog();
+				Log.e(TAG, "Bad thing happened", throwable);
+			}
+
+			@Override
+			public void onThinking() {
+				showDialog();
+				Log.i(TAG, "Thinking...");
+			}
+
+			@Override
+			public void onComplete(Page response) {
+				hideDialog();
+				Log.i(TAG, "Page name = " + response.getName());
+				toast("Page name = " + response.getName());
+			}
+		};
+		
+		mButtonGetPage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mSimpleFacebook.getPage(pageId, onPageListener);
+			}
+		});
+		
+	}
+	
 	private void initUI() {
 		mButtonLogin = (Button) findViewById(R.id.button_login);
 		mButtonLogout = (Button) findViewById(R.id.button_logout);
@@ -1000,6 +1051,7 @@ public class MainActivity extends Activity {
 		mButtonGetPhotos = (Button) findViewById(R.id.button_get_photos);
 		mButtonGetPosts = (Button) findViewById(R.id.button_get_posts);
 		mButtonGetVideos = (Button) findViewById(R.id.button_get_videos);
+		mButtonGetPage = (Button) findViewById(R.id.button_get_page);
 	}
 
 	private void setUIState() {
@@ -1042,6 +1094,7 @@ public class MainActivity extends Activity {
 		mButtonGetPhotos.setEnabled(true);
 		mButtonGetPosts.setEnabled(true);
 		mButtonGetVideos.setEnabled(true);
+		mButtonGetPage.setEnabled(true);
 
 		mTextStatus.setText("Logged in");
 	}
@@ -1068,6 +1121,7 @@ public class MainActivity extends Activity {
 		mButtonGetPhotos.setEnabled(false);
 		mButtonGetPosts.setEnabled(false);
 		mButtonGetVideos.setEnabled(false);
+		mButtonGetPage.setEnabled(false);
 		mTextStatus.setText("Logged out");
 	}
 

@@ -17,6 +17,7 @@ import com.sromku.simple.fb.actions.GetEventsAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetGroupsAction;
 import com.sromku.simple.fb.actions.GetLikesAction;
+import com.sromku.simple.fb.actions.GetPageAction;
 import com.sromku.simple.fb.actions.GetPhotosAction;
 import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
@@ -55,6 +56,7 @@ import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
+import com.sromku.simple.fb.listeners.OnPageListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
@@ -479,6 +481,21 @@ public class SimpleFacebook {
 		getLikesAction.setActionListener(onLikesListener);
 		getLikesAction.setTarget(entityId);
 		getLikesAction.execute();
+	}
+
+	/**
+	 * Get page by page id.
+	 * 
+	 * @param entityId
+	 *            The page id.
+	 * @param onPageListener
+	 *            The callback listener.
+	 */
+	public void getPage(String entityId, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setTarget(entityId);
+		getPageAction.execute();
 	}
 
 	/**
