@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.actions;
 
-import org.json.JSONException;
-
 import android.os.Bundle;
 
 import com.facebook.Response;
@@ -36,7 +34,7 @@ public class GetProfileAction extends GetAction<Profile> {
 	}
 
 	@Override
-	protected Profile processResponse(Response response) throws JSONException {
+	protected Profile processResponse(Response response) {
 		GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
 		Profile profile = Profile.create(graphUser);
 		return profile;

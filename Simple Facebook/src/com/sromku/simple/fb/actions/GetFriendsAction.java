@@ -3,8 +3,6 @@ package com.sromku.simple.fb.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
 import android.os.Bundle;
 
 import com.facebook.Response;
@@ -41,7 +39,7 @@ public class GetFriendsAction extends GetAction<List<Profile>> {
 	}
 
 	@Override
-	protected List<Profile> processResponse(Response response) throws JSONException {
+	protected List<Profile> processResponse(Response response) {
 		List<GraphUser> graphUsers = Utils.typedListFromResponse(response, GraphUser.class);
 		List<Profile> profiles = new ArrayList<Profile>(graphUsers.size());
 		for (GraphUser graphUser : graphUsers) {

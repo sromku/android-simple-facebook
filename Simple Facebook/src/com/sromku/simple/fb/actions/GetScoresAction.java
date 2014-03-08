@@ -3,8 +3,6 @@ package com.sromku.simple.fb.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
 import android.os.Bundle;
 
 import com.facebook.Response;
@@ -44,7 +42,7 @@ public class GetScoresAction extends GetAction<List<Score>> {
 	}
 
 	@Override
-	protected List<Score> processResponse(Response response) throws JSONException {
+	protected List<Score> processResponse(Response response) {
 		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
 		List<Score> scores = new ArrayList<Score>(graphObjects.size());
 		for (GraphObject graphObject : graphObjects) {

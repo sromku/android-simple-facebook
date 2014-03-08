@@ -3,10 +3,6 @@ package com.sromku.simple.fb.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
-import android.os.Bundle;
-
 import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
@@ -32,14 +28,7 @@ public class GetPostsAction extends GetAction<List<Post>> {
 	}
 
 	@Override
-	protected Bundle getBundle() {
-		Bundle bundle = new Bundle();
-		bundle.putString("date_format", "U");
-		return bundle;
-	}
-
-	@Override
-	protected List<Post> processResponse(Response response) throws JSONException {
+	protected List<Post> processResponse(Response response) {
 		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
 		List<Post> posts = new ArrayList<Post>(graphObjects.size());
 		for (GraphObject graphObject : graphObjects) {

@@ -3,10 +3,6 @@ package com.sromku.simple.fb.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
-import android.os.Bundle;
-
 import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
@@ -26,12 +22,7 @@ public class GetLikesAction extends GetAction<List<Like>> {
 	}
 
 	@Override
-	protected Bundle getBundle() {
-		return null;
-	}
-
-	@Override
-	protected List<Like> processResponse(Response response) throws JSONException {
+	protected List<Like> processResponse(Response response) {
 		List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
 		List<Like> likes = new ArrayList<Like>(graphObjects.size());
 		for (GraphObject graphObject : graphObjects) {
