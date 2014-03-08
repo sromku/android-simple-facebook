@@ -664,13 +664,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				mSimpleFacebook.getAlbums(onAlbumsListener);
-//				
-//				mSimpleFacebook.get("me", "music", new OnActionListener<List<Page>>() {
-//					@Override
-//					public void onComplete(List<Page> response) {
-//						System.out.println("sss");
-//					}
-//				});
 			}
 		});
 
