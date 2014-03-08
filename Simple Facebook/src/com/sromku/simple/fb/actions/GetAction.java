@@ -1,6 +1,6 @@
 package com.sromku.simple.fb.actions;
 
-import org.json.JSONException;
+import java.lang.reflect.Type;
 
 import android.os.Bundle;
 
@@ -16,10 +16,12 @@ import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Utils;
 
-public abstract class GetAction<T> extends AbstractAction {
+public class GetAction<T> extends AbstractAction {
 
 	private String mTarget = "me"; // default
+	private String mEdge = null;
 	private OnActionListener<T> mOnActionListener = null;
 	private Cursor<T> mCursor = null;
 
@@ -45,7 +47,7 @@ public abstract class GetAction<T> extends AbstractAction {
 							T result = processResponse(response);
 							actionListener.onComplete(result);
 						}
-						catch (JSONException e) {
+						catch (Exception e) {
 							actionListener.onException(e);
 						}
 					}
@@ -56,6 +58,10 @@ public abstract class GetAction<T> extends AbstractAction {
 
 	public GetAction(SessionManager sessionManager) {
 		super(sessionManager);
+	}
+	
+	public void setEdge(String edge) {
+		mEdge = edge;
 	}
 
 	public void setTarget(String target) {
@@ -82,7 +88,37 @@ public abstract class GetAction<T> extends AbstractAction {
 			}
 		}
 	}
+
+	protected String getTarget() {
+		return mTarget;
+	}
 	
+	protected String getGraphPath() {
+		if (mEdge != null) {
+			return mTarget + "/" + mEdge;
+		}
+		return mTarget;
+	}
+
+	protected Bundle getBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString("date_format", "U");
+		return bundle;
+	}
+
+	protected OnActionListener<T> getActionListener() {
+		return mOnActionListener;
+	}
+
+	/**
+	 * It is better to override this method and implement your faster
+	 * conversion.
+	 */
+	protected T processResponse(Response response) {
+		Type type = mOnActionListener.getGenericType();
+		return Utils.convert(response, type);
+	}
+
 	void runRequest(Request request) {
 		OnActionListener<T> actionListener = getActionListener();
 		request.setCallback(mCallback);
@@ -93,20 +129,6 @@ public abstract class GetAction<T> extends AbstractAction {
 		}
 	}
 
-	protected String getTarget() {
-		return mTarget;
-	}
-
-	protected abstract String getGraphPath();
-
-	protected abstract Bundle getBundle();
-
-	protected OnActionListener<T> getActionListener() {
-		return mOnActionListener;
-	}
-
-	protected abstract T processResponse(Response response) throws JSONException;
-
 	/**
 	 * set next and prev pages requests
 	 * 
@@ -116,7 +138,7 @@ public abstract class GetAction<T> extends AbstractAction {
 		if (mOnActionListener == null) {
 			return;
 		}
-		
+
 		if (mCursor == null) {
 			mCursor = new Cursor<T>(GetAction.this);
 		}

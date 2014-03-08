@@ -9,6 +9,7 @@ import android.content.Intent;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
+import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
 import com.sromku.simple.fb.actions.GetCheckinsAction;
@@ -43,6 +44,7 @@ import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
+import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
@@ -183,6 +185,24 @@ public class SimpleFacebook {
 	 */
 	public boolean isLogin() {
 		return mSessionManager.isLogin(true);
+	}
+
+	/**
+	 * General GET method.
+	 * 
+	 * @param entityId
+	 *            The id of the entity you want to retrieve.
+	 * @param edge
+	 *            The graph edge. Like "friends", "groups" ...
+	 * @param onActionListener
+	 *            The listener with the type you expect as response.
+	 */
+	public <T> void get(String entityId, String edge, OnActionListener<T> onActionListener) {
+		GetAction<T> getAction = new GetAction<T>(mSessionManager);
+		getAction.setActionListener(onActionListener);
+		getAction.setTarget(entityId);
+		getAction.setEdge(edge);
+		getAction.execute();
 	}
 
 	/**

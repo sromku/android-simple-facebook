@@ -1,6 +1,9 @@
 package com.sromku.simple.fb.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -158,6 +161,39 @@ public class Utils {
 		return data.castToListOf(clazz);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T convert(Response response, Type type) {
+		try {
+			if (type instanceof ParameterizedType) {
+				ParameterizedType parameterizedType = (ParameterizedType) type;
+				Class<?> rawType = (Class<?>) parameterizedType.getRawType();
+				if (rawType.getName().equals(List.class.getName())) {
+					// if the T is of List type
+					List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
+					Class<?> actualType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+					Method method = actualType.getMethod("create", GraphObject.class);
+					List<Object> list = ArrayList.class.newInstance();
+					for (GraphObject graphObject : graphObjects) {
+						Object object = method.invoke(null, graphObject);
+						list.add(object);
+					}
+					return (T) list;
+				}
+			}
+			else {
+				Class<?> rawType = (Class<?>) type;
+				GraphObject graphObject = response.getGraphObject();
+				Method method = rawType.getMethod("create", GraphObject.class);
+				Object object = method.invoke(null, graphObject);
+				return (T) object;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static <T> List<T> createList(GraphObject graphObject, String property, Converter<T> converter) {
 		List<T> result = new ArrayList<T>();
 		if (graphObject == null) {
@@ -202,18 +238,18 @@ public class Utils {
 		}
 		return result;
 	}
-	
+
 	public static <T> List<T> createListAggregateValues(GraphObject graphObject, String property, Converter<T> converter) {
 		List<T> result = new ArrayList<T>();
 		if (graphObject == null) {
 			return result;
 		}
-		
+
 		GraphObject mapGraph = graphObject.getPropertyAs(property, GraphObject.class);
 		if (mapGraph == null) {
 			return result;
 		}
-		
+
 		// get the map of objects and have them in ordered way
 		Map<String, Object> map = mapGraph.asMap();
 		Set<String> keySet = map.keySet();
@@ -231,7 +267,7 @@ public class Utils {
 			if (graphObjects == null || graphObjects.size() == 0) {
 				continue;
 			}
-			
+
 			ListIterator<GraphObject> iterator = graphObjects.listIterator();
 			while (iterator.hasNext()) {
 				GraphObject graphObjectItr = iterator.next();
@@ -239,7 +275,7 @@ public class Utils {
 				result.add(t);
 			}
 		}
-		
+
 		return result;
 	}
 

@@ -1,5 +1,8 @@
 package com.sromku.simple.fb.listeners;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import com.sromku.simple.fb.actions.Cursor;
 
 public abstract class OnActionListener<T> implements OnThinkingListetener {
@@ -23,54 +26,52 @@ public abstract class OnActionListener<T> implements OnThinkingListetener {
 	@Override
 	public void onThinking() {
 	}
-	
+
 	public void setCursor(Cursor<T> cursor) {
 		mCursor = cursor;
 	}
-	
+
 	/**
-	 * Return <code>True</code> if there is another next page with more results. You
-	 * can iterate to the next page and get more results by calling to
+	 * Return <code>True</code> if there is another next page with more results.
+	 * You can iterate to the next page and get more results by calling to
 	 * {@link #getNext()} method.
 	 * 
 	 * @return <code>True</code> if more results exist.
 	 */
 	public boolean hasNext() {
 		if (mCursor != null) {
-			return mCursor.hasNext();	
-		}
-		return false;
-	}
-	
-	/**
-	 * Return <code>True</code> if there is another previous page with more results. You
-	 * can iterate to the next page and get more results by calling to
-	 * {@link #getPrev()} method.
-	 * 
-	 * @return <code>True</code> if more results exist.
-	 */
-	public boolean hasPrev() {
-		if (mCursor != null) {
-			return mCursor.hasPrev();	
+			return mCursor.hasNext();
 		}
 		return false;
 	}
 
 	/**
-	 * Ask for the next page results in async way. When
-	 * the response will arrive {@link #onComplete(Object)} method will be
-	 * invoked again.
+	 * Return <code>True</code> if there is another previous page with more
+	 * results. You can iterate to the next page and get more results by calling
+	 * to {@link #getPrev()} method.
+	 * 
+	 * @return <code>True</code> if more results exist.
+	 */
+	public boolean hasPrev() {
+		if (mCursor != null) {
+			return mCursor.hasPrev();
+		}
+		return false;
+	}
+
+	/**
+	 * Ask for the next page results in async way. When the response will arrive
+	 * {@link #onComplete(Object)} method will be invoked again.
 	 */
 	public void getNext() {
 		if (mCursor != null) {
 			mCursor.next();
 		}
 	}
-	
+
 	/**
-	 * Ask for the prev page results in async way. When
-	 * the response will arrive {@link #onComplete(Object)} method will be
-	 * invoked again.
+	 * Ask for the prev page results in async way. When the response will arrive
+	 * {@link #onComplete(Object)} method will be invoked again.
 	 */
 	public void getPrev() {
 		if (mCursor != null) {
@@ -87,6 +88,11 @@ public abstract class OnActionListener<T> implements OnThinkingListetener {
 	 */
 	public Cursor<T> getCursor() {
 		return mCursor;
+	}
+
+	public Type getGenericType() {
+		ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+		return parameterizedType.getActualTypeArguments()[0];
 	}
 
 }
