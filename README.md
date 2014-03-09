@@ -7,6 +7,8 @@ This is a library project which makes the life much easier by coding less code f
 
 Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
+We have new <img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
+
 Sample app:<br> 
 <a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
   <img alt="Get it on Google Play"
@@ -35,12 +37,14 @@ Sample app:<br>
 	* [Events](#get-events)
 	* [Groups](#get-groups)
 	* [Likes](#get-likes)
+	* [Page](#get-page)
 	* [Photos](#get-photos)
 	* [Posts](#get-posts)
 	* [Scores](#get-scores)
 	* [Videos](#get-videos)
 * [Additional options](#additional-options)
 	* [Pagination](#pagination)
+	* [General 'GET'](#general-get)
 	* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
 	* [Configuration options](#configuration-options)
 	* [Permissions](#permissions)
@@ -509,7 +513,7 @@ By using this option, you define the properties you need, and you will get only 
 
 Prepare the properties that you need:
 ``` java
-Properties properties = new Properties.Builder()
+Profile.Properties properties = new Profile.Properties.Builder()
 	.add(Properties.ID)
 	.add(Properties.FIRST_NAME)
 	.add(Properties.COVER)
@@ -537,7 +541,7 @@ pictureAttributes.setType(PictureType.SQUARE);
 
 Prepare the properties that you need:
 ``` java
-Properties properties = new Properties.Builder()
+Profile.Properties properties = new Profile.Properties.Builder()
 	.add(Properties.ID)
 	.add(Properties.FIRST_NAME)
 	.add(Properties.PICTURE, pictureAttributes)
@@ -750,6 +754,51 @@ String entityId = ...;
 mSimpleFacebook.getLikes(entityId, onLikesListener);
 ```
 
+### Get page
+
+**Two** options are possible to get page data.
+
+#### Default
+
+Initialize callback listener:
+``` java
+OnPageListener onPageListener = new OnPageListener() {			
+	@Override
+	public void onComplete(Page page) {
+		Log.i(TAG, "Page id = " + page.getId());
+	}
+
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+```
+
+Get the page:
+``` java
+String pageId = ... ;
+mSimpleFacebook.getPage(pageId, onPageListener);
+```
+
+#### Be specific and get what you need
+By using this option, you define the properties you need, and you will get only them. Here, any property is possible to get.
+
+Prepare the properties that you need:
+``` java
+Page.Properties properties = new Page.Properties.Builder()
+	.add(Properties.ID)
+	.add(Properties.NAME)
+	.add(Properties.LINK)
+	.build();
+``` 
+
+Get the page:
+``` java		
+String pageId = ...	;
+mSimpleFacebook.getPage(pageId, properties, onPageListener);
+```
+
 ### Get photos
 
 Initialize callback listener:
@@ -875,6 +924,7 @@ mSimpleFacebook.getVideos(entityId, onVideosListener);
 
 ## Additional options
 * [Pagination](#pagination)
+* [General 'GET'](#general-get)
 * [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
 * [Configuration options](#configuration-options)
 * [Permissions](#permissions)
@@ -913,6 +963,32 @@ OnCommentsListener onCommentsListener = new OnCommentsListener() {
 
 > Of course, it is just an example. In your app, you will maybe add a button that will say 'get more...' and then you will actually call for `getNext()` but it is up to you how to handle it. You can `getCursor()` and iterate to the next pages from other place in you app. Again, it's up to you :)
 
+### General 'GET'
+You can get anything from facebook by using this generic function. By using this method, you should be familiar with Graph API. 
+
+``` java
+String entityId = ... ;
+String edge = ... ;
+OnActionListener<T> onActionListener = ... ;
+mSimpleFacebook.get(entityId, edge, onActionListener);
+```
+
+#### Example:
+If you want to get **music** that you like, then the graph path should be `me/music` and the expeted result is of type `Page` as explained in [this document](https://developers.facebook.com/docs/graph-api/reference/user/music).
+
+Get my music: 
+``` java
+mSimpleFacebook.get("me", "music", new OnActionListener<List<Page>>() {
+	
+	@Override
+	public void onComplete(List<Page> response) {
+		Log.i(TAG, "Number of music pages I like = " + response.size());
+	}
+
+});
+```
+
+> **Note:** This method is expensive since it uses reflection. It also supports only **List** and entities that have `create(GraphObject)` method.
 
 ### Set privacy settings of a single post
 You can set the privacy settings of a single post (set who can / can't see the post). <br/>
