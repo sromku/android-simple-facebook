@@ -6,7 +6,7 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Page;
-import com.sromku.simple.fb.entities.Profile.Properties;
+import com.sromku.simple.fb.entities.Page.Properties;
 
 public class GetPageAction extends GetAction<Page> {
 

@@ -519,6 +519,24 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * Get page by page id.
+	 * 
+	 * @param entityId
+	 *            The page id.
+	 * @param properties
+	 *            Properties you want to get.
+	 * @param onPageListener
+	 *            The callback listener.
+	 */
+	public void getPage(String entityId, Page.Properties properties, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setTarget(entityId);
+		getPageAction.setProperties(properties);
+		getPageAction.execute();
+	}
+
+	/**
 	 * Get my photos.
 	 * 
 	 * <b>Permission:</b><br>
@@ -607,7 +625,7 @@ public class SimpleFacebook {
 	 * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.FIRST_NAME).add(Properties.PICTURE, attributes).build();
 	 * </pre>
 	 */
-	public void getProfile(Properties properties, OnProfileListener onProfileListener) {
+	public void getProfile(Profile.Properties properties, OnProfileListener onProfileListener) {
 		GetProfileAction getProfileAction = new GetProfileAction(mSessionManager);
 		getProfileAction.setProperties(properties);
 		getProfileAction.setActionListener(onProfileListener);

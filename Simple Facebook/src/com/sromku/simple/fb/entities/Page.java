@@ -1,5 +1,11 @@
 package com.sromku.simple.fb.entities;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import android.os.Bundle;
+
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -535,6 +541,19 @@ public class Page {
 
 	public static class Properties {
 
+		private final Bundle mBundle;
+
+		private Properties(Builder builder) {
+			mBundle = new Bundle();
+			Iterator<String> iterator = builder.properties.iterator();
+			String fields = Utils.join(iterator, ',');
+			mBundle.putString("fields", fields);
+		}
+
+		public Bundle getBundle() {
+			return mBundle;
+		}
+		
 		/**
 		 * The Page ID
 		 */
@@ -743,5 +762,30 @@ public class Page {
 		 * The number of visits to this Page's location
 		 */
 		public static final String WERE_HERE_COUNT = "were_here_count";
+		
+		public static class Builder {
+			Set<String> properties;
+
+			public Builder() {
+				properties = new HashSet<String>();
+			}
+
+			/**
+			 * Add property you need
+			 * 
+			 * @param property
+			 *            The property of the page<br>
+			 *            For example: {@link Properties#FOUNDED}
+			 * @return {@link Builder}
+			 */
+			public Builder add(String property) {
+				properties.add(property);
+				return this;
+			}
+
+			public Properties build() {
+				return new Properties(this);
+			}
+		}
 	}
 }
