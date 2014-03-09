@@ -977,6 +977,11 @@ public class MainActivity extends Activity {
 
 	private void getPage() {
 		final String pageId = "109984829031269";
+		final Page.Properties properties = new Page.Properties.Builder()
+			.add(Page.Properties.NAME)
+			.add(Page.Properties.DESCRIPTION)
+			.build();
+		
 		final OnPageListener onPageListener = new OnPageListener() {
 			@Override
 			public void onFail(String reason) {
@@ -1007,7 +1012,7 @@ public class MainActivity extends Activity {
 		mButtonGetPage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mSimpleFacebook.getPage(pageId, onPageListener);
+				mSimpleFacebook.getPage(pageId, properties, onPageListener);
 			}
 		});
 		
