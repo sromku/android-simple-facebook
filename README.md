@@ -98,10 +98,10 @@ Add next lines in your `Application` or `Activity` class.
 - Define and select permissions you need:
 
 	``` java
-	Permissions[] permissions = new Permissions[] {
-		Permissions.USER_PHOTOS,
-		Permissions.EMAIL,
-		Permissions.PUBLISH_ACTION
+	Permission[] permissions = new Permission[] {
+		Permission.USER_PHOTOS,
+		Permission.EMAIL,
+		Permission.PUBLISH_ACTION
 	};
 	``` 
 
