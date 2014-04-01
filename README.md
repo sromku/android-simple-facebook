@@ -1,7 +1,7 @@
 android-simple-facebook
 =======================
 
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.7**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.8**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
@@ -978,7 +978,7 @@ If you want to get **music** that you like, then the graph path should be `me/mu
 
 Get my music: 
 ``` java
-mSimpleFacebook.get("me", "music", new OnActionListener<List<Page>>() {
+mSimpleFacebook.get("me", "music", null, new OnActionListener<List<Page>>() {
 	
 	@Override
 	public void onComplete(List<Page> response) {
