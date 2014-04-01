@@ -9,21 +9,13 @@ import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Score;
-import com.sromku.simple.fb.listeners.OnActionListener;
-import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 public class GetScoresAction extends GetAction<List<Score>> {
 
-	private OnScoresListener mOnScoresListener;
-
 	public GetScoresAction(SessionManager sessionManager) {
 		super(sessionManager);
-	}
-
-	public void setOnScoresRequestListener(OnScoresListener onScoresListener) {
-		mOnScoresListener = onScoresListener;
 	}
 
 	@Override
@@ -34,11 +26,6 @@ public class GetScoresAction extends GetAction<List<Score>> {
 	@Override
 	protected Bundle getBundle() {
 		return null;
-	}
-
-	@Override
-	protected OnActionListener<List<Score>> getActionListener() {
-		return mOnScoresListener;
 	}
 
 	@Override
