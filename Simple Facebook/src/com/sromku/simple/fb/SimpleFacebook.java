@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -197,8 +198,16 @@ public class SimpleFacebook {
 	 * @param onActionListener
 	 *            The listener with the type you expect as response.
 	 */
-	public <T> void get(String entityId, String edge, OnActionListener<T> onActionListener) {
-		GetAction<T> getAction = new GetAction<T>(mSessionManager);
+	public <T> void get(String entityId, String edge, final Bundle bundle, OnActionListener<T> onActionListener) {
+		GetAction<T> getAction = new GetAction<T>(mSessionManager) {
+			@Override
+			protected Bundle getBundle() {
+				if (bundle != null) {
+					return bundle;
+				}
+				return super.getBundle();
+			}
+		};
 		getAction.setActionListener(onActionListener);
 		getAction.setTarget(entityId);
 		getAction.setEdge(edge);
@@ -863,8 +872,7 @@ public class SimpleFacebook {
 		if (!withDialog) {
 			// make it silently
 			publish(feed, onPublishListener);
-		}
-		else {
+		} else {
 			PublishFeedDialogAction publishFeedDialogAction = new PublishFeedDialogAction(mSessionManager);
 			publishFeedDialogAction.setFeed(feed);
 			publishFeedDialogAction.setOnPublishListener(onPublishListener);
