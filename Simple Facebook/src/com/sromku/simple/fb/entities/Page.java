@@ -7,7 +7,6 @@ import java.util.Set;
 import android.os.Bundle;
 
 import com.facebook.model.GraphObject;
-import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.utils.Utils;
 
 /**

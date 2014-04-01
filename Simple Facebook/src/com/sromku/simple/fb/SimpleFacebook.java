@@ -68,7 +68,7 @@ import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 
 /**
- * Simple Facebook SDK which wraps original Facebook SDK 3.6
+ * Simple Facebook SDK which wraps original Facebook SDK
  * 
  * @author sromku
  */
@@ -195,6 +195,8 @@ public class SimpleFacebook {
 	 *            The id of the entity you want to retrieve.
 	 * @param edge
 	 *            The graph edge. Like "friends", "groups" ...
+	 * @param bundle
+	 *            The 'get' parameters
 	 * @param onActionListener
 	 *            The listener with the type you expect as response.
 	 */
@@ -872,7 +874,8 @@ public class SimpleFacebook {
 		if (!withDialog) {
 			// make it silently
 			publish(feed, onPublishListener);
-		} else {
+		}
+		else {
 			PublishFeedDialogAction publishFeedDialogAction = new PublishFeedDialogAction(mSessionManager);
 			publishFeedDialogAction.setFeed(feed);
 			publishFeedDialogAction.setOnPublishListener(onPublishListener);

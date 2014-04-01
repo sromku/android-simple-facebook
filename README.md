@@ -62,7 +62,7 @@ Sample app:<br>
 
 
 ## Setup Project
-1. Clone [Facebook SDK 3.7](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+1. Clone [Facebook SDK 3.8](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
 2. Clone and import this (Simple Facebook) project to your workspace.
  
@@ -1138,15 +1138,8 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
 
 ## Applications using the library
 
-| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers)<br>
-| [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) <br>
-| [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) <br>
-| [Fun Call](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) <br>
-| [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) <br>
-| [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) <br>
-| [Dough Pro - Artisan Baking](https://play.google.com/store/apps/details?id=com.ollygrov.doughpro) <br>
-| [Mental Arithmetic](https://play.google.com/store/apps/details?id=nintenda.calculmental) <br>
-| **and more...**<br>
+| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) | [Fun Call](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) | [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) | [Dough Pro - Artisan Baking](https://play.google.com/store/apps/details?id=com.ollygrov.doughpro) | [Mental Arithmetic](https://play.google.com/store/apps/details?id=nintenda.calculmental) | [Pemex Checker](https://play.google.com/store/apps/details?id=com.xoco.pemex.checker) | [Ayuda Alguien](https://play.google.com/store/apps/details?id=com.xoco.ayuda) 
+| and more...<br>
 
 > If you use this library in your project and you found it helpful, it will be really great to share it here :) 
 
@@ -1165,5 +1158,5 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sromku/android-simple-facebook/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+
