@@ -7,6 +7,7 @@ import java.util.Set;
 import android.os.Bundle;
 
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.utils.Utils;
 
 /**
@@ -44,6 +45,7 @@ public class Page {
 	private String mMission;
 	private String mName;
 	private Parking mParking;
+	private String mPicture;
 	private String mPhone;
 	private String mPressContact;
 	private String mPriceRange;
@@ -142,6 +144,10 @@ public class Page {
 		// parking
 		GraphObject parking = Utils.getPropertyGraphObject(graphObject, Properties.PARKING);
 		mParking = Parking.create(parking);
+
+		// picture
+		GraphObject data = Utils.getPropertyGraphObject(mGraphObject, Properties.PICTURE);
+		mPicture = Utils.getPropertyInsideProperty(data, "data", "url");
 
 		// phone
 		mPhone = Utils.getPropertyString(graphObject, Properties.PHONE);
@@ -449,6 +455,13 @@ public class Page {
 	}
 
 	/**
+	 * The page 'profile' picture
+	 */
+	public String getPicture() {
+		return mPicture;
+	}
+	
+	/**
 	 * Phone number provided by a Page
 	 * 
 	 * @return
@@ -712,6 +725,8 @@ public class Page {
 		 */
 		public static final String PARKING = "parking";
 
+		public static final String PICTURE = "picture";
+		
 		/**
 		 * Phone number provided by a Page
 		 */
