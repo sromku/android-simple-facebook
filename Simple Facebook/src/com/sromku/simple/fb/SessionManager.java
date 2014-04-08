@@ -164,7 +164,7 @@ public class SessionManager {
 	 * @return the list of accepted permissions
 	 */
 	public List<String> getActiveSessionPermissions() {
-		return getActiveSession().getPermissions();
+		return getOrCreateActiveSession().getPermissions();
 	}
 
 	public Activity getActivity() {
