@@ -367,7 +367,7 @@ public class Profile implements User {
 	 * 
 	 * @return <code>True</code> if installed, otherwise <code>False</code>
 	 */
-	public boolean getInstalled() {
+	public Boolean getInstalled() {
 		return mIsInstalled;
 	}
 
