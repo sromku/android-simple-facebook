@@ -1069,7 +1069,7 @@ Initialize callback listener:
 OnNewPermissionsListener onNewPermissionsListener = new OnNewPermissionsListener() {
 
 	@Override
-	publicvoid onSuccess(String accessToken) {
+	public void onSuccess(String accessToken) {
 		// updated access token 
 	}
 
