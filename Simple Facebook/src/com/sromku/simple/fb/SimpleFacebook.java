@@ -814,8 +814,44 @@ public class SimpleFacebook {
 	 * @see https://developers.facebook.com/docs/games/scores/
 	 */
 	public void publish(Score score, OnPublishListener onPublishListener) {
-		publish((Publishable) score, "me", onPublishListener);
+		publish("me", (Publishable) score, onPublishListener);
 	}
+	
+	
+	/**
+	 * 
+	 * Publish {@link Feed} on the wall of entity.<br>
+	 * <br>
+	 * The entity can be one of:<br>
+	 * - <b>Group</b>. Any public group. To get the group id: {@link Group#getId()}<br>
+	 * - <b>Event</b>. Any public event. To get the event id: {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page that allowed publishing on their timeline. To get page id: {@link Page#getId()} <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#PUBLISH_ACTION}
+	 * 
+	 * <br><br>
+	 * <b>Notes:</b><br>
+	 * - Publishing on friend's wall is <b>no more</b> possible. This option was disabled by Facebook.<br>
+	 * - If the user is admin of page. And you try to publish a feed on this page. Then you will have to ask 
+	 * for {@link Permission#MANAGE_PAGES} permission in addition to {@link Permission#PUBLISH_ACTION}.<br>
+	 * 
+	 * @param entityId
+	 *            Group, Event, Page
+	 * @param feed
+	 *            The feed to publish. Use {@link Feed.Builder} to create a new
+	 *            <code>Feed</code>
+	 * @param onPublishListener
+	 *            The listener for publishing action
+	 * @see https
+	 *      ://developers.facebook.com/docs/howtos/androidsdk/3.0/publish-to
+	 *      -feed/
+	 */
+	public void publish(String entityId, Feed feed, OnPublishListener onPublishListener) {
+		publish(entityId, (Publishable) feed, onPublishListener);
+	}
+	
 
 	/**
 	 * 
@@ -835,7 +871,7 @@ public class SimpleFacebook {
 	 *      -feed/
 	 */
 	public void publish(Feed feed, OnPublishListener onPublishListener) {
-		publish((Publishable) feed, "me", onPublishListener);
+		publish("me", (Publishable) feed, onPublishListener);
 	}
 
 	/**
@@ -894,7 +930,7 @@ public class SimpleFacebook {
 	 * @param onPublishListener
 	 */
 	public void publish(Story story, OnPublishListener onPublishListener) {
-		publish((Publishable) story, "me", onPublishListener);
+		publish("me", (Publishable) story, onPublishListener);
 	}
 
 	/**
@@ -923,7 +959,7 @@ public class SimpleFacebook {
 	 *            The callback listener
 	 */
 	public void publish(Photo photo, String albumId, OnPublishListener onPublishListener) {
-		publish((Publishable) photo, albumId, onPublishListener);
+		publish(albumId, (Publishable) photo, onPublishListener);
 	}
 
 	/**
@@ -945,7 +981,7 @@ public class SimpleFacebook {
 	 *            The callback listener
 	 */
 	public void publish(Photo photo, OnPublishListener onPublishListener) {
-		publish((Publishable) photo, "me", onPublishListener);
+		publish("me", (Publishable) photo, onPublishListener);
 	}
 
 	/**
@@ -961,19 +997,20 @@ public class SimpleFacebook {
 	 *            The callback listener
 	 */
 	public void publish(Video video, OnPublishListener onPublishListener) {
-		publish((Publishable) video, "me", onPublishListener);
+		publish("me", (Publishable) video, onPublishListener);
 	}
 
 	/**
-	 * Publish any publishable entity
+	 * Publish any publishable entity to target (entity)
 	 * 
+	 * @param entityId
 	 * @param publishable
 	 * @param onPublishListener
 	 */
-	public void publish(Publishable publishable, String target, OnPublishListener onPublishListener) {
+	public void publish(String entityId, Publishable publishable, OnPublishListener onPublishListener) {
 		PublishAction publishAction = new PublishAction(mSessionManager);
 		publishAction.setPublishable(publishable);
-		publishAction.setTarget(target);
+		publishAction.setTarget(entityId);
 		publishAction.setOnPublishListener(onPublishListener);
 		publishAction.execute();
 	}
