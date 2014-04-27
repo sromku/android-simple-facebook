@@ -29,6 +29,7 @@ public class Page {
 	private Integer mNumCheckins;
 	private String mCompanyOverview;
 	private String mCover;
+	private Long mCreatedTime;
 	private String mCurrentLocation;
 	private String mDescription;
 	private String mDirectedBy;
@@ -84,6 +85,9 @@ public class Page {
 
 		// category
 		mCategory = Utils.getPropertyString(graphObject, Properties.CATEGORY);
+		
+		// create time
+		mCreatedTime = Utils.getPropertyLong(graphObject, Properties.CREATED_TIME);
 
 		// num checkins
 		mNumCheckins = Utils.getPropertyInteger(graphObject, Properties.CHECKINS);
@@ -262,6 +266,14 @@ public class Page {
 	 */
 	public String getCategory() {
 		return mCategory;
+	}
+	
+	/**
+	 * Relevant to Book. <br>
+	 * A timestamp indicating when the book was added to the person's profile.
+	 */
+	public Long getCreatedTime() {
+		return mCreatedTime;
 	}
 
 	/**
@@ -630,6 +642,12 @@ public class Page {
 		 * URL to the Photo that represents this cover photo.
 		 */
 		public static final String COVER = "cover";
+		
+		/**
+		 * Relevant to Book. <br>
+		 * A timestamp indicating when the book was added to the person's profile.
+		 */
+		public static final String CREATED_TIME = "created_time";
 
 		/**
 		 * Current location of the Page
