@@ -1149,15 +1149,6 @@ public class Profile implements User {
 			}
 
 			/**
-			 * Add property you need
-			 * 
-			 * @param property
-			 *            The property of the user profile<br>
-			 *            For example: {@link Properties#PICTURE}
-			 * @return {@link Builder}
-			 */
-
-			/**
 			 * Add property and attribute you need
 			 * 
 			 * @param property
@@ -1166,17 +1157,14 @@ public class Profile implements User {
 			 * @param attributes
 			 *            For example: picture can have type,width and height<br>
 			 * 
-			 * 
 			 * @return {@link Builder}
 			 */
 			public Builder add(String property, Attributes attributes) {
 				Map<String, String> map = attributes.getAttributes();
-
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.append(property);
 				stringBuilder.append('.');
 				stringBuilder.append(Utils.join(map, '.', '(', ')'));
-
 				properties.add(stringBuilder.toString());
 				return this;
 			}

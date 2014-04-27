@@ -2,11 +2,13 @@ package com.sromku.simple.fb.entities;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import android.os.Bundle;
 
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.utils.Attributes;
 import com.sromku.simple.fb.utils.Utils;
 
 /**
@@ -794,6 +796,27 @@ public class Page {
 			 */
 			public Builder add(String property) {
 				properties.add(property);
+				return this;
+			}
+			
+			/**
+			 * Add property and attribute you need
+			 * 
+			 * @param property
+			 *            The property of the page<br>
+			 *            For example: {@link Properties#PICTURE}
+			 * @param attributes
+			 *            For example: picture can have type,width and height<br>
+			 * 
+			 * @return {@link Builder}
+			 */
+			public Builder add(String property, Attributes attributes) {
+				Map<String, String> map = attributes.getAttributes();
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.append(property);
+				stringBuilder.append('.');
+				stringBuilder.append(Utils.join(map, '.', '(', ')'));
+				properties.add(stringBuilder.toString());
 				return this;
 			}
 
