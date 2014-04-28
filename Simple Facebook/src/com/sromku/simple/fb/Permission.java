@@ -114,7 +114,7 @@ public enum Permission {
 		}
 	};
 
-	public static enum Page {
+	public static enum Role {
 		/**
 		 * Manage admins<br>
 		 * Full Admin

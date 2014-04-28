@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
+import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
@@ -45,6 +46,7 @@ import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Video;
+import com.sromku.simple.fb.listeners.OnAccountsListener;
 import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
@@ -66,6 +68,7 @@ import com.sromku.simple.fb.listeners.OnProfileListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
+import com.sromku.simple.fb.utils.GraphPath;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK
@@ -217,6 +220,17 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * The pages of which the current user is an admin.
+	 * 
+	 * @param onAccountsListener
+	 */
+	public void getAccounts(OnAccountsListener onAccountsListener) {
+		GetAccountsAction getAccountsAction = new GetAccountsAction(mSessionManager);
+		getAccountsAction.setActionListener(onAccountsListener);
+		getAccountsAction.execute();
+	}
+
+	/**
 	 * Get my albums.<br>
 	 * <br>
 	 * 
@@ -268,6 +282,93 @@ public class SimpleFacebook {
 		GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
 		getAppRequestsAction.setActionListener(onAppRequestsListener);
 		getAppRequestsAction.execute();
+	}
+	
+	/**
+	 * Get my books. The response as you can notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getBooks(OnPageListener onPageListener) {
+		getBooks(null, null, onPageListener);
+	}
+	
+	/**
+	 * Get my books and set the properties you need. The response as you can notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getBooks(Page.Properties properties, OnPageListener onPageListener) {
+		getBooks(null, properties, onPageListener);
+	}
+	
+	/**
+	 * Get books of entity. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' or/and 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getBooks(String entityId, OnPageListener onPageListener) {
+		getBooks(entityId, null, onPageListener);
+	}
+	
+	/**
+	 * Get books of entity and set properties that you need. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' or/and 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getBooks(String entityId, Page.Properties properties, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setProperties(properties);
+		getPageAction.setTarget(entityId);
+		getPageAction.setEdge(GraphPath.BOOKS);
+		getPageAction.execute();
 	}
 
 	/**
@@ -816,26 +917,31 @@ public class SimpleFacebook {
 	public void publish(Score score, OnPublishListener onPublishListener) {
 		publish("me", (Publishable) score, onPublishListener);
 	}
-	
-	
+
 	/**
 	 * 
 	 * Publish {@link Feed} on the wall of entity.<br>
 	 * <br>
 	 * The entity can be one of:<br>
-	 * - <b>Group</b>. Any public group. To get the group id: {@link Group#getId()}<br>
-	 * - <b>Event</b>. Any public event. To get the event id: {@link Event#getId()}<br>
-	 * - <b>Page</b>. Any page that allowed publishing on their timeline. To get page id: {@link Page#getId()} <br>
+	 * - <b>Group</b>. Any public group. To get the group id:
+	 * {@link Group#getId()}<br>
+	 * - <b>Event</b>. Any public event. To get the event id:
+	 * {@link Event#getId()}<br>
+	 * - <b>Page</b>. Any page that allowed publishing on their timeline. To get
+	 * page id: {@link Page#getId()} <br>
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#PUBLISH_ACTION}
 	 * 
-	 * <br><br>
+	 * <br>
+	 * <br>
 	 * <b>Notes:</b><br>
-	 * - Publishing on friend's wall is <b>no more</b> possible. This option was disabled by Facebook.<br>
-	 * - If the user is admin of page. And you try to publish a feed on this page. Then you will have to ask 
-	 * for {@link Permission#MANAGE_PAGES} permission in addition to {@link Permission#PUBLISH_ACTION}.<br>
+	 * - Publishing on friend's wall is <b>no more</b> possible. This option was
+	 * disabled by Facebook.<br>
+	 * - If the user is admin of page. And you try to publish a feed on this
+	 * page. Then you will have to ask for {@link Permission#MANAGE_PAGES}
+	 * permission in addition to {@link Permission#PUBLISH_ACTION}.<br>
 	 * 
 	 * @param entityId
 	 *            Group, Event, Page
@@ -851,7 +957,6 @@ public class SimpleFacebook {
 	public void publish(String entityId, Feed feed, OnPublishListener onPublishListener) {
 		publish(entityId, (Publishable) feed, onPublishListener);
 	}
-	
 
 	/**
 	 * 
