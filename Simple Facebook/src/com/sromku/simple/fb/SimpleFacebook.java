@@ -614,6 +614,93 @@ public class SimpleFacebook {
 		getLikesAction.setTarget(entityId);
 		getLikesAction.execute();
 	}
+	
+	/**
+	 * Get my music. The response as you can notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMusic(OnPageListener onPageListener) {
+		getMusic(null, null, onPageListener);
+	}
+	
+	/**
+	 * Get my music and set the properties you need. The response as you can notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMusic(Page.Properties properties, OnPageListener onPageListener) {
+		getMusic(null, properties, onPageListener);
+	}
+	
+	/**
+	 * Get music of entity. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' or/and 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMusic(String entityId, OnPageListener onPageListener) {
+		getMusic(entityId, null, onPageListener);
+	}
+	
+	/**
+	 * Get musics that entity like and set properties that you need. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved without permissions,
+	 * but if user added privacy, then 'user_likes' or/and 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br><br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMusic(String entityId, Page.Properties properties, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setProperties(properties);
+		getPageAction.setTarget(entityId);
+		getPageAction.setEdge(GraphPath.MUSIC);
+		getPageAction.execute();
+	}
 
 	/**
 	 * Get page by page id.
