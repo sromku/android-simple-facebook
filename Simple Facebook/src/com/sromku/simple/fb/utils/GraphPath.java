@@ -21,5 +21,6 @@ public class GraphPath {
 	public static final String ACCOUNTS = "accounts";
 	public static final String BOOKS = "books";
 	public static final String MUSIC = "music";
+	public static final String FAMILY = "family";
 
 }
