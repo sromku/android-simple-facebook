@@ -769,6 +769,103 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * Get my movies. The response as you can notice is a Page because
+	 * everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes'
+	 * permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMovies(OnPageListener onPageListener) {
+		getMovies(null, null, onPageListener);
+	}
+
+	/**
+	 * Get my movies and set the properties you need. The response as you can
+	 * notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes'
+	 * permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMovies(Page.Properties properties, OnPageListener onPageListener) {
+		getMovies(null, properties, onPageListener);
+	}
+
+	/**
+	 * Get movies of entity. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes' or/and
+	 * 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMovies(String entityId, OnPageListener onPageListener) {
+		getMovies(entityId, null, onPageListener);
+	}
+
+	/**
+	 * Get movies that entity like and set properties that you need. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes' or/and
+	 * 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
+	 */
+	public void getMovies(String entityId, Page.Properties properties, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setProperties(properties);
+		getPageAction.setTarget(entityId);
+		getPageAction.setEdge(GraphPath.MOVIES);
+		getPageAction.execute();
+	}
+
+	/**
 	 * Get my music. The response as you can notice is a Page because everything
 	 * in facebook has the model of Page.<br>
 	 * <br>
