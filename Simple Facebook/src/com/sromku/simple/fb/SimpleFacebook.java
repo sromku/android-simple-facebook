@@ -21,6 +21,7 @@ import com.sromku.simple.fb.actions.GetFamilyAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetGroupsAction;
 import com.sromku.simple.fb.actions.GetLikesAction;
+import com.sromku.simple.fb.actions.GetNotificationsAction;
 import com.sromku.simple.fb.actions.GetPageAction;
 import com.sromku.simple.fb.actions.GetPhotosAction;
 import com.sromku.simple.fb.actions.GetPostsAction;
@@ -63,6 +64,7 @@ import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
+import com.sromku.simple.fb.listeners.OnNotificationsListener;
 import com.sromku.simple.fb.listeners.OnPageListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
@@ -764,6 +766,24 @@ public class SimpleFacebook {
 		getPageAction.setTarget(entityId);
 		getPageAction.setEdge(GraphPath.MUSIC);
 		getPageAction.execute();
+	}
+
+	/**
+	 * Get unread Facebook notifications that a person has.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#MANAGE_NOTIFICATIONS}<br>
+	 * 
+	 * @param onNotificationsListener
+	 *            The callback listener
+	 * @see https://developers.facebook.com/docs/graph-api/reference/v1.0/user/
+	 *      notifications
+	 */
+	public void getNotifications(OnNotificationsListener onNotificationsListener) {
+		GetNotificationsAction getNotificationsAction = new GetNotificationsAction(mSessionManager);
+		getNotificationsAction.setActionListener(onNotificationsListener);
+		getNotificationsAction.execute();
 	}
 
 	/**

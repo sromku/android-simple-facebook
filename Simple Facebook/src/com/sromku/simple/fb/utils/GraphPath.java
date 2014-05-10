@@ -22,5 +22,9 @@ public class GraphPath {
 	public static final String BOOKS = "books";
 	public static final String MUSIC = "music";
 	public static final String FAMILY = "family";
+	public static final String MOVIES = "movies";
+	public static final String GAMES = "games";
+	public static final Object NOTIFICATIONS = "notifications";
+	public static final String TELEVISION = "television";
 
 }
