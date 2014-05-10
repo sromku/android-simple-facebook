@@ -1,9 +1,11 @@
 android-simple-facebook
 =======================
 
-:bulb: **Notice: SDK 3.14 has several changes and some permissions and fields of entities were deprecated. I am working to adjust this library to latest version. Be updated :)** 
+:bulb: **Notice: <br>
+:small_orange_diamond: This library supports and wraps facebook **SDKs 3.0-3.8<br>
+:small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( I am working to create next version of this library to support latest version Facebook SDK. Be updated :)** <br>
 
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.8**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0-3.8**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
@@ -31,18 +33,27 @@ Sample app:<br>
 	* [Invite one friend](#one-friend-only)
 	* [Delete invite/request](#delete-requestinvite)
 * [Get](#get-my-profile)
-	* [Profile](#get-my-profile)
-	* [Friends](#get-friends)
+	* [Account](#get-accounts)
 	* [Albums](#get-albums)
+	* [App Requests](#get-app-requests)
+	* [Books](#get-books)
 	* [Checkins](#get-checkins)
 	* [Comments](#get-comments)
 	* [Events](#get-events)
+	* [Family](#get-family)
+	* [Friends](#get-friends)
+	* [Games](#get-games)
 	* [Groups](#get-groups)
 	* [Likes](#get-likes)
+	* [Movies](#get-movies)
+	* [Music](#get-music)
+	* [Notifications](#get-notifications)
 	* [Page](#get-page)
 	* [Photos](#get-photos)
 	* [Posts](#get-posts)
+	* [Profile](#get-my-profile)
 	* [Scores](#get-scores)
+	* [Television](#get-television)
 	* [Videos](#get-videos)
 * [Additional options](#additional-options)
 	* [Pagination](#pagination)
@@ -57,7 +68,7 @@ Sample app:<br>
 	* [Debug](#debug)
 
 *And,*
-* Based on latest Facebook SDK
+* Based on Facebook SDK 3.0 - 3.8
 * Permission strings are predefined
 * No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
@@ -480,90 +491,15 @@ String requestId = ...;
 mSimpleFacebook.deleteRequest(requestId, onDeleteListener);
 ```
 
-### Get my profile
-
-Facebook doesn't reveal all user fields by default. For example, if you need picture, then you need to specify it in your graph api request. 
-I can understand this, since getting all possible user fields will be time consuming task and this is not what we want.<br>
-Thus, **two** options are possible to get profile data.
-
-#### Default
-By using this way, you can get many properties like: *id*, *name*, *education* and more. Just ensure to have needed permissions. Read the javadoc to know what is needed.
-But, here you won't be able to get several properties like: *cover*, *picture* and other. 
+### Get accounts
+Get pages of which the current user is an admin.
 
 Initialize callback listener:
 ``` java
-OnProfileListener onProfileListener = new OnProfileListener() {			
+OnAccountsListener onAccountsListener = new OnAccountsListener() {			
 	@Override
-	public void onComplete(Profile profile) {
-		Log.i(TAG, "My profile id = " + profile.getId());
-	}
-
-	/* 
-	 * You can override other methods here: 
-	 * onThinking(), onFail(String reason), onException(Throwable throwable)
-	 */		
-};
-```
-
-Get the profile:
-``` java
-mSimpleFacebook.getProfile(onProfileListener);
-```
-
-#### Be specific and get what you need
-By using this option, you define the properties you need, and you will get only them. Here, any property is possible to get.
-
-Prepare the properties that you need:
-``` java
-Profile.Properties properties = new Profile.Properties.Builder()
-	.add(Properties.ID)
-	.add(Properties.FIRST_NAME)
-	.add(Properties.COVER)
-	.add(Properties.WORK)
-	.add(Properties.EDUCATION)
-	.add(Properties.PICTURE)
-	.build();
-``` 
-
-Get the profile:
-``` java			
-mSimpleFacebook.getProfile(properties, onProfileListener);
-```
-
-#### Be even more specific - Picture Attributes
-You can describe the picture you really need like: *`small`, `normal`, `large`, `square`* and set width and height.
-
-Prepare specific picture that you need:
-``` java
-PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
-pictureAttributes.setHeight(500);
-pictureAttributes.setWidth(500);
-pictureAttributes.setType(PictureType.SQUARE);
-```
-
-Prepare the properties that you need:
-``` java
-Profile.Properties properties = new Profile.Properties.Builder()
-	.add(Properties.ID)
-	.add(Properties.FIRST_NAME)
-	.add(Properties.PICTURE, pictureAttributes)
-	.build();			
-```
-
-Get the profile:
-``` java
-mSimpleFacebook.getProfile(properties, onProfileListener);
-```
-
-
-### Get friends
-
-Initialize callback listener:
-``` java
-OnFriendsListener onFriendsListener = new OnFriendsListener() {			
-	@Override
-	public void onComplete(List<Profile> friends) {
-		Log.i(TAG, "Number of friends = " + friends.size());
+	public void onComplete(List<Account> accounts) {
+		Log.i(TAG, "Number of accounts = " + accounts.size());
 	}
 
 	/* 
@@ -573,9 +509,9 @@ OnFriendsListener onFriendsListener = new OnFriendsListener() {
 };
 ```
 
-Get my friends:
+Get my accounts:
 ``` java
-mSimpleFacebook.getFriends(onFriendsListener);
+mSimpleFacebook.getAccounts(onAccountsListener);
 ```
 
 ### Get albums
@@ -607,6 +543,12 @@ Get album of next entities by passing entity id:
 String entityId = ...;
 mSimpleFacebook.getAlbums(entityId, onAlbumsListener);
 ```
+
+### Get app requests
+[TO DOC]
+
+### Get books
+[TO DOC]
 
 ### Get checkins
 
@@ -698,6 +640,34 @@ String entityId = ...;
 mSimpleFacebook.getEvents(entityId, EventDecision.ATTENDING, onEventsListener);
 ```
 
+### Get family
+[TO DOC]
+
+### Get friends
+
+Initialize callback listener:
+``` java
+OnFriendsListener onFriendsListener = new OnFriendsListener() {			
+	@Override
+	public void onComplete(List<Profile> friends) {
+		Log.i(TAG, "Number of friends = " + friends.size());
+	}
+
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */			
+};
+```
+
+Get my friends:
+``` java
+mSimpleFacebook.getFriends(onFriendsListener);
+```
+
+### Get games
+[TO DOC]
+
 ### Get groups
 
 Initialize callback listener:
@@ -755,6 +725,15 @@ Get likes of next entities by passing entity id:
 String entityId = ...;
 mSimpleFacebook.getLikes(entityId, onLikesListener);
 ```
+
+### Get movies
+[TO DOC]
+
+### Get music
+[TO DOC]
+
+### Get notifications
+[TO DOC]
 
 ### Get page
 
@@ -871,6 +850,81 @@ String entityId = ...;
 mSimpleFacebook.getPosts(entityId, PostType.STATUSES, onPostsListener);
 ```
 
+### Get my profile
+
+Facebook doesn't reveal all user fields by default. For example, if you need picture, then you need to specify it in your graph api request. 
+I can understand this, since getting all possible user fields will be time consuming task and this is not what we want.<br>
+Thus, **two** options are possible to get profile data.
+
+#### Default
+By using this way, you can get many properties like: *id*, *name*, *education* and more. Just ensure to have needed permissions. Read the javadoc to know what is needed.
+But, here you won't be able to get several properties like: *cover*, *picture* and other. 
+
+Initialize callback listener:
+``` java
+OnProfileListener onProfileListener = new OnProfileListener() {			
+	@Override
+	public void onComplete(Profile profile) {
+		Log.i(TAG, "My profile id = " + profile.getId());
+	}
+
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */		
+};
+```
+
+Get the profile:
+``` java
+mSimpleFacebook.getProfile(onProfileListener);
+```
+
+#### Be specific and get what you need
+By using this option, you define the properties you need, and you will get only them. Here, any property is possible to get.
+
+Prepare the properties that you need:
+``` java
+Profile.Properties properties = new Profile.Properties.Builder()
+	.add(Properties.ID)
+	.add(Properties.FIRST_NAME)
+	.add(Properties.COVER)
+	.add(Properties.WORK)
+	.add(Properties.EDUCATION)
+	.add(Properties.PICTURE)
+	.build();
+``` 
+
+Get the profile:
+``` java			
+mSimpleFacebook.getProfile(properties, onProfileListener);
+```
+
+#### Be even more specific - Picture Attributes
+You can describe the picture you really need like: *`small`, `normal`, `large`, `square`* and set width and height.
+
+Prepare specific picture that you need:
+``` java
+PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+pictureAttributes.setHeight(500);
+pictureAttributes.setWidth(500);
+pictureAttributes.setType(PictureType.SQUARE);
+```
+
+Prepare the properties that you need:
+``` java
+Profile.Properties properties = new Profile.Properties.Builder()
+	.add(Properties.ID)
+	.add(Properties.FIRST_NAME)
+	.add(Properties.PICTURE, pictureAttributes)
+	.build();			
+```
+
+Get the profile:
+``` java
+mSimpleFacebook.getProfile(properties, onProfileListener);
+```
+
 ### Get scores
 
 Initialize callback listener:
@@ -892,6 +946,9 @@ Get my scores:
 ``` java
 mSimpleFacebook.getScores(onScoresListener); 
 ```
+
+### Get television
+[TO DOC]
 
 ### Get videos
 
