@@ -10,6 +10,10 @@ import com.sromku.simple.fb.entities.FamilyUser;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
+/**
+ * @author sromku
+ * @see https://developers.facebook.com/docs/graph-api/reference/user/family/
+ */
 public class GetFamilyAction extends GetAction<List<FamilyUser>> {
 
 	public GetFamilyAction(SessionManager sessionManager) {

@@ -533,13 +533,15 @@ public class SimpleFacebook {
 	 * <br>
 	 * The entity can be only:<br>
 	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
-	 * id of the profile: {@link Profile#getId()}<br><br>
+	 * id of the profile: {@link Profile#getId()}<br>
+	 * <br>
 	 * 
 	 * The result will be id + name of other user and the relationship between
 	 * you two. For example: wife, brother, mother,.. <br>
 	 * <br>
 	 * 
 	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_RELATIONSHIPS}<br>
 	 * {@link Permission#FRIENDS_RELATIONSHIPS}<br>
 	 * 
 	 * @param entityId

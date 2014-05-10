@@ -453,7 +453,7 @@ public class Profile implements User {
 	}
 
 	/**
-	 * The user's cover photo <br>
+	 * The user's cover photo. The url of cover will be under {@link Photo#getSource()} <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#BASIC_INFO}
