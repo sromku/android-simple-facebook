@@ -1,11 +1,12 @@
 android-simple-facebook
 =======================
 
-:bulb: **Notice: <br>
-:small_orange_diamond: This library supports and wraps facebook **SDKs 3.0-3.8<br>
-:small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( I am working to create next version of this library to support latest version Facebook SDK. Be updated :)** <br>
+:bulb: **Notice:** <br>
+:small_orange_diamond: This library supports and wraps facebook **SDKs 3.0 - 3.8**<br>
+:small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( <br>
+:small_orange_diamond: I am working to create next version of this library to support latest version Facebook SDK. **Be updated :)** <br>
 
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0-3.8**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0 - 3.8**](https://github.com/facebook/facebook-android-sdk)
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
@@ -545,10 +546,10 @@ mSimpleFacebook.getAlbums(entityId, onAlbumsListener);
 ```
 
 ### Get app requests
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get books
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get checkins
 
@@ -641,7 +642,7 @@ mSimpleFacebook.getEvents(entityId, EventDecision.ATTENDING, onEventsListener);
 ```
 
 ### Get family
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get friends
 
@@ -666,7 +667,7 @@ mSimpleFacebook.getFriends(onFriendsListener);
 ```
 
 ### Get games
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get groups
 
@@ -727,13 +728,13 @@ mSimpleFacebook.getLikes(entityId, onLikesListener);
 ```
 
 ### Get movies
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get music
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get notifications
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get page
 
@@ -948,7 +949,7 @@ mSimpleFacebook.getScores(onScoresListener);
 ```
 
 ### Get television
-[TO DOC]
+[The code exists, just need TO DOC]
 
 ### Get videos
 
