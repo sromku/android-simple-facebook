@@ -1261,6 +1261,103 @@ public class SimpleFacebook {
 		getScoresAction.setActionListener(onScoresListener);
 		getScoresAction.execute();
 	}
+	
+	/**
+	 * Get my TV shows. The response as you can notice is a Page because everything
+	 * in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes'
+	 * permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getTelevision(OnPageListener onPageListener) {
+		getTelevision(null, null, onPageListener);
+	}
+
+	/**
+	 * Get my TV shows and set the properties you need. The response as you can
+	 * notice is a Page because everything in facebook has the model of Page.<br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes'
+	 * permission is needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getTelevision(Page.Properties properties, OnPageListener onPageListener) {
+		getTelevision(null, properties, onPageListener);
+	}
+
+	/**
+	 * Get TV shows of entity. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes' or/and
+	 * 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getTelevision(String entityId, OnPageListener onPageListener) {
+		getTelevision(entityId, null, onPageListener);
+	}
+
+	/**
+	 * Get TV shows of entity and set properties that you need. <br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * In most cases this information is public and thus can be retrieved
+	 * without permissions, but if user added privacy, then 'user_likes' or/and
+	 * 'friends_likes' permissions are needed. <br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_LIKES}<br>
+	 * {@link Permission#FRIENDS_LIKES}<br>
+	 * 
+	 * @param onPageListener
+	 * <br>
+	 * <br>
+	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
+	 */
+	public void getTelevision(String entityId, Page.Properties properties, OnPageListener onPageListener) {
+		GetPageAction getPageAction = new GetPageAction(mSessionManager);
+		getPageAction.setActionListener(onPageListener);
+		getPageAction.setProperties(properties);
+		getPageAction.setTarget(entityId);
+		getPageAction.setEdge(GraphPath.TELEVISION);
+		getPageAction.execute();
+	}
 
 	/**
 	 * Get my videos.<br>
