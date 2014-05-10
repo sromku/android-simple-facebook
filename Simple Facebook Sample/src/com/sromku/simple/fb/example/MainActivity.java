@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.example;
 
 import java.security.Permissions;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -87,7 +88,9 @@ public class MainActivity extends Activity {
 	private Button mButtonGetPosts;
 	private Button mButtonGetVideos;
 	private Button mButtonGetPage;
-
+	
+	private List<Button> mButtons = new ArrayList<Button>();
+	
 	// Login listener
 	private OnLoginListener mOnLoginListener = new OnLoginListener() {
 
@@ -227,6 +230,7 @@ public class MainActivity extends Activity {
 		
 		// 19. Get page example
 		getPage();
+		
 	}
 
 	@Override
@@ -307,7 +311,9 @@ public class MainActivity extends Activity {
 				.setCaption("Code less, do the same.")
 				.setDescription(
 						"The Simple Facebook library project makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more.")
-				.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png").setLink("https://github.com/sromku/android-simple-facebook").build();
+				.setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png").setLink("https://github.com/sromku/android-simple-facebook")
+				.build();
+		
 
 		// click on button and publish
 		mButtonPublishFeed.setOnClickListener(new View.OnClickListener() {
@@ -563,8 +569,12 @@ public class MainActivity extends Activity {
 				pictureAttributes.setType(PictureType.SQUARE);
 
 				// prepare the properties that we need
-				Profile.Properties properties = new Profile.Properties.Builder().add(Profile.Properties.ID).add(Profile.Properties.FIRST_NAME).add(Profile.Properties.COVER)
-						.add(Profile.Properties.PICTURE, pictureAttributes).build();
+				Profile.Properties properties = new Profile.Properties.Builder()
+					.add(Profile.Properties.ID)
+					.add(Profile.Properties.FIRST_NAME)
+					.add(Profile.Properties.COVER)
+					.add(Profile.Properties.PICTURE, pictureAttributes)
+					.build();
 
 				// do the get profile action
 				mSimpleFacebook.getProfile(properties, onProfileListener);
@@ -1022,17 +1032,41 @@ public class MainActivity extends Activity {
 		mButtonLogin = (Button) findViewById(R.id.button_login);
 		mButtonLogout = (Button) findViewById(R.id.button_logout);
 		mTextStatus = (TextView) findViewById(R.id.text_status);
+		mButtons = new ArrayList<Button>();
+		
 		mButtonPublishFeed = (Button) findViewById(R.id.button_publish_feed);
+		mButtons.add(mButtonPublishFeed);
+		
 		mButtonPublishStory = (Button) findViewById(R.id.button_publish_story);
+		mButtons.add(mButtonPublishStory);
+		
 		mButtonPublishPhoto = (Button) findViewById(R.id.button_publish_photo);
+		mButtons.add(mButtonPublishPhoto);
+		
 		mButtonInviteAll = (Button) findViewById(R.id.button_invite_all);
+		mButtons.add(mButtonInviteAll);
+		
 		mButtonInviteSuggested = (Button) findViewById(R.id.button_invite_suggested);
+		mButtons.add(mButtonInviteSuggested);
+		
 		mButtonInviteOne = (Button) findViewById(R.id.button_invite_one);
+		mButtons.add(mButtonInviteOne);
+		
 		mButtonGetProfile = (Button) findViewById(R.id.button_get_profile);
+		mButtons.add(mButtonGetProfile);
+		
 		mButtonGetProfileProperties = (Button) findViewById(R.id.button_get_profile_with_properties);
+		mButtons.add(mButtonGetProfileProperties);
+		
 		mButtonGetFriends = (Button) findViewById(R.id.button_get_friends);
+		mButtons.add(mButtonGetFriends);
+		
 		mButtonGetAlbums = (Button) findViewById(R.id.button_get_albums);
+		mButtons.add(mButtonGetAlbums);
+		
 		mButtonFragments = (Button) findViewById(R.id.button_fragments);
+		mButtons.add(mButtonFragments);
+		
 		mButtonFragments.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -1042,14 +1076,31 @@ public class MainActivity extends Activity {
 		});
 
 		mButtonGetCheckins = (Button) findViewById(R.id.button_get_checkins);
+		mButtons.add(mButtonGetCheckins);
+		
 		mButtonGetComments = (Button) findViewById(R.id.button_get_comments);
+		mButtons.add(mButtonGetComments);
+		
 		mButtonGetEvents = (Button) findViewById(R.id.button_get_events);
+		mButtons.add(mButtonGetEvents);
+		
 		mButtonGetGroups = (Button) findViewById(R.id.button_get_groups);
+		mButtons.add(mButtonGetGroups);
+		
 		mButtonGetLikes = (Button) findViewById(R.id.button_get_likes);
+		mButtons.add(mButtonGetLikes);
+		
 		mButtonGetPhotos = (Button) findViewById(R.id.button_get_photos);
+		mButtons.add(mButtonGetPhotos);
+		
 		mButtonGetPosts = (Button) findViewById(R.id.button_get_posts);
+		mButtons.add(mButtonGetPosts);
+		
 		mButtonGetVideos = (Button) findViewById(R.id.button_get_videos);
+		mButtons.add(mButtonGetVideos);
+		
 		mButtonGetPage = (Button) findViewById(R.id.button_get_page);
+		mButtons.add(mButtonGetPage);
 	}
 
 	private void setUIState() {
@@ -1073,54 +1124,22 @@ public class MainActivity extends Activity {
 	private void loggedInUIState() {
 		mButtonLogin.setEnabled(false);
 		mButtonLogout.setEnabled(true);
-		mButtonPublishFeed.setEnabled(true);
-		mButtonPublishStory.setEnabled(true);
-		mButtonPublishPhoto.setEnabled(true);
-		mButtonInviteAll.setEnabled(true);
-		mButtonInviteSuggested.setEnabled(true);
-		mButtonInviteOne.setEnabled(true);
-		mButtonGetProfile.setEnabled(true);
-		mButtonGetProfileProperties.setEnabled(true);
-		mButtonGetFriends.setEnabled(true);
-		mButtonGetAlbums.setEnabled(true);
-
-		mButtonGetCheckins.setEnabled(true);
-		mButtonGetComments.setEnabled(true);
-		mButtonGetEvents.setEnabled(true);
-		mButtonGetGroups.setEnabled(true);
-		mButtonGetLikes.setEnabled(true);
-		mButtonGetPhotos.setEnabled(true);
-		mButtonGetPosts.setEnabled(true);
-		mButtonGetVideos.setEnabled(true);
-		mButtonGetPage.setEnabled(true);
-
+		setEnabled(mButtons, true);
 		mTextStatus.setText("Logged in");
 	}
 
 	private void loggedOutUIState() {
 		mButtonLogin.setEnabled(true);
 		mButtonLogout.setEnabled(false);
-		mButtonPublishFeed.setEnabled(false);
-		mButtonPublishStory.setEnabled(false);
-		mButtonPublishPhoto.setEnabled(false);
-		mButtonInviteAll.setEnabled(false);
-		mButtonInviteSuggested.setEnabled(false);
-		mButtonInviteOne.setEnabled(false);
-		mButtonGetProfile.setEnabled(false);
-		mButtonGetProfileProperties.setEnabled(false);
-		mButtonGetFriends.setEnabled(false);
-		mButtonGetAlbums.setEnabled(false);
-
-		mButtonGetCheckins.setEnabled(false);
-		mButtonGetComments.setEnabled(false);
-		mButtonGetEvents.setEnabled(false);
-		mButtonGetGroups.setEnabled(false);
-		mButtonGetLikes.setEnabled(false);
-		mButtonGetPhotos.setEnabled(false);
-		mButtonGetPosts.setEnabled(false);
-		mButtonGetVideos.setEnabled(false);
-		mButtonGetPage.setEnabled(false);
+		setEnabled(mButtons, false);
 		mTextStatus.setText("Logged out");
+	}
+	
+	private void setEnabled(List<Button> buttons, boolean isEnabled) {
+		for (Button button : buttons) {
+			Log.i(TAG, "-");
+			button.setEnabled(isEnabled);
+		}
 	}
 
 	private void showDialog() {
