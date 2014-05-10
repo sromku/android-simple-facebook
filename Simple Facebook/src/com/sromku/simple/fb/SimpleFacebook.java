@@ -1078,7 +1078,21 @@ public class SimpleFacebook {
 	 *            The callback listener.
 	 */
 	public void getProfile(OnProfileListener onProfileListener) {
-		getProfile(null, onProfileListener);
+		getProfile(null, null, onProfileListener);
+	}
+
+	/**
+	 * Get profile by profile id. <br>
+	 * The default values only will be returned. For more options, see
+	 * {@link #getProfile(String, Properties, OnProfileListener)}
+	 * 
+	 * @param profileId
+	 *            The id of the profile we want to get
+	 * @param onProfileListener
+	 *            The callback listener.
+	 */
+	public void getProfile(String profileId, OnProfileListener onProfileListener) {
+		getProfile(profileId, null, onProfileListener);
 	}
 
 	/**
@@ -1103,8 +1117,35 @@ public class SimpleFacebook {
 	 * </pre>
 	 */
 	public void getProfile(Profile.Properties properties, OnProfileListener onProfileListener) {
+		getProfile(null, properties, onProfileListener);
+	}
+
+	/**
+	 * Get profile by profile id and mentioning specific parameters. <br>
+	 * 
+	 * @param profileId
+	 *            The id of the profile we want to get
+	 * @param onProfileListener
+	 *            The callback listener.
+	 * @param properties
+	 *            The {@link Properties}. <br>
+	 *            To create {@link Properties} instance use:
+	 * 
+	 *            <pre>
+	 * // define the profile picture we want to get
+	 * PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+	 * pictureAttributes.setType(PictureType.SQUARE);
+	 * pictureAttributes.setHeight(500);
+	 * pictureAttributes.setWidth(500);
+	 * 
+	 * // create properties
+	 * Properties properties = new Properties.Builder().add(Properties.ID).add(Properties.FIRST_NAME).add(Properties.PICTURE, attributes).build();
+	 * </pre>
+	 */
+	public void getProfile(String profileId, Profile.Properties properties, OnProfileListener onProfileListener) {
 		GetProfileAction getProfileAction = new GetProfileAction(mSessionManager);
 		getProfileAction.setProperties(properties);
+		getProfileAction.setTarget(profileId);
 		getProfileAction.setActionListener(onProfileListener);
 		getProfileAction.execute();
 	}
