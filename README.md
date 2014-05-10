@@ -1,10 +1,12 @@
 android-simple-facebook
 =======================
 
-:bulb: **Notice:** <br>
+:bulb: **Notice: (May 10th, 2014)** <br>
 :small_orange_diamond: This library supports and wraps facebook **SDKs 3.0 - 3.8**<br>
 :small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( <br>
 :small_orange_diamond: I am working to create next version of this library to support latest version Facebook SDK. **Be updated :)** <br>
+
+---
 
 Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0 - 3.8**](https://github.com/facebook/facebook-android-sdk)
 
