@@ -65,7 +65,7 @@ public class GetAction<T> extends AbstractAction {
 	}
 
 	public void setTarget(String target) {
-		if (mTarget != null) {
+		if (target != null) {
 			mTarget = target;
 		}
 	}
