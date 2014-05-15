@@ -157,7 +157,7 @@ public class Video implements Publishable {
 
 	@Override
 	public Permission getPermission() {
-		return Permission.PUBLISH_STREAM;
+		return Permission.PUBLISH_ACTION;
 	}
 
 	public Bundle getBundle() {
