@@ -653,7 +653,7 @@ public class Profile implements User {
 		private Properties(Builder builder) {
 			mBundle = new Bundle();
 			Iterator<String> iterator = builder.properties.iterator();
-			String fields = Utils.join(iterator, ',');
+			String fields = Utils.join(iterator, ",");
 			mBundle.putString("fields", fields);
 		}
 

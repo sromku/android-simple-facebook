@@ -94,7 +94,7 @@ public class Utils {
 	 *            the separator character to use
 	 * @return the joined String, {@code null} if null iterator input
 	 */
-	public static String join(Iterator<?> iterator, char separator) {
+	public static String join(Iterator<?> iterator, String separator) {
 		if (iterator == null) {
 			return null;
 		}
