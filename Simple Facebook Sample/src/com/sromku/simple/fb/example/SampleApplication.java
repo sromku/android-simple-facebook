@@ -15,6 +15,7 @@ public class SampleApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		SharedObjects.context = this;
 
 		// set log to true
 		Logger.DEBUG_WITH_STACKTRACE = true;
