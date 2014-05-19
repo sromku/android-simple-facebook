@@ -118,6 +118,49 @@ public class Utils {
 		}
 		return buf.toString();
 	}
+	
+	/**
+	 * <p>
+	 * Joins the elements of the provided {@code Iterator} into a single String
+	 * containing the provided elements.
+	 * </p>
+	 * 
+	 * <p>
+	 * No delimiter is added before or after the list. Null objects or empty
+	 * strings within the iteration are represented by empty strings.
+	 * </p>
+	 * @param <T>
+	 * 
+	 * @param iterator
+	 *            the {@code Iterator} of values to join together, may be null
+	 * @param separator
+	 *            the separator character to use
+	 * @return the joined String, {@code null} if null iterator input
+	 */
+	public static <T> String join(Iterator<T> iterator, String separator, Process<T> process) {
+		if (iterator == null) {
+			return null;
+		}
+		if (!iterator.hasNext()) {
+			return EMPTY;
+		}
+		T first = iterator.next();
+		if (!iterator.hasNext()) {
+			return first == null ? EMPTY : process.process(first);
+		}
+		StringBuilder buf = new StringBuilder(256);
+		if (first != null) {
+			buf.append(process.process(first));
+		}
+		while (iterator.hasNext()) {
+			buf.append(separator);
+			T obj = iterator.next();
+			if (obj != null) {
+				buf.append(process.process(obj));
+			}
+		}
+		return buf.toString();
+	}
 
 	public static String join(Map<?, ?> map, char separator, char valueStartChar, char valueEndChar) {
 
@@ -281,6 +324,10 @@ public class Utils {
 
 	public interface Converter<T> {
 		T convert(GraphObject graphObject);
+	}
+	
+	public interface Process<T> {
+		String process(T t);
 	}
 
 	public static String getPropertyInsideProperty(GraphObject graphObject, String parent, String child) {

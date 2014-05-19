@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="5dp"
+            android:textSize="10dp"
             android:text="The result is here" />
     </ScrollView>
 
