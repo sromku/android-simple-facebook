@@ -6,6 +6,9 @@ android-simple-facebook
 :small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( <br>
 :small_orange_diamond: I am working to create next version of this library to support latest version Facebook SDK. **Be updated :)** <br>
 
+**Update : (May 20th, 2014)** <br>
+This is the branch - [v2.0](https://github.com/sromku/android-simple-facebook/tree/v2.0) that supports facebook 3.14 SDK. These days I making better examples and add new examples. Also, more testings are done. Once I finish to test this branch, I will merge to the `master`. **Be updated :)** <br>
+
 ---
 
 Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0 - 3.8**](https://github.com/facebook/facebook-android-sdk)
