@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -42,17 +44,13 @@ public class Utils {
 			Class<?> cls = classLoader.loadClass("com.facebook.FacebookSdkVersion");
 			Field field = cls.getField("BUILD");
 			sdkVersion = String.valueOf(field.get(null));
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (NoSuchFieldException e) {
+		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		return sdkVersion;
@@ -67,11 +65,9 @@ public class Utils {
 				md.update(signature.toByteArray());
 				return Base64.encodeToString(md.digest(), Base64.DEFAULT);
 			}
-		}
-		catch (NameNotFoundException e) {
+		} catch (NameNotFoundException e) {
 
-		}
-		catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 
 		}
 		return null;
@@ -118,7 +114,7 @@ public class Utils {
 		}
 		return buf.toString();
 	}
-	
+
 	/**
 	 * <p>
 	 * Joins the elements of the provided {@code Iterator} into a single String
@@ -129,6 +125,7 @@ public class Utils {
 	 * No delimiter is added before or after the list. Null objects or empty
 	 * strings within the iteration are represented by empty strings.
 	 * </p>
+	 * 
 	 * @param <T>
 	 * 
 	 * @param iterator
@@ -179,8 +176,7 @@ public class Utils {
 				buf.append(entry.getValue());
 				buf.append(valueEndChar);
 				isFirst = false;
-			}
-			else {
+			} else {
 				buf.append(separator);
 				buf.append(entry.getKey());
 				buf.append(valueStartChar);
@@ -190,6 +186,19 @@ public class Utils {
 		}
 
 		return buf.toString();
+	}
+
+	public static <T> List<T> convert(JSONArray jsonArray, StringConverter<T> converter) {
+		List<T> list = new ArrayList<T>();
+		if (jsonArray == null || jsonArray.length() == 0) {
+			return list;
+		}
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			list.add(converter.convert(jsonArray.optString(i)));
+		}
+
+		return list;
 	}
 
 	public static <T extends GraphObject> List<T> typedListFromResponse(Response response, Class<T> clazz) {
@@ -222,16 +231,14 @@ public class Utils {
 					}
 					return (T) list;
 				}
-			}
-			else {
+			} else {
 				Class<?> rawType = (Class<?>) type;
 				GraphObject graphObject = response.getGraphObject();
 				Method method = rawType.getMethod("create", GraphObject.class);
 				Object object = method.invoke(null, graphObject);
 				return (T) object;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -322,10 +329,16 @@ public class Utils {
 		return result;
 	}
 
-	public interface Converter<T> {
-		T convert(GraphObject graphObject);
+	public interface GeneralConverter<T, E> {
+		T convert(E e);
 	}
-	
+
+	public interface Converter<T> extends GeneralConverter<T, GraphObject> {
+	}
+
+	public interface StringConverter<T> extends GeneralConverter<T, String> {
+	}
+
 	public interface Process<T> {
 		String process(T t);
 	}
@@ -360,8 +373,7 @@ public class Utils {
 
 		try {
 			return Long.valueOf(String.valueOf(value));
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return null;
 		}
 	}
@@ -388,8 +400,7 @@ public class Utils {
 
 		try {
 			return Integer.valueOf(String.valueOf(value));
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return null;
 		}
 
@@ -404,6 +415,24 @@ public class Utils {
 			return null;
 		}
 		return Double.valueOf(String.valueOf(value));
+	}
+
+	public static JSONArray getPropertyJsonArray(GraphObject graphObject, String property) {
+		if (graphObject == null) {
+			return null;
+		}
+		Object value = graphObject.getProperty(property);
+		if (value == null || value.equals(EMPTY)) {
+			return null;
+		}
+
+		JSONArray jsonArray;
+		try {
+			jsonArray = new JSONArray(value);
+			return jsonArray;
+		} catch (JSONException e) {
+			return null;
+		}
 	}
 
 	public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
