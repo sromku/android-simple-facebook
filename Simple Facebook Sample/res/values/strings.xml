@@ -25,5 +25,6 @@
     <string name="fragment_example_">Fragment example >></string>
     <string name="publish_photo">Publish photo</string>
     <string name="get_albums">Get albums</string>
+    <string name="load_more">load more...</string>
 
 </resources>
