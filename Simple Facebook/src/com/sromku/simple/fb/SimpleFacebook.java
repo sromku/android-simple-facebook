@@ -1187,6 +1187,30 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * Get my posts filtered by {@link PostType}.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * No special permissions are needed for getting the public posts. If you
+	 * want to get more private posts, then you need
+	 * {@link Permission#READ_STREAM}<br>
+	 * <br>
+	 * 
+	 * @param entityId
+	 *            Event, Group, Page, Profile
+	 * @param postType
+	 *            Filter all wall feeds and get posts that you need.
+	 * @param onPostsListener
+	 *            The callback listener.
+	 */
+	public void getPosts(PostType postType, OnPostsListener onPostsListener) {
+		GetPostsAction getPostsAction = new GetPostsAction(mSessionManager);
+		getPostsAction.setActionListener(onPostsListener);
+		getPostsAction.setPostType(postType);
+		getPostsAction.execute();
+	}
+
+	/**
 	 * Get all feeds on the wall of specific entity. It includes: links,
 	 * statuses, photos.. everything that appears on that wall.<br>
 	 * 
@@ -1280,8 +1304,8 @@ public class SimpleFacebook {
 	}
 	
 	/**
-	 * Get my TV shows. The response as you can notice is a Page because everything
-	 * in facebook has the model of Page.<br>
+	 * Get my TV shows. The response as you can notice is a Page because
+	 * everything in facebook has the model of Page.<br>
 	 * <br>
 	 * 
 	 * <b>Note:</b><br>
@@ -1535,8 +1559,7 @@ public class SimpleFacebook {
 		if (!withDialog) {
 			// make it silently
 			publish(feed, onPublishListener);
-		}
-		else {
+		} else {
 			PublishFeedDialogAction publishFeedDialogAction = new PublishFeedDialogAction(mSessionManager);
 			publishFeedDialogAction.setFeed(feed);
 			publishFeedDialogAction.setOnPublishListener(onPublishListener);
