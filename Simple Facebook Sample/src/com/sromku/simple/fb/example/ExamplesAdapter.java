@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.sromku.simple.fb.example.utils.SharedObjects;
+
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;

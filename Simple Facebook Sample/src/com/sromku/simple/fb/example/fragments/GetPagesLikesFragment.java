@@ -20,6 +20,8 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class GetPagesLikesFragment extends BaseFragment {
 
+	private final static String EXAMPLE = "Get liked pages";
+	
 	private TextView mResult;
 	private Button mGetLikesButton;
 	private TextView mMore;
@@ -28,16 +30,17 @@ public class GetPagesLikesFragment extends BaseFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle("Get liked pages");
+		getActivity().setTitle(EXAMPLE);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_get_pages_likes, container, false);
+		View view = inflater.inflate(R.layout.fragment_example_action, container, false);
 		mResult = (TextView) view.findViewById(R.id.result);
 		mMore = (TextView) view.findViewById(R.id.load_more);
 		mMore.setPaintFlags(mMore.getPaint().getFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		mGetLikesButton = (Button) view.findViewById(R.id.button);
+		mGetLikesButton.setText(EXAMPLE);
 		mGetLikesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

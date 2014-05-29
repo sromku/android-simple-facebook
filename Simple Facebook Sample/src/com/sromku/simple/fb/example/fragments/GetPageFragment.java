@@ -17,6 +17,8 @@ import com.sromku.simple.fb.listeners.OnPageListener;
 
 public class GetPageFragment extends BaseFragment{
 
+	private final static String EXAMPLE = "Get page";
+	
 	private TextView mResult;
 	private Button mGetButton;
 	private TextView mMore;
@@ -24,16 +26,17 @@ public class GetPageFragment extends BaseFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle("Get page");
+		getActivity().setTitle(EXAMPLE);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_get_music, container, false);
+		View view = inflater.inflate(R.layout.fragment_example_action, container, false);
 		mResult = (TextView) view.findViewById(R.id.result);
 		mMore = (TextView) view.findViewById(R.id.load_more);
 		mMore.setPaintFlags(mMore.getPaint().getFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		mGetButton = (Button) view.findViewById(R.id.button);
+		mGetButton.setText(EXAMPLE);
 		disableLoadMore();
 		mGetButton.setOnClickListener(new View.OnClickListener() {
 			@Override

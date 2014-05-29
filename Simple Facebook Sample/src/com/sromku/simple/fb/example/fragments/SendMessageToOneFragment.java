@@ -16,7 +16,7 @@ import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.utils.Utils;
 
-public class InviteSuggestedFragment extends Fragment {
+public class SendMessageToOneFragment extends Fragment {
 
 	private Button mInviteAllButton;
 	private TextView mResult;

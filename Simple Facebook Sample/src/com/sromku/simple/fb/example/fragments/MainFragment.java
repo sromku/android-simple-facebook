@@ -43,14 +43,11 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		
 		mExamples = new ArrayList<Example>();
 		mExamples.add(new Example("Requests", null));
-		mExamples.add(new Example("Invite all", InviteAllFragment.class));
-//		mExamples.add(new Example("Invite suggested", InviteSuggestedFragment.class));
-//		mExamples.add(new Example("Invite one", InviteOneFragment.class));
-//		mExamples.add(new Example("Send gift", InviteAllFragment.class));
-//		mExamples.add(new Example("Ask for help", InviteAllFragment.class));
-//		mExamples.add(new Example("Send message", InviteAllFragment.class));
+		mExamples.add(new Example("Invite", InviteFragment.class));
+//		mExamples.add(new Example("Send message to suggested", SendMessageToSuggestedFragment.class));
+//		mExamples.add(new Example("Send message to one", SendMessageToSuggestedFragment.class));
 //		mExamples.add(new Example("Publish", null));
-//		mExamples.add(new Example("Publish feed - dialog", PublishFeedFragment.class));
+		mExamples.add(new Example("Publish feed - dialog", PublishFeedDialogFragment.class));
 //		mExamples.add(new Example("Publish feed - no dialog", PublishFeedFragment.class));
 //		mExamples.add(new Example("Publish story", PublishStoryFragment.class));
 //		mExamples.add(new Example("Publish photo", PublishPhotoFragment.class));

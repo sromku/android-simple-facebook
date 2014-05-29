@@ -6,6 +6,7 @@ import com.facebook.SessionDefaultAudience;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
+import com.sromku.simple.fb.example.utils.SharedObjects;
 import com.sromku.simple.fb.utils.Logger;
 
 public class SampleApplication extends Application {

@@ -1,4 +1,4 @@
-package com.sromku.simple.fb.example;
+package com.sromku.simple.fb.example.utils;
 
 import android.content.Context;
 
