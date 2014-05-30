@@ -1,7 +1,7 @@
 android-simple-facebook
 =======================
 
-:small_orange_diamond: This branch supports and wraps facebook **SDKs 3.0 - 3.8**<br>
+:small_orange_diamond: This branch supports and wraps facebook **SDKs 3.0 - 3.8**. You can [download the jar from here](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar).
 
 ---
 
