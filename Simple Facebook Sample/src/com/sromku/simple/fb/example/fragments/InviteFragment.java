@@ -18,22 +18,25 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class InviteFragment extends Fragment {
 
-	private Button mInviteAllButton;
+	private final static String EXAMPLE = "Invite all";
+	
+	private Button mButton;
 	private TextView mResult;
 	private final static String INVITE_MESSAGE = "I invite you to join me";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle("Invite all");
+		getActivity().setTitle(EXAMPLE);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_invite_all, container, false);
 		mResult = (TextView) view.findViewById(R.id.result);
-		mInviteAllButton = (Button) view.findViewById(R.id.button);
-		mInviteAllButton.setOnClickListener(new View.OnClickListener() {
+		mButton = (Button) view.findViewById(R.id.button);
+		mButton.setText(EXAMPLE);
+		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OnInviteListener onInviteListener = new OnInviteListener() {

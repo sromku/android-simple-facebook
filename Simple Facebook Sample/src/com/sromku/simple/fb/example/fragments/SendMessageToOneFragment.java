@@ -18,22 +18,25 @@ import com.sromku.simple.fb.utils.Utils;
 
 public class SendMessageToOneFragment extends Fragment {
 
-	private Button mInviteAllButton;
-	private TextView mResult;
-	private final static String INVITE_MESSAGE = "I invite you to join me";
+	private final static String EXAMPLE = "Send message - one recipient";
 	
+	private Button mButton;
+	private TextView mResult;
+	private final static String MESSAGE_TEXT = "The is my message for you";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle("Invite all");
+		getActivity().setTitle(EXAMPLE);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_invite_all, container, false);
 		mResult = (TextView) view.findViewById(R.id.result);
-		mInviteAllButton = (Button) view.findViewById(R.id.button);
-		mInviteAllButton.setOnClickListener(new View.OnClickListener() {
+		mButton = (Button) view.findViewById(R.id.button);
+		mButton.setText(EXAMPLE);
+		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OnInviteListener onInviteListener = new OnInviteListener() {
@@ -41,26 +44,28 @@ public class SendMessageToOneFragment extends Fragment {
 					public void onFail(String reason) {
 						mResult.setText(reason);
 					}
-					
+
 					@Override
 					public void onException(Throwable throwable) {
 						mResult.setText(throwable.getMessage());
 					}
-					
+
 					@Override
-					public void onComplete(List<String> invitedFriends, String requestId) {
+					public void onComplete(List<String> recipientFriends, String requestId) {
 						String print = "<u><b>Requet Id</b></u><br>" + requestId + "<br><br>";
-						print += String.format("<u><b>Invited Ids (%d)</b></u><br>", invitedFriends.size());
-						print += Utils.join(invitedFriends.iterator(), "<br>");
+						print += String.format("<u><b>Recipient Ids (%d)</b></u><br>", recipientFriends.size());
+						print += Utils.join(recipientFriends.iterator(), "<br>");
 						mResult.setText(Html.fromHtml(print));
 					}
-					
+
 					@Override
 					public void onCancel() {
-						mResult.setText(Html.fromHtml("<u><b>Result</b></u>	<br>Canceled invitation"));
+						mResult.setText(Html.fromHtml("<u><b>Result</b></u>	<br>Canceled sending message"));
 					}
 				};
-				SimpleFacebook.getInstance(getActivity()).invite(INVITE_MESSAGE, onInviteListener, null);
+
+				String id = "";
+				SimpleFacebook.getInstance().invite(id, MESSAGE_TEXT, onInviteListener, null);
 			}
 		});
 		return view;
