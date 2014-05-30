@@ -79,24 +79,20 @@ public class PublishAction extends AbstractAction {
 							}
 						});
 						sessionManager.extendPublishPermissions();
-					}
-					else {
+					} else {
 						publishImpl(mPublishable, mOnPublishListener);
 					}
-				}
-				else {
+				} else {
 					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
 					Logger.logError(PublishAction.class, reason, null);
 					if (mOnPublishListener != null) {
 						mOnPublishListener.onFail(reason);
 					}
 				}
-			}
-			else {
+			} else {
 				return;
 			}
-		}
-		else {
+		} else {
 			if (mOnPublishListener != null) {
 				String reason = Errors.getError(ErrorMsg.LOGIN);
 				Logger.logError(PublishAction.class, reason, null);
@@ -116,9 +112,9 @@ public class PublishAction extends AbstractAction {
 					String postId = null;
 					try {
 						postId = graphResponse.getString("id");
-					}
-					catch (JSONException e) {
+					} catch (JSONException e) {
 						Logger.logError(PublishAction.class, "JSON error", e);
+						postId = "no_id";
 					}
 					FacebookRequestError error = response.getError();
 					if (error != null) {
@@ -126,17 +122,21 @@ public class PublishAction extends AbstractAction {
 						if (onPublishListener != null) {
 							onPublishListener.onException(error.getException());
 						}
-					}
-					else {
+					} else {
 						if (onPublishListener != null) {
 							onPublishListener.onComplete(postId);
 						}
 					}
-				}
-				else {
+				} else {
 					Logger.logError(PublishAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-					if (onPublishListener != null) {
-						onPublishListener.onComplete("0");
+					FacebookRequestError error = response.getError();
+					if (error != null) {
+						Logger.logError(PublishAction.class, "Failed to publish", error.getException());
+						if (onPublishListener != null) {
+							onPublishListener.onException(error.getException());
+						}
+					} else if (onPublishListener != null) {
+						onPublishListener.onFail("The returned value is null");
 					}
 				}
 			}

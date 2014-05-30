@@ -7,6 +7,7 @@ public class Cursor<T> {
 	private final GetAction<T> mGetAction;
 	private Request mNextPage = null;
 	private Request mPrevPage = null;
+	private int mPageNum = 0;
 	
 	public Cursor(GetAction<T> getAction) {
 		mGetAction = getAction;
@@ -20,11 +21,17 @@ public class Cursor<T> {
 		return mPrevPage != null ? true : false;
 	}
 	
+	public int getPageNum() {
+		return mPageNum;
+	}
+	
 	public void next() {
+		mPageNum++;
 		mGetAction.runRequest(mNextPage);
 	}
 	
 	public void prev() {
+		mPageNum--;
 		mGetAction.runRequest(mPrevPage);
 	}
 

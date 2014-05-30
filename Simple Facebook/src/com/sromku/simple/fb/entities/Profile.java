@@ -119,7 +119,7 @@ public class Profile implements User {
 		mUpdatedTime = Utils.getPropertyString(mGraphObject, Properties.UPDATED_TIME);
 
 		// verified
-		mVerified = Utils.getPropertyBoolean(mGraphObject, Properties.INSTALLED);
+		mVerified = Utils.getPropertyBoolean(mGraphObject, Properties.VERIFIED);
 
 		// bio
 		mBio = Utils.getPropertyString(mGraphObject, Properties.BIO);
@@ -653,7 +653,7 @@ public class Profile implements User {
 		private Properties(Builder builder) {
 			mBundle = new Bundle();
 			Iterator<String> iterator = builder.properties.iterator();
-			String fields = Utils.join(iterator, ',');
+			String fields = Utils.join(iterator, ",");
 			mBundle.putString("fields", fields);
 		}
 

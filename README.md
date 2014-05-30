@@ -1,19 +1,8 @@
 android-simple-facebook
 =======================
 
-:bulb: **Notice: (May 10th, 2014)** <br>
-:small_orange_diamond: This library supports and wraps facebook **SDKs 3.0 - 3.8**<br>
-:small_orange_diamond: Facebook made several changes to their API and released v2.0 Graph API. For example, getting all friends is impossible anymore :( <br>
-:small_orange_diamond: I am working to create next version of this library to support latest version Facebook SDK. **Be updated :)** <br>
-
-**Update : (May 20th, 2014)** <br>
-This is the branch - [v2.0](https://github.com/sromku/android-simple-facebook/tree/v2.0) that supports facebook 3.14 SDK. These days I making better examples and add new examples. Also, more testings are done. Once I finish to test this branch, I will merge to the `master`.
-
-[![Gitter chat](https://badges.gitter.im/sromku/android-simple-facebook.png)](https://gitter.im/sromku/android-simple-facebook)
-
----
-
-Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.0 - 3.8**](https://github.com/facebook/facebook-android-sdk)
+Simple Facebook SDK for Android which wraps original [**Facebook SDK 3.14**](https://github.com/facebook/facebook-android-sdk). <br>
+For support of older versions of facebook **SDK 3.8** and below, go to [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) branch.
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
@@ -21,11 +10,16 @@ Since my feeling was that the usage of Facebook SDK was too complicated for simp
 
 We have new <img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
 
-Sample app:<br> 
-<a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
-</a>
+## Releases
+Library jar | Branch | Supported Facebook SDK
+------------|--------|------------------------
+[simple-facebook-2.0.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.0/simple.facebook.jar) | [master]() | 3.14 > 
+[simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0]() | 3.0 - 3.8
+
+## Sample App
+The sample app includes examples for all actions. Check out this very short [wiki page](https://github.com/sromku/android-simple-facebook/wiki/Sample-App) of how to run and setup the sample app.
+
+<img src="https://raw.githubusercontent.com/sromku/android-simple-facebook/v2.0/Refs/sample-app.png" width="600"/>
 
 ## Features
 * [Login](#login)
@@ -76,14 +70,14 @@ Sample app:<br>
 	* [Debug](#debug)
 
 *And,*
-* Based on Facebook SDK 3.0 - 3.8
+* Based on Facebook SDK 3.14
 * Permission strings are predefined
 * No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 
 
 ## Setup Project
-1. Clone [Facebook SDK 3.8](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
+1. Clone [Facebook SDK 3.14](https://github.com/facebook/facebook-android-sdk) or [download](https://developers.facebook.com/android/) it. Then, import the project to your workspace.
 
 2. Clone and import this (Simple Facebook) project to your workspace.
  
@@ -1197,15 +1191,9 @@ Print logs with full stacktrace to logcat:
 Set `Logger.DEBUG_WITH_STACKTRACE` to `true` 
 
 
-## Sample application
-<a href="https://play.google.com/store/apps/details?id=com.sromku.simple.fb.example">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
-</a>
-
 ## Applications using the library
 
-| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) | [Fun Call](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) | [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) | [Dough Pro - Artisan Baking](https://play.google.com/store/apps/details?id=com.ollygrov.doughpro) | [Mental Arithmetic](https://play.google.com/store/apps/details?id=nintenda.calculmental) | [Pemex Checker](https://play.google.com/store/apps/details?id=com.xoco.pemex.checker) | [Ayuda Alguien](https://play.google.com/store/apps/details?id=com.xoco.ayuda) 
+| [Pregnancy Tickers - Widget](https://play.google.com/store/apps/details?id=com.romkuapps.tickers) | [Pregnancy Calculator](https://play.google.com/store/apps/details?id=com.romkuapps.enfree.duedate) | [Ring Drop : Fun Ring Toss Game](https://play.google.com/store/apps/details?id=com.aitrich.ringdrop) | [Fun Call](https://play.google.com/store/apps/details?id=com.rami_bar.fun_call) | [8tracks Radio](https://play.google.com/store/apps/details?id=com.e8tracks) | [Violet Glasses](https://play.google.com/store/apps/developer?id=Violet+Glasses) | [Dough Pro - Artisan Baking](https://play.google.com/store/apps/details?id=com.ollygrov.doughpro) | [Mental Arithmetic](https://play.google.com/store/apps/details?id=nintenda.calculmental) | [Pemex Checker](https://play.google.com/store/apps/details?id=com.xoco.pemex.checker) | [Ayuda Alguien](https://play.google.com/store/apps/details?id=com.xoco.ayuda) | [Buga's Dream](https://play.google.com/store/apps/details?id=com.hectechlabs.bugasdream)
 | and more...<br>
 
 > If you use this library in your project and you found it helpful, it will be really great to share it here :) 
@@ -1225,5 +1213,4 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
 

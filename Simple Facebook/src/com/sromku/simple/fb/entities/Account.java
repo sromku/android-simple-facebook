@@ -5,7 +5,7 @@ import java.util.List;
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.Permission.Role;
 import com.sromku.simple.fb.utils.Utils;
-import com.sromku.simple.fb.utils.Utils.Converter;
+import com.sromku.simple.fb.utils.Utils.StringConverter;
 
 public class Account {
 
@@ -31,16 +31,15 @@ public class Account {
 
 		// access token
 		mAccessToken = Utils.getPropertyString(graphObject, ACCESS_TOKEN);
-		
+
 		// roles
-		mRoles = Utils.createList(graphObject, PERMS, new Converter<Role>() {
+		mRoles = Utils.convert(Utils.getPropertyJsonArray(graphObject, PERMS), new StringConverter<Role>() {
 			@Override
-			public Role convert(GraphObject graphObject) {
-				String perm = graphObject.toString();
-				return Role.valueOf(perm);
+			public Role convert(String str) {
+				return Role.valueOf(str);
 			}
 		});
-		
+
 		// id
 		mId = Utils.getPropertyString(graphObject, ID);
 	}
@@ -56,15 +55,15 @@ public class Account {
 	public String getName() {
 		return mName;
 	}
-	
+
 	public String getAccessToken() {
 		return mAccessToken;
 	}
-	
+
 	public List<Role> getRoles() {
 		return mRoles;
 	}
-	
+
 	public String getId() {
 		return mId;
 	}

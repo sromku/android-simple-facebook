@@ -230,11 +230,11 @@ public class Privacy {
 			jsonRepresentation.put(PRIVACY, mPrivacySetting.name());
 			if (mPrivacySetting == PrivacySettings.CUSTOM) {
 				if (!mAllowedUsers.isEmpty()) {
-					jsonRepresentation.put(ALLOW, Utils.join(mAllowedUsers.iterator(), ','));
+					jsonRepresentation.put(ALLOW, Utils.join(mAllowedUsers.iterator(), ","));
 				}
 
 				if (!mDeniedUsers.isEmpty()) {
-					jsonRepresentation.put(DENY, Utils.join(mDeniedUsers.iterator(), ','));
+					jsonRepresentation.put(DENY, Utils.join(mDeniedUsers.iterator(), ","));
 				}
 			}
 		}

@@ -90,6 +90,15 @@ public abstract class OnActionListener<T> implements OnThinkingListetener {
 		return mCursor;
 	}
 
+	/**
+	 * Get the last page number that was retrieved.
+	 * 
+	 * @return The page number.
+	 */
+	public int getPageNum() {
+		return mCursor.getPageNum();
+	}
+
 	public Type getGenericType() {
 		ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
 		return parameterizedType.getActualTypeArguments()[0];
