@@ -23,6 +23,7 @@ import com.sromku.simple.fb.actions.GetGroupsAction;
 import com.sromku.simple.fb.actions.GetLikesAction;
 import com.sromku.simple.fb.actions.GetNotificationsAction;
 import com.sromku.simple.fb.actions.GetPageAction;
+import com.sromku.simple.fb.actions.GetPagesAction;
 import com.sromku.simple.fb.actions.GetPhotosAction;
 import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
@@ -66,6 +67,7 @@ import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnNotificationsListener;
 import com.sromku.simple.fb.listeners.OnPageListener;
+import com.sromku.simple.fb.listeners.OnPagesListener;
 import com.sromku.simple.fb.listeners.OnPhotosListener;
 import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
@@ -302,13 +304,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getBooks(OnPageListener onPageListener) {
-		getBooks(null, null, onPageListener);
+	public void getBooks(OnPagesListener onPagesListener) {
+		getBooks(null, null, onPagesListener);
 	}
 
 	/**
@@ -325,13 +327,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getBooks(Page.Properties properties, OnPageListener onPageListener) {
-		getBooks(null, properties, onPageListener);
+	public void getBooks(Page.Properties properties, OnPagesListener onPagesListener) {
+		getBooks(null, properties, onPagesListener);
 	}
 
 	/**
@@ -348,13 +350,13 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getBooks(String entityId, OnPageListener onPageListener) {
-		getBooks(entityId, null, onPageListener);
+	public void getBooks(String entityId, OnPagesListener onPagesListener) {
+		getBooks(entityId, null, onPagesListener);
 	}
 
 	/**
@@ -371,18 +373,18 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getBooks(String entityId, Page.Properties properties, OnPageListener onPageListener) {
-		GetPageAction getPageAction = new GetPageAction(mSessionManager);
-		getPageAction.setActionListener(onPageListener);
-		getPageAction.setProperties(properties);
-		getPageAction.setTarget(entityId);
-		getPageAction.setEdge(GraphPath.BOOKS);
-		getPageAction.execute();
+	public void getBooks(String entityId, Page.Properties properties, OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setProperties(properties);
+		getPagesAction.setTarget(entityId);
+		getPagesAction.setEdge(GraphPath.BOOKS);
+		getPagesAction.execute();
 	}
 
 	/**
@@ -614,13 +616,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getGames(OnPageListener onPageListener) {
-		getGames(null, null, onPageListener);
+	public void getGames(OnPagesListener onPagesListener) {
+		getGames(null, null, onPagesListener);
 	}
 
 	/**
@@ -642,7 +644,7 @@ public class SimpleFacebook {
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getGames(Page.Properties properties, OnPageListener onPageListener) {
+	public void getGames(Page.Properties properties, OnPagesListener onPageListener) {
 		getGames(null, properties, onPageListener);
 	}
 
@@ -660,13 +662,13 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getGames(String entityId, OnPageListener onPageListener) {
-		getGames(entityId, null, onPageListener);
+	public void getGames(String entityId, OnPagesListener onPagesListener) {
+		getGames(entityId, null, onPagesListener);
 	}
 
 	/**
@@ -683,18 +685,18 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getGames(String entityId, Page.Properties properties, OnPageListener onPageListener) {
-		GetPageAction getPageAction = new GetPageAction(mSessionManager);
-		getPageAction.setActionListener(onPageListener);
-		getPageAction.setProperties(properties);
-		getPageAction.setTarget(entityId);
-		getPageAction.setEdge(GraphPath.GAMES);
-		getPageAction.execute();
+	public void getGames(String entityId, Page.Properties properties, OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setProperties(properties);
+		getPagesAction.setTarget(entityId);
+		getPagesAction.setEdge(GraphPath.GAMES);
+		getPagesAction.execute();
 	}
 
 	/**
@@ -784,13 +786,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMovies(OnPageListener onPageListener) {
-		getMovies(null, null, onPageListener);
+	public void getMovies(OnPagesListener onPagesListener) {
+		getMovies(null, null, onPagesListener);
 	}
 
 	/**
@@ -807,13 +809,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMovies(Page.Properties properties, OnPageListener onPageListener) {
-		getMovies(null, properties, onPageListener);
+	public void getMovies(Page.Properties properties, OnPagesListener onPagesListener) {
+		getMovies(null, properties, onPagesListener);
 	}
 
 	/**
@@ -830,13 +832,13 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMovies(String entityId, OnPageListener onPageListener) {
-		getMovies(entityId, null, onPageListener);
+	public void getMovies(String entityId, OnPagesListener onPagesListener) {
+		getMovies(entityId, null, onPagesListener);
 	}
 
 	/**
@@ -853,18 +855,18 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMovies(String entityId, Page.Properties properties, OnPageListener onPageListener) {
-		GetPageAction getPageAction = new GetPageAction(mSessionManager);
-		getPageAction.setActionListener(onPageListener);
-		getPageAction.setProperties(properties);
-		getPageAction.setTarget(entityId);
-		getPageAction.setEdge(GraphPath.MOVIES);
-		getPageAction.execute();
+	public void getMovies(String entityId, Page.Properties properties, OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setProperties(properties);
+		getPagesAction.setTarget(entityId);
+		getPagesAction.setEdge(GraphPath.MOVIES);
+		getPagesAction.execute();
 	}
 
 	/**
@@ -881,13 +883,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMusic(OnPageListener onPageListener) {
-		getMusic(null, null, onPageListener);
+	public void getMusic(OnPagesListener onPagesListener) {
+		getMusic(null, null, onPagesListener);
 	}
 
 	/**
@@ -904,13 +906,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMusic(Page.Properties properties, OnPageListener onPageListener) {
-		getMusic(null, properties, onPageListener);
+	public void getMusic(Page.Properties properties, OnPagesListener onPagesListener) {
+		getMusic(null, properties, onPagesListener);
 	}
 
 	/**
@@ -927,13 +929,13 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMusic(String entityId, OnPageListener onPageListener) {
-		getMusic(entityId, null, onPageListener);
+	public void getMusic(String entityId, OnPagesListener onPagesListener) {
+		getMusic(entityId, null, onPagesListener);
 	}
 
 	/**
@@ -950,18 +952,18 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/music/
 	 */
-	public void getMusic(String entityId, Page.Properties properties, OnPageListener onPageListener) {
-		GetPageAction getPageAction = new GetPageAction(mSessionManager);
-		getPageAction.setActionListener(onPageListener);
-		getPageAction.setProperties(properties);
-		getPageAction.setTarget(entityId);
-		getPageAction.setEdge(GraphPath.MUSIC);
-		getPageAction.execute();
+	public void getMusic(String entityId, Page.Properties properties, OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setProperties(properties);
+		getPagesAction.setTarget(entityId);
+		getPagesAction.setEdge(GraphPath.MUSIC);
+		getPagesAction.execute();
 	}
 
 	/**
@@ -1014,6 +1016,21 @@ public class SimpleFacebook {
 		getPageAction.setProperties(properties);
 		getPageAction.execute();
 	}
+	
+	
+	/**
+	 * Get pages that user liked
+	 * 
+	 * @param onPagesListener
+	 *            The callback listener.
+	 */
+	public void getPages(OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setEdge(GraphPath.LIKES);
+		getPagesAction.execute();
+	}
+
 
 	/**
 	 * Get my photos.
@@ -1278,13 +1295,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getTelevision(OnPageListener onPageListener) {
-		getTelevision(null, null, onPageListener);
+	public void getTelevision(OnPagesListener onPagesListener) {
+		getTelevision(null, null, onPagesListener);
 	}
 
 	/**
@@ -1301,13 +1318,13 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getTelevision(Page.Properties properties, OnPageListener onPageListener) {
-		getTelevision(null, properties, onPageListener);
+	public void getTelevision(Page.Properties properties, OnPagesListener onPagesListener) {
+		getTelevision(null, properties, onPagesListener);
 	}
 
 	/**
@@ -1324,13 +1341,13 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getTelevision(String entityId, OnPageListener onPageListener) {
-		getTelevision(entityId, null, onPageListener);
+	public void getTelevision(String entityId, OnPagesListener onPagesListener) {
+		getTelevision(entityId, null, onPagesListener);
 	}
 
 	/**
@@ -1347,18 +1364,18 @@ public class SimpleFacebook {
 	 * {@link Permission#USER_LIKES}<br>
 	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
-	 * @param onPageListener
+	 * @param onPagesListener
 	 * <br>
 	 * <br>
 	 * @see https://developers.facebook.com/docs/graph-api/reference/user/books/
 	 */
-	public void getTelevision(String entityId, Page.Properties properties, OnPageListener onPageListener) {
-		GetPageAction getPageAction = new GetPageAction(mSessionManager);
-		getPageAction.setActionListener(onPageListener);
-		getPageAction.setProperties(properties);
-		getPageAction.setTarget(entityId);
-		getPageAction.setEdge(GraphPath.TELEVISION);
-		getPageAction.execute();
+	public void getTelevision(String entityId, Page.Properties properties, OnPagesListener onPagesListener) {
+		GetPagesAction getPagesAction = new GetPagesAction(mSessionManager);
+		getPagesAction.setActionListener(onPagesListener);
+		getPagesAction.setProperties(properties);
+		getPagesAction.setTarget(entityId);
+		getPagesAction.setEdge(GraphPath.TELEVISION);
+		getPagesAction.execute();
 	}
 
 	/**
