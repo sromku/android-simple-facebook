@@ -74,6 +74,7 @@ public class ExamplesAdapter extends BaseAdapter {
 			TextView textView = new TextView(SharedObjects.context);
 			textView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_height)));
 			textView.setTextColor(SharedObjects.context.getResources().getColor(R.color.black));
+			textView.setSingleLine();
 			if (getItemViewType(position) == EXAMPLE_VIEW) {
 				textView.setTextSize(SharedObjects.context.getResources().getDimension(R.dimen.example_list_text_size));
 			}
