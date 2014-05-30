@@ -74,7 +74,7 @@ public class GetPostsFragment extends BaseFragment {
 						mAllPages += Utils.join(response.iterator(), "<br>", new Utils.Process<Post>() {
 							@Override
 							public String process(Post post) {
-								return "\u25CF " + post.getSource() + " \u25CF";
+								return "\u25CF " + post.getStory() == null || post.getStory().equalsIgnoreCase("null") ? post.getId() : post.getStory() + " \u25CF";
 							}
 						});
 						mAllPages += "<br>";

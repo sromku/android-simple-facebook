@@ -1,5 +1,8 @@
 package com.sromku.simple.fb.example.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -115,4 +118,25 @@ public class Utils {
 		}
 		return stringBuilder.toString();
 	}
+
+	public static byte[] getSamleVideo(Context context, String assetFile) {
+		try {
+			InputStream inputStream = context.getAssets().open(assetFile);
+			return getBytes(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private static byte[] getBytes(InputStream input) throws IOException {
+		byte[] buffer = new byte[8192];
+		int bytesRead;
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		while ((bytesRead = input.read(buffer)) != -1) {
+			output.write(buffer, 0, bytesRead);
+		}
+		return output.toByteArray();
+	}
+
 }

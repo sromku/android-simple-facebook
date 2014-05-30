@@ -23,7 +23,7 @@ private final static String EXAMPLE = "Send message - suggested recipients";
 	
 	private Button mButton;
 	private TextView mResult;
-	private final static String MESSAGE_TEXT = "The is my ANOTHER message for you";
+	private final static String MESSAGE_TEXT = "The is my ANOTHER message for you ";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

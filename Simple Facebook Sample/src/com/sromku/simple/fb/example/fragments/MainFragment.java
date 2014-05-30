@@ -52,7 +52,7 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		mExamples.add(new Example("Publish feed more options - no dialog", PublishFeedMoreFragment.class));
 //		mExamples.add(new Example("Publish story", PublishStoryFragment.class));
 		mExamples.add(new Example("Publish photo", PublishPhotoFragment.class));
-//		mExamples.add(new Example("Publish video", PublishVideoFragment.class));
+		mExamples.add(new Example("Publish video", PublishVideoFragment.class));
 		mExamples.add(new Example("Publish score", PublishScoreFragment.class));
 		mExamples.add(new Example("Get", null));
 		mExamples.add(new Example("Get accounts", GetAccountsFragment.class));
@@ -232,14 +232,14 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 	private void loggedInUIState() {
 		mButtonLogin.setEnabled(false);
 		mButtonLogout.setEnabled(true);
-		mListView.setEnabled(true);
+		mListView.setVisibility(View.VISIBLE);
 		mTextStatus.setText("Logged in");
 	}
 
 	private void loggedOutUIState() {
 		mButtonLogin.setEnabled(true);
 		mButtonLogout.setEnabled(false);
-		mListView.setEnabled(false);
+		mListView.setVisibility(View.INVISIBLE);
 		mTextStatus.setText("Logged out");
 	}
 }

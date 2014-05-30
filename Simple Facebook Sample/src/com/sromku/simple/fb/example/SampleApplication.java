@@ -32,6 +32,7 @@ public class SampleApplication extends Application {
 				Permission.USER_EVENTS,
 				Permission.USER_VIDEOS,
 				Permission.USER_RELATIONSHIPS,
+				Permission.READ_STREAM, 
 				Permission.PUBLISH_ACTION
 				};
 
