@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.example.fragments;
 
 import java.util.List;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,10 +20,10 @@ import com.sromku.simple.fb.utils.Utils;
 public class SendMessageToOneFragment extends Fragment {
 
 	private final static String EXAMPLE = "Send message - one recipient";
-	
+
 	private Button mButton;
 	private TextView mResult;
-	private final static String MESSAGE_TEXT = "The is my message for you";
+	private static String MESSAGE_TEXT = "The is my message for you ";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,16 @@ public class SendMessageToOneFragment extends Fragment {
 					}
 				};
 
-				String id = "";
-				SimpleFacebook.getInstance().invite(id, MESSAGE_TEXT, onInviteListener, null);
+				String id = "10152408430924362";
+				String message = MESSAGE_TEXT + getRand();
+				SimpleFacebook.getInstance().invite(id, message, onInviteListener, null);
 			}
 		});
 		return view;
+	}
+
+	private static int getRand() {
+		Random random = new Random();
+		return random.nextInt(1000);
 	}
 }
