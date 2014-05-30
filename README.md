@@ -13,8 +13,8 @@ We have new <img src="http://stackoverflow.com/content/stackoverflow/img/apple-t
 ## Releases
 Library jar | Branch | Supported Facebook SDK
 ------------|--------|------------------------
-[simple-facebook-2.0.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.0/simple-facebook-2.0.jar) | [master]() | 3.14 > 
-[simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0]() | 3.0 - 3.8
+[simple-facebook-2.0.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.0/simple-facebook-2.0.jar) | [master](https://github.com/sromku/android-simple-facebook) | 3.14 > 
+[simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) | 3.0 - 3.8
 
 ## Sample App
 The sample app includes examples for all actions. Check out this very short [wiki page](https://github.com/sromku/android-simple-facebook/wiki/Sample-App) of how to run and setup the sample app.
