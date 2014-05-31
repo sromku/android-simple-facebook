@@ -28,10 +28,12 @@ import com.sromku.simple.fb.actions.GetPhotosAction;
 import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
+import com.sromku.simple.fb.actions.GetStoryObjectsAction;
 import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
+import com.sromku.simple.fb.actions.PublishStoryDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
@@ -48,6 +50,7 @@ import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnAccountsListener;
 import com.sromku.simple.fb.listeners.OnActionListener;
@@ -73,6 +76,7 @@ import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnScoresListener;
+import com.sromku.simple.fb.listeners.OnStoryObjectsListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.GraphPath;
 
@@ -1016,7 +1020,7 @@ public class SimpleFacebook {
 		getPageAction.setProperties(properties);
 		getPageAction.execute();
 	}
-	
+
 	/**
 	 * Get pages that user liked
 	 * 
@@ -1302,7 +1306,20 @@ public class SimpleFacebook {
 		getScoresAction.setActionListener(onScoresListener);
 		getScoresAction.execute();
 	}
-	
+
+	/**
+	 * Get open graph objects that are stored on facebook side.
+	 * 
+	 * @param objectName
+	 * @param onStoryObjectsListener
+	 */
+	public void getStoryObjects(String objectName, OnStoryObjectsListener onStoryObjectsListener) {
+		GetStoryObjectsAction getStoryObjectsAction = new GetStoryObjectsAction(mSessionManager);
+		getStoryObjectsAction.setObjectName(objectName);
+		getStoryObjectsAction.setActionListener(onStoryObjectsListener);
+		getStoryObjectsAction.execute();
+	}
+
 	/**
 	 * Get my TV shows. The response as you can notice is a Page because
 	 * everything in facebook has the model of Page.<br>
@@ -1582,6 +1599,28 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * Publish open graph story with dialog or without.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#PUBLISH_ACTION}
+	 * 
+	 * @param openGraph
+	 * @param onPublishListener
+	 */
+	public void publish(Story story, boolean withDialog, OnPublishListener onPublishListener) {
+		if (!withDialog) {
+			// make it silently
+			publish(story, onPublishListener);
+		} else {
+			PublishStoryDialogAction publishStoryDialogAction = new PublishStoryDialogAction(mSessionManager);
+			publishStoryDialogAction.setStory(story);
+			publishStoryDialogAction.setOnPublishListener(onPublishListener);
+			publishStoryDialogAction.execute();
+		}
+	}
+
+	/**
 	 * Publish photo to specific album. You can use
 	 * {@link #getAlbums(OnAlbumsRequestListener)} to retrieve all user's
 	 * albums.<br>
@@ -1725,6 +1764,15 @@ public class SimpleFacebook {
 		inviteAction.setData(data);
 		inviteAction.setOnInviteListener(onInviteListener);
 		inviteAction.execute();
+	}
+
+	/**
+	 * Create object on facebook side
+	 * 
+	 * @param storyObject
+	 */
+	public void create(StoryObject storyObject) {
+
 	}
 
 	/**

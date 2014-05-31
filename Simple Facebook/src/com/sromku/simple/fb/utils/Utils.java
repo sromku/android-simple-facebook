@@ -431,10 +431,15 @@ public class Utils {
 			jsonArray = new JSONArray(value);
 			return jsonArray;
 		} catch (JSONException e) {
-			return null;
+			try {
+				return (JSONArray) value;
+			}
+			catch (Exception e1) {
+			}
 		}
+		return null;
 	}
-
+	
 	public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
 		if (graphObject == null) {
 			return null;

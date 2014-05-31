@@ -26,5 +26,6 @@ public class GraphPath {
 	public static final String GAMES = "games";
 	public static final Object NOTIFICATIONS = "notifications";
 	public static final String TELEVISION = "television";
+	public static final String OBJECTS = "objects";
 
 }
