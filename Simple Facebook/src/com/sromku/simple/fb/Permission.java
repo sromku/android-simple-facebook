@@ -27,6 +27,7 @@ public enum Permission {
 	USER_HOMETOWN("user_hometown", Type.READ),
 	USER_INTERESTS("user_interests", Type.READ),
 	USER_LIKES("user_likes", Type.READ),
+	USER_LOCATION("user_location", Type.READ),
 	USER_PHOTOS("user_photos", Type.READ),
 	USER_RELATIONSHIPS("user_relationships", Type.READ),
 	USER_RELATIONSHIP_DETAILS("user_relationship_details", Type.READ),
