@@ -1198,6 +1198,10 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
 
 > If you use this library in your project and you found it helpful, it will be really great to share it here :) 
 
+## Donate
+Just in case :)<br>
+<a href='https://pledgie.com/campaigns/25567'><img alt='Click here to lend your support to: Open source projects and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/25567.png?skin_name=chrome' border='0' ></a>
+
 ## License
 
     Copyright 2013-present Roman Kushnarenko
