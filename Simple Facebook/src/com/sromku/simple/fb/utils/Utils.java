@@ -1,9 +1,11 @@
 package com.sromku.simple.fb.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -26,16 +28,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.os.Bundle;
 import android.util.Base64;
 
 import com.facebook.Response;
 import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
+import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.User;
 
 public class Utils {
 	public static final String EMPTY = "";
+	public static final String CHARSET_NAME = "UTF-8";
 
 	public String getFacebookSDKVersion() {
 		String sdkVersion = null;
@@ -433,13 +438,12 @@ public class Utils {
 		} catch (JSONException e) {
 			try {
 				return (JSONArray) value;
-			}
-			catch (Exception e1) {
+			} catch (Exception e1) {
 			}
 		}
 		return null;
 	}
-	
+
 	public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
 		if (graphObject == null) {
 			return null;
@@ -475,6 +479,33 @@ public class Utils {
 		};
 
 		return user;
+	}
+
+	public static String encodeUrl(Bundle parameters) {
+		if (parameters == null) {
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for (String key : parameters.keySet()) {
+			Object parameter = parameters.get(key);
+			if (!(parameter instanceof String)) {
+				continue;
+			}
+
+			if (first) {
+				first = false;
+			} else {
+				sb.append("&");
+			}
+			try {
+				sb.append(URLEncoder.encode(key, CHARSET_NAME)).append("=").append(URLEncoder.encode(parameters.getString(key), CHARSET_NAME));
+			} catch (UnsupportedEncodingException e) {
+				Logger.logError(Story.class, "Error enconding URL", e);
+			}
+		}
+		return sb.toString();
 	}
 
 }

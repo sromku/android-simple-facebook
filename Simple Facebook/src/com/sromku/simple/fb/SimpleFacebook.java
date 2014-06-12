@@ -58,6 +58,7 @@ import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
+import com.sromku.simple.fb.listeners.OnCreateStoryObject;
 import com.sromku.simple.fb.listeners.OnDeleteListener;
 import com.sromku.simple.fb.listeners.OnEventsListener;
 import com.sromku.simple.fb.listeners.OnFamilyListener;
@@ -1767,12 +1768,40 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Create object on facebook side
+	 * Create open graph object on facebook side. <br>
+	 * <br>
+	 * 
+	 * <b>What is this method about:</b><br>
+	 * Objects can be used in two different ways:
+	 * 
+	 * <li>Self-hosted objects are represented by HTML markup on a particular
+	 * URL which uniquely defines each object. Using self-hosted objects
+	 * requires that you host them as pages on your own web server and all
+	 * self-hosted objects are public.</li>
+	 * 
+	 * <li>The Object API lets you create and manage Open Graph objects using a
+	 * simple HTTP-based API, without the requirement for a web server to host
+	 * them. The Object API can also create objects that have custom or
+	 * non-public privacy settings and includes an API for you to upload images
+	 * to Facebook to use in objects and stories.</li><br>
+	 * 
+	 * <b>This method is the second option, which means, you can create object
+	 * on facebook servers and reuse it in your app.</b><br>
+	 * <br>
+	 * 
+	 * <b>Note:</b><br>
+	 * You don't need to create the same object any time that user what to share
+	 * the story. Just reuse the same object, by having the <b>id</b> that you
+	 * got on response.
+	 * 
+	 * <br>
+	 * <br>
 	 * 
 	 * @param storyObject
+	 * @see https://developers.facebook.com/docs/opengraph/using-objects
 	 */
-	public void create(StoryObject storyObject) {
-
+	public void create(StoryObject storyObject, OnCreateStoryObject onCreateStoryObject) {
+		publish("me", (Publishable) storyObject, onCreateStoryObject);
 	}
 
 	/**
