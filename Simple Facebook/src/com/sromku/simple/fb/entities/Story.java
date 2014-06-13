@@ -473,7 +473,8 @@ public class Story implements Publishable {
 			}
 
 			/**
-			 * Set on click referencing url
+			 * Set the url of the object. By clicking on published open graph,
+			 * this url will be opened.
 			 * 
 			 * @param url
 			 * @return {@link Builder}

@@ -49,13 +49,13 @@ public class CreateStoryObjectFragment extends BaseFragment {
 				// build story object
 				StoryObject storyObject = new StoryObject.Builder()
 					.setApp(appId, namespace)
-					.setDescription("sample description")
-					.setImage("http://romkuapps.com/Apps/Romku%20Store/Facebook/images/milk.jpg")
+					.setDescription("The apple is the pomaceous fruit of the apple tree, Malus domestica of the rose family. It is one of the most widely cultivated tree fruits.")
+					.setImage("http://upload.wikimedia.org/wikipedia/commons/e/ee/Apples.jpg")
 					.setNoun("food")
-					.setTitle("Milk")
+					.setTitle("Apple")
 					.setUrl("https://github.com/sromku/android-simple-facebook")
 					.setPrivacy(privacy)
-					.addProperty("score", 330)
+					.addProperty("calories", 52)
 					.build();
 				
 				// create story object
