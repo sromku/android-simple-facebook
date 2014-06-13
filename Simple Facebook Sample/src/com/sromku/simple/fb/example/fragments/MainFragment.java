@@ -54,8 +54,7 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		mExamples.add(new Example("Publish video", PublishVideoFragment.class));
 		mExamples.add(new Example("Publish score", PublishScoreFragment.class));
 		mExamples.add(new Example("Open graph", null));
-		mExamples.add(new Example("Create object", CreateObjectFragment.class));
-		
+		mExamples.add(new Example("Create object", CreateStoryObjectFragment.class));
 		mExamples.add(new Example("Get", null));
 		mExamples.add(new Example("Get accounts", GetAccountsFragment.class));
 		mExamples.add(new Example("Get albums", GetAlbumsFragment.class));

@@ -232,7 +232,6 @@ public class Privacy {
 				if (!mAllowedUsers.isEmpty()) {
 					jsonRepresentation.put(ALLOW, Utils.join(mAllowedUsers.iterator(), ","));
 				}
-
 				if (!mDeniedUsers.isEmpty()) {
 					jsonRepresentation.put(DENY, Utils.join(mDeniedUsers.iterator(), ","));
 				}

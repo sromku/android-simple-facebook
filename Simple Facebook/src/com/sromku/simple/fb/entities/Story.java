@@ -17,9 +17,15 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Story implements Publishable {
 
+	private static final String ID = "id";
+	private StoryObject storyObject;
+	private StoryAction storyAction;
+
 	@Override
 	public Bundle getBundle() {
-		return null;
+		Bundle bundle = new Bundle();
+		// bundle.putString(storyObject., value)
+		return bundle;
 	}
 
 	@Override
@@ -33,9 +39,8 @@ public class Story implements Publishable {
 	}
 
 	private Story(Builder buidler) {
-		StoryObject storyObject = buidler.storyObject;
-		StoryAction storyAction = buidler.storyAction;
-
+		storyObject = buidler.storyObject;
+		storyAction = buidler.storyAction;
 	}
 
 	public class Builder {
@@ -262,6 +267,7 @@ public class Story implements Publishable {
 		}
 	}
 
+	// TODO - Add The privacy parameter
 	public static class StoryObject implements Publishable {
 
 		private static final String ID = "id";
@@ -275,6 +281,7 @@ public class Story implements Publishable {
 		private static final String CREATED_TIME = "created_time";
 		private static final String APPLICATION = "application";
 		private static final String OBJECT = "object";
+		private static final String PRIVACY = "privacy";
 
 		private String mId;
 		private String mType;
@@ -288,6 +295,7 @@ public class Story implements Publishable {
 		private String mAppId;
 		private String mNamespace;
 		private Application mApplication;
+		private Privacy mPrivacy;
 
 		private StoryObject(GraphObject graphObject) {
 
@@ -336,12 +344,13 @@ public class Story implements Publishable {
 			mImage = builder.image;
 			mAppId = builder.appId;
 			mNamespace = builder.namespace;
+			mPrivacy = builder.privacy;
 		}
 
 		public static StoryObject create(GraphObject graphObject) {
 			return new StoryObject(graphObject);
 		}
-		
+
 		@Override
 		public Bundle getBundle() {
 			Bundle bundle = new Bundle();
@@ -353,8 +362,13 @@ public class Story implements Publishable {
 			object.setProperty(TITLE, mTitle);
 			object.setProperty(DESCRIPTION, mDescription);
 			object.setProperty(IMAGE, mImage);
-			object.setProperty(DATA, mData.toString());
-			bundle.putString(OBJECT, object.toString());
+			if (mData != null) {
+				object.setProperty(DATA, mData);
+			}
+			bundle.putString(OBJECT, object.getInnerJSONObject().toString());
+			if (mPrivacy != null) {
+				bundle.putString(PRIVACY, mPrivacy.getJSONString());
+			}
 			return bundle;
 		}
 
@@ -429,6 +443,7 @@ public class Story implements Publishable {
 			private String title;
 			private String description;
 			private GraphObject data = null;
+			private Privacy privacy;
 
 			public Builder() {
 			}
@@ -449,11 +464,11 @@ public class Story implements Publishable {
 			/**
 			 * Set name of the noun. For example: food
 			 * 
-			 * @param name
+			 * @param noun
 			 * @return {@link Builder}
 			 */
-			public Builder setName(String name) {
-				this.name = name;
+			public Builder setNoun(String noun) {
+				this.name = noun;
 				return this;
 			}
 
@@ -499,6 +514,24 @@ public class Story implements Publishable {
 			 */
 			public Builder setDescription(String description) {
 				this.description = description;
+				return this;
+			}
+
+			/**
+			 * Set the max privacy of the object. <br>
+			 * <br>
+			 * Your privacy setting can not be more public than what the person
+			 * has chosen for your app. For example, if a person has chosen
+			 * 'Friends' you can't set the privacy of an object to 'Public.' If
+			 * you don't include a privacy parameter, the default privacy
+			 * setting that the person has chosen for the app will be used for
+			 * the privacy of the object.
+			 * 
+			 * @param privacy
+			 * @return
+			 */
+			public Builder setPrivacy(Privacy privacy) {
+				this.privacy = privacy;
 				return this;
 			}
 

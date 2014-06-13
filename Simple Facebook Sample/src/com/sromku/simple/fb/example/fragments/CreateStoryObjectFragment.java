@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.entities.Privacy;
+import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
 import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnCreateStoryObject;
 
-public class CreateObjectFragment extends BaseFragment {
+public class CreateStoryObjectFragment extends BaseFragment {
 
 	private final static String EXAMPLE = "Create open graph object";
 
@@ -39,17 +41,24 @@ public class CreateObjectFragment extends BaseFragment {
 				String appId = SimpleFacebook.getConfiguration().getAppId();
 				String namespace = SimpleFacebook.getConfiguration().getNamespace();
 				
-				// TODO - from here
+				// set privacy
+				Privacy privacy = new Privacy.Builder()
+					.setPrivacySettings(PrivacySettings.FRIENDS_OF_FRIENDS)
+					.build();
+				
+				// build story object
 				StoryObject storyObject = new StoryObject.Builder()
 					.setApp(appId, namespace)
 					.setDescription("sample description")
 					.setImage("http://romkuapps.com/Apps/Romku%20Store/Facebook/images/milk.jpg")
-					.setName("food")
+					.setNoun("food")
 					.setTitle("Milk")
 					.setUrl("https://github.com/sromku/android-simple-facebook")
-					.addProperty("score", 400)
+					.setPrivacy(privacy)
+					.addProperty("score", 330)
 					.build();
 				
+				// create story object
 				SimpleFacebook.getInstance().create(storyObject, new OnCreateStoryObject() {
 
 					@Override
