@@ -13,6 +13,8 @@ import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
+import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
+import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
 import com.sromku.simple.fb.actions.GetCheckinsAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
@@ -597,6 +599,28 @@ public class SimpleFacebook {
 	 */
 	public void getFriends(Properties properties, OnFriendsListener onFriendsListener) {
 		GetFriendsAction getFriendsAction = new GetFriendsAction(mSessionManager);
+		getFriendsAction.setProperties(properties);
+		getFriendsAction.setActionListener(onFriendsListener);
+		getFriendsAction.execute();
+	}
+
+	public void getTaggableFriends(OnFriendsListener onFriendsListener) {
+	    getTaggableFriends(null, onFriendsListener);
+	}
+
+	public void getTaggableFriends(Properties properties, OnFriendsListener onFriendsListener) {
+		GetFriendsAction getFriendsAction = new GetTaggableFriendsAction(mSessionManager);
+		getFriendsAction.setProperties(properties);
+		getFriendsAction.setActionListener(onFriendsListener);
+		getFriendsAction.execute();
+	}
+
+	public void getInvitableFriends(OnFriendsListener onFriendsListener) {
+	    getInvitableFriends(null, onFriendsListener);
+	}
+
+	public void getInvitableFriends(Properties properties, OnFriendsListener onFriendsListener) {
+		GetFriendsAction getFriendsAction = new GetInvitableFriendsAction(mSessionManager);
 		getFriendsAction.setProperties(properties);
 		getFriendsAction.setActionListener(onFriendsListener);
 		getFriendsAction.execute();

@@ -3,6 +3,10 @@ package com.sromku.simple.fb.utils;
 public class GraphPath {
 
 	public static final String FRIENDS = "friends";
+	public static final String FRIEND_LISTS = "friendlists";
+	public static final String TAGGABLE_FRIENDS = "taggable_friends";
+	public static final String INVITABLE_FRIENDS = "invitable_friends";
+	public static final String NONAPP_FRIENDS = "nonapp_friends"; // TBD
 	public static final String ALBUMS = "albums";
 	public static final String SCORES = "scores";
 	public static final String APPREQUESTS = "apprequests";
