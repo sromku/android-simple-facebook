@@ -1172,8 +1172,12 @@ boolean isAllGranted = mSimpleFacebook.isAllPermissionsGranted();
 ```
 
 ### Open Graph
-Currently this feature exists in the library but still in experimental mode. <br>
-The used method is: `publish(Story)` and it is possible to build `Story` entity. It should work, because it works for me, but the final API of this action and `Story` entity aren't finalized yet. 
+This feature was in experimental state and now it's in final development. <br>
+The methods up to now:
+- `create(StoryObject, OnCreateStoryObject)` - Create custom open graph object on facebook servers.
+- `getStoryObjects(String, OnStoryObjectsListener)` - Get custom graph objects that are stored on facebook servers.
+
+The full story publishing api will be available soon.
 
 ### Misc
 
@@ -1200,7 +1204,7 @@ Set `Logger.DEBUG_WITH_STACKTRACE` to `true`
 
 ## Donate
 Just in case :)<br>
-<a href='https://pledgie.com/campaigns/25567'><img alt='Click here to lend your support to: Open source projects and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/25567.png?skin_name=chrome' border='0' ></a>
+[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/sromku/)
 
 ## License
 
