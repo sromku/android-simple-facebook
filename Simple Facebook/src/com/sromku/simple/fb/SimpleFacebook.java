@@ -33,7 +33,6 @@ import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
-import com.sromku.simple.fb.actions.PublishStoryDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
@@ -1609,17 +1608,17 @@ public class SimpleFacebook {
 	 * @param openGraph
 	 * @param onPublishListener
 	 */
-	public void publish(Story story, boolean withDialog, OnPublishListener onPublishListener) {
-		if (!withDialog) {
-			// make it silently
-			publish(story, onPublishListener);
-		} else {
-			PublishStoryDialogAction publishStoryDialogAction = new PublishStoryDialogAction(mSessionManager);
-			publishStoryDialogAction.setStory(story);
-			publishStoryDialogAction.setOnPublishListener(onPublishListener);
-			publishStoryDialogAction.execute();
-		}
-	}
+//	public void publish(Story story, boolean withDialog, OnPublishListener onPublishListener) {
+//		if (!withDialog) {
+//			// make it silently
+//			publish(story, onPublishListener);
+//		} else {
+//			PublishStoryDialogAction publishStoryDialogAction = new PublishStoryDialogAction(mSessionManager);
+//			publishStoryDialogAction.setStory(story);
+//			publishStoryDialogAction.setOnPublishListener(onPublishListener);
+//			publishStoryDialogAction.execute();
+//		}
+//	}
 
 	/**
 	 * Publish photo to specific album. You can use
