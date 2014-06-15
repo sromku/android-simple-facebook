@@ -26,6 +26,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 * [Logout](#logout)
 * [Publish](#publish-feed)
 	* [Feed](#publish-feed)
+	* [Story](#publish-story)
 	* [Photo](#publish-photo)
 	* [Video](#publish-video)
 	* [Score](#publish-score)
@@ -50,6 +51,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 	* [Movies](#get-movies)
 	* [Music](#get-music)
 	* [Notifications](#get-notifications)
+	* [Objects](#get-objects)
 	* [Page](#get-page)
 	* [Photos](#get-photos)
 	* [Posts](#get-posts)
@@ -58,6 +60,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 	* [Television](#get-television)
 	* [Videos](#get-videos)
 * [Additional options](#additional-options)
+	* [Create object](#create-object)
 	* [Pagination](#pagination)
 	* [General 'GET'](#general-get)
 	* [Set privacy settings of a single post](#set-privacy-settings-of-a-single-post)
@@ -298,6 +301,111 @@ And, the **result** is:
 <p align="center">
   <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_feed_advanced.png" alt="Published feed"/>
 </p>
+
+### Publish story
+
+It is possible to create and share open graph stories. Story consists of two main parts:
+- `StoryObject` - The object that you want to appear on the wall.
+- `StoryAction` - The action that relates to the object.
+
+For example: **Eat food** is the definition for many possible food objects that can be eaten. Like: 
+- Eat apple 
+- Eat honey
+- Eat steak, 
+- ... <br>
+
+#### So, what's now? Ok, these are the steps:
+1. Define new custom story in your app dashboard on facebook.
+2. Upload object meta tags that describe your **noun** (object) on your server or create one on facebook servers.
+3. Publish the story.
+
+#### Example: **Eat food**
+
+1. Defined story:
+
+	<p align="center">
+	  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/define_story.png" alt="Published feed"/>
+	</p>
+
+	- Create new object called: `Food` and add new custom property called `calories` of int type.
+	- Create new action called `Eat` and add new custom property called `taste` of string type.
+	- Edit the output of the story including the custom values.
+
+	<p align="center">
+	  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/define_story_output.png" alt="Published feed"/>
+	</p>
+	<p align="center">
+	  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/define_story_attachment.png" alt="Published feed"/>
+	</p>
+
+2. Upload object:
+
+	Two options are possible:
+
+	1. Use `create(StoryObject, OnCreateStoryObject)` - to create objects and upload them to facebook servers
+	2. Upload story meta tags to your private servers.
+
+	I used the **option 2**. Create these html page and upload to your server:
+	``` html
+	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# sromkuapp_vtwo: http://ogp.me/ns/fb/sromkuapp_vtwo#">
+	  <meta property="fb:app_id"               content="728615400528729" /> 
+	  <meta property="og:type"                 content="sromkuapp_vtwo:food" /> 
+	  <meta property="og:url"                  content="http://romkuapps.com/github/simple-facebook/object-apple.html" /> 
+	  <meta property="og:title"                content="Apple" /> 
+	  <meta property="og:image"                content="http://romkuapps.com/github/simple-facebook/apple.jpg" /> 
+	  <meta property="og:description"          content="The apple is the pomaceous fruit of the apple tree, Malus domestica of the rose family. It is one of the most widely cultivated tree fruits." /> 
+	  <meta property="sromkuapp_vtwo:calories" content="52" /> 
+	```
+
+	I uploaded it to: `http://romkuapps.com/github/simple-facebook/object-apple.html`
+
+3. Publish the story:
+
+	Initialize callback listener:
+	``` java
+	OnPublishListener onPublishListener = new OnPublishListener() {
+		@Override
+		public void onComplete(String id) {
+			Log.i(TAG, "Published successfully. id = " + id);
+		}
+
+		/* 
+		 * You can override other methods here: 
+		 * onThinking(), onFail(String reason), onException(Throwable throwable)
+		 */
+	};
+	```
+
+	Build story for publishing:
+	``` java
+	// set object to be shared
+	StoryObject storyObject = new StoryObject.Builder()
+		.setUrl("http://romkuapps.com/github/simple-facebook/object-apple.html")
+		.setNoun("food")
+		.build();
+
+	// set action to be done 
+	StoryAction storyAction = new StoryAction.Builder()
+		.setAction("eat")
+		.addProperty("taste", "sweet")
+		.build();
+					
+	// build story
+	Story story = new Story.Builder()
+		.setObject(storyObject)
+		.setAction(storyAction)
+		.build();
+
+	// publish
+	mSimpleFacebook.publish(story, onPublishListener);
+	```
+
+	The result:
+	<p align="center">
+		<img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/publish_story.png" alt="Published feed"/>
+	</p>
+
+	More examples and info will be added in wiki.
 
 ### Publish photo
 
@@ -1176,8 +1284,7 @@ This feature was in experimental state and now it's in final development. <br>
 The methods up to now:
 - `create(StoryObject, OnCreateStoryObject)` - Create custom open graph object on facebook servers.
 - `getStoryObjects(String, OnStoryObjectsListener)` - Get custom graph objects that are stored on facebook servers.
-
-The full story publishing api will be available soon.
+- `publish(Story, OnPublishListener)` - Publish story see [Publish story](#publish-story) section.
 
 ### Misc
 
