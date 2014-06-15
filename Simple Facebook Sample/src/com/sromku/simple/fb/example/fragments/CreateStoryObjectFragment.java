@@ -38,9 +38,6 @@ public class CreateStoryObjectFragment extends BaseFragment {
 			@Override
 			public void onClick(View v) {
 				
-				String appId = SimpleFacebook.getConfiguration().getAppId();
-				String namespace = SimpleFacebook.getConfiguration().getNamespace();
-				
 				// set privacy
 				Privacy privacy = new Privacy.Builder()
 					.setPrivacySettings(PrivacySettings.FRIENDS_OF_FRIENDS)
@@ -48,9 +45,8 @@ public class CreateStoryObjectFragment extends BaseFragment {
 				
 				// build story object
 				StoryObject storyObject = new StoryObject.Builder()
-					.setApp(appId, namespace)
 					.setDescription("The apple is the pomaceous fruit of the apple tree, Malus domestica of the rose family. It is one of the most widely cultivated tree fruits.")
-					.setImage("http://upload.wikimedia.org/wikipedia/commons/e/ee/Apples.jpg")
+					.setImage("http://romkuapps.com/github/simple-facebook/apple.jpg")
 					.setNoun("food")
 					.setTitle("Apple")
 					.setUrl("https://github.com/sromku/android-simple-facebook")
