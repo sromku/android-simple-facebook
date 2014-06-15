@@ -28,7 +28,7 @@ public class Story implements Publishable {
 		 * set object id (that is hosted on facebook server) or url (that is
 		 * hosted on your servers)
 		 */
-		if (storyObject.getId() == null) {
+		if (storyObject.getId() != null) {
 			bundle.putString(storyObject.getNoun(), storyObject.getId());
 		} else {
 			bundle.putString(storyObject.getNoun(), storyObject.getUrl());
@@ -100,6 +100,9 @@ public class Story implements Publishable {
 			}
 
 			public Builder addProperty(String param, String value) {
+				if (bundle == null) {
+					bundle = new Bundle();
+				}
 				bundle.putString(param, value);
 				return this;
 			}
