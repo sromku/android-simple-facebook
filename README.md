@@ -327,9 +327,9 @@ For example: **Eat food** is the definition for many possible food objects that 
 	  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/define_story.png" alt="Published feed"/>
 	</p>
 
-	- Create new object called: `Food` and add new custom property called `calories` of int type.
-	- Create new action called `Eat` and add new custom property called `taste` of string type.
-	- Edit the output of the story including the custom values.
+	± Create new object called: `Food` and add new custom property called `calories` of int type. <br>
+	± Create new action called `Eat` and add new custom property called `taste` of string type. <br>
+	± Edit the output of the story including the custom values.
 
 	<p align="center">
 	  <img src="https://raw.github.com/sromku/android-simple-facebook/master/Refs/define_story_output.png" alt="Published feed"/>
