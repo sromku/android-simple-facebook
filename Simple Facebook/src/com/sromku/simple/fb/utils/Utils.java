@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -18,6 +19,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -506,6 +510,25 @@ public class Utils {
 			}
 		}
 		return sb.toString();
+	}
+
+	@SuppressWarnings("resource")
+	public static String encode(String key, String data) {
+		try {
+			Mac mac = Mac.getInstance("HmacSHA256");
+			SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+			mac.init(secretKey);
+			byte[] bytes = mac.doFinal(data.getBytes());
+			StringBuilder sb = new StringBuilder(bytes.length * 2);
+			Formatter formatter = new Formatter(sb);
+			for (byte b : bytes) {
+				formatter.format("%02x", b);
+			}
+			return sb.toString();
+		} catch (Exception e) {
+			Logger.logError(Utils.class, "Failed to create sha256", e);
+			return null;
+		}
 	}
 
 }

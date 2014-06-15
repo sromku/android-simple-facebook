@@ -15,6 +15,8 @@ public class SimpleFacebookConfiguration {
 	private SessionLoginBehavior mLoginBehavior = null;
 	private boolean mHasPublishPermissions = false;
 	boolean mAllAtOnce = false;
+	private boolean mUseAppsecretProof = false;
+	private String mAppSecret = null;
 
 	private SimpleFacebookConfiguration(Builder builder) {
 		this.mAppId = builder.mAppId;
@@ -24,6 +26,8 @@ public class SimpleFacebookConfiguration {
 		this.mDefaultAudience = builder.mDefaultAudience;
 		this.mLoginBehavior = builder.mLoginBehavior;
 		this.mAllAtOnce = builder.mAllAtOnce;
+		this.mUseAppsecretProof = builder.mUseAppsecretProof;
+		this.mAppSecret = builder.mAppSecret;
 
 		if (this.mPublishPermissions.size() > 0) {
 			this.mHasPublishPermissions = true;
@@ -94,6 +98,26 @@ public class SimpleFacebookConfiguration {
 	}
 
 	/**
+	 * Return <code>True</code> if appsecret_proof should be passed with graph
+	 * api calls, otherwise return <code>False</code>
+	 * 
+	 * @return The app secret proof
+	 * @see https://developers.facebook.com/docs/graph-api/securing-requests
+	 */
+	public boolean useAppsecretProof() {
+		return mUseAppsecretProof;
+	}
+
+	/**
+	 * Get the app secret
+	 * 
+	 * @return The app secret
+	 */
+	public String getAppSecret() {
+		return mAppSecret;
+	}
+
+	/**
 	 * Return <code>True</code> if all permissions - read and publish should be
 	 * asked one after another in the same time after logging in.
 	 */
@@ -137,6 +161,8 @@ public class SimpleFacebookConfiguration {
 		private SessionDefaultAudience mDefaultAudience = SessionDefaultAudience.FRIENDS;
 		private SessionLoginBehavior mLoginBehavior = SessionLoginBehavior.SSO_WITH_FALLBACK;
 		private boolean mAllAtOnce = false;
+		private boolean mUseAppsecretProof = false;
+		private String mAppSecret = null;
 
 		public Builder() {
 		}
@@ -222,6 +248,31 @@ public class SimpleFacebookConfiguration {
 		 */
 		public Builder setAskForAllPermissionsAtOnce(boolean allAtOnce) {
 			mAllAtOnce = allAtOnce;
+			return this;
+		}
+
+		/**
+		 * Set <code>True</code> if appsecret_proof should be passed with graph
+		 * api calls, otherwise set <code>False</code>. <b>Set app secret</b>
+		 * {@link #setAppSecret(String)} to be able to use this feature.<br>
+		 * <br>
+		 * The default value is <code>False</code>
+		 */
+		public Builder useAppsecretProof(boolean use) {
+			mUseAppsecretProof = use;
+			return this;
+		}
+
+		/**
+		 * Set the app secret string. The app secret is shown in your app
+		 * dashboard settings. <br>
+		 * <b>It is highly suggested not to save this string hard coded in your
+		 * app</b>
+		 * 
+		 * @param appSecret
+		 */
+		public Builder setAppSecret(String appSecret) {
+			mAppSecret = appSecret;
 			return this;
 		}
 

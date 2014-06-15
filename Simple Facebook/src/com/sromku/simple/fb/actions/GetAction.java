@@ -35,19 +35,16 @@ public class GetAction<T> extends AbstractAction {
 				if (actionListener != null) {
 					actionListener.onException(error.getException());
 				}
-			}
-			else {
+			} else {
 				if (response.getGraphObject() == null) {
 					Logger.logError(GetAction.class, "The response GraphObject has null value. Response=" + response.toString(), null);
-				}
-				else {
+				} else {
 					if (actionListener != null) {
 						try {
 							updateCursor(response);
 							T result = processResponse(response);
 							actionListener.onComplete(result);
-						}
-						catch (Exception e) {
+						} catch (Exception e) {
 							actionListener.onException(e);
 						}
 					}
@@ -59,7 +56,7 @@ public class GetAction<T> extends AbstractAction {
 	public GetAction(SessionManager sessionManager) {
 		super(sessionManager);
 	}
-	
+
 	public void setEdge(String edge) {
 		mEdge = edge;
 	}
@@ -79,10 +76,10 @@ public class GetAction<T> extends AbstractAction {
 		OnActionListener<T> actionListener = getActionListener();
 		if (sessionManager.isLogin(true)) {
 			Session session = sessionManager.getActiveSession();
-			Request request = new Request(session, getGraphPath(), getBundle(), HttpMethod.GET);
+			Bundle bundle = updateAppSecretProof(getBundle());
+			Request request = new Request(session, getGraphPath(), bundle, HttpMethod.GET);
 			runRequest(request);
-		}
-		else {
+		} else {
 			String reason = Errors.getError(ErrorMsg.LOGIN);
 			Logger.logError(getClass(), reason, null);
 			if (actionListener != null) {
@@ -91,10 +88,28 @@ public class GetAction<T> extends AbstractAction {
 		}
 	}
 
+	/**
+	 * Update the params to contain 'appsecret_proof' if it was asked in
+	 * SimpleFacebookConfiguration.
+	 * 
+	 * @param bundle
+	 * @return Updated bundle
+	 * @see https://developers.facebook.com/docs/graph-api/securing-requests
+	 */
+	private Bundle updateAppSecretProof(Bundle bundle) {
+		if (configuration.useAppsecretProof()) {
+			if (bundle == null) {
+				bundle = new Bundle();
+			}
+			bundle.putString("appsecret_proof", Utils.encode(configuration.getAppSecret(), sessionManager.getAccessToken()));
+		}
+		return bundle;
+	}
+
 	protected String getTarget() {
 		return mTarget;
 	}
-	
+
 	protected String getGraphPath() {
 		if (mEdge != null) {
 			return mTarget + "/" + mEdge;
