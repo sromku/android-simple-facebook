@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.facebook.model.GraphObject;
 import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -17,20 +18,34 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Story implements Publishable {
 
-	private static final String ID = "id";
 	private StoryObject storyObject;
 	private StoryAction storyAction;
 
 	@Override
 	public Bundle getBundle() {
 		Bundle bundle = new Bundle();
-		// bundle.putString(storyObject., value)
+		/*
+		 * set object id (that is hosted on facebook server) or url (that is
+		 * hosted on your servers)
+		 */
+		if (storyObject.getId() == null) {
+			bundle.putString(storyObject.getNoun(), storyObject.getId());
+		} else {
+			bundle.putString(storyObject.getNoun(), storyObject.getUrl());
+		}
+
+		// put action params if such exist
+		if (storyAction.getParams() != null) {
+			bundle.putAll(storyAction.getParams());
+		}
+
 		return bundle;
 	}
 
 	@Override
 	public String getPath() {
-		return null;
+		String namespace = SimpleFacebook.getConfiguration().getNamespace();
+		return namespace + ":" + storyAction.getActionName();
 	}
 
 	@Override
@@ -43,7 +58,7 @@ public class Story implements Publishable {
 		storyAction = buidler.storyAction;
 	}
 
-	public class Builder {
+	public static class Builder {
 
 		private StoryObject storyObject;
 		private StoryAction storyAction;
@@ -64,166 +79,6 @@ public class Story implements Publishable {
 
 	}
 
-	// private final ActionOpenGraph mAction;
-	// private final ObjectOpenGraph mObject;
-	//
-	// private Story(ActionOpenGraph action, ObjectOpenGraph object) {
-	// mAction = action;
-	// mObject = object;
-	//
-	// // Connect between object and action
-	// mAction.putProperty(mObject.getObjectName(), mObject.getObjectUrl());
-	// }
-	//
-	// @Override
-	// public Bundle getBundle() {
-	// return mAction.getProperties();
-	// }
-	//
-	// @Override
-	// public String getPath() {
-	// return SimpleFacebook.getConfiguration().getNamespace() + ":" +
-	// mAction.getActionName();
-	// }
-	//
-	// @Override
-	// public Permission getPermission() {
-	// return Permission.PUBLISH_ACTION;
-	// }
-	//
-	// public String getGraphPath(String appNamespace) {
-	// return "me" + "/" + appNamespace + ":" + mAction.getActionName();
-	// }
-	//
-	// public Bundle getActionBundle() {
-	// return mAction.getProperties();
-	// }
-	//
-	// public static class Builder {
-	// private String mObjectName = null;
-	// private String mObjectUrl = null;
-	// private String mActionName = null;
-	// private final Bundle mObjectBundle;
-	// private final Bundle mActionBundle;
-	//
-	// public Builder() {
-	// mObjectBundle = new Bundle();
-	// mActionBundle = new Bundle();
-	// }
-	//
-	// public Builder setObject(String objectName, String objectUrl) {
-	// mObjectName = objectName;
-	// mObjectUrl = objectUrl;
-	// return this;
-	// }
-	//
-	// public Builder addObjectProperty(String property, String value) {
-	// mObjectBundle.putString(property, value);
-	// return this;
-	// }
-	//
-	// public Builder setAction(String action) {
-	// mActionName = action;
-	// return this;
-	// }
-	//
-	// public Builder addActionProperty(String property, String value) {
-	// mActionBundle.putString(property, value);
-	// return this;
-	// }
-	//
-	// public Builder addActionProperty(String property, boolean value) {
-	// mActionBundle.putBoolean(property, value);
-	// return this;
-	// }
-	//
-	// public Story build() {
-	// // create story
-	// ObjectOpenGraph object = new ObjectOpenGraph(mObjectName, mObjectUrl);
-	// object.setProperties(mObjectBundle);
-	//
-	// ActionOpenGraph action = new ActionOpenGraph(mActionName);
-	// action.setProperties(mActionBundle);
-	//
-	// return new Story(action, object);
-	// }
-	//
-	// boolean isEmpty(String str) {
-	// return str == null || str.length() == 0;
-	// }
-	// }
-	//
-	// /**
-	// * Action of the open graph
-	// *
-	// * @author sromku
-	// */
-	static class ActionOpenGraph {
-		private Bundle mBundle;
-		private final String mActionName;
-
-		ActionOpenGraph(String actionName) {
-			mBundle = new Bundle();
-			mActionName = actionName;
-		}
-
-		void putProperty(String property, String value) {
-			mBundle.putString(property, value);
-		}
-
-		void setProperties(Bundle bundle) {
-			this.mBundle = bundle;
-		}
-
-		Bundle getProperties() {
-			return mBundle;
-		}
-
-		String getActionName() {
-			return mActionName;
-		}
-	}
-
-	//
-	// /**
-	// * Object of the open graph
-	// *
-	// * @author sromku
-	// *
-	// */
-	// static class ObjectOpenGraph {
-	// private Bundle mBundle;
-	// private final String mHostFileUrl;
-	// private final String mObjectName;
-	//
-	// ObjectOpenGraph(String objectName, String hostFileUrl) {
-	// mBundle = new Bundle();
-	// mHostFileUrl = hostFileUrl;
-	// mObjectName = objectName;
-	// }
-	//
-	// void putProperty(String property, String value) {
-	// mBundle.putString(property, value);
-	// }
-	//
-	// void setProperties(Bundle bundle) {
-	// this.mBundle = bundle;
-	// }
-	//
-	// Bundle getProperties() {
-	// return mBundle;
-	// }
-	//
-	// String getObjectName() {
-	// return mObjectName;
-	// }
-	//
-	// String getObjectUrl() {
-	// return mHostFileUrl + "?" + encodeUrl(mBundle);
-	// }
-	//
-	// }
-
 	public static class StoryAction {
 
 		private Bundle mBundle;
@@ -234,17 +89,17 @@ public class Story implements Publishable {
 			mActionName = builder.actionName;
 		}
 
-		public class Builder {
+		public static class Builder {
 
 			private Bundle bundle;
 			private String actionName;
 
-			public Builder setName(String name) {
-				this.actionName = name;
+			public Builder setAction(String actionName) {
+				this.actionName = actionName;
 				return this;
 			}
 
-			public Builder put(String param, String value) {
+			public Builder addProperty(String param, String value) {
 				bundle.putString(param, value);
 				return this;
 			}
@@ -254,7 +109,7 @@ public class Story implements Publishable {
 			}
 		}
 
-		public String getName() {
+		public String getActionName() {
 			return mActionName;
 		}
 
@@ -267,7 +122,6 @@ public class Story implements Publishable {
 		}
 	}
 
-	// TODO - Add The privacy parameter
 	public static class StoryObject implements Publishable {
 
 		private static final String ID = "id";
@@ -292,10 +146,9 @@ public class Story implements Publishable {
 		private Long mUpdatedTime;
 		private Long mCreatedTime;
 		private GraphObject mData;
-		private String mAppId;
-		private String mNamespace;
 		private Application mApplication;
 		private Privacy mPrivacy;
+		private String mNoun;
 
 		private StoryObject(GraphObject graphObject) {
 
@@ -304,6 +157,12 @@ public class Story implements Publishable {
 
 			// type
 			mType = Utils.getPropertyString(graphObject, TYPE);
+			if (mType != null) {
+				String[] split = mType.split(":");
+				if (split.length > 0) {
+					mNoun = split[1];
+				}
+			}
 
 			// title
 			mTitle = Utils.getPropertyString(graphObject, TITLE);
@@ -328,22 +187,20 @@ public class Story implements Publishable {
 
 			// application
 			mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-			mAppId = mApplication.getAppId();
-			mNamespace = mApplication.getAppNamespace();
 
 			// data
 			mData = Utils.getPropertyGraphObject(graphObject, DATA);
 		}
 
 		private StoryObject(Builder builder) {
-			mType = builder.namespace + ":" + builder.name;
+			String namespace = SimpleFacebook.getConfiguration().getNamespace();
+			mType = namespace + ":" + builder.noun;
+			mNoun = builder.noun;
 			mTitle = builder.title;
 			mUrl = builder.url;
 			mDescription = builder.description;
 			mData = builder.data;
 			mImage = builder.image;
-			mAppId = builder.appId;
-			mNamespace = builder.namespace;
 			mPrivacy = builder.privacy;
 		}
 
@@ -355,13 +212,10 @@ public class Story implements Publishable {
 		public Bundle getBundle() {
 			Bundle bundle = new Bundle();
 			GraphObject object = GraphObject.Factory.create();
-			object.setProperty("app_id", mAppId);
-			object.setProperty(TYPE, mType);
 			object.setProperty(URL, mUrl);
 			object.setProperty(IMAGE, mImage);
 			object.setProperty(TITLE, mTitle);
 			object.setProperty(DESCRIPTION, mDescription);
-			object.setProperty(IMAGE, mImage);
 			if (mData != null) {
 				object.setProperty(DATA, mData);
 			}
@@ -388,6 +242,10 @@ public class Story implements Publishable {
 
 		public String getType() {
 			return mType;
+		}
+
+		public String getNoun() {
+			return mNoun;
 		}
 
 		public String getTitle() {
@@ -435,9 +293,7 @@ public class Story implements Publishable {
 
 		public static class Builder {
 
-			private String namespace;
-			private String name;
-			private String appId;
+			private String noun;
 			private String url;
 			private String image;
 			private String title;
@@ -449,26 +305,13 @@ public class Story implements Publishable {
 			}
 
 			/**
-			 * TODO - try to remove this method
-			 * 
-			 * @param appId
-			 * @param namespace
-			 * @return
-			 */
-			public Builder setApp(String appId, String namespace) {
-				this.appId = appId;
-				this.namespace = namespace;
-				return this;
-			}
-
-			/**
-			 * Set name of the noun. For example: food
+			 * Set the noun. For example: food
 			 * 
 			 * @param noun
 			 * @return {@link Builder}
 			 */
 			public Builder setNoun(String noun) {
-				this.name = noun;
+				this.noun = noun;
 				return this;
 			}
 
@@ -497,7 +340,7 @@ public class Story implements Publishable {
 
 			/**
 			 * Set the title of the object. This is the concrete instance of
-			 * noun. For example: steak, honey, ...
+			 * noun. For example: steak, honey, apple, ...
 			 * 
 			 * @param title
 			 * @return {@link Builder}
