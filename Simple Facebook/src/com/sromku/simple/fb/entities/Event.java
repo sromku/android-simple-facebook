@@ -102,6 +102,14 @@ public class Event {
 		 */
 		MAYBE("maybe"),
 		/**
+		 * Events that user created
+		 */
+		CREATED("created"),
+		/**
+		 * Events that user not replied
+		 */
+		NOT_REPLIED("not_replied"),
+		/**
 		 * Events that user declined
 		 */
 		DECLINED("declined");

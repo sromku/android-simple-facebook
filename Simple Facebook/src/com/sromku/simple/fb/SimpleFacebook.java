@@ -268,7 +268,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_PHOTOS}<br>
-	 * {@link Permission#FRIENDS_PHOTOS}
 	 * 
 	 * @param entityId
 	 *            profile id or page id.
@@ -352,7 +351,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPageListener
 	 * <br>
@@ -375,7 +373,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPageListener
 	 * <br>
@@ -397,7 +394,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_CHECKINS}<br>
-	 * {@link Permission#FRIENDS_CHECKINS}
 	 * 
 	 * @param onCheckinsListener
 	 *            The callback listener.
@@ -420,7 +416,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_CHECKINS}<br>
-	 * {@link Permission#FRIENDS_CHECKINS}
 	 * 
 	 * @param entityId
 	 *            profile id or page id.
@@ -451,8 +446,7 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get comments of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} or
-	 * {@link Permission#FRIENDS_PHOTOS} for getting the comments of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting the comments of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -473,7 +467,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_EVENTS}<br>
-	 * {@link Permission#FRIENDS_EVENTS}
 	 * 
 	 * @param eventDecision
 	 *            The type of event: attending, maybe, declined.
@@ -499,7 +492,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_EVENTS}<br>
-	 * {@link Permission#FRIENDS_EVENTS}
 	 * 
 	 * @param entityId
 	 *            Profile, Page or Group.
@@ -548,7 +540,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_RELATIONSHIPS}<br>
-	 * {@link Permission#FRIENDS_RELATIONSHIPS}<br>
 	 * 
 	 * @param entityId
 	 * @param onFamilyListener
@@ -664,7 +655,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPagesListener
 	 * <br>
@@ -687,7 +677,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPageListener
 	 * <br>
@@ -730,7 +719,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_GROUPS}<br>
-	 * {@link Permission#FRIENDS_GROUPS}
 	 * 
 	 * @param entityId
 	 *            Profile
@@ -761,8 +749,7 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get likes of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} or
-	 * {@link Permission#FRIENDS_PHOTOS} for getting likes of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting likes of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -834,7 +821,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPagesListener
 	 * <br>
@@ -857,7 +843,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPageListener
 	 * <br>
@@ -931,7 +916,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPagesListener
 	 * <br>
@@ -954,7 +938,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPageListener
 	 * <br>
@@ -1061,7 +1044,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_PHOTOS}<br>
-	 * {@link Permission#FRIENDS_PHOTOS}
 	 * 
 	 * @param entityId
 	 *            Album, Event, Page, Profile
@@ -1378,7 +1360,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPagesListener
 	 * <br>
@@ -1401,7 +1382,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}<br>
 	 * 
 	 * @param onPagesListener
 	 * <br>
@@ -1445,7 +1425,6 @@ public class SimpleFacebook {
 	 * 
 	 * <b>Permission:</b><br>
 	 * {@link Permission#USER_VIDEOS}<br>
-	 * {@link Permission#FRIENDS_VIDEOS}
 	 * 
 	 * @param entityId
 	 *            Profile, Page, Event
