@@ -44,7 +44,7 @@ public class PublishPhotoFragment extends BaseFragment {
 
 				// set privacy
 				Privacy privacy = new Privacy.Builder()
-					.setPrivacySettings(PrivacySettings.SELF)
+					.setPrivacySettings(PrivacySettings.ALL_FRIENDS)
 					.build();
 
 				// create Photo instance and add some properties

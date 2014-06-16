@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.actions.Cursor;
 import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.utils.Utils;
@@ -47,7 +48,18 @@ public class GetFriendsFragment extends BaseFragment{
 				mAllPages = "";
 				mResult.setText(mAllPages);
 
-				SimpleFacebook.getInstance().getFriends(new OnFriendsListener() {
+				Properties properties = new Properties.Builder()
+					.add(Profile.Properties.ID)
+					.add(Profile.Properties.FIRST_NAME)
+					.add(Profile.Properties.LAST_NAME)
+					.add(Profile.Properties.BIRTHDAY)
+					.add(Profile.Properties.AGE_RANGE)
+					.add(Profile.Properties.EMAIL)
+					.add(Profile.Properties.GENDER)
+					.add(Profile.Properties.INSTALLED)
+					.build();
+				
+				SimpleFacebook.getInstance().getFriends(properties, new OnFriendsListener() {
 
 					@Override
 					public void onThinking() {
