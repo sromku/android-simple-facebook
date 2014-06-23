@@ -200,6 +200,7 @@ public class Story implements Publishable {
 			mType = namespace + ":" + builder.noun;
 			mNoun = builder.noun;
 			mTitle = builder.title;
+			mId = builder.id;
 			mUrl = builder.url;
 			mDescription = builder.description;
 			mData = builder.data;
@@ -296,6 +297,7 @@ public class Story implements Publishable {
 
 		public static class Builder {
 
+			private String id;
 			private String noun;
 			private String url;
 			private String image;
@@ -327,6 +329,17 @@ public class Story implements Publishable {
 			 */
 			public Builder setUrl(String url) {
 				this.url = url;
+				return this;
+			}
+			
+			/**
+			 * Set the id of the object that was created on facebook servers.
+			 * 
+			 * @param id The object id
+			 * @return {@link Builder}
+			 */
+			public Builder setId(String id) {
+				this.id = id;
 				return this;
 			}
 
