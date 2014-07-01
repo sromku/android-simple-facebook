@@ -50,10 +50,21 @@ public class Feed implements Publishable {
 			public static final String PROPERTIES = "properties";
 			public static final String ACTIONS = "actions";
 			public static final String PRIVACY = "privacy";
+			public static final String PLACE = "place";
 		}
 
 		public Builder() {
 			mBundle = new Bundle();
+		}
+		
+		/**
+		 * 
+		 * @param pageId the pageId of the place
+		 * @return
+		 */
+		public Builder setPlace(String pageId){
+			mBundle.putString(Parameters.PLACE, pageId);
+			return this;
 		}
 
 		/**
