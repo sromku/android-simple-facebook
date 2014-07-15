@@ -143,7 +143,7 @@ Add next lines in your `Application` or `Activity` class.
 ## Usage
 
 #### 1. `onResume()`
-In each `Activity` where you want to use the library, just override  `onResume()` and set `SimpleFacebook` instance:
+In each `Activity` where you want to use the library, just override the `onResume()` and set `SimpleFacebook` instance:
 
 ``` java
 @Override
