@@ -3,4 +3,10 @@ gen
 .DS_Store
 *.class
 *.sh
-.settings
+.settings/
+.classpath
+build/
+
+*.orig
+
+.gradle/
