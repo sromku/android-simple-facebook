@@ -110,7 +110,7 @@ public class SimpleFacebook {
 	public static void initialize(Activity activity) {
 		if (mInstance == null) {
 			mInstance = new SimpleFacebook();
-			mSessionManager = new SessionManager(mActivity, mConfiguration);
+			mSessionManager = new SessionManager(activity, mConfiguration);
 		}
 		mActivity = activity;
 		SessionManager.activity = activity;
