@@ -1,6 +1,10 @@
 package com.sromku.simple.fb.entities;
 
+import android.os.Bundle;
+
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 /**
@@ -9,12 +13,13 @@ import com.sromku.simple.fb.utils.Utils;
  * @author sromku
  * @see https://developers.facebook.com/docs/reference/api/album
  */
-public class Album {
+public class Album implements Publishable {
 
 	private static final String ID = "id";
 	private static final String FROM = "from";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
+	private static final String MESSAGE = "message";
 	private static final String LOCATION = "location";
 	private static final String LINK = "link";
 	private static final String COUNT = "count";
@@ -34,6 +39,7 @@ public class Album {
 	private String mLink = null;
 	private Integer mCount = null;
 	private String mPrivacy = null;
+	private Privacy mPublishPrivacy = null;
 	private String mCoverPhotoId = null;
 	private String mType = null;
 	private long mCreatedTime;
@@ -84,6 +90,13 @@ public class Album {
 
 		// can upload
 		mCanUpload = Utils.getPropertyBoolean(graphObject, CAN_UPLOAD);
+	}
+
+	private Album(Builder builder) {
+		mGraphObject = null;
+		mName = builder.mName;
+		mDescription = builder.mMessage;
+		mPublishPrivacy = builder.mPublishPrivacy;
 	}
 
 	/**
@@ -226,4 +239,84 @@ public class Album {
 		return mCanUpload;
 	}
 
+	public Bundle getBundle() {
+		Bundle bundle = new Bundle();
+
+		// add name
+		if (mName != null) {
+			bundle.putString(NAME, mName);
+		}
+
+		// add description
+		if (mDescription != null) {
+			bundle.putString(MESSAGE, mDescription);
+		}
+
+		// add privacy
+		if (mPublishPrivacy != null) {
+			bundle.putString(PRIVACY, mPublishPrivacy.getJSONString());
+		}
+
+		return bundle;
+	}
+
+	/**
+	 * Builder for preparing the Album object to be published.
+	 */
+	public static class Builder {
+		private String mName = null;
+		private String mMessage = null;
+		private Privacy mPublishPrivacy = null;
+
+		public Builder() {
+		}
+
+		/**
+		 * Add name to the album 
+		 *
+		 * @param name
+		 *			The name of the album 
+		 */
+		public Builder setName(String name) {
+			mName = name;
+			return this;
+		}
+
+		/**
+		 * Add description to the album
+		 *
+		 * @param message
+		 *			The description of the album 
+		 */
+		public Builder setMessage(String message) {
+			mMessage = message;
+			return this;
+		}
+
+		/**
+		 * Add privacy setting to the photo
+		 *
+		 * @param privacy
+		 *			The privacy setting of the album 
+		 * @see com.sromku.simple.fb.entities.Privacy
+		 */
+		public Builder setPrivacy(Privacy privacy) {
+			mPublishPrivacy = privacy;
+			return this;
+		}
+
+		public Album build() {
+			return new Album(this);
+		}
+	}
+
+	@Override
+	public String getPath() {
+		return GraphPath.ALBUMS;
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.PUBLISH_ACTION;
+	}
 }
