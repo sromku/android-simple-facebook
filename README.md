@@ -27,6 +27,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 * [Publish](#publish-feed)
 	* [Feed](#publish-feed)
 	* [Story](#publish-story)
+	* [Album](#publish-album)
 	* [Photo](#publish-photo)
 	* [Video](#publish-video)
 	* [Score](#publish-score)
@@ -406,6 +407,39 @@ For example: **Eat food** is the definition for many possible food objects that 
 	</p>
 
 	More examples and info will be added in wiki.
+
+### Publish album 
+
+Create new album.<br>
+
+Initialize callback listener:
+``` java
+OnPublishListener onPublishListener = new OnPublishListener() {
+	@Override
+	public void onComplete(String id) {
+		Log.i(TAG, "Published successfully. id = " + id);
+	}
+
+	/* 
+	 * You can override other methods here: 
+	 * onThinking(), onFail(String reason), onException(Throwable throwable)
+	 */
+};
+```
+
+Build album for publishing:
+``` java
+// create Album instance and add some properties
+Album album = new Album.Builder()
+  .setName("Album name")
+  .setMessage("Album create by #android_simple_facebook sample application")
+  .build();
+```
+
+Create album:
+``` java
+mSimpleFacebook.publish(album, onPublishListener);
+```
 
 ### Publish photo
 

@@ -1624,6 +1624,27 @@ public class SimpleFacebook {
 //	}
 
 	/**
+	 * Create new album.<br>
+	 * <br>
+	 * 
+	 * <b>Permission:</b><br>
+	 * {@link Permission#PUBLISH_ACTION}<br>
+	 * <br>
+	 * 
+	 * <b>Important:</b><br>
+	 * Make sure has {@link Permission#USER_PHOTOS} permission<br>
+	 * before use this function.<br>
+	 * 
+	 * @param album 
+	 *            The album to create 
+	 * @param onPublishListener
+	 *            The callback listener
+	 */
+	public void publish(Album album, OnPublishListener onPublishListener) {
+		publish("me", (Publishable) album, onPublishListener);
+	}
+
+	/**
 	 * Publish photo to specific album. You can use
 	 * {@link #getAlbums(OnAlbumsRequestListener)} to retrieve all user's
 	 * albums.<br>
