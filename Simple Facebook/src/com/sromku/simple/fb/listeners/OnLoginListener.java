@@ -9,24 +9,16 @@ import com.sromku.simple.fb.Permission;
  * 
  * @author sromku
  */
-public class OnLoginListener implements IOnLoginListener {
-    @Override
-    public void onLogin() {
-    }
+public interface OnLoginListener extends OnThinkingListetener {
+	/**
+	 * If user performed {@link FacebookTools#login(Activity)} action, this
+	 * callback method will be invoked
+	 */
+	void onLogin();
 
-    @Override
-    public void onNotAcceptingPermissions(Permission.Type type) {
-    }
-
-    @Override
-    public void onException(Throwable throwable) {
-    }
-
-    @Override
-    public void onFail(String reason) {
-    }
-
-    @Override
-    public void onThinking() {
-    }
+	/**
+	 * If user pressed 'cancel' in one of the permissions dialog (READ or
+	 * PUBLISH)
+	 */
+	void onNotAcceptingPermissions(Permission.Type type);
 }
