@@ -384,7 +384,7 @@ public class Profile implements User {
 	 * 
 	 * @return the timezone of the user
 	 */
-	public int getTimeZone() {
+	public Integer getTimeZone() {
 		return mTimeZone;
 	}
 
