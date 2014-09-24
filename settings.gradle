@@ -1,0 +1,4 @@
+include ':facebook-android-sdk:facebook'
+project(':facebook-android-sdk:facebook').projectDir = new File(settingsDir, '../facebook-android-sdk/facebook')
+include ':Simple Facebook'
+include ':Simple Facebook Sample'
