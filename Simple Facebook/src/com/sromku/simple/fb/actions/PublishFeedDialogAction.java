@@ -64,14 +64,20 @@ public class PublishFeedDialogAction extends AbstractAction {
 						sessionManager.untrackPendingCall();
 						boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
 						String postId = FacebookDialog.getNativeDialogPostId(data);
-						
 						String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
 						
-						if (didComplete && completeGesture.equals("post")) {
-                            				mOnPublishListener.onComplete(postId!=null?postId:"no postId return");
-                        			} else {
-                            				mOnPublishListener.onFail("Canceled by user");
-                				}
+						//didComplete is meaningless when completeGesture can determine the result
+						if(completeGesture != null){
+							if(completeGesture.equals("post")) {
+                            					mOnPublishListener.onComplete(postId!=null?postId:"no postId return");
+                        				} else {
+                            					mOnPublishListener.onFail("Canceled by user");
+                					}	
+						} else {
+							mOnPublishListener.onFail("Canceled by user");
+						}
+							
+						
 					}
 				});
 			}
