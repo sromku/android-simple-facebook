@@ -151,8 +151,34 @@ In each `Activity` where you want to use the library, just override the `onResum
 public void onResume() {
 	super.onResume();
 	mSimpleFacebook = SimpleFacebook.getInstance(this);
+	mSimpleFacebook.onResume();
+	
 }
 ```
+and override the following as follow `onPause(), onDestroy(),onSaveInstanceState() ` 
+
+``` java 
+@Override
+public void onPause() {
+    super.onPause();
+    mSimpleFacebook.onPause();
+}
+
+
+@Override
+public void onDestroy() {
+    super.onDestroy();
+    mSimpleFacebook.onDestroy();
+}
+
+@Override
+public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    mSimpleFacebook.onSaveInstanceState(outState);
+}
+```
+
+
 
 #### 2. Run the [`action`](#actions) (login, publish, invite, get something …)
 
