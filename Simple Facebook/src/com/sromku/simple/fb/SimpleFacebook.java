@@ -14,16 +14,15 @@ import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
-import com.sromku.simple.fb.actions.GetCommentAction;
-import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
-import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
 import com.sromku.simple.fb.actions.GetCheckinsAction;
+import com.sromku.simple.fb.actions.GetCommentAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
 import com.sromku.simple.fb.actions.GetEventsAction;
 import com.sromku.simple.fb.actions.GetFamilyAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetGroupsAction;
+import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetLikesAction;
 import com.sromku.simple.fb.actions.GetNotificationsAction;
 import com.sromku.simple.fb.actions.GetPageAction;
@@ -33,6 +32,7 @@ import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
 import com.sromku.simple.fb.actions.GetStoryObjectsAction;
+import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
 import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
@@ -482,7 +482,8 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get comments of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting the comments of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting
+	 * the comments of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -807,7 +808,8 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get likes of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting likes of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting
+	 * likes of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -1494,6 +1496,17 @@ public class SimpleFacebook {
 		getVideosAction.setActionListener(onVideosListener);
 		getVideosAction.setTarget(entityId);
 		getVideosAction.execute();
+	}
+
+	/**
+	 * Publish comment
+	 * 
+	 * @param entityId
+	 * @param comment
+	 * @param onPublishListener
+	 */
+	public void publish(String entityId, Comment comment, OnPublishListener onPublishListener) {
+		publish(entityId, (Publishable) comment, onPublishListener);
 	}
 
 	/**

@@ -54,6 +54,7 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		mExamples.add(new Example("Publish photo", PublishPhotoFragment.class));
 		mExamples.add(new Example("Publish video", PublishVideoFragment.class));
 		mExamples.add(new Example("Publish score", PublishScoreFragment.class));
+		mExamples.add(new Example("Publish comment", PublishCommentFragment.class));
 		mExamples.add(new Example("Get", null));
 		mExamples.add(new Example("Get accounts", GetAccountsFragment.class));
 		mExamples.add(new Example("Get albums", GetAlbumsFragment.class));
@@ -80,11 +81,6 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		mExamples.add(new Example("Get videos", GetVideosFragment.class));
 		mExamples.add(new Example("Misc", null));
 		mExamples.add(new Example("Create object", CreateStoryObjectFragment.class));
-//		mExamples.add(new Example("Pagination", PermissionsFragment.class));
-//		mExamples.add(new Example("Privacy", PermissionsFragment.class));
-//		mExamples.add(new Example("Configuration", PermissionsFragment.class));
-//		mExamples.add(new Example("Granted permissions", PermissionsFragment.class));
-//		mExamples.add(new Example("Request new permissions", PermissionsFragment.class));
 	}
 	
 	@Override

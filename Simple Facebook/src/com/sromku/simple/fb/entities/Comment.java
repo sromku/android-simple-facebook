@@ -2,7 +2,11 @@ package com.sromku.simple.fb.entities;
 
 import java.util.List;
 
+import android.os.Bundle;
+
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
@@ -10,7 +14,7 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  * @author sromku
  * @see https://developers.facebook.com/docs/graph-api/reference/comment
  */
-public class Comment {
+public class Comment implements Publishable {
 
 	private static final String ID = "id";
 	private static final String CAN_COMMENT = "can_comment";
@@ -83,8 +87,34 @@ public class Comment {
 		mUserLikes = Utils.getPropertyBoolean(graphObject, USER_LIKES);
 	}
 
+	private Comment(Builder builder) {
+		mMessage = builder.mMessage;
+	}
+
 	public static Comment create(GraphObject graphObject) {
 		return new Comment(graphObject);
+	}
+
+	@Override
+	public Bundle getBundle() {
+		Bundle bundle = new Bundle();
+
+		// add name
+		if (mMessage != null) {
+			bundle.putString(MESSAGE, mMessage);
+		}
+
+		return bundle;
+	}
+
+	@Override
+	public String getPath() {
+		return GraphPath.COMMENTS;
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.PUBLISH_ACTION;
 	}
 
 	/**
@@ -162,5 +192,30 @@ public class Comment {
 	 */
 	public Boolean getUserLikes() {
 		return mUserLikes;
+	}
+
+	/**
+	 * Builder for preparing the Album object to be published.
+	 */
+	public static class Builder {
+		private String mMessage = null;
+
+		public Builder() {
+		}
+
+		/**
+		 * Add description to the album
+		 * 
+		 * @param message
+		 *            The description of the album
+		 */
+		public Builder setMessage(String message) {
+			mMessage = message;
+			return this;
+		}
+
+		public Comment build() {
+			return new Comment(this);
+		}
 	}
 }
