@@ -44,6 +44,7 @@ import com.sromku.simple.fb.entities.Event;
 import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
+import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Post;
@@ -1509,6 +1510,17 @@ public class SimpleFacebook {
 		publish(entityId, (Publishable) comment, onPublishListener);
 	}
 
+	/**
+	 * Publish like
+	 * 
+	 * @param entityId
+	 * @param like
+	 * @param onPublishListener
+	 */
+	public void publish(String entityId, Like like, OnPublishListener onPublishListener) {
+		publish(entityId, (Publishable) like, onPublishListener);
+	}
+	
 	/**
 	 * 
 	 * Posts a score using Scores API for games. If missing publish_actions
