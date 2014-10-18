@@ -14,6 +14,7 @@ import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
+import com.sromku.simple.fb.actions.GetCommentAction;
 import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
 import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
@@ -60,6 +61,7 @@ import com.sromku.simple.fb.listeners.OnAlbumListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
+import com.sromku.simple.fb.listeners.OnCommentListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnCreateStoryObject;
 import com.sromku.simple.fb.listeners.OnDeleteListener;
@@ -448,6 +450,21 @@ public class SimpleFacebook {
 		getCheckinsAction.execute();
 	}
 
+	/**
+	 * Get comment by comment id.
+	 * 
+	 * @param commentId
+	 *            The comment id.
+	 * @param onPageListener
+	 *            The callback listener.
+	 */
+	public void getComment(String commentId, OnCommentListener onCommentListener) {
+		GetCommentAction getCommentAction = new GetCommentAction(mSessionManager);
+		getCommentAction.setActionListener(onCommentListener);
+		getCommentAction.setTarget(commentId);
+		getCommentAction.execute();
+	}
+	
 	/**
 	 * Get comments of specific entity.<br>
 	 * <br>
