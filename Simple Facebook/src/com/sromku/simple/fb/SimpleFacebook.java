@@ -12,6 +12,7 @@ import com.facebook.Session;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
+import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
 import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
@@ -55,6 +56,7 @@ import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnAccountsListener;
 import com.sromku.simple.fb.listeners.OnActionListener;
+import com.sromku.simple.fb.listeners.OnAlbumListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnCheckinsListener;
@@ -240,6 +242,21 @@ public class SimpleFacebook {
 		GetAccountsAction getAccountsAction = new GetAccountsAction(mSessionManager);
 		getAccountsAction.setActionListener(onAccountsListener);
 		getAccountsAction.execute();
+	}
+	
+	/**
+	 * Get album by album id.
+	 * 
+	 * @param albumId
+	 *            The album id.
+	 * @param onPageListener
+	 *            The callback listener.
+	 */
+	public void getAlbum(String albumId, OnAlbumListener onAlbumListener) {
+		GetAlbumAction getAlbumAction = new GetAlbumAction(mSessionManager);
+		getAlbumAction.setActionListener(onAlbumListener);
+		getAlbumAction.setTarget(albumId);
+		getAlbumAction.execute();
 	}
 
 	/**
