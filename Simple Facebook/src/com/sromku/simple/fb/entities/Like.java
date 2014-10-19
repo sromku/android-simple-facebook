@@ -42,7 +42,7 @@ public class Like implements Publishable {
 	}
 	
 	/**
-	 * Builder for preparing the Album object to be published.
+	 * Builder for preparing the Like object to be published.
 	 */
 	public static class Builder {
 
