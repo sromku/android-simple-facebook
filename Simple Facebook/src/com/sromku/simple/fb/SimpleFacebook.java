@@ -15,7 +15,6 @@ import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
-import com.sromku.simple.fb.actions.GetCheckinsAction;
 import com.sromku.simple.fb.actions.GetCommentAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
 import com.sromku.simple.fb.actions.GetEventsAction;
@@ -61,7 +60,6 @@ import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnAlbumListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
-import com.sromku.simple.fb.listeners.OnCheckinsListener;
 import com.sromku.simple.fb.listeners.OnCommentListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnCreateStoryObject;
@@ -408,47 +406,6 @@ public class SimpleFacebook {
 		getPagesAction.setTarget(entityId);
 		getPagesAction.setEdge(GraphPath.BOOKS);
 		getPagesAction.execute();
-	}
-
-	/**
-	 * Get checkins of the user.<br>
-	 * <br>
-	 * 
-	 * <b>Permission:</b><br>
-	 * {@link Permission#USER_CHECKINS}<br>
-	 * 
-	 * @param onCheckinsListener
-	 *            The callback listener.
-	 */
-	public void getCheckins(OnCheckinsListener onCheckinsListener) {
-		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
-		getCheckinsAction.setActionListener(onCheckinsListener);
-		getCheckinsAction.execute();
-	}
-
-	/**
-	 * Get checkins of entity.<br>
-	 * <br>
-	 * The entity can be one of:<br>
-	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
-	 * id of the profile: {@link Profile#getId()}<br>
-	 * - <b>Page</b>. It can be any page. To get the page id:
-	 * {@link Page#getId()}<br>
-	 * <br>
-	 * 
-	 * <b>Permission:</b><br>
-	 * {@link Permission#USER_CHECKINS}<br>
-	 * 
-	 * @param entityId
-	 *            profile id or page id.
-	 * @param onCheckinsListener
-	 *            The callback listener.
-	 */
-	public void getCheckins(String entityId, OnCheckinsListener onCheckinsListener) {
-		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
-		getCheckinsAction.setActionListener(onCheckinsListener);
-		getCheckinsAction.setTarget(entityId);
-		getCheckinsAction.execute();
 	}
 
 	/**
