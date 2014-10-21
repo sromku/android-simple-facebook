@@ -51,7 +51,8 @@ public class MainFragment extends Fragment implements OnItemClickListener{
 		mExamples.add(new Example("Publish feed - no dialog", PublishFeedFragment.class));
 		mExamples.add(new Example("Publish feed more options - no dialog", PublishFeedMoreFragment.class));
 		mExamples.add(new Example("Publish story - no dialog", PublishStoryFragment.class));
-		mExamples.add(new Example("Publish photo", PublishPhotoFragment.class));
+		mExamples.add(new Example("Publish photo - no dialog", PublishPhotoFragment.class));
+		mExamples.add(new Example("Publish photo - dialog", PublishPhotoDialogFragment.class));
 		mExamples.add(new Example("Publish video", PublishVideoFragment.class));
 		mExamples.add(new Example("Publish score", PublishScoreFragment.class));
 		mExamples.add(new Example("Publish comment", PublishCommentFragment.class));

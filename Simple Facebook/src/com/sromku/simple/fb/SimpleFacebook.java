@@ -36,6 +36,7 @@ import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
+import com.sromku.simple.fb.actions.PublishPhotoDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
@@ -1707,8 +1708,17 @@ public class SimpleFacebook {
 	 * @param onPublishListener
 	 *            The callback listener
 	 */
-	public void publish(Photo photo, OnPublishListener onPublishListener) {
-		publish("me", (Publishable) photo, onPublishListener);
+	public void publish(Photo photo, boolean withDialog, OnPublishListener onPublishListener) {
+		if (!withDialog) {
+			publish("me", (Publishable) photo, onPublishListener);
+		} else {
+			List<Photo> photos = new ArrayList<Photo>();
+			photos.add(photo);
+			PublishPhotoDialogAction publishPhotoDialogAction = new PublishPhotoDialogAction(mSessionManager);
+			publishPhotoDialogAction.setPhotos(photos);
+			publishPhotoDialogAction.setOnPublishListener(onPublishListener);
+			publishPhotoDialogAction.execute();
+		}
 	}
 
 	/**

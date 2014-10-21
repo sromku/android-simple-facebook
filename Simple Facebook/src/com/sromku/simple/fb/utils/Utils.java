@@ -32,13 +32,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 
 import com.facebook.Response;
 import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
+import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.User;
 
@@ -529,6 +532,17 @@ public class Utils {
 			Logger.logError(Utils.class, "Failed to create sha256", e);
 			return null;
 		}
+	}
+	
+	public static List<Bitmap> extractBitmaps(List<Photo> photos) {
+		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+		for (Photo photo : photos) {
+			Parcelable parcelable = photo.getParcelable();
+			if (parcelable instanceof Bitmap) {
+				bitmaps.add((Bitmap) parcelable);
+			}
+		}
+		return bitmaps;
 	}
 
 }

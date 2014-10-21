@@ -228,6 +228,10 @@ public class Photo implements Publishable {
 		return mWidth;
 	}
 
+	public Parcelable getParcelable() {
+		return mParcelable;
+	}
+	
 	public Bundle getBundle() {
 		Bundle bundle = new Bundle();
 
