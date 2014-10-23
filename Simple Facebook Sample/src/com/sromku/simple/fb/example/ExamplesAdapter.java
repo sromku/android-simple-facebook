@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.sromku.simple.fb.example.utils.SharedObjects;
 
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ExamplesAdapter extends BaseAdapter {
 
 	private final List<Example> mExamples;
 	private final Set<Integer> mTitles;
+	private boolean mLoggedIn;
 
 	public ExamplesAdapter(List<Example> examples) {
 		mExamples = examples;
@@ -66,6 +68,9 @@ public class ExamplesAdapter extends BaseAdapter {
 		if (getItemViewType(position) == TITLE_VIEW) {
 			return false;
 		}
+		if (!mLoggedIn && mExamples.get(position).isRequireLogin()) {
+			return false;
+		}
 		return super.isEnabled(position);
 	}
 
@@ -78,8 +83,7 @@ public class ExamplesAdapter extends BaseAdapter {
 			textView.setSingleLine();
 			if (getItemViewType(position) == EXAMPLE_VIEW) {
 				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_text_size));
-			}
-			else {
+			} else {
 				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_title_size));
 			}
 			textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
@@ -92,11 +96,22 @@ public class ExamplesAdapter extends BaseAdapter {
 		TextView textView = (TextView) view;
 		if (getItemViewType(position) == EXAMPLE_VIEW) {
 			textView.setText("  \u25B6  " + example.getTitle());
-		}
-		else {
+		} else {
 			textView.setText(example.getTitle());
 		}
+		if (mLoggedIn || (!mLoggedIn && !example.isRequireLogin())) {
+			textView.setTextColor(Color.BLACK);
+			textView.setEnabled(true);
+		} else {
+			textView.setTextColor(Color.GRAY);
+			textView.setEnabled(false);
+		}
 		return view;
+	}
+
+	public void setLogged(boolean logged) {
+		mLoggedIn = logged;
+		notifyDataSetChanged();
 	}
 
 }

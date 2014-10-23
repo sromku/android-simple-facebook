@@ -58,6 +58,7 @@ public class PublishPhotoDialogAction extends AbstractAction {
 				@Override
 				public void onComplete(PendingCall pendingCall, Bundle data) {
 					sessionManager.untrackPendingCall();
+					boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
 					String postId = FacebookDialog.getNativeDialogPostId(data);
 					String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
 					if (completeGesture != null) {
@@ -66,6 +67,8 @@ public class PublishPhotoDialogAction extends AbstractAction {
 						} else {
 							mOnPublishListener.onFail("Canceled by user");
 						}
+					} else if (didComplete) {
+						mOnPublishListener.onComplete(postId != null ? postId : "published successfully. (post id is not availaible if you are not logged in)");
 					} else {
 						mOnPublishListener.onFail("Canceled by user");
 					}

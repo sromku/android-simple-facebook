@@ -14,8 +14,6 @@ import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Feed.Builder.Parameters;
 import com.sromku.simple.fb.listeners.OnPublishListener;
-import com.sromku.simple.fb.utils.Errors;
-import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 
 public class PublishFeedDialogAction extends AbstractAction {
@@ -37,59 +35,49 @@ public class PublishFeedDialogAction extends AbstractAction {
 
 	@Override
 	protected void executeImpl() {
-		if (sessionManager.isLogin(true)) {
-			if (FacebookDialog.canPresentShareDialog(sessionManager.getActivity(), ShareDialogFeature.SHARE_DIALOG)) {
-				FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(sessionManager.getActivity())
-						.setCaption(mFeed.getBundle().getString(Parameters.CAPTION))
-						.setDescription(mFeed.getBundle().getString(Parameters.DESCRIPTION))
-						.setName(mFeed.getBundle().getString(Parameters.NAME))
-						.setPicture(mFeed.getBundle().getString(Parameters.PICTURE))
-						.setLink(mFeed.getBundle().getString(Parameters.LINK))
-						.build();
-				PendingCall pendingCall = shareDialog.present();
-				sessionManager.trackFacebookDialogPendingCall(pendingCall, new FacebookDialog.Callback() {
+		if (FacebookDialog.canPresentShareDialog(sessionManager.getActivity(), ShareDialogFeature.SHARE_DIALOG)) {
+			FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(sessionManager.getActivity())
+					.setCaption(mFeed.getBundle().getString(Parameters.CAPTION))
+					.setDescription(mFeed.getBundle().getString(Parameters.DESCRIPTION))
+					.setName(mFeed.getBundle().getString(Parameters.NAME))
+					.setPicture(mFeed.getBundle().getString(Parameters.PICTURE))
+					.setLink(mFeed.getBundle().getString(Parameters.LINK))
+					.build();
+			PendingCall pendingCall = shareDialog.present();
+			sessionManager.trackFacebookDialogPendingCall(pendingCall, new FacebookDialog.Callback() {
 
-					@Override
-					public void onError(PendingCall pendingCall, Exception error, Bundle data) {
-						sessionManager.untrackPendingCall();
-						Logger.logError(PublishFeedDialogAction.class, "Failed to share by using native dialog", error);
-						if ("".equals(error.getMessage())) {
-							Logger.logError(PublishFeedDialogAction.class, "Make sure to have 'app_id' meta data value in your manifest", error);
-						}
-						shareWithWebDialog();
+				@Override
+				public void onError(PendingCall pendingCall, Exception error, Bundle data) {
+					sessionManager.untrackPendingCall();
+					Logger.logError(PublishFeedDialogAction.class, "Failed to share by using native dialog", error);
+					if ("".equals(error.getMessage())) {
+						Logger.logError(PublishFeedDialogAction.class, "Make sure to have 'app_id' meta data value in your manifest", error);
 					}
+					shareWithWebDialog();
+				}
 
-					@Override
-					public void onComplete(PendingCall pendingCall, Bundle data) {
-						sessionManager.untrackPendingCall();
-						// redundant check, since 
-						// boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
-						String postId = FacebookDialog.getNativeDialogPostId(data);
-						String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
-
-						// didComplete is meaningless when completeGesture can
-						// determine the result
-						if (completeGesture != null) {
-							if (completeGesture.equals("post")) {
-								mOnPublishListener.onComplete(postId != null ? postId : "no postId return");
-							} else {
-								mOnPublishListener.onFail("Canceled by user");
-							}
+				@Override
+				public void onComplete(PendingCall pendingCall, Bundle data) {
+					sessionManager.untrackPendingCall();
+					boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
+					String postId = FacebookDialog.getNativeDialogPostId(data);
+					String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
+					if (completeGesture != null) {
+						if (completeGesture.equals("post")) {
+							mOnPublishListener.onComplete(postId != null ? postId : "no postId return");
 						} else {
 							mOnPublishListener.onFail("Canceled by user");
 						}
-
+					} else if (didComplete) {
+						mOnPublishListener.onComplete(postId != null ? postId : "published successfully. (post id is not availaible if you are not logged in)");
+					} else {
+						mOnPublishListener.onFail("Canceled by user");
 					}
-				});
-			} else {
-				shareWithWebDialog();
-			}
+
+				}
+			});
 		} else {
-			if (mOnPublishListener != null) {
-				String reason = Errors.getError(ErrorMsg.LOGIN);
-				Logger.logError(PublishFeedDialogAction.class, reason, null);
-				mOnPublishListener.onFail(reason);
-			}
+			shareWithWebDialog();
 		}
 	}
 
