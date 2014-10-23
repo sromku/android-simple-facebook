@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.sromku.simple.fb.example.utils.SharedObjects;
 
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,10 +77,10 @@ public class ExamplesAdapter extends BaseAdapter {
 			textView.setTextColor(SharedObjects.context.getResources().getColor(R.color.black));
 			textView.setSingleLine();
 			if (getItemViewType(position) == EXAMPLE_VIEW) {
-				textView.setTextSize(SharedObjects.context.getResources().getDimension(R.dimen.example_list_text_size));
+				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_text_size));
 			}
 			else {
-				textView.setTextSize(SharedObjects.context.getResources().getDimension(R.dimen.example_list_title_size));
+				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_title_size));
 			}
 			textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			int pix10dp = SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.padding_10dp);
