@@ -24,7 +24,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -434,20 +433,10 @@ public class Utils {
 			return null;
 		}
 		Object value = graphObject.getProperty(property);
-		if (value == null || value.equals(EMPTY)) {
-			return null;
+		if (value instanceof JSONArray) {
+			return (JSONArray) value;
 		}
 
-		JSONArray jsonArray;
-		try {
-			jsonArray = new JSONArray(value);
-			return jsonArray;
-		} catch (JSONException e) {
-			try {
-				return (JSONArray) value;
-			} catch (Exception e1) {
-			}
-		}
 		return null;
 	}
 
