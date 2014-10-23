@@ -1,5 +1,7 @@
 package com.sromku.simple.fb.entities;
 
+import java.util.Locale;
+
 import com.facebook.model.GraphObject;
 
 public class Location {
@@ -29,5 +31,10 @@ public class Location {
 		location.mId = String.valueOf(graphObject.getProperty("id"));
 		location.mName = String.valueOf(graphObject.getProperty("name"));
 		return location;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format(Locale.US, "id=%s,name=%s", mId, mName);
 	}
 }
