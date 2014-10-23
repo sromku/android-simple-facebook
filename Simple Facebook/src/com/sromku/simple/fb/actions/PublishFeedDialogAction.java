@@ -77,7 +77,11 @@ public class PublishFeedDialogAction extends AbstractAction {
 				}
 			});
 		} else {
-			shareWithWebDialog();
+			if (!sessionManager.isLogin(true) && mOnPublishListener != null) {
+				mOnPublishListener.onFail("Facebook app wasn't detected on the device. You need to login in and then publish again.");
+			} else {
+				shareWithWebDialog();
+			}
 		}
 	}
 
