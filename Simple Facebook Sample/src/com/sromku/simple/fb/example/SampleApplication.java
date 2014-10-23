@@ -23,17 +23,7 @@ public class SampleApplication extends Application {
 
 		// initialize facebook configuration
 		Permission[] permissions = new Permission[] { 
-				Permission.PUBLIC_PROFILE, 
-				Permission.USER_GROUPS,
-				Permission.USER_BIRTHDAY, 
-				Permission.USER_LIKES, 
-				Permission.USER_PHOTOS,
-				Permission.USER_VIDEOS,
-				Permission.USER_FRIENDS,
-				Permission.USER_EVENTS,
-				Permission.USER_VIDEOS,
-				Permission.USER_RELATIONSHIPS,
-				Permission.READ_STREAM, 
+				Permission.PUBLIC_PROFILE,
 				Permission.PUBLISH_ACTION
 				};
 

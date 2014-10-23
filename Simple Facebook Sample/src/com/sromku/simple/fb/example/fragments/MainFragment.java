@@ -84,8 +84,11 @@ public class MainFragment extends Fragment implements OnItemClickListener {
 		mExamples.add(new Example("Get objects (open graph)", GetStoryObjectsFragment.class, true));
 		mExamples.add(new Example("Get television", GetTelevisionFragment.class, true));
 		mExamples.add(new Example("Get videos", GetVideosFragment.class, true));
-		mExamples.add(new Example("Misc", null, false));
+		mExamples.add(new Example("Open Graph", null, false));
 		mExamples.add(new Example("Create object", CreateStoryObjectFragment.class, true));
+		mExamples.add(new Example("Permissions", null, false));
+		mExamples.add(new Example("Show granted permissions", GrantedPermissionsFragment.class, true));
+		mExamples.add(new Example("Request new permissions", RequestPermissionsFragment.class, true));
 	}
 
 	@Override
