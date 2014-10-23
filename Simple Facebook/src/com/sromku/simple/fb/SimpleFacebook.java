@@ -1906,18 +1906,11 @@ public class SimpleFacebook {
 	 *            and PUBLISH permissions in the same time. Just ask what you
 	 *            need.<br>
 	 * <br>
-	 * @param showPublish
-	 *            This flag is relevant only in cases when new permissions
-	 *            include PUBLISH permission. Then you can decide if you want
-	 *            the dialog of requesting publish permission to appear <b>right
-	 *            away</b> or <b>later</b>, at first time of real publish
-	 *            action.<br>
-	 * <br>
 	 * @param onNewPermissionsListener
 	 *            The listener for the requesting new permission action.
 	 */
 	public void requestNewPermissions(Permission[] permissions, boolean showPublish, OnNewPermissionsListener onNewPermissionsListener) {
-		mSessionManager.requestNewPermissions(permissions, showPublish, onNewPermissionsListener);
+		mSessionManager.requestNewPermissions(permissions, onNewPermissionsListener);
 	}
 
 	/**

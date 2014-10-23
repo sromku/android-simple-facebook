@@ -1,6 +1,7 @@
 package com.sromku.simple.fb;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,7 +16,6 @@ import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.FacebookDialog.Callback;
 import com.facebook.widget.FacebookDialog.PendingCall;
 import com.sromku.simple.fb.Permission.Type;
-import com.sromku.simple.fb.SimpleFacebookConfiguration.Builder;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
@@ -69,8 +69,7 @@ public class SessionManager {
 		session.addCallback(mSessionStatusCallback);
 		if (!session.isOpened()) {
 			openSession(session, true);
-		}
-		else {
+		} else {
 			onLoginListener.onLogin();
 		}
 	}
@@ -88,15 +87,13 @@ public class SessionManager {
 			if (session.isClosed()) {
 				Logger.logInfo(SessionManager.class, "You were already logged out before calling 'logout()' method");
 				onLogoutListener.onLogout();
-			}
-			else {
+			} else {
 				mSessionStatusCallback.onLogoutListener = onLogoutListener;
 				session.closeAndClearTokenInformation();
 				session.removeCallback(mSessionStatusCallback);
 				onLogoutListener.onLogout();
 			}
-		}
-		else {
+		} else {
 			onLogoutListener.onLogout();
 		}
 	}
@@ -164,7 +161,7 @@ public class SessionManager {
 	 * @return the list of accepted permissions
 	 */
 	public List<String> getActiveSessionPermissions() {
-		return getActiveSession().getPermissions();
+		return getActiveSession() != null ? getActiveSession().getPermissions() : new ArrayList<String>();
 	}
 
 	public Activity getActivity() {
@@ -210,6 +207,21 @@ public class SessionManager {
 		session.addCallback(mSessionStatusCallback);
 		session.requestNewPublishPermissions(request);
 	}
+	
+	/**
+	 * Extend and ask user for READ permissions
+	 * 
+	 * @param activity
+	 */
+	public void extendReadPermissions() {
+		Session session = Session.getActiveSession();
+		if (hasPendingRequest(session)) {
+			Logger.logWarning(TAG, "You are trying to ask for publish permission one more time, before finishing the previous login call");
+		}
+		Session.NewPermissionsRequest request = new Session.NewPermissionsRequest(activity, configuration.getReadPermissions());
+		session.addCallback(mSessionStatusCallback);
+		session.requestNewReadPermissions(request);
+	}
 
 	public void openSession(Session session, boolean isRead) {
 		Session.OpenRequest request = new Session.OpenRequest(activity);
@@ -231,8 +243,7 @@ public class SessionManager {
 
 				// Open session with read permissions
 				session.openForRead(request);
-			}
-			else {
+			} else {
 				request.setPermissions(configuration.getPublishPermissions());
 				session.openForPublish(request);
 			}
@@ -254,63 +265,49 @@ public class SessionManager {
 	 *            New permissions you want to have. This array can include READ
 	 *            and PUBLISH permissions in the same time. Just ask what you
 	 *            need.<br>
-	 * <br>
-	 * @param showPublish
-	 *            This flag is relevant only in cases when new permissions
-	 *            include PUBLISH permission. Then you can decide if you want
-	 *            the dialog of requesting publish permission to appear <b>right
-	 *            away</b> or <b>later</b>, at first time of real publish
-	 *            action.<br>
-	 * <br>
-	 *            The configuration of
-	 *            {@link Builder#setAskForAllPermissionsAtOnce(boolean)} will
-	 *            not take effect for this method, because you define here by
-	 *            setting <code>showPublish</code> what would you like to see. <br><br>
 	 * @param onNewPermissionListener
 	 *            The callback listener for the requesting new permission
 	 *            action.
 	 */
-	public void requestNewPermissions(Permission[] permissions, final boolean showPublish, final OnNewPermissionsListener onNewPermissionListener) {
-		configuration.addNewPermissions(permissions);
-		logout(new OnLogoutAdapter() {
+	public void requestNewPermissions(Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
+		int flag = configuration.addNewPermissions(permissions);
+		if (flag == 0) {
+			onNewPermissionListener.onFail("There is no new permissions in your request");
+			return;
+		}
+		mSessionStatusCallback.onLoginListener = new OnLoginListener() {
+
 			@Override
-			public void onLogout() {
-				final boolean prevValue = configuration.mAllAtOnce;
-				configuration.mAllAtOnce = showPublish;
-				login(new OnLoginListener() {
-
-					@Override
-					public void onFail(String reason) {
-						configuration.mAllAtOnce = prevValue;
-						onNewPermissionListener.onFail(reason);
-					}
-
-					@Override
-					public void onException(Throwable throwable) {
-						configuration.mAllAtOnce = prevValue;
-						onNewPermissionListener.onException(throwable);
-					}
-
-					@Override
-					public void onThinking() {
-						configuration.mAllAtOnce = prevValue;
-						onNewPermissionListener.onThinking();
-					}
-
-					@Override
-					public void onNotAcceptingPermissions(Type type) {
-						configuration.mAllAtOnce = prevValue;
-						onNewPermissionListener.onNotAcceptingPermissions(type);
-					}
-
-					@Override
-					public void onLogin() {
-						configuration.mAllAtOnce = prevValue;
-						onNewPermissionListener.onSuccess(getAccessToken());
-					}
-				});
+			public void onFail(String reason) {
+				onNewPermissionListener.onFail(reason);
 			}
-		});
+
+			@Override
+			public void onException(Throwable throwable) {
+				onNewPermissionListener.onException(throwable);
+			}
+
+			@Override
+			public void onThinking() {
+				onNewPermissionListener.onThinking();
+			}
+
+			@Override
+			public void onNotAcceptingPermissions(Type type) {
+				onNewPermissionListener.onNotAcceptingPermissions(type);
+			}
+
+			@Override
+			public void onLogin() {
+				onNewPermissionListener.onSuccess(getAccessToken());
+			}
+		};
+		
+		if (flag == 1 || flag == 3) {
+			extendReadPermissions();
+		} else if (flag == 2) {
+			extendPublishPermissions();
+		}
 	}
 
 	/**
@@ -330,8 +327,7 @@ public class SessionManager {
 			List<String> publishPermissions = configuration.getPublishPermissions();
 			if (publishPermissions != null && publishPermissions.size() > 0 && permissions.containsAll(publishPermissions)) {
 				openSession(session, false);
-			}
-			else if (permissions.containsAll(configuration.getReadPermissions())) {
+			} else if (permissions.containsAll(configuration.getReadPermissions())) {
 				openSession(session, true);
 			}
 		}
@@ -407,8 +403,7 @@ public class SessionManager {
 			if (authorizationRequest != null) {
 				return true;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// do nothing
 		}
 		return false;
@@ -432,16 +427,15 @@ public class SessionManager {
 				if (exception instanceof FacebookOperationCanceledException && !SessionState.OPENED_TOKEN_UPDATED.equals(state)) {
 					if (permissions.size() == 0) {
 						notAcceptedPermission(Permission.Type.READ);
-					}
-					else {
+					} else {
 						notAcceptedPermission(Permission.Type.PUBLISH);
 					}
-				}
-				else {
+				} else {
 					if (onLoginListener != null) {
 						onLoginListener.onException(exception);
 					}
 				}
+				return;
 			}
 
 			switch (state) {
@@ -490,14 +484,12 @@ public class SessionManager {
 						 */
 						doOnLogin = false;
 						onLoginListener.onLogin();
-					}
-					else {
+					} else {
 						doOnLogin = true;
 						extendPublishPermissions();
 						askPublishPermissions = false;
 					}
-				}
-				else {
+				} else {
 					if (onLoginListener != null) {
 						onLoginListener.onLogin();
 					}
@@ -513,15 +505,21 @@ public class SessionManager {
 				if (onReopenSessionListener != null) {
 					if ((exception != null && exception instanceof FacebookOperationCanceledException) || (!containsAllPublishPermissions())) {
 						onReopenSessionListener.onNotAcceptingPermissions(Permission.Type.PUBLISH);
-					}
-					else {
+					} else {
 						onReopenSessionListener.onSuccess();
 					}
 					onReopenSessionListener = null;
-				}
-				else if (doOnLogin) {
+				} else if (doOnLogin) {
 					doOnLogin = false;
 
+					if (onLoginListener != null) {
+						onLoginListener.onLogin();
+					}
+				} else if (askPublishPermissions) {
+					doOnLogin = true;
+					extendPublishPermissions();
+					askPublishPermissions = false;
+				} else {
 					if (onLoginListener != null) {
 						onLoginListener.onLogin();
 					}
@@ -549,23 +547,4 @@ public class SessionManager {
 		}
 	}
 
-	private class OnLogoutAdapter implements OnLogoutListener {
-
-		@Override
-		public void onThinking() {
-		}
-
-		@Override
-		public void onException(Throwable throwable) {
-		}
-
-		@Override
-		public void onFail(String reason) {
-		}
-
-		@Override
-		public void onLogout() {
-		}
-
-	}
 }

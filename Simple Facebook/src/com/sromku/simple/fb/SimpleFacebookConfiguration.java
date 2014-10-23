@@ -129,18 +129,28 @@ public class SimpleFacebookConfiguration {
 	 * Add new permissions in a runtime
 	 * 
 	 * @param permissions
+	 * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
+	 * 
 	 */
-	void addNewPermissions(Permission[] permissions) {
+	int addNewPermissions(Permission[] permissions) {
+		/*
+		 * 0 = no new permissions were added
+		 * 1 = for read permissions
+		 * 2 = for write permissions
+		 */
+		int flag = 0;
 		for (Permission permission : permissions) {
 			switch (permission.getType()) {
 			case READ:
 				if (!mReadPermissions.contains(permission.getValue())) {
 					mReadPermissions.add(permission.getValue());
+					flag |= 1;
 				}
 				break;
 			case PUBLISH:
 				if (!mPublishPermissions.contains(permission.getValue())) {
 					mPublishPermissions.add(permission.getValue());
+					flag |= 2;
 				}
 				break;
 			default:
@@ -151,6 +161,7 @@ public class SimpleFacebookConfiguration {
 		if (this.mPublishPermissions.size() > 0) {
 			this.mHasPublishPermissions = true;
 		}
+		return flag;
 	}
 
 	public static class Builder {
