@@ -85,6 +85,7 @@ import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnStoryObjectsListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.GraphPath;
+import com.sromku.simple.fb.utils.Utils;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK
@@ -1712,13 +1713,29 @@ public class SimpleFacebook {
 		if (!withDialog) {
 			publish("me", (Publishable) photo, onPublishListener);
 		} else {
-			List<Photo> photos = new ArrayList<Photo>();
-			photos.add(photo);
+			List<Photo> photos = Utils.createSingleItemList(photo);
 			PublishPhotoDialogAction publishPhotoDialogAction = new PublishPhotoDialogAction(mSessionManager);
 			publishPhotoDialogAction.setPhotos(photos);
+			publishPhotoDialogAction.setPlace(photo.getPlaceId());
 			publishPhotoDialogAction.setOnPublishListener(onPublishListener);
 			publishPhotoDialogAction.execute();
 		}
+	}
+
+	/**
+	 * Publish up to 6 photos to user timeline <b>WITH DIALOG ONLY</b>
+	 * 
+	 * @param photos
+	 * @param onPublishListener
+	 */
+	public void publish(List<Photo> photos, OnPublishListener onPublishListener) {
+		PublishPhotoDialogAction publishPhotoDialogAction = new PublishPhotoDialogAction(mSessionManager);
+		publishPhotoDialogAction.setPhotos(photos);
+		// the assumption is that the all photos from the same location. So we
+		// take the location from the first photo.
+		publishPhotoDialogAction.setPlace(photos.get(0).getPlaceId());
+		publishPhotoDialogAction.setOnPublishListener(onPublishListener);
+		publishPhotoDialogAction.execute();
 	}
 
 	/**

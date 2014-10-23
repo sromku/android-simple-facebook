@@ -545,4 +545,9 @@ public class Utils {
 		return bitmaps;
 	}
 
+	public static <T> List<T> createSingleItemList(T t) {
+		List<T> list = new ArrayList<T>();
+		list.add(t);
+		return list;
+	}
 }

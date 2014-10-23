@@ -18,7 +18,6 @@ public class PublishPhotoDialogAction extends AbstractAction {
 	private OnPublishListener mOnPublishListener;
 	private List<Photo> mPhotos;
 	private String mPlace;
-	private List<String> mTaggedFriends;
 
 	public PublishPhotoDialogAction(SessionManager sessionManager) {
 		super(sessionManager);
@@ -32,10 +31,6 @@ public class PublishPhotoDialogAction extends AbstractAction {
 		mPlace = place;
 	}
 
-	public void setTaggedFriends(List<String> profileIds) {
-		mTaggedFriends = profileIds;
-	}
-
 	public void setOnPublishListener(OnPublishListener onPublishListener) {
 		mOnPublishListener = onPublishListener;
 	}
@@ -45,6 +40,7 @@ public class PublishPhotoDialogAction extends AbstractAction {
 		if (FacebookDialog.canPresentShareDialog(sessionManager.getActivity(), ShareDialogFeature.PHOTOS)) {
 			FacebookDialog shareDialog = new FacebookDialog.PhotoShareDialogBuilder(sessionManager.getActivity())
 				.addPhotos(Utils.extractBitmaps(mPhotos))
+				.setPlace(mPlace)
 				.build();
 			PendingCall pendingCall = shareDialog.present();
 			sessionManager.trackFacebookDialogPendingCall(pendingCall, new FacebookDialog.Callback() {
@@ -56,20 +52,14 @@ public class PublishPhotoDialogAction extends AbstractAction {
 					if ("".equals(error.getMessage())) {
 						Logger.logError(PublishPhotoDialogAction.class, "Make sure to have 'app_id' meta data value in your manifest", error);
 					}
-					// TODO  callback - fail
+					mOnPublishListener.onFail("Have you added com.facebook.NativeAppCallContentProvider to your manifest? " + error.getMessage());
 				}
 
 				@Override
 				public void onComplete(PendingCall pendingCall, Bundle data) {
 					sessionManager.untrackPendingCall();
-					// redundant check, since
-					// boolean didComplete =
-					// FacebookDialog.getNativeDialogDidComplete(data);
 					String postId = FacebookDialog.getNativeDialogPostId(data);
 					String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
-
-					// didComplete is meaningless when completeGesture can
-					// determine the result
 					if (completeGesture != null) {
 						if (completeGesture.equals("post")) {
 							mOnPublishListener.onComplete(postId != null ? postId : "no postId return");
