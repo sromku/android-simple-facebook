@@ -53,52 +53,52 @@ public class RequestPermissionsFragment extends BaseFragment {
 	private void showPermissionsSelectDialog() {
 		final List<Permission> newPermissions = new ArrayList<Permission>();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder
-			.setTitle("Select new permissions")
-			.setMultiChoiceItems(getAllPermissions(), null, new DialogInterface.OnMultiChoiceClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-					Permission permission = Permission.values()[which];
-					if (isChecked && !newPermissions.contains(permission)) {
-						newPermissions.add(permission);
-					} else if (!isChecked && newPermissions.contains(permission)) {
-						newPermissions.remove(permission);
+		builder.setTitle("Select new permissions").setMultiChoiceItems(getAllPermissions(), null, new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				Permission permission = Permission.values()[which];
+				if (isChecked && !newPermissions.contains(permission)) {
+					newPermissions.add(permission);
+				} else if (!isChecked && newPermissions.contains(permission)) {
+					newPermissions.remove(permission);
+				}
+			}
+		}).setPositiveButton("Request", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
+				SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, false, new OnNewPermissionsListener() {
+
+					@Override
+					public void onFail(String reason) {
+						mResult.setText(reason);
 					}
-				}
-			})
-			.setPositiveButton("Request", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
-					SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, false, new OnNewPermissionsListener() {
 
-						@Override
-						public void onFail(String reason) {
-							mResult.setText(reason);
-						}
+					@Override
+					public void onException(Throwable throwable) {
+						mResult.setText(throwable.getMessage());
+					}
 
-						@Override
-						public void onException(Throwable throwable) {
-							mResult.setText(throwable.getMessage());
-						}
+					@Override
+					public void onThinking() {
+					}
 
-						@Override
-						public void onThinking() {
+					@Override
+					public void onSuccess(String accessToken, List<Permission> permissions) {
+						showGrantedPermissions();
+						if (permissions.size() > 0) {
+							Toast.makeText(getActivity(), "User declined few permissions: " + permissions.toString(), Toast.LENGTH_SHORT).show();
 						}
+					}
 
-						@Override
-						public void onSuccess(String accessToken) {
-							showGrantedPermissions();
-						}
-
-						@Override
-						public void onNotAcceptingPermissions(Type type) {
-							showGrantedPermissions();
-							Toast.makeText(getActivity(), String.format("You didn't accept %s permissions", type.name()), Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			});
+					@Override
+					public void onNotAcceptingPermissions(Type type) {
+						showGrantedPermissions();
+						Toast.makeText(getActivity(), String.format("You didn't accept %s permissions", type.name()), Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
 
 		builder.create().show();
 	}

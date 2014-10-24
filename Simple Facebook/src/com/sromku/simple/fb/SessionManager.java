@@ -269,7 +269,7 @@ public class SessionManager {
 	 *            The callback listener for the requesting new permission
 	 *            action.
 	 */
-	public void requestNewPermissions(Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
+	public void requestNewPermissions(final Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
 		int flag = configuration.addNewPermissions(permissions);
 		flag |= getNotGrantedReadPermissions().size() > 0 ? 1 : 0;
 		flag |= getNotGrantedPublishPermissions().size() > 0 ? 2 : 0;
@@ -301,15 +301,45 @@ public class SessionManager {
 
 			@Override
 			public void onLogin() {
-				onNewPermissionListener.onSuccess(getAccessToken());
+				/*
+				 * Facebook has issue permissions dialog. If user presses (X) to
+				 * decline the dialog, then it behaves as expected, but if user
+				 * clicks on 'Not Now' button, then the response is possitive.
+				 * Thus, we need to check it ourself.
+				 */
+				List<Permission> declinedPermissions = getDeclinedPermissions(permissions, getActiveSessionPermissions());
+				if (declinedPermissions.size() == permissions.length) {
+					onFail("User canceled the permissions dialog");
+				} else {
+					onNewPermissionListener.onSuccess(getAccessToken(), declinedPermissions);
+				}
 			}
 		};
-		
+
 		if (flag == 1 || flag == 3) {
 			extendReadPermissions();
 		} else if (flag == 2) {
 			extendPublishPermissions();
 		}
+	}
+
+	/**
+	 * Return list with declined permissions
+	 * 
+	 * @param permissions
+	 *            - The new requested permissions by user
+	 * @param activeSessionPermissions
+	 *            - The already accepted permissions by user
+	 * @return
+	 */
+	private List<Permission> getDeclinedPermissions(Permission[] permissions, List<String> activeSessionPermissions) {
+		List<Permission> declinedPermissions = new ArrayList<Permission>();
+		for (Permission permission : permissions) {
+			if (!activeSessionPermissions.contains(permission.getValue())) {
+				declinedPermissions.add(permission);
+			}
+		}
+		return declinedPermissions;
 	}
 
 	/**
