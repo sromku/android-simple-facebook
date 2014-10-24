@@ -271,6 +271,8 @@ public class SessionManager {
 	 */
 	public void requestNewPermissions(Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
 		int flag = configuration.addNewPermissions(permissions);
+		flag |= getNotGrantedReadPermissions().size() > 0 ? 1 : 0;
+		flag |= getNotGrantedPublishPermissions().size() > 0 ? 2 : 0;
 		if (flag == 0) {
 			onNewPermissionListener.onFail("There is no new permissions in your request");
 			return;
@@ -408,7 +410,28 @@ public class SessionManager {
 		}
 		return false;
 	}
-
+	
+	private List<String> getNotGrantedReadPermissions() {
+		List<String> grantedPermissions = getActiveSessionPermissions();
+		List<String> readPermissions = new ArrayList<String>(configuration.getReadPermissions());
+		readPermissions.removeAll(grantedPermissions);
+		return readPermissions;
+	}
+	
+	private List<String> getNotGrantedPublishPermissions() {
+		List<String> grantedPermissions = getActiveSessionPermissions();
+		List<String> publishPermissions = new ArrayList<String>(configuration.getPublishPermissions());
+		publishPermissions.removeAll(grantedPermissions);
+		return publishPermissions;
+	}
+	
+	public boolean isAllPermissionsGranted() {
+		if (getNotGrantedReadPermissions().size() > 0 || getNotGrantedPublishPermissions().size() > 0) {
+			return false;
+		}
+		return true;
+	}
+	
 	public class SessionStatusCallback implements Session.StatusCallback {
 		private boolean askPublishPermissions = false;
 		private boolean doOnLogin = false;

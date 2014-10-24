@@ -1,6 +1,5 @@
 package com.sromku.simple.fb;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -1929,15 +1928,7 @@ public class SimpleFacebook {
 	 *         otherwise return <code>False</code>
 	 */
 	public boolean isAllPermissionsGranted() {
-		List<String> grantedPermissions = getGrantedPermissions();
-		List<String> readPermissions = new ArrayList<String>(mConfiguration.getReadPermissions());
-		List<String> publishPermissions = new ArrayList<String>(mConfiguration.getPublishPermissions());
-		readPermissions.removeAll(grantedPermissions);
-		publishPermissions.removeAll(grantedPermissions);
-		if (readPermissions.size() > 0 || publishPermissions.size() > 0) {
-			return false;
-		}
-		return true;
+		return mSessionManager.isAllPermissionsGranted();
 	}
 
 	/**

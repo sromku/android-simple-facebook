@@ -245,8 +245,8 @@ public class SimpleFacebookConfiguration {
 
 		/**
 		 * If your app has both: read and publish permissions, then this
-		 * configuration can be very useful. When you first time login the popup
-		 * with read permissions that the user should accept is appeared. After
+		 * configuration can be very useful. When you first time login, the popup
+		 * with read permissions that the user should accept appears. After
 		 * this you can decide, if you want the dialog of publish permissions to
 		 * appear or not. <br>
 		 * <br>
