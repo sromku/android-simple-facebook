@@ -1,9 +1,11 @@
 package com.sromku.simple.fb.actions;
 
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import android.os.Bundle;
 
+import com.facebook.model.GraphObject;
 import com.facebook.model.OpenGraphAction;
 import com.facebook.model.OpenGraphObject;
 import com.facebook.widget.FacebookDialog;
@@ -79,8 +81,18 @@ FacebookDialog shareDialog = null;
 					object.setProperty(property, mStory.getStoryObject().getObjectProperties().get(property));
 				}
 
+				// set custom object properties
+				GraphObject data = mStory.getStoryObject().getData();
+				if (data != null) {
+					for (Entry<String, Object> property : data.asMap().entrySet()) {
+						object.getData().setProperty(property.getKey(), property.getValue());
+					}
+				}
+
 				OpenGraphAction action = OpenGraphAction.Factory.createForPost(mStory.getPath());
 				action.setProperty(mStory.getStoryObject().getNoun(), object);
+				
+				// set custom action properties
 				Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
 				while (actionProperties.hasNext()) {
 					String property = actionProperties.next();

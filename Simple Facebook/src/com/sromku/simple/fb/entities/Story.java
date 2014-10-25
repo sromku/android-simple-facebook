@@ -1,10 +1,6 @@
 package com.sromku.simple.fb.entities;
 
-import java.util.Map.Entry;
-
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Bundle;
 
@@ -265,11 +261,6 @@ public class Story implements Publishable {
 			bundle.putString(IMAGE, mImage);
 			bundle.putString(TITLE, mTitle);
 			bundle.putString(DESCRIPTION, mDescription);
-			if (mData != null) {
-				for (Entry<String, Object> entry : mData.asMap().entrySet()) {
-					bundle.putString(entry.getKey(), String.valueOf(entry.getValue()));
-				}
-			}
 			return bundle;
 		}
 
