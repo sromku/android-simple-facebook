@@ -42,16 +42,17 @@ public class PublishStoryUserOwnedDialogFragment extends BaseFragment {
 				// set object to be shared
 				StoryObject storyObject = new StoryObject.Builder()
 					.setDescription("The apple is the pomaceous fruit of the apple tree, Malus domestica of the rose family. It is one of the most widely cultivated tree fruits.")
-					.setImage("http://romkuapps.com/github/simple-facebook/apple.jpg")
+					.setImage("http://en.huashengfruit.com/v15/Upload/2012971553522493.png")
 					.setNoun("food")
 					.setTitle("Apple")
 					.setUrl("https://github.com/sromku/android-simple-facebook")
-//					.addProperty("sromkuapp_vtwo:calories", 52)
+					.addProperty("calories", "52")
 					.build();
 				
 				// set action to be done 
 				StoryAction storyAction = new StoryAction.Builder()
 					.setAction("eat")
+					.addProperty("taste", "sweet")
 					.build();
 				
 				// build story

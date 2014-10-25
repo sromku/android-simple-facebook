@@ -48,6 +48,7 @@ public class PublishStoryUrlDialogFragment extends BaseFragment {
 				// set action to be done 
 				StoryAction storyAction = new StoryAction.Builder()
 					.setAction("eat")
+					.addProperty("taste", "sweet")
 					.build();
 				
 				// build story
