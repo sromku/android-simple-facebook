@@ -1,5 +1,7 @@
 package com.sromku.simple.fb.entities;
 
+import java.util.Map.Entry;
+
 import org.json.JSONArray;
 
 import android.os.Bundle;
@@ -18,8 +20,8 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Story implements Publishable {
 
-	private StoryObject storyObject;
-	private StoryAction storyAction;
+	private StoryObject mStoryObject;
+	private StoryAction mStoryAction;
 
 	@Override
 	public Bundle getBundle() {
@@ -28,15 +30,15 @@ public class Story implements Publishable {
 		 * set object id (that is hosted on facebook server) or url (that is
 		 * hosted on your servers)
 		 */
-		if (storyObject.getId() != null) {
-			bundle.putString(storyObject.getNoun(), storyObject.getId());
+		if (mStoryObject.getId() != null) {
+			bundle.putString(mStoryObject.getNoun(), mStoryObject.getId());
 		} else {
-			bundle.putString(storyObject.getNoun(), storyObject.getUrl());
+			bundle.putString(mStoryObject.getNoun(), mStoryObject.getUrl());
 		}
 
 		// put action params if such exist
-		if (storyAction.getParams() != null) {
-			bundle.putAll(storyAction.getParams());
+		if (mStoryAction.getParams() != null) {
+			bundle.putAll(mStoryAction.getParams());
 		}
 
 		return bundle;
@@ -45,7 +47,12 @@ public class Story implements Publishable {
 	@Override
 	public String getPath() {
 		String namespace = SimpleFacebook.getConfiguration().getNamespace();
-		return namespace + ":" + storyAction.getActionName();
+		return namespace + ":" + mStoryAction.getActionName();
+	}
+
+	public String getObjectType() {
+		String namespace = SimpleFacebook.getConfiguration().getNamespace();
+		return namespace + ":" + mStoryObject.getNoun();
 	}
 
 	@Override
@@ -53,9 +60,17 @@ public class Story implements Publishable {
 		return Permission.PUBLISH_ACTION;
 	}
 
+	public StoryAction getStoryAction() {
+		return mStoryAction;
+	}
+
+	public StoryObject getStoryObject() {
+		return mStoryObject;
+	}
+
 	private Story(Builder buidler) {
-		storyObject = buidler.storyObject;
-		storyAction = buidler.storyAction;
+		mStoryObject = buidler.storyObject;
+		mStoryAction = buidler.storyAction;
 	}
 
 	public static class Builder {
@@ -81,7 +96,7 @@ public class Story implements Publishable {
 
 	public static class StoryAction {
 
-		private Bundle mBundle;
+		private Bundle mBundle = new Bundle();
 		private String mActionName;
 
 		private StoryAction(Builder builder) {
@@ -91,7 +106,7 @@ public class Story implements Publishable {
 
 		public static class Builder {
 
-			private Bundle bundle;
+			private Bundle bundle = new Bundle();
 			private String actionName;
 
 			public Builder setAction(String actionName) {
@@ -100,9 +115,6 @@ public class Story implements Publishable {
 			}
 
 			public Builder addProperty(String param, String value) {
-				if (bundle == null) {
-					bundle = new Bundle();
-				}
 				bundle.putString(param, value);
 				return this;
 			}
@@ -152,6 +164,7 @@ public class Story implements Publishable {
 		private Application mApplication;
 		private Privacy mPrivacy;
 		private String mNoun;
+		private String mHostedUrl;
 
 		private StoryObject(GraphObject graphObject) {
 
@@ -206,6 +219,7 @@ public class Story implements Publishable {
 			mData = builder.data;
 			mImage = builder.image;
 			mPrivacy = builder.privacy;
+			mHostedUrl = builder.hostedUrl;
 		}
 
 		public static StoryObject create(GraphObject graphObject) {
@@ -240,6 +254,20 @@ public class Story implements Publishable {
 			return Permission.PUBLISH_ACTION;
 		}
 
+		public Bundle getObjectProperties() {
+			Bundle bundle = new Bundle();
+			bundle.putString(URL, mUrl);
+			bundle.putString(IMAGE, mImage);
+			bundle.putString(TITLE, mTitle);
+			bundle.putString(DESCRIPTION, mDescription);
+			if (mData != null) {
+				for (Entry<String, Object> entry : mData.asMap().entrySet()) {
+					bundle.putString(entry.getKey(), String.valueOf(entry.getValue()));
+				}
+			}
+			return bundle;
+		}
+
 		public String getId() {
 			return mId;
 		}
@@ -258,6 +286,10 @@ public class Story implements Publishable {
 
 		public String getUrl() {
 			return mUrl;
+		}
+
+		public String getHostedUrl() {
+			return mHostedUrl;
 		}
 
 		public String getImage() {
@@ -305,6 +337,7 @@ public class Story implements Publishable {
 			private String description;
 			private GraphObject data = null;
 			private Privacy privacy;
+			private String hostedUrl;
 
 			public Builder() {
 			}
@@ -331,11 +364,24 @@ public class Story implements Publishable {
 				this.url = url;
 				return this;
 			}
-			
+
+			/**
+			 * Once you set this one, all other properties except
+			 * {@link #setNoun(String)} and {@link #addProperty(String, Object)}
+			 * WON'T be valid upon publishing.
+			 * 
+			 * @param hostedUrl
+			 */
+			public Builder setHostedUrl(String hostedUrl) {
+				this.hostedUrl = hostedUrl;
+				return this;
+			}
+
 			/**
 			 * Set the id of the object that was created on facebook servers.
 			 * 
-			 * @param id The object id
+			 * @param id
+			 *            The object id
 			 * @return {@link Builder}
 			 */
 			public Builder setId(String id) {
