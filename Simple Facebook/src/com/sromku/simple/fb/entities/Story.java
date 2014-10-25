@@ -1,8 +1,11 @@
 package com.sromku.simple.fb.entities;
 
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 
@@ -32,8 +35,19 @@ public class Story implements Publishable {
 		 */
 		if (mStoryObject.getId() != null) {
 			bundle.putString(mStoryObject.getNoun(), mStoryObject.getId());
+		} else if (mStoryObject.getHostedUrl() != null) {
+			bundle.putString(mStoryObject.getNoun(), mStoryObject.getHostedUrl());
 		} else {
-			bundle.putString(mStoryObject.getNoun(), mStoryObject.getUrl());
+			JSONObject json = new JSONObject();
+			Iterator<String> objectProperties = mStoryObject.getObjectProperties().keySet().iterator();
+			while (objectProperties.hasNext()) {
+				String property = objectProperties.next();
+				try {
+					json.put(property, mStoryObject.getObjectProperties().get(property));
+				} catch (JSONException e) {
+				}
+			}
+			bundle.putString(mStoryObject.getNoun(), json.toString());
 		}
 
 		// put action params if such exist

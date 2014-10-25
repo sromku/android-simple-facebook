@@ -49,10 +49,15 @@ public class MainFragment extends Fragment implements OnItemClickListener {
 		mExamples.add(new Example("Send message to one", SendMessageToOneFragment.class, true));
 		mExamples.add(new Example("Send message to suggested", SendMessageToSuggestedFragment.class, true));
 		mExamples.add(new Example("Publish", null, false));
-		mExamples.add(new Example("Publish feed - dialog", PublishFeedDialogFragment.class, false));
 		mExamples.add(new Example("Publish feed - no dialog", PublishFeedFragment.class, true));
 		mExamples.add(new Example("Publish feed more options - no dialog", PublishFeedMoreFragment.class, true));
-		mExamples.add(new Example("Publish story - no dialog", PublishStoryFragment.class, true));
+		mExamples.add(new Example("Publish feed - dialog", PublishFeedDialogFragment.class, false));
+		mExamples.add(new Example("Publish story - no dialog - url", PublishStoryUrlFragment.class, true));
+		mExamples.add(new Example("Publish story - no dialog - id", PublishStoryIdFragment.class, true));
+		mExamples.add(new Example("Publish story - no dialog - user-owned", PublishStoryUserOwnedFragment.class, true));
+		mExamples.add(new Example("Publish story - dialog - url", PublishStoryUrlDialogFragment.class, true));
+		mExamples.add(new Example("Publish story - dialog - id", PublishStoryIdDialogFragment.class, true));
+		mExamples.add(new Example("Publish story - dialog - user-owned", PublishStoryUserOwnedDialogFragment.class, true));
 		mExamples.add(new Example("Publish photo - no dialog", PublishPhotoFragment.class, true));
 		mExamples.add(new Example("Publish photo - dialog", PublishPhotoDialogFragment.class, false));
 		mExamples.add(new Example("Publish multiple photos - dialog", PublishMultiplePhotosDialogFragment.class, false));

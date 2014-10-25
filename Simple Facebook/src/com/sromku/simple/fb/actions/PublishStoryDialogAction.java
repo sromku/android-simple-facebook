@@ -60,7 +60,7 @@ FacebookDialog shareDialog = null;
 			// set the option 1
 			if (predefineObject) {
 				OpenGraphAction action = OpenGraphAction.Factory.createForPost(mStory.getPath());
-				action.setProperty(mStory.getStoryObject().getNoun(), objectId != null ? objectId != null : objectUrl);
+				action.setProperty(mStory.getStoryObject().getNoun(), objectId != null ? objectId : objectUrl);
 				Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
 				while (actionProperties.hasNext()) {
 					String property = actionProperties.next();

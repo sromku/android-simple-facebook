@@ -14,7 +14,7 @@ import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishStoryFragment extends BaseFragment {
+public class PublishStoryUrlFragment extends BaseFragment {
 
 	private final static String EXAMPLE = "Publish story (open graph)";
 
@@ -41,7 +41,7 @@ public class PublishStoryFragment extends BaseFragment {
 
 				// set object to be shared
 				StoryObject storyObject = new StoryObject.Builder()
-					.setUrl("http://romkuapps.com/github/simple-facebook/object-apple.html")
+					.setHostedUrl("http://romkuapps.com/github/simple-facebook/object-apple.html")
 					.setNoun("food")
 					.build();
 				
