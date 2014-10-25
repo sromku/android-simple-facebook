@@ -1,6 +1,5 @@
 package com.sromku.simple.fb.entities;
 
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
@@ -31,23 +30,15 @@ public class Story implements Publishable {
 		Bundle bundle = new Bundle();
 		/*
 		 * set object id (that is hosted on facebook server) or url (that is
-		 * hosted on your servers)
+		 * hosted on your servers) or user-owned one
 		 */
 		if (mStoryObject.getId() != null) {
 			bundle.putString(mStoryObject.getNoun(), mStoryObject.getId());
 		} else if (mStoryObject.getHostedUrl() != null) {
 			bundle.putString(mStoryObject.getNoun(), mStoryObject.getHostedUrl());
 		} else {
-			JSONObject json = new JSONObject();
-			Iterator<String> objectProperties = mStoryObject.getObjectProperties().keySet().iterator();
-			while (objectProperties.hasNext()) {
-				String property = objectProperties.next();
-				try {
-					json.put(property, mStoryObject.getObjectProperties().get(property));
-				} catch (JSONException e) {
-				}
-			}
-			bundle.putString(mStoryObject.getNoun(), json.toString());
+			bundle = mStoryObject.getBundle();
+			bundle.putString(mStoryObject.getNoun(), bundle.getString(StoryObject.OBJECT));
 		}
 
 		// put action params if such exist

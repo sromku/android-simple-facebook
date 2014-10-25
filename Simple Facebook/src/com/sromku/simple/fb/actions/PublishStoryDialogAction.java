@@ -81,6 +81,11 @@ FacebookDialog shareDialog = null;
 
 				OpenGraphAction action = OpenGraphAction.Factory.createForPost(mStory.getPath());
 				action.setProperty(mStory.getStoryObject().getNoun(), object);
+				Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
+				while (actionProperties.hasNext()) {
+					String property = actionProperties.next();
+					action.setProperty(property, mStory.getStoryAction().getParams().get(property));
+				}
 						
 				shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(sessionManager.getActivity(), action, mStory.getStoryObject().getNoun()).build();
 			}
