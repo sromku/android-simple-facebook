@@ -12,9 +12,9 @@ import com.sromku.simple.fb.entities.Comment;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishCommentFragment extends BaseFragment {
+public class PublishCommentImageFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish comment - text";
+	private final static String EXAMPLE = "Publish comment - image";
 
 	private TextView mResult;
 	private Button mButton;
@@ -37,7 +37,7 @@ public class PublishCommentFragment extends BaseFragment {
 			public void onClick(View v) {
 
 				Comment comment = new Comment.Builder()
-					.setMessage("Test comment")
+					.setAttachmentImageUrl("https://raw.githubusercontent.com/sromku/android-simple-facebook/master/Refs/publish_feed.png")
 					.build();
 
 				SimpleFacebook.getInstance().publish("977576802258070_977578808924536", comment, new OnPublishListener() {

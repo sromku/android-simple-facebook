@@ -16,7 +16,7 @@ import com.sromku.simple.fb.listeners.OnPublishListener;
 
 public class PublishStoryIdFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish story (open graph)";
+	private final static String EXAMPLE = "Publish story (hosted object)";
 
 	private TextView mResult;
 	private Button mButton;

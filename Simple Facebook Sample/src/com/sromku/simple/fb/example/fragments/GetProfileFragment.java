@@ -15,10 +15,10 @@ import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnProfileListener;
 
-public class GetProfileFragment extends BaseFragment{
+public class GetProfileFragment extends BaseFragment {
 
 	private final static String EXAMPLE = "Get profile";
-	
+
 	private TextView mResult;
 	private Button mGetButton;
 	private TextView mMore;
@@ -41,6 +41,14 @@ public class GetProfileFragment extends BaseFragment{
 		mGetButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				// PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+				// pictureAttributes.setHeight(500);
+				// pictureAttributes.setWidth(500);
+				// pictureAttributes.setType(PictureType.SQUARE);
+				// Properties properties = new Properties.Builder()
+				//		.add(Properties.PICTURE, pictureAttributes)
+				//		.build();
 
 				SimpleFacebook.getInstance().getProfile(new OnProfileListener() {
 

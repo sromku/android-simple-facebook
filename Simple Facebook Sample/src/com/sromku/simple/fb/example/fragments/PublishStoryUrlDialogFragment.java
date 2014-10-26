@@ -16,7 +16,7 @@ import com.sromku.simple.fb.listeners.OnPublishListener;
 
 public class PublishStoryUrlDialogFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish story - dialog (open graph)";
+	private final static String EXAMPLE = "Publish story - dialog (object url)";
 
 	private TextView mResult;
 	private Button mButton;

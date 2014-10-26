@@ -7,6 +7,7 @@ import java.util.Set;
 import com.sromku.simple.fb.example.utils.SharedObjects;
 
 import android.graphics.Color;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -95,9 +96,9 @@ public class ExamplesAdapter extends BaseAdapter {
 		Example example = mExamples.get(position);
 		TextView textView = (TextView) view;
 		if (getItemViewType(position) == EXAMPLE_VIEW) {
-			textView.setText("  \u25B6  " + example.getTitle());
+			textView.setText(Html.fromHtml("  \u25B6  " + example.getTitle()));
 		} else {
-			textView.setText(example.getTitle());
+			textView.setText(Html.fromHtml(example.getTitle()));
 		}
 		if (mLoggedIn || (!mLoggedIn && !example.isRequireLogin())) {
 			textView.setTextColor(Color.BLACK);
