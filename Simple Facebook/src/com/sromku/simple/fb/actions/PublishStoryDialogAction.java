@@ -37,7 +37,7 @@ public class PublishStoryDialogAction extends AbstractAction {
 	protected void executeImpl() {
 		if (FacebookDialog.canPresentOpenGraphActionDialog(sessionManager.getActivity(), OpenGraphActionDialogFeature.OG_ACTION_DIALOG)) {
 			
-FacebookDialog shareDialog = null;
+			FacebookDialog shareDialog = null;
 			
 			/*
 			 * Publishing open graph can be in 2 ways: 1. Publish actions on
