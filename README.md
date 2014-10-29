@@ -8,12 +8,12 @@ This is a library project which makes the life much easier by coding less code f
 
 Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
 
-We have new <img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
+<img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
 
 ## Releases
 Library jar | Branch | Supported Facebook SDK
 ------------|--------|------------------------
-[simple-facebook-2.1.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.1/simple.facebook-2.1.jar) | [master](https://github.com/sromku/android-simple-facebook) | 3.14 > 
+[simple-facebook-2.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.2/simple.facebook-2.2.jar) | [master](https://github.com/sromku/android-simple-facebook) | 3.14 > 
 [simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) | 3.0 - 3.8
 
 ## Sample App
@@ -80,7 +80,8 @@ The sample app includes examples for all actions. Check out this very short [wik
 	- [Debug](wiki/Debug)
 
 * **Samples**
-  - [Setup sample app](wiki/Sample-App)
+    - [Setup sample app](wiki/Sample-App)
+	- [LikeView](wiki/LikeView)
 
 *And,*
 * Based on latest Facebook SDK and Graph API v2.1
@@ -91,7 +92,22 @@ The sample app includes examples for all actions. Check out this very short [wik
 * And much more
 
 ## Documentation
-Everything is explained in **wiki**
+Everything is explained in [**wiki**](https://github.com/sromku/android-simple-facebook/wiki)
+
+## Contributors
+
+- [Rony Lutsky](https://github.com/ronlut)
+- [Martín Marconcini](https://github.com/Gryzor)
+- [Koray Balcı](https://github.com/koraybalci)
+- [Andrew Chen](https://github.com/yongjhih)
+- [Denny Huang](https://github.com/denny0223)
+- [Mateusz Mlodawski](https://github.com/MateuszMlodawski)
+- [booker0108](https://github.com/booker0108)
+- [Ansgar Mertens](https://github.com/ansgarm)
+- [bperin](https://github.com/bperin)
+- [Norbert Schuler](https://github.com/norbertschuler)
+
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-android--simple--facebook-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/949)
 
 ## License
 
