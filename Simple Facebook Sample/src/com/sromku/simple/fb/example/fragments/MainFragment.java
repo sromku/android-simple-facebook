@@ -96,6 +96,8 @@ public class MainFragment extends Fragment implements OnItemClickListener {
 		mExamples.add(new Example("Permissions", null, false));
 		mExamples.add(new Example("Show granted permissions", GrantedPermissionsFragment.class, true));
 		mExamples.add(new Example("Request new permissions", RequestPermissionsFragment.class, true));
+		mExamples.add(new Example("Misc", null, false));
+		mExamples.add(new Example("LikeView button", PublishLikeButtonFragment.class, true));
 	}
 
 	@Override
