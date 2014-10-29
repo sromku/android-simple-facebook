@@ -34,7 +34,6 @@ public class Profile implements User {
 	private String mLocale;
 	private List<Language> mLanguages;
 	private String mLink;
-	private String mUsername;
 	private AgeRange mAgeRange;
 	private String mThirdPartyId;
 	private Boolean mIsInstalled;
@@ -96,9 +95,6 @@ public class Profile implements User {
 
 		// link
 		mLink = Utils.getPropertyString(mGraphObject, Properties.LINK);
-
-		// username
-		mUsername = Utils.getPropertyString(mGraphObject, Properties.USER_NAME);
 
 		// age range
 		GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(mGraphObject, Properties.AGE_RANGE);
@@ -320,18 +316,6 @@ public class Profile implements User {
 	 */
 	public String getLink() {
 		return mLink;
-	}
-
-	/**
-	 * Returns the Facebook username of the user. <br>
-	 * <br>
-	 * <b> Permissions:</b><br>
-	 * {@link Permission#PUBLIC_PROFILE}
-	 * 
-	 * @return the Facebook username of the user
-	 */
-	public String getUsername() {
-		return mUsername;
 	}
 
 	/**
@@ -748,17 +732,6 @@ public class Profile implements User {
 		 * 
 		 */
 		public static final String LINK = "link";
-
-		/**
-		 * <b>Description:</b><br>
-		 * The user's Facebook username<br>
-		 * <br>
-		 * 
-		 * <b>Permissions:</b><br>
-		 * {@link Permission#PUBLIC_PROFILE}
-		 * 
-		 */
-		public static final String USER_NAME = "username";
 
 		/**
 		 * <b>Description:</b><br>
