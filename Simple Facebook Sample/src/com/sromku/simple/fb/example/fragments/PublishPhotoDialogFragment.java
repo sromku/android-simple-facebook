@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Photo;
-import com.sromku.simple.fb.entities.Privacy;
-import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnPublishListener;
@@ -42,17 +40,10 @@ public class PublishPhotoDialogFragment extends BaseFragment {
 
 				final Bitmap bitmap = Utils.takeScreenshot(getActivity());
 
-				// set privacy
-				Privacy privacy = new Privacy.Builder()
-					.setPrivacySettings(PrivacySettings.ALL_FRIENDS)
-					.build();
-
 				// create Photo instance and add some properties
 				Photo photo = new Photo.Builder()
 					.setImage(bitmap)
-					.setName("Screenshot from #android_simple_facebook sample application")
 					.setPlace("110619208966868")
-					.setPrivacy(privacy)
 					.build();
 
 				SimpleFacebook.getInstance().publish(photo, true, new OnPublishListener() {

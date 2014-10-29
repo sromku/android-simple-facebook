@@ -37,7 +37,7 @@ public class PublishCommentImageFragment extends BaseFragment {
 			public void onClick(View v) {
 
 				Comment comment = new Comment.Builder()
-					.setAttachmentImageUrl("https://raw.githubusercontent.com/sromku/android-simple-facebook/master/Refs/publish_feed.png")
+					.setAttachmentImageUrl("https://raw.githubusercontent.com/wiki/sromku/android-simple-facebook/images/publish_feed.png")
 					.build();
 
 				SimpleFacebook.getInstance().publish("977576802258070_977578808924536", comment, new OnPublishListener() {
