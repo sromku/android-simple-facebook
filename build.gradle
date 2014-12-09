@@ -4,7 +4,19 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:1.0.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+allprojects {
+    version = VERSION_NAME
+    group = GROUP
+    repositories {
+        mavenCentral()
+    }
+}
