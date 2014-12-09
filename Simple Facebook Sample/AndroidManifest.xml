@@ -14,7 +14,7 @@
         android:name=".SampleApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.App">
+        android:theme="@style/Theme.App" >
         <activity
             android:name="com.sromku.simple.fb.example.MainActivity"
             android:label="@string/app_name"
@@ -35,6 +35,11 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
+
+        <provider
+            android:name="com.facebook.NativeAppCallContentProvider"
+            android:authorities="com.facebook.app.NativeAppCallContentProvider728615400528729"
+            android:exported="true" />
     </application>
 
 </manifest>

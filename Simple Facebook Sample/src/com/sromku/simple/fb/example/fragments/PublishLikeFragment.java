@@ -1,6 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.entities.Photo;
-import com.sromku.simple.fb.entities.Privacy;
-import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
+import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.example.R;
-import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishPhotoFragment extends BaseFragment {
+public class PublishLikeFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish photo - no dialog";
+	private final static String EXAMPLE = "Publish like";
 
 	private TextView mResult;
 	private Button mButton;
@@ -40,22 +36,9 @@ public class PublishPhotoFragment extends BaseFragment {
 			@Override
 			public void onClick(View v) {
 
-				final Bitmap bitmap = Utils.takeScreenshot(getActivity());
+				Like like = new Like.Builder().build();
 
-				// set privacy
-				Privacy privacy = new Privacy.Builder()
-					.setPrivacySettings(PrivacySettings.ALL_FRIENDS)
-					.build();
-
-				// create Photo instance and add some properties
-				Photo photo = new Photo.Builder()
-					.setImage(bitmap)
-					.setName("Screenshot from #android_simple_facebook sample application")
-					.setPlace("110619208966868")
-					.setPrivacy(privacy)
-					.build();
-
-				SimpleFacebook.getInstance().publish(photo, false, new OnPublishListener() {
+				SimpleFacebook.getInstance().publish("977576802258070_977578808924536", like, new OnPublishListener() {
 
 					@Override
 					public void onException(Throwable throwable) {

@@ -1,6 +1,8 @@
 package com.sromku.simple.fb.example.fragments;
 
-import android.graphics.Bitmap;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +12,13 @@ import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Photo;
-import com.sromku.simple.fb.entities.Privacy;
-import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishPhotoFragment extends BaseFragment {
+public class PublishMultiplePhotosDialogFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish photo - no dialog";
+	private final static String EXAMPLE = "Publish multiple photos - with dialog";
 
 	private TextView mResult;
 	private Button mButton;
@@ -40,22 +40,11 @@ public class PublishPhotoFragment extends BaseFragment {
 			@Override
 			public void onClick(View v) {
 
-				final Bitmap bitmap = Utils.takeScreenshot(getActivity());
+				List<Photo> photos = new ArrayList<Photo>();
+				photos.add(new Photo.Builder().setImage(Utils.takeScreenshot(getActivity())).setPlace("110619208966868").build());
+				photos.add(new Photo.Builder().setImage(Utils.takeScreenshot(getActivity())).setPlace("110619208966868").build());
 
-				// set privacy
-				Privacy privacy = new Privacy.Builder()
-					.setPrivacySettings(PrivacySettings.ALL_FRIENDS)
-					.build();
-
-				// create Photo instance and add some properties
-				Photo photo = new Photo.Builder()
-					.setImage(bitmap)
-					.setName("Screenshot from #android_simple_facebook sample application")
-					.setPlace("110619208966868")
-					.setPrivacy(privacy)
-					.build();
-
-				SimpleFacebook.getInstance().publish(photo, false, new OnPublishListener() {
+				SimpleFacebook.getInstance().publish(photos, new OnPublishListener() {
 
 					@Override
 					public void onException(Throwable throwable) {

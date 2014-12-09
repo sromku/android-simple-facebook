@@ -115,6 +115,10 @@ public class PublishAction extends AbstractAction {
 					} catch (JSONException e) {
 						Logger.logError(PublishAction.class, "JSON error", e);
 						postId = "no_id";
+						try {
+							postId = "success: " + graphResponse.getString("success");
+						} catch (JSONException e1) {
+						}
 					}
 					FacebookRequestError error = response.getError();
 					if (error != null) {

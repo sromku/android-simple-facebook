@@ -34,7 +34,6 @@ public class Profile implements User {
 	private String mLocale;
 	private List<Language> mLanguages;
 	private String mLink;
-	private String mUsername;
 	private AgeRange mAgeRange;
 	private String mThirdPartyId;
 	private Boolean mIsInstalled;
@@ -63,7 +62,7 @@ public class Profile implements User {
 		mGraphObject = graphObject;
 
 		// id
-		mId =Utils.getPropertyString(mGraphObject, Properties.ID);
+		mId = Utils.getPropertyString(mGraphObject, Properties.ID);
 
 		// name
 		mName = Utils.getPropertyString(mGraphObject, Properties.NAME);
@@ -96,9 +95,6 @@ public class Profile implements User {
 
 		// link
 		mLink = Utils.getPropertyString(mGraphObject, Properties.LINK);
-
-		// username
-		mUsername = Utils.getPropertyString(mGraphObject, Properties.USER_NAME);
 
 		// age range
 		GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(mGraphObject, Properties.AGE_RANGE);
@@ -218,7 +214,7 @@ public class Profile implements User {
 	 * Returns the ID of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the ID of the user
 	 */
@@ -230,7 +226,7 @@ public class Profile implements User {
 	 * Returns the name of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the name of the user
 	 */
@@ -242,7 +238,7 @@ public class Profile implements User {
 	 * Returns the first name of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the first name of the user
 	 */
@@ -254,7 +250,7 @@ public class Profile implements User {
 	 * Returns the middle name of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the middle name of the user
 	 */
@@ -266,7 +262,7 @@ public class Profile implements User {
 	 * Returns the last name of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the last name of the user
 	 */
@@ -278,7 +274,7 @@ public class Profile implements User {
 	 * Returns the gender of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the gender of the user
 	 */
@@ -290,7 +286,7 @@ public class Profile implements User {
 	 * Return the ISO language code and ISO country code of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the ISO language code and ISO country code of the user
 	 */
@@ -314,7 +310,7 @@ public class Profile implements User {
 	 * Returns the Facebook URL of the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the Facebook URL of the user
 	 */
@@ -323,22 +319,10 @@ public class Profile implements User {
 	}
 
 	/**
-	 * Returns the Facebook username of the user. <br>
-	 * <br>
-	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
-	 * 
-	 * @return the Facebook username of the user
-	 */
-	public String getUsername() {
-		return mUsername;
-	}
-
-	/**
 	 * The user's age range. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the user's age range
 	 */
@@ -350,7 +334,7 @@ public class Profile implements User {
 	 * An anonymous, but unique identifier for the user. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return the an anonymous, but unique identifier for the user
 	 */
@@ -363,7 +347,7 @@ public class Profile implements User {
 	 * the app access token that is used to make the request. <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return <code>True</code> if installed, otherwise <code>False</code>
 	 */
@@ -375,7 +359,7 @@ public class Profile implements User {
 	 * Return the timezone of the user.<br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * <br>
 	 * <br>
@@ -384,7 +368,7 @@ public class Profile implements User {
 	 * 
 	 * @return the timezone of the user
 	 */
-	public int getTimeZone() {
+	public Integer getTimeZone() {
 		return mTimeZone;
 	}
 
@@ -395,7 +379,7 @@ public class Profile implements User {
 	 * value.<br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * <br>
 	 * <br>
@@ -410,7 +394,7 @@ public class Profile implements User {
 	 * The user's account verification status.<br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * <br>
 	 * <br>
@@ -431,7 +415,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_ABOUT_ME}<br>
-	 * {@link Permission#FRIENDS_ABOUT_ME}
 	 * 
 	 * @return the biography of the user
 	 */
@@ -444,7 +427,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_BIRTHDAY} <br>
-	 * {@link Permission#FRIENDS_BIRTHDAY}
 	 * 
 	 * @return the birthday of the user
 	 */
@@ -453,10 +435,11 @@ public class Profile implements User {
 	}
 
 	/**
-	 * The user's cover photo. The url of cover will be under {@link Photo#getSource()} <br>
+	 * The user's cover photo. The url of cover will be under
+	 * {@link Photo#getSource()} <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return The user's cover photo
 	 */
@@ -468,7 +451,7 @@ public class Profile implements User {
 	 * The user's currency settings <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return The user's currency settings
 	 */
@@ -481,7 +464,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_EDUCATION_HISTORY}<br>
-	 * {@link Permission#FRIENDS_EDUCATION_HISTORY}
 	 * 
 	 * @return The user's education history
 	 */
@@ -506,7 +488,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_HOMETOWN}<br>
-	 * {@link Permission#FRIENDS_HOMETOWN}
 	 * 
 	 * @return The user's hometown
 	 */
@@ -519,7 +500,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_LOCATION}<br>
-	 * {@link Permission#FRIENDS_LOCATION}
 	 * 
 	 * @return the current city of the user
 	 */
@@ -545,7 +525,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}
 	 * 
 	 * @return The user's favorite athletes
 	 */
@@ -558,7 +537,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_LIKES}<br>
-	 * {@link Permission#FRIENDS_LIKES}
 	 * 
 	 * @return The user's favorite teams
 	 */
@@ -570,7 +548,7 @@ public class Profile implements User {
 	 * The user's profile pic <br>
 	 * <br>
 	 * <b> Permissions:</b><br>
-	 * {@link Permission#BASIC_INFO}
+	 * {@link Permission#PUBLIC_PROFILE}
 	 * 
 	 * @return The user's profile pic
 	 */
@@ -583,7 +561,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_ABOUT_ME}<br>
-	 * {@link Permission#FRIENDS_ABOUT_ME}
 	 * 
 	 * @return The user's favorite quotes
 	 */
@@ -600,7 +577,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_RELATIONSHIPS}<br>
-	 * {@link Permission#FRIENDS_RELATIONSHIPS}
 	 * 
 	 * @return The user's relationship status
 	 */
@@ -613,7 +589,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_RELIGION_POLITICS}<br>
-	 * {@link Permission#FRIENDS_RELIGION_POLITICS}
 	 * 
 	 * @return The user's religion
 	 */
@@ -626,7 +601,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_WEBSITE}<br>
-	 * {@link Permission#FRIENDS_WEBSITE}
 	 * 
 	 * @return The URL of the user's personal website
 	 */
@@ -639,7 +613,6 @@ public class Profile implements User {
 	 * <br>
 	 * <b> Permissions:</b><br>
 	 * {@link Permission#USER_WORK_HISTORY}<br>
-	 * {@link Permission#FRIENDS_WORK_HISTORY}
 	 * 
 	 * @return The user's work history
 	 */
@@ -667,7 +640,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String ID = "id";
@@ -678,7 +651,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String NAME = "name";
@@ -689,7 +662,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String FIRST_NAME = "first_name";
@@ -700,7 +673,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String MIDDLE_NAME = "middle_name";
@@ -711,7 +684,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String LAST_NAME = "last_name";
@@ -722,7 +695,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String GENDER = "gender";
@@ -733,7 +706,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String LOCALE = "locale";
@@ -755,21 +728,10 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String LINK = "link";
-
-		/**
-		 * <b>Description:</b><br>
-		 * The user's Facebook username<br>
-		 * <br>
-		 * 
-		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
-		 * 
-		 */
-		public static final String USER_NAME = "username";
 
 		/**
 		 * <b>Description:</b><br>
@@ -777,7 +739,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String AGE_RANGE = "age_range";
@@ -788,7 +750,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String THIRD_PARTY_ID = "third_party_id";
@@ -800,7 +762,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String INSTALLED = "installed";
@@ -811,7 +773,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String TIMEZONE = "timezone";
@@ -825,7 +787,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String UPDATED_TIME = "updated_time";
@@ -836,7 +798,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String VERIFIED = "verified";
@@ -871,7 +833,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String COVER = "cover";
@@ -882,7 +844,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String CURRENCY = "currency";
@@ -893,7 +855,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String DEVICES = "devices";
@@ -979,7 +941,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String PAYMENT_PRICEPOINTS = "payment_pricepoints";
@@ -991,7 +953,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String PAYMENT_MOBILE_PRICEPOINTS = "payment_mobile_pricepoints";
@@ -1026,7 +988,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String PICTURE = "picture";
@@ -1075,7 +1037,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String SECURITY_SETTINGS = "security_settings";
@@ -1099,7 +1061,7 @@ public class Profile implements User {
 		 * <br>
 		 * 
 		 * <b>Permissions:</b><br>
-		 * {@link Permission#BASIC_INFO}
+		 * {@link Permission#PUBLIC_PROFILE}
 		 * 
 		 */
 		public static final String VIDEO_UPLOAD_LIMITS = "video_upload_limits";

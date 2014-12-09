@@ -2,7 +2,11 @@ package com.sromku.simple.fb.entities;
 
 import java.util.List;
 
+import android.os.Bundle;
+
 import com.facebook.model.GraphObject;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 import com.sromku.simple.fb.utils.Utils.Converter;
 
@@ -10,7 +14,7 @@ import com.sromku.simple.fb.utils.Utils.Converter;
  * @author sromku
  * @see https://developers.facebook.com/docs/graph-api/reference/comment
  */
-public class Comment {
+public class Comment implements Publishable {
 
 	private static final String ID = "id";
 	private static final String CAN_COMMENT = "can_comment";
@@ -23,12 +27,11 @@ public class Comment {
 	private static final String MESSAGE_TAGS = "message_tags";
 	private static final String PARENT = "parent";
 	private static final String USER_LIKES = "user_likes";
-
-	// TODO
-	@SuppressWarnings("unused")
 	private static final String ATTACHMENT = "attachment";
+	private static final String ATTACHMENT_URL = "attachment_url";
 
 	private String mId;
+	private Attachment mAttachment;
 	private Boolean mCanComment;
 	private Boolean mCanRemove;
 	private Integer mCommentCount;
@@ -39,10 +42,14 @@ public class Comment {
 	private List<String> mMessageTags;
 	private Comment mParent;
 	private Boolean mUserLikes;
+	private String mAttachmentUrl;
 
 	private Comment(GraphObject graphObject) {
 		// id
 		mId = Utils.getPropertyString(graphObject, ID);
+
+		// attachment
+		mAttachment = Attachment.create(Utils.getPropertyGraphObject(graphObject, ATTACHMENT));
 
 		// can comment
 		mCanComment = Utils.getPropertyBoolean(graphObject, CAN_COMMENT);
@@ -83,8 +90,40 @@ public class Comment {
 		mUserLikes = Utils.getPropertyBoolean(graphObject, USER_LIKES);
 	}
 
+	private Comment(Builder builder) {
+		mMessage = builder.mMessage;
+		mAttachmentUrl = builder.mAttachmentUrl;
+	}
+
 	public static Comment create(GraphObject graphObject) {
 		return new Comment(graphObject);
+	}
+
+	@Override
+	public Bundle getBundle() {
+		Bundle bundle = new Bundle();
+
+		// add name
+		if (mMessage != null) {
+			bundle.putString(MESSAGE, mMessage);
+		}
+
+		// add attachment
+		if (mAttachmentUrl != null) {
+			bundle.putString(ATTACHMENT_URL, mAttachmentUrl);
+		}
+		
+		return bundle;
+	}
+
+	@Override
+	public String getPath() {
+		return GraphPath.COMMENTS;
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.PUBLISH_ACTION;
 	}
 
 	/**
@@ -92,6 +131,13 @@ public class Comment {
 	 */
 	public String getId() {
 		return mId;
+	}
+
+	/**
+	 * Get attachments to this comment. Thay may include photos and links.
+	 */
+	public Attachment getAttachment() {
+		return mAttachment;
 	}
 
 	/**
@@ -162,5 +208,100 @@ public class Comment {
 	 */
 	public Boolean getUserLikes() {
 		return mUserLikes;
+	}
+
+	public static class Attachment {
+
+		private static final String DESCRIPTION = "description";
+		private static final String TITLE = "title";
+		private static final String TYPE = "type";
+		private static final String URL = "url";
+
+		@SuppressWarnings("unused")
+		// TODO
+		private static final String DESCRIPTION_TAGS = "description_tags";
+
+		@SuppressWarnings("unused")
+		// TODO
+		private static final String MEDIA = "media";
+
+		@SuppressWarnings("unused")
+		// TODO
+		private static final String TARGET = "target";
+
+		private String mDescription;
+		private String mTitle;
+		private String mType;
+		private String mUrl;
+
+		private Attachment(GraphObject graphObject) {
+
+			// description
+			mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
+
+			// title
+			mTitle = Utils.getPropertyString(graphObject, TITLE);
+
+			// type
+			mType = Utils.getPropertyString(graphObject, TYPE);
+
+			// url
+			mUrl = Utils.getPropertyString(graphObject, URL);
+		}
+
+		public static Attachment create(GraphObject graphObject) {
+			return new Attachment(graphObject);
+		}
+
+		public String getDescription() {
+			return mDescription;
+		}
+
+		public String getTitle() {
+			return mTitle;
+		}
+
+		public String getType() {
+			return mType;
+		}
+
+		public String getUrl() {
+			return mUrl;
+		}
+	}
+
+	/**
+	 * Builder for preparing the Comment object to be published.
+	 */
+	public static class Builder {
+		private String mMessage = null;
+		private String mAttachmentUrl = null;
+
+		public Builder() {
+		}
+
+		/**
+		 * Set the comment text
+		 * 
+		 * @param message
+		 *            The text of the comment
+		 */
+		public Builder setMessage(String message) {
+			mMessage = message;
+			return this;
+		}
+		
+		/**
+		 * The URL of an image to include as a photo comment
+		 * @param attachmentImageUrl The image url to be attached to comment
+		 */
+		public Builder setAttachmentImageUrl(String attachmentImageUrl) {
+			mAttachmentUrl = attachmentImageUrl;
+			return this;
+		}
+
+		public Comment build() {
+			return new Comment(this);
+		}
 	}
 }

@@ -129,18 +129,28 @@ public class SimpleFacebookConfiguration {
 	 * Add new permissions in a runtime
 	 * 
 	 * @param permissions
+	 * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
+	 * 
 	 */
-	void addNewPermissions(Permission[] permissions) {
+	int addNewPermissions(Permission[] permissions) {
+		/*
+		 * 0 = no new permissions were added
+		 * 1 = for read permissions
+		 * 2 = for write permissions
+		 */
+		int flag = 0;
 		for (Permission permission : permissions) {
 			switch (permission.getType()) {
 			case READ:
 				if (!mReadPermissions.contains(permission.getValue())) {
 					mReadPermissions.add(permission.getValue());
+					flag |= 1;
 				}
 				break;
 			case PUBLISH:
 				if (!mPublishPermissions.contains(permission.getValue())) {
 					mPublishPermissions.add(permission.getValue());
+					flag |= 2;
 				}
 				break;
 			default:
@@ -151,6 +161,7 @@ public class SimpleFacebookConfiguration {
 		if (this.mPublishPermissions.size() > 0) {
 			this.mHasPublishPermissions = true;
 		}
+		return flag;
 	}
 
 	public static class Builder {
@@ -234,8 +245,8 @@ public class SimpleFacebookConfiguration {
 
 		/**
 		 * If your app has both: read and publish permissions, then this
-		 * configuration can be very useful. When you first time login the popup
-		 * with read permissions that the user should accept is appeared. After
+		 * configuration can be very useful. When you first time login, the popup
+		 * with read permissions that the user should accept appears. After
 		 * this you can decide, if you want the dialog of publish permissions to
 		 * appear or not. <br>
 		 * <br>

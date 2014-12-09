@@ -1,5 +1,6 @@
 package com.sromku.simple.fb.example.fragments;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.entities.Story;
-import com.sromku.simple.fb.entities.Story.StoryAction;
-import com.sromku.simple.fb.entities.Story.StoryObject;
+import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.example.R;
+import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishStoryFragment extends BaseFragment {
+public class PublishPhotoDialogFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish story (open graph)";
+	private final static String EXAMPLE = "Publish photo - with dialog";
 
 	private TextView mResult;
 	private Button mButton;
@@ -35,31 +35,19 @@ public class PublishStoryFragment extends BaseFragment {
 		mButton = (Button) view.findViewById(R.id.button);
 		mButton.setText(EXAMPLE);
 		mButton.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 
-				// set object to be shared
-				StoryObject storyObject = new StoryObject.Builder()
-					.setUrl("http://romkuapps.com/github/simple-facebook/object-apple.html")
-					.setNoun("food")
+				final Bitmap bitmap = Utils.takeScreenshot(getActivity());
+
+				// create Photo instance and add some properties
+				Photo photo = new Photo.Builder()
+					.setImage(bitmap)
+					.setPlace("110619208966868")
 					.build();
-				
-				// set action to be done 
-				StoryAction storyAction = new StoryAction.Builder()
-					.setAction("eat")
-					.addProperty("taste", "sweet")
-					.build();
-				
-				// build story
-				Story story = new Story.Builder()
-					.setObject(storyObject)
-					.setAction(storyAction)
-					.build();
-					
-				// publish story
-				SimpleFacebook.getInstance().publish(story, new OnPublishListener() {
-					
+
+				SimpleFacebook.getInstance().publish(photo, true, new OnPublishListener() {
+
 					@Override
 					public void onException(Throwable throwable) {
 						hideDialog();
@@ -83,9 +71,10 @@ public class PublishStoryFragment extends BaseFragment {
 						mResult.setText(response);
 					}
 				});
+
 			}
 		});
 		return view;
 	}
-	
+
 }

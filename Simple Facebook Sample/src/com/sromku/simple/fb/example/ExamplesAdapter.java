@@ -6,6 +6,9 @@ import java.util.Set;
 
 import com.sromku.simple.fb.example.utils.SharedObjects;
 
+import android.graphics.Color;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ public class ExamplesAdapter extends BaseAdapter {
 
 	private final List<Example> mExamples;
 	private final Set<Integer> mTitles;
+	private boolean mLoggedIn;
 
 	public ExamplesAdapter(List<Example> examples) {
 		mExamples = examples;
@@ -65,6 +69,9 @@ public class ExamplesAdapter extends BaseAdapter {
 		if (getItemViewType(position) == TITLE_VIEW) {
 			return false;
 		}
+		if (!mLoggedIn && mExamples.get(position).isRequireLogin()) {
+			return false;
+		}
 		return super.isEnabled(position);
 	}
 
@@ -76,10 +83,9 @@ public class ExamplesAdapter extends BaseAdapter {
 			textView.setTextColor(SharedObjects.context.getResources().getColor(R.color.black));
 			textView.setSingleLine();
 			if (getItemViewType(position) == EXAMPLE_VIEW) {
-				textView.setTextSize(SharedObjects.context.getResources().getDimension(R.dimen.example_list_text_size));
-			}
-			else {
-				textView.setTextSize(SharedObjects.context.getResources().getDimension(R.dimen.example_list_title_size));
+				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_text_size));
+			} else {
+				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.example_list_title_size));
 			}
 			textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			int pix10dp = SharedObjects.context.getResources().getDimensionPixelSize(R.dimen.padding_10dp);
@@ -90,12 +96,23 @@ public class ExamplesAdapter extends BaseAdapter {
 		Example example = mExamples.get(position);
 		TextView textView = (TextView) view;
 		if (getItemViewType(position) == EXAMPLE_VIEW) {
-			textView.setText("  \u25B6  " + example.getTitle());
+			textView.setText(Html.fromHtml("  \u25B6  " + example.getTitle()));
+		} else {
+			textView.setText(Html.fromHtml(example.getTitle()));
 		}
-		else {
-			textView.setText(example.getTitle());
+		if (mLoggedIn || (!mLoggedIn && !example.isRequireLogin())) {
+			textView.setTextColor(Color.BLACK);
+			textView.setEnabled(true);
+		} else {
+			textView.setTextColor(Color.GRAY);
+			textView.setEnabled(false);
 		}
 		return view;
+	}
+
+	public void setLogged(boolean logged) {
+		mLoggedIn = logged;
+		notifyDataSetChanged();
 	}
 
 }

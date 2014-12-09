@@ -1,6 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.entities.Photo;
-import com.sromku.simple.fb.entities.Privacy;
-import com.sromku.simple.fb.entities.Privacy.PrivacySettings;
+import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.Story.StoryAction;
+import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.example.R;
-import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-public class PublishPhotoFragment extends BaseFragment {
+public class PublishStoryUserOwnedFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish photo - no dialog";
+	private final static String EXAMPLE = "Publish story (user-owned)";
 
 	private TextView mResult;
 	private Button mButton;
@@ -37,26 +35,35 @@ public class PublishPhotoFragment extends BaseFragment {
 		mButton = (Button) view.findViewById(R.id.button);
 		mButton.setText(EXAMPLE);
 		mButton.setOnClickListener(new View.OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
 
-				final Bitmap bitmap = Utils.takeScreenshot(getActivity());
-
-				// set privacy
-				Privacy privacy = new Privacy.Builder()
-					.setPrivacySettings(PrivacySettings.ALL_FRIENDS)
+				// set object to be shared
+				StoryObject storyObject = new StoryObject.Builder()
+					.setDescription("The apple is the pomaceous fruit of the apple tree, Malus domestica of the rose family. It is one of the most widely cultivated tree fruits.")
+					.setImage("http://en.huashengfruit.com/v15/Upload/2012971553522493.png")
+					.setNoun("food")
+					.setTitle("Apple")
+					.setUrl("https://github.com/sromku/android-simple-facebook")
+					.addProperty("calories", "52")
 					.build();
-
-				// create Photo instance and add some properties
-				Photo photo = new Photo.Builder()
-					.setImage(bitmap)
-					.setName("Screenshot from #android_simple_facebook sample application")
-					.setPlace("110619208966868")
-					.setPrivacy(privacy)
+				
+				// set action to be done 
+				StoryAction storyAction = new StoryAction.Builder()
+					.setAction("eat")
+					.addProperty("taste", "sweet")
 					.build();
-
-				SimpleFacebook.getInstance().publish(photo, false, new OnPublishListener() {
-
+				
+				// build story
+				Story story = new Story.Builder()
+					.setObject(storyObject)
+					.setAction(storyAction)
+					.build();
+					
+				// publish story
+				SimpleFacebook.getInstance().publish(story, new OnPublishListener() {
+					
 					@Override
 					public void onException(Throwable throwable) {
 						hideDialog();
@@ -80,10 +87,9 @@ public class PublishPhotoFragment extends BaseFragment {
 						mResult.setText(response);
 					}
 				});
-
 			}
 		});
 		return view;
 	}
-
+	
 }

@@ -24,7 +24,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -32,13 +31,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 
 import com.facebook.Response;
 import com.facebook.model.GraphMultiResult;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
+import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.User;
 
@@ -431,20 +433,10 @@ public class Utils {
 			return null;
 		}
 		Object value = graphObject.getProperty(property);
-		if (value == null || value.equals(EMPTY)) {
-			return null;
+		if (value instanceof JSONArray) {
+			return (JSONArray) value;
 		}
 
-		JSONArray jsonArray;
-		try {
-			jsonArray = new JSONArray(value);
-			return jsonArray;
-		} catch (JSONException e) {
-			try {
-				return (JSONArray) value;
-			} catch (Exception e1) {
-			}
-		}
 		return null;
 	}
 
@@ -530,5 +522,21 @@ public class Utils {
 			return null;
 		}
 	}
+	
+	public static List<Bitmap> extractBitmaps(List<Photo> photos) {
+		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+		for (Photo photo : photos) {
+			Parcelable parcelable = photo.getParcelable();
+			if (parcelable instanceof Bitmap) {
+				bitmaps.add((Bitmap) parcelable);
+			}
+		}
+		return bitmaps;
+	}
 
+	public static <T> List<T> createSingleItemList(T t) {
+		List<T> list = new ArrayList<T>();
+		list.add(t);
+		return list;
+	}
 }

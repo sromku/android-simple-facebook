@@ -228,6 +228,20 @@ public class Photo implements Publishable {
 		return mWidth;
 	}
 
+	/**
+	 * Is used for publishing action
+	 */
+	public Parcelable getParcelable() {
+		return mParcelable;
+	}
+
+	/**
+	 * Is used for publishing action
+	 */
+	public String getPlaceId() {
+		return mPlaceId;
+	}
+
 	public Bundle getBundle() {
 		Bundle bundle = new Bundle();
 
@@ -249,8 +263,7 @@ public class Photo implements Publishable {
 		// add image
 		if (mParcelable != null) {
 			bundle.putParcelable(PICTURE, mParcelable);
-		}
-		else if (mBytes != null) {
+		} else if (mBytes != null) {
 			bundle.putByteArray(PICTURE, mBytes);
 		}
 
@@ -336,8 +349,7 @@ public class Photo implements Publishable {
 		public Builder setImage(File file) {
 			try {
 				mParcelable = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
-			}
-			catch (FileNotFoundException e) {
+			} catch (FileNotFoundException e) {
 				Logger.logError(Photo.class, "Failed to create photo from file", e);
 			}
 			return this;

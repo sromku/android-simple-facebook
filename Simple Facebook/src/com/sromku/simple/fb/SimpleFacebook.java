@@ -1,6 +1,5 @@
 package com.sromku.simple.fb;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,16 +11,16 @@ import com.facebook.Session;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
+import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
-import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
-import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
-import com.sromku.simple.fb.actions.GetCheckinsAction;
+import com.sromku.simple.fb.actions.GetCommentAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
 import com.sromku.simple.fb.actions.GetEventsAction;
 import com.sromku.simple.fb.actions.GetFamilyAction;
 import com.sromku.simple.fb.actions.GetFriendsAction;
 import com.sromku.simple.fb.actions.GetGroupsAction;
+import com.sromku.simple.fb.actions.GetInvitableFriendsAction;
 import com.sromku.simple.fb.actions.GetLikesAction;
 import com.sromku.simple.fb.actions.GetNotificationsAction;
 import com.sromku.simple.fb.actions.GetPageAction;
@@ -31,10 +30,13 @@ import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
 import com.sromku.simple.fb.actions.GetStoryObjectsAction;
+import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
 import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
+import com.sromku.simple.fb.actions.PublishPhotoDialogAction;
+import com.sromku.simple.fb.actions.PublishStoryDialogAction;
 import com.sromku.simple.fb.entities.Album;
 import com.sromku.simple.fb.entities.Checkin;
 import com.sromku.simple.fb.entities.Comment;
@@ -42,6 +44,7 @@ import com.sromku.simple.fb.entities.Event;
 import com.sromku.simple.fb.entities.Event.EventDecision;
 import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Group;
+import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Post;
@@ -55,9 +58,10 @@ import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnAccountsListener;
 import com.sromku.simple.fb.listeners.OnActionListener;
+import com.sromku.simple.fb.listeners.OnAlbumListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
-import com.sromku.simple.fb.listeners.OnCheckinsListener;
+import com.sromku.simple.fb.listeners.OnCommentListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
 import com.sromku.simple.fb.listeners.OnCreateStoryObject;
 import com.sromku.simple.fb.listeners.OnDeleteListener;
@@ -81,6 +85,7 @@ import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnStoryObjectsListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.GraphPath;
+import com.sromku.simple.fb.utils.Utils;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK
@@ -241,6 +246,21 @@ public class SimpleFacebook {
 		getAccountsAction.setActionListener(onAccountsListener);
 		getAccountsAction.execute();
 	}
+	
+	/**
+	 * Get album by album id.
+	 * 
+	 * @param albumId
+	 *            The album id.
+	 * @param onPageListener
+	 *            The callback listener.
+	 */
+	public void getAlbum(String albumId, OnAlbumListener onAlbumListener) {
+		GetAlbumAction getAlbumAction = new GetAlbumAction(mSessionManager);
+		getAlbumAction.setActionListener(onAlbumListener);
+		getAlbumAction.setTarget(albumId);
+		getAlbumAction.execute();
+	}
 
 	/**
 	 * Get my albums.<br>
@@ -391,46 +411,20 @@ public class SimpleFacebook {
 	}
 
 	/**
-	 * Get checkins of the user.<br>
-	 * <br>
+	 * Get comment by comment id.
 	 * 
-	 * <b>Permission:</b><br>
-	 * {@link Permission#USER_CHECKINS}<br>
-	 * 
-	 * @param onCheckinsListener
+	 * @param commentId
+	 *            The comment id.
+	 * @param onPageListener
 	 *            The callback listener.
 	 */
-	public void getCheckins(OnCheckinsListener onCheckinsListener) {
-		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
-		getCheckinsAction.setActionListener(onCheckinsListener);
-		getCheckinsAction.execute();
+	public void getComment(String commentId, OnCommentListener onCommentListener) {
+		GetCommentAction getCommentAction = new GetCommentAction(mSessionManager);
+		getCommentAction.setActionListener(onCommentListener);
+		getCommentAction.setTarget(commentId);
+		getCommentAction.execute();
 	}
-
-	/**
-	 * Get checkins of entity.<br>
-	 * <br>
-	 * The entity can be one of:<br>
-	 * - <b>Profile</b>. It can be you, your friend or any other profile. To get
-	 * id of the profile: {@link Profile#getId()}<br>
-	 * - <b>Page</b>. It can be any page. To get the page id:
-	 * {@link Page#getId()}<br>
-	 * <br>
-	 * 
-	 * <b>Permission:</b><br>
-	 * {@link Permission#USER_CHECKINS}<br>
-	 * 
-	 * @param entityId
-	 *            profile id or page id.
-	 * @param onCheckinsListener
-	 *            The callback listener.
-	 */
-	public void getCheckins(String entityId, OnCheckinsListener onCheckinsListener) {
-		GetCheckinsAction getCheckinsAction = new GetCheckinsAction(mSessionManager);
-		getCheckinsAction.setActionListener(onCheckinsListener);
-		getCheckinsAction.setTarget(entityId);
-		getCheckinsAction.execute();
-	}
-
+	
 	/**
 	 * Get comments of specific entity.<br>
 	 * <br>
@@ -448,7 +442,8 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get comments of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting the comments of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting
+	 * the comments of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -773,7 +768,8 @@ public class SimpleFacebook {
 	 * <b>Permission:</b><br>
 	 * No special permission is needed, except the permission you asked for
 	 * getting the entity itself. For example, if you want to get likes of
-	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting likes of this album.
+	 * album, you need to have the {@link Permission#USER_PHOTOS} for getting
+	 * likes of this album.
 	 * 
 	 * @param entityId
 	 *            Album, Checkin, Comment, Link, Photo, Post or Video.
@@ -1463,6 +1459,28 @@ public class SimpleFacebook {
 	}
 
 	/**
+	 * Publish comment
+	 * 
+	 * @param entityId
+	 * @param comment
+	 * @param onPublishListener
+	 */
+	public void publish(String entityId, Comment comment, OnPublishListener onPublishListener) {
+		publish(entityId, (Publishable) comment, onPublishListener);
+	}
+
+	/**
+	 * Publish like
+	 * 
+	 * @param entityId
+	 * @param like
+	 * @param onPublishListener
+	 */
+	public void publish(String entityId, Like like, OnPublishListener onPublishListener) {
+		publish(entityId, (Publishable) like, onPublishListener);
+	}
+	
+	/**
 	 * 
 	 * Posts a score using Scores API for games. If missing publish_actions
 	 * permission, we do not ask again for it.<br>
@@ -1611,17 +1629,17 @@ public class SimpleFacebook {
 	 * @param openGraph
 	 * @param onPublishListener
 	 */
-//	public void publish(Story story, boolean withDialog, OnPublishListener onPublishListener) {
-//		if (!withDialog) {
-//			// make it silently
-//			publish(story, onPublishListener);
-//		} else {
-//			PublishStoryDialogAction publishStoryDialogAction = new PublishStoryDialogAction(mSessionManager);
-//			publishStoryDialogAction.setStory(story);
-//			publishStoryDialogAction.setOnPublishListener(onPublishListener);
-//			publishStoryDialogAction.execute();
-//		}
-//	}
+	public void publish(Story story, boolean withDialog, OnPublishListener onPublishListener) {
+		if (!withDialog) {
+			// make it silently
+			publish(story, onPublishListener);
+		} else {
+			PublishStoryDialogAction publishStoryDialogAction = new PublishStoryDialogAction(mSessionManager);
+			publishStoryDialogAction.setStory(story);
+			publishStoryDialogAction.setOnPublishListener(onPublishListener);
+			publishStoryDialogAction.execute();
+		}
+	}
 
 	/**
 	 * Create new album.<br>
@@ -1691,8 +1709,33 @@ public class SimpleFacebook {
 	 * @param onPublishListener
 	 *            The callback listener
 	 */
-	public void publish(Photo photo, OnPublishListener onPublishListener) {
-		publish("me", (Publishable) photo, onPublishListener);
+	public void publish(Photo photo, boolean withDialog, OnPublishListener onPublishListener) {
+		if (!withDialog) {
+			publish("me", (Publishable) photo, onPublishListener);
+		} else {
+			List<Photo> photos = Utils.createSingleItemList(photo);
+			PublishPhotoDialogAction publishPhotoDialogAction = new PublishPhotoDialogAction(mSessionManager);
+			publishPhotoDialogAction.setPhotos(photos);
+			publishPhotoDialogAction.setPlace(photo.getPlaceId());
+			publishPhotoDialogAction.setOnPublishListener(onPublishListener);
+			publishPhotoDialogAction.execute();
+		}
+	}
+
+	/**
+	 * Publish up to 6 photos to user timeline <b>WITH DIALOG ONLY</b>
+	 * 
+	 * @param photos
+	 * @param onPublishListener
+	 */
+	public void publish(List<Photo> photos, OnPublishListener onPublishListener) {
+		PublishPhotoDialogAction publishPhotoDialogAction = new PublishPhotoDialogAction(mSessionManager);
+		publishPhotoDialogAction.setPhotos(photos);
+		// the assumption is that the all photos from the same location. So we
+		// take the location from the first photo.
+		publishPhotoDialogAction.setPlace(photos.get(0).getPlaceId());
+		publishPhotoDialogAction.setOnPublishListener(onPublishListener);
+		publishPhotoDialogAction.execute();
 	}
 
 	/**
@@ -1863,18 +1906,11 @@ public class SimpleFacebook {
 	 *            and PUBLISH permissions in the same time. Just ask what you
 	 *            need.<br>
 	 * <br>
-	 * @param showPublish
-	 *            This flag is relevant only in cases when new permissions
-	 *            include PUBLISH permission. Then you can decide if you want
-	 *            the dialog of requesting publish permission to appear <b>right
-	 *            away</b> or <b>later</b>, at first time of real publish
-	 *            action.<br>
-	 * <br>
 	 * @param onNewPermissionsListener
 	 *            The listener for the requesting new permission action.
 	 */
 	public void requestNewPermissions(Permission[] permissions, boolean showPublish, OnNewPermissionsListener onNewPermissionsListener) {
-		mSessionManager.requestNewPermissions(permissions, showPublish, onNewPermissionsListener);
+		mSessionManager.requestNewPermissions(permissions, onNewPermissionsListener);
 	}
 
 	/**
@@ -1893,15 +1929,7 @@ public class SimpleFacebook {
 	 *         otherwise return <code>False</code>
 	 */
 	public boolean isAllPermissionsGranted() {
-		List<String> grantedPermissions = getGrantedPermissions();
-		List<String> readPermissions = new ArrayList<String>(mConfiguration.getReadPermissions());
-		List<String> publishPermissions = new ArrayList<String>(mConfiguration.getPublishPermissions());
-		readPermissions.removeAll(grantedPermissions);
-		publishPermissions.removeAll(grantedPermissions);
-		if (readPermissions.size() > 0 || publishPermissions.size() > 0) {
-			return false;
-		}
-		return true;
+		return mSessionManager.isAllPermissionsGranted();
 	}
 
 	/**
