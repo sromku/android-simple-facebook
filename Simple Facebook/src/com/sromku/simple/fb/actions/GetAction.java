@@ -40,13 +40,15 @@ public class GetAction<T> extends AbstractAction {
 					Logger.logError(GetAction.class, "The response GraphObject has null value. Response=" + response.toString(), null);
 				} else {
 					if (actionListener != null) {
+						T result = null;
 						try {
 							updateCursor(response);
-							T result = processResponse(response);
-							actionListener.onComplete(result);
+							result = processResponse(response);
 						} catch (Exception e) {
 							actionListener.onException(e);
+							return;
 						}
+						actionListener.onComplete(result);
 					}
 				}
 			}
