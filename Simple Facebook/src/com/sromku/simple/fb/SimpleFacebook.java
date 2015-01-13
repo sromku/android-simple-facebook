@@ -26,6 +26,7 @@ import com.sromku.simple.fb.actions.GetLikesAction;
 import com.sromku.simple.fb.actions.GetNotificationsAction;
 import com.sromku.simple.fb.actions.GetPageAction;
 import com.sromku.simple.fb.actions.GetPagesAction;
+import com.sromku.simple.fb.actions.GetPhotoAction;
 import com.sromku.simple.fb.actions.GetPhotosAction;
 import com.sromku.simple.fb.actions.GetPostsAction;
 import com.sromku.simple.fb.actions.GetProfileAction;
@@ -74,6 +75,7 @@ import com.sromku.simple.fb.listeners.OnGroupsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLikesListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnPhotoListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.listeners.OnNotificationsListener;
@@ -1050,6 +1052,24 @@ public class SimpleFacebook {
 		getPagesAction.setActionListener(onPagesListener);
 		getPagesAction.setEdge(GraphPath.LIKES);
 		getPagesAction.execute();
+	}
+
+	/**
+	 * Get an individual photo.
+	 *
+	 * <b>Permission:</b><br>
+	 * {@link Permission#USER_PHOTOS}
+	 *
+	 * @param entityId
+	 *            Photo-id.
+	 * @param onPhotoListener
+	 *            The callback listener.
+	 */
+	public void getPhoto(String entityId, OnPhotoListener onPhotoListener) {
+		GetPhotoAction getPhotoAction = new GetPhotoAction(mSessionManager);
+		getPhotoAction.setActionListener(onPhotoListener);
+		getPhotoAction.setTarget(entityId);
+		getPhotoAction.execute();
 	}
 
 	/**
