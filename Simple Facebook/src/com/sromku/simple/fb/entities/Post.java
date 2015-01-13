@@ -53,6 +53,7 @@ public class Post {
 
 	private static final String ACTIONS = "actions";
 	private static final String APPLICATION = "application";
+	private static final String ATTACHMENTS = "attachments";
 	private static final String CAPTION = "caption";
 	private static final String COMMENTS = "comments";
 	private static final String LIKES = "likes";
@@ -83,6 +84,7 @@ public class Post {
 
 	private List<Action> mActions;
 	private Application mApplication;
+	private Attachment mAttachment;
 	private String mCaption;
 	private List<Comment> mComments;
 	private List<Like> mLikes;
@@ -125,6 +127,9 @@ public class Post {
 
 		// application
 		mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
+
+		// attachments
+		mAttachment = Attachment.create(Utils.getPropertyGraphObject(graphObject, ATTACHMENTS));
 
 		// caption
 		mCaption = Utils.getPropertyString(graphObject, CAPTION);
@@ -263,6 +268,13 @@ public class Post {
 	 */
 	public Application getApplication() {
 		return mApplication;
+	}
+
+	/**
+	 * Media content associated with a story or comment.
+	 */
+	public Attachment getAttachment() {
+		return mAttachment;
 	}
 
 	/**

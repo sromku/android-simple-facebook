@@ -210,66 +210,6 @@ public class Comment implements Publishable {
 		return mUserLikes;
 	}
 
-	public static class Attachment {
-
-		private static final String DESCRIPTION = "description";
-		private static final String TITLE = "title";
-		private static final String TYPE = "type";
-		private static final String URL = "url";
-
-		@SuppressWarnings("unused")
-		// TODO
-		private static final String DESCRIPTION_TAGS = "description_tags";
-
-		@SuppressWarnings("unused")
-		// TODO
-		private static final String MEDIA = "media";
-
-		@SuppressWarnings("unused")
-		// TODO
-		private static final String TARGET = "target";
-
-		private String mDescription;
-		private String mTitle;
-		private String mType;
-		private String mUrl;
-
-		private Attachment(GraphObject graphObject) {
-
-			// description
-			mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-
-			// title
-			mTitle = Utils.getPropertyString(graphObject, TITLE);
-
-			// type
-			mType = Utils.getPropertyString(graphObject, TYPE);
-
-			// url
-			mUrl = Utils.getPropertyString(graphObject, URL);
-		}
-
-		public static Attachment create(GraphObject graphObject) {
-			return new Attachment(graphObject);
-		}
-
-		public String getDescription() {
-			return mDescription;
-		}
-
-		public String getTitle() {
-			return mTitle;
-		}
-
-		public String getType() {
-			return mType;
-		}
-
-		public String getUrl() {
-			return mUrl;
-		}
-	}
-
 	/**
 	 * Builder for preparing the Comment object to be published.
 	 */

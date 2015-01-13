@@ -50,7 +50,7 @@ public class Photo implements Publishable {
 	private User mFrom;
 	private Integer mHeight;
 	private String mIcon;
-	private List<ImageSource> mImageSources;
+	private List<Image> mImages;
 	private String mLink;
 	private String mName;
 	private String mPageStoryId;
@@ -96,14 +96,10 @@ public class Photo implements Publishable {
 		mIcon = Utils.getPropertyString(graphObject, ICON);
 
 		// image sources
-		mImageSources = Utils.createList(graphObject, IMAGES, new Converter<ImageSource>() {
+		mImages = Utils.createList(graphObject, IMAGES, new Converter<Image>() {
 			@Override
-			public ImageSource convert(GraphObject graphObject) {
-				ImageSource imageSource = new ImageSource();
-				imageSource.mHeight = Utils.getPropertyInteger(graphObject, HEIGHT);
-				imageSource.mWidth = Utils.getPropertyInteger(graphObject, WIDTH);
-				imageSource.mSource = Utils.getPropertyString(graphObject, SOURCE);
-				return imageSource;
+			public Image convert(GraphObject graphObject) {
+				return Image.create(graphObject);
 			}
 		});
 
@@ -192,8 +188,8 @@ public class Photo implements Publishable {
 		return mIcon;
 	}
 
-	public List<ImageSource> getImageSources() {
-		return mImageSources;
+	public List<Image> getImages() {
+		return mImages;
 	}
 
 	public String getLink() {
@@ -295,25 +291,6 @@ public class Photo implements Publishable {
 				}
 			}
 			return BackDatetimeGranularity.NONE;
-		}
-	}
-
-	public static class ImageSource {
-
-		private Integer mHeight;
-		private String mSource;
-		private Integer mWidth;
-
-		public Integer getHeight() {
-			return mHeight;
-		}
-
-		public Integer getWidth() {
-			return mWidth;
-		}
-
-		public String getSource() {
-			return mSource;
 		}
 	}
 

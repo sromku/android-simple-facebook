@@ -14,6 +14,7 @@ import com.sromku.simple.fb.actions.GetAction;
 import com.sromku.simple.fb.actions.GetAlbumAction;
 import com.sromku.simple.fb.actions.GetAlbumsAction;
 import com.sromku.simple.fb.actions.GetAppRequestsAction;
+import com.sromku.simple.fb.actions.GetAttachmentAction;
 import com.sromku.simple.fb.actions.GetCommentAction;
 import com.sromku.simple.fb.actions.GetCommentsAction;
 import com.sromku.simple.fb.actions.GetEventsAction;
@@ -56,6 +57,7 @@ import com.sromku.simple.fb.entities.Score;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.entities.Video;
+import com.sromku.simple.fb.listeners.OnAttachmentListener;
 import com.sromku.simple.fb.listeners.OnAccountsListener;
 import com.sromku.simple.fb.listeners.OnActionListener;
 import com.sromku.simple.fb.listeners.OnAlbumListener;
@@ -313,6 +315,19 @@ public class SimpleFacebook {
 		GetAppRequestsAction getAppRequestsAction = new GetAppRequestsAction(mSessionManager);
 		getAppRequestsAction.setActionListener(onAppRequestsListener);
 		getAppRequestsAction.execute();
+	}
+
+	/**
+	 * Get attachment of specific entity.
+	 *
+	 * @param onAttachmentListener
+	 *            The callback listener.
+	 */
+	public void getAttachment(String entityId, OnAttachmentListener onAttachmentListener) {
+		GetAttachmentAction getAttachmentAction = new GetAttachmentAction(mSessionManager);
+		getAttachmentAction.setActionListener(onAttachmentListener);
+		getAttachmentAction.setTarget(entityId);
+		getAttachmentAction.execute();
 	}
 
 	/**

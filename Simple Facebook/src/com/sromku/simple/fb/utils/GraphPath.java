@@ -2,6 +2,7 @@ package com.sromku.simple.fb.utils;
 
 public class GraphPath {
 
+	public static final String ATTACHMENTS = "attachments";
 	public static final String FRIENDS = "friends";
 	public static final String TAGGABLE_FRIENDS = "taggable_friends";
 	public static final String INVITABLE_FRIENDS = "invitable_friends";
