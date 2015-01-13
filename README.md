@@ -106,6 +106,7 @@ Everything is explained in [**wiki**](https://github.com/sromku/android-simple-f
 - [Ansgar Mertens](https://github.com/ansgarm)
 - [bperin](https://github.com/bperin)
 - [Norbert Schuler](https://github.com/norbertschuler)
+- [Chang Yu-heng](https://github.com/changyuheng)
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-android--simple--facebook-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/949)
 
