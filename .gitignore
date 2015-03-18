@@ -10,3 +10,5 @@ build/
 *.orig
 
 .gradle/
+*.iml
+.idea/
