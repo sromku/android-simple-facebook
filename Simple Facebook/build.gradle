@@ -1,4 +1,12 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+version = "2.2" // library version
+
+def siteUrl = 'https://github.com/sromku/android-simple-facebook'     // project homepage
+def gitUrl = 'https://github.com/sromku/android-simple-facebook.git'  // project git
+group = "<Your Group ID>"
 
 dependencies {
     compile 'com.facebook.android:facebook-android-sdk:3.23.1'
@@ -31,5 +39,71 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM. xml  with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'Simple to use Facebook SDK For Android'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer { // #CONFIG# Change to Your information
+                        id 'takumalee'
+                        name 'takumalee'
+                        email 'vmgsahm1@gmail.com'
+                    }
+                }
+                scm { connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android. sourceSets .main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android. sourceSets .main.java.srcDirs
+    classpath += project.files( android.getBootClasspath(). join ( File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    key = properties.getProperty("bintray.apikey")
+    user = properties.getProperty("bintray.user")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "SimpleFacebook"                                                 // #CONFIG# project name in jcenter
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
     }
 }
