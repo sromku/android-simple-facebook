@@ -1,6 +1,9 @@
 android-simple-facebook
 =======================
 
+**SDK 4.0 was just released (March 25th). This lib will be updated to support new options very soon.**
+https://developers.facebook.com/docs/android/change-log-4.x
+
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
 For support of older versions of facebook SDK 3.8 and below, go to [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) branch.
 
