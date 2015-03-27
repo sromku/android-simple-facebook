@@ -1998,6 +1998,28 @@ public class SimpleFacebook {
 	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
 		return mSessionManager.onActivityResult(activity, requestCode, resultCode, data);
 	}
+	
+	/**
+	 * handle the login state new facebook sdk
+	 * /
+	 
+	 public void onResume() {
+		mSessionManager.onResume();
+	}
+	
+	public void onPause() {
+		mSessionManager.onPause();
+	}
+	public void onDestroy() {
+		mSessionManager.onDestroy();
+	}
+	public void onSaveInstanceState(Bundle outState) {
+		mSessionManager.onSaveInstanceState(outState);
+	}
+	 
+	 /*
+	  * end of code for handling session
+	  * /
 
 	/**
 	 * Clean all references like Activity to prevent memory leaks
