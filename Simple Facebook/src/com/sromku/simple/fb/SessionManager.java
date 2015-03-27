@@ -378,6 +378,30 @@ public class SessionManager {
 		uiLifecycleHelper.onActivityResult(requestCode, resultCode, data, mFacebookDialogCallback);
 		return true;
 	}
+	/*
+	* code to handle session login state
+	*/
+	public boolean onResume() {
+		uiHelper.onResume();
+		return true
+	}
+
+	public boolean onPause() {
+		uiHelper.onPause();
+		return true
+	}
+
+	public boolean onDestroy() {
+		uiHelper.onDestroy();
+		return true;
+	}
+	public boolean onSaveInstanceState(Bundle outState) {
+		uiHelper.onSaveInstanceState(outState);
+		return true
+	}
+	/*
+	*end of session management
+	*/
 
 	/**
 	 * Check if we already have Active session. If such exists, then return it,
