@@ -70,7 +70,7 @@ public class Post {
 	private static final String OBJECT_ID = "object_id";
 	private static final String PICTURE = "picture";
 	private static final String PLACE = "place";
-	// private static final String PRIVACY = "privacy";
+	private static final String PRIVACY = "privacy";
 	private static final String PROPERTIES = "properties";
 	private static final String SHARES = "shares";
 	private static final String SOURCE = "source";
@@ -101,7 +101,7 @@ public class Post {
 	private String mObjectId;
 	private String mPicture;
 	private Place mPlace;
-	// private Privacy mPrivacy;
+	private Privacy mPrivacy;
 	private List<Property> mProperties;
 	private Integer mShares;
 	private String mSource;
@@ -195,8 +195,7 @@ public class Post {
 		mPlace = Place.create(Utils.getPropertyGraphObject(graphObject, PLACE));
 
 		// privacy
-		// mPrivacy = Privacy.create(Utils.getPropertyGraphObject(graphObject,
-		// PRIVACY));
+		mPrivacy = Privacy.create(Utils.getPropertyGraphObject(graphObject, PRIVACY));
 
 		// properties
 		mProperties = Utils.createList(graphObject, PROPERTIES, new Converter<Property>() {
@@ -393,9 +392,9 @@ public class Post {
 	/**
 	 * The privacy settings of the Post.
 	 */
-	// public Privacy getPrivacy() {
-	// return mPrivacy;
-	// }
+	public Privacy getPrivacy() {
+		return mPrivacy;
+	}
 
 	/**
 	 * A list of properties for an uploaded video, for example, the length of

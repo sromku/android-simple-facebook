@@ -1,7 +1,11 @@
 package com.sromku.simple.fb.entities;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,21 +23,52 @@ import com.sromku.simple.fb.utils.Utils;
  */
 public class Privacy {
 	// private static final String DESCRIPTION = "description";
-	private static final String PRIVACY = "value";
+	private static final String VALUE = "value";
 	private static final String ALLOW = "allow";
 	private static final String DENY = "deny";
 
 	// private String mDescription;
 	private PrivacySettings mPrivacySetting = null;
-	private ArrayList<String> mAllowedUsers = new ArrayList<String>();
-	private ArrayList<String> mDeniedUsers = new ArrayList<String>();
+	private List<String> mAllowedUsers = new ArrayList<String>();
+	private List<String> mDeniedUsers = new ArrayList<String>();
 
 	public static enum PrivacySettings {
-		EVERYONE,
-		ALL_FRIENDS,
-		FRIENDS_OF_FRIENDS,
-		SELF,
-		CUSTOM
+		EVERYONE("EVERYONE"),
+		ALL_FRIENDS("ALL_FRIENDS"),
+		FRIENDS_OF_FRIENDS("FRIENDS_OF_FRIENDS"),
+		CUSTOM("CUSTOM"),
+		SELF("SELF");
+
+		private String value;
+
+		private PrivacySettings(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public static PrivacySettings fromValue(String value) {
+			for (PrivacySettings privacy : values()) {
+				if (privacy.value.equals(value)) return privacy;
+			}
+			return null;
+		}
+	}
+
+	public String getValue() {
+		String value = "";
+		if (mPrivacySetting != null) value = mPrivacySetting.getValue();
+		return value;
+	}
+
+	public List<String> getAllow() {
+		return mAllowedUsers;
+	}
+
+	public List<String> getDeny() {
+		return mDeniedUsers;
 	}
 
 	private Privacy(Builder builder) {
@@ -43,7 +78,14 @@ public class Privacy {
 	}
 
 	private Privacy(GraphObject graphObject) {
-		// not supported currently. It is used as output in 'Post' entity
+		String privacy = Utils.getPropertyString(graphObject, VALUE);
+		mPrivacySetting = PrivacySettings.fromValue(privacy);
+
+		String allow = Utils.getPropertyString(graphObject, ALLOW);
+		if (!TextUtils.isEmpty(allow)) mAllowedUsers = Arrays.asList(allow.split(","));
+
+		String deny = Utils.getPropertyString(graphObject, DENY);
+		if (!TextUtils.isEmpty(deny)) mDeniedUsers = Arrays.asList(deny.split(","));
 	}
 
 	public static Privacy create(GraphObject graphObject) {
@@ -52,8 +94,8 @@ public class Privacy {
 
 	public static class Builder {
 		private PrivacySettings mPrivacySetting = null;
-		private ArrayList<String> mAllowedUsers = new ArrayList<String>();
-		private ArrayList<String> mDeniedUsers = new ArrayList<String>();
+		private List<String> mAllowedUsers = new ArrayList<String>();
+		private List<String> mDeniedUsers = new ArrayList<String>();
 
 		public Builder() {
 		}
@@ -227,7 +269,7 @@ public class Privacy {
 	public String getJSONString() {
 		JSONObject jsonRepresentation = new JSONObject();
 		try {
-			jsonRepresentation.put(PRIVACY, mPrivacySetting.name());
+			jsonRepresentation.put(VALUE, mPrivacySetting.name());
 			if (mPrivacySetting == PrivacySettings.CUSTOM) {
 				if (!mAllowedUsers.isEmpty()) {
 					jsonRepresentation.put(ALLOW, Utils.join(mAllowedUsers.iterator(), ","));
