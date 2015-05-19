@@ -1,4 +1,0 @@
-include ':facebook-android-sdk'
-project(':facebook-android-sdk').projectDir = new File(settingsDir, '../facebook-android-sdk')
-include ':facebook-android-sdk:facebook'
-project(':facebook-android-sdk:facebook').projectDir = new File(settingsDir, '../facebook-android-sdk/facebook')

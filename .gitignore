@@ -6,7 +6,8 @@ gen
 .settings/
 .classpath
 build/
-
+.idea/
 *.orig
 
 .gradle/
+*.iml
