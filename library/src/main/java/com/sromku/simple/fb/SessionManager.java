@@ -4,29 +4,70 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
+import com.sromku.simple.fb.utils.Logger;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SessionManager {
 
 	private final static Class<?> TAG = SessionManager.class;
-
-	static Activity activity;
+    public static Activity activity;
 	static SimpleFacebookConfiguration configuration;
-//	private final SessionStatusCallback mSessionStatusCallback;
-//	private UiLifecycleHelper uiLifecycleHelper;
+    private final LoginManager mLoginManager;
+    private CallbackManager mCallbackManager = CallbackManager.Factory.create();
+    private LoginCallback mLoginCallback = new LoginCallback();
 
-//	private Callback mFacebookDialogCallback;
+    class LoginCallback implements FacebookCallback<LoginResult> {
 
-	public SessionManager(Activity activity, SimpleFacebookConfiguration configuration) {
-		SessionManager.activity = activity;
+        private OnLoginListener mOnLoginListener;
+        private boolean mIsAllPermissionsAtOnce;
+
+        public void setLoginListener(OnLoginListener listener) {
+            mOnLoginListener = listener;
+        }
+
+        public void setAllPermissionsAtOnce(boolean enabled) {
+            mIsAllPermissionsAtOnce = enabled;
+        }
+
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            if (mOnLoginListener != null) {
+                mOnLoginListener.onLogin();
+                // TODO - check what was denied..
+            }
+        }
+
+        @Override
+        public void onCancel() {
+            mOnLoginListener.onFail("User canceled the permissions dialog");
+        }
+
+        @Override
+        public void onError(FacebookException e) {
+            // TODO - resolve the error
+            mOnLoginListener.onException(e);
+        }
+    };
+
+	public SessionManager(SimpleFacebookConfiguration configuration) {
 		SessionManager.configuration = configuration;
-//		mSessionStatusCallback = new SessionStatusCallback();
-//		uiLifecycleHelper = new UiLifecycleHelper(activity, mSessionStatusCallback);
+        mLoginManager = LoginManager.getInstance();
+        mLoginManager.registerCallback(mCallbackManager, mLoginCallback);
+        mLoginManager.setDefaultAudience(configuration.getDefaultAudience());
+        mLoginManager.setLoginBehavior(configuration.getLoginBehavior());
+        mLoginCallback.setAllPermissionsAtOnce(configuration.isAllPermissionsAtOnce());
 	}
 
 	/**
@@ -35,32 +76,37 @@ public class SessionManager {
 	 * @param onLoginListener
 	 */
 	public void login(OnLoginListener onLoginListener) {
-//		if (onLoginListener == null) {
-//			Logger.logError(TAG, "OnLoginListener can't be null in -> 'login(OnLoginListener onLoginListener)' method.");
-//			return;
-//		}
-//		if (activity == null) {
-//			onLoginListener.onFail("You must initialize the SimpleFacebook instance with you current Activity.");
-//			return;
-//		}
-//		if (isLogin(true)) {
-//			Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
-//			onLoginListener.onLogin();
-//			return;
-//		}
-//		Session session = getOrCreateActiveSession();
-//		if (hasPendingRequest(session)) {
-//			Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
-//			return;
-//		}
-//
-//		mSessionStatusCallback.onLoginListener = onLoginListener;
-//		session.addCallback(mSessionStatusCallback);
-//		if (!session.isOpened()) {
-//			openSession(session, true);
-//		} else {
-//			onLoginListener.onLogin();
-//		}
+		if (onLoginListener == null) {
+			Logger.logError(TAG, "OnLoginListener can't be null in -> 'login(OnLoginListener onLoginListener)' method.");
+			return;
+		}
+
+        if (isLogin(true)) {
+			Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
+			onLoginListener.onLogin();
+			return;
+		}
+
+		if (hasPendingRequest()) {
+			Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
+			return;
+		}
+
+        mLoginCallback.setLoginListener(onLoginListener);
+        Set<String> permissions = null;
+        AccessToken accessToken = getAccessToken();
+        if (accessToken != null) {
+            permissions = getAccessToken().getPermissions();
+        }
+        List<String> readPermissions = configuration.getReadPermissions();
+        List<String> publishPermissions = configuration.getPublishPermissions();
+        if (permissions == null || !permissions.containsAll(readPermissions)) {
+            mLoginManager.logInWithReadPermissions(activity, readPermissions);
+        } else if (!permissions.containsAll(publishPermissions)) {
+            mLoginManager.logInWithPublishPermissions(activity, publishPermissions);
+        } else {
+            onLoginListener.onLogin();
+        }
 	}
 
 	/**
@@ -94,6 +140,14 @@ public class SessionManager {
 	 *         <code>False</code>
 	 */
 	public boolean isLogin(boolean reopenIfPossible) {
+
+        AccessToken accessToken = getAccessToken();
+        if (accessToken == null) {
+            return false;
+        }
+
+        return !accessToken.isExpired();
+
 //		Session session = getActiveSession();
 //		if (session == null) {
 //			if (activity == null) {
@@ -110,37 +164,15 @@ public class SessionManager {
 //			return true;
 //		}
 
-		return false;
 	}
-
-	/**
-	 * Get the current 'Active' session. <br>
-	 * <br>
-	 * <b>Important:</b> The result could be <code>null</code>. If you want to
-	 * have not null active session, then use
-	 * {@link #getOrCreateActiveSession()} method.
-	 *
-	 * @return Active session or null.
-	 */
-//	public Session getActiveSession() {
-//		return Session.getActiveSession();
-//	}
 
 	/**
 	 * Get access token of open session
 	 *
 	 */
 	public AccessToken getAccessToken() {
-//		Session session = getActiveSession();
-//		if (session != null) {
-//			return session.getAccessToken();
-//		}
 		return AccessToken.getCurrentAccessToken();
 	}
-
-//	public SessionStatusCallback getSessionStatusCallback() {
-//		return mSessionStatusCallback;
-//	}
 
 	/**
 	 * Get permissions that are accepted by user for current token
@@ -150,10 +182,6 @@ public class SessionManager {
 	public List<String> getActiveSessionPermissions() {
 //		return getActiveSession() != null ? getActiveSession().getPermissions() : new ArrayList<String>();
 		return null;
-	}
-
-	public Activity getActivity() {
-		return activity;
 	}
 
 	/**
@@ -359,9 +387,8 @@ public class SessionManager {
 //		mFacebookDialogCallback = null;
 	}
 
-	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-//		uiLifecycleHelper.onActivityResult(requestCode, resultCode, data, mFacebookDialogCallback);
-		return true;
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
@@ -412,17 +439,17 @@ public class SessionManager {
 		return false;
 	}
 
-	private boolean hasPendingRequest(/*Session session*/) {
-//		try {
-//			Field f = session.getClass().getDeclaredField("pendingAuthorizationRequest");
-//			f.setAccessible(true);
-//			AuthorizationRequest authorizationRequest = (AuthorizationRequest) f.get(session);
-//			if (authorizationRequest != null) {
-//				return true;
-//			}
-//		} catch (Exception e) {
-//			// do nothing
-//		}
+	private boolean hasPendingRequest() {
+		try {
+			Field f = mLoginManager.getClass().getDeclaredField("pendingLoginRequest");
+			f.setAccessible(true);
+            Object request = f.get(mLoginManager);
+            if (request != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			// do nothing
+		}
 		return false;
 	}
 

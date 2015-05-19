@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.facebook.FacebookSdk;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
@@ -98,7 +99,6 @@ public class SimpleFacebook {
 	private static SimpleFacebook mInstance = null;
 	private static SimpleFacebookConfiguration mConfiguration = new SimpleFacebookConfiguration.Builder().build();
 
-	private static Activity mActivity;
 	private static SessionManager mSessionManager = null;
 
 	private SimpleFacebook() {
@@ -116,10 +116,10 @@ public class SimpleFacebook {
 	 */
 	public static void initialize(Activity activity) {
 		if (mInstance == null) {
+            FacebookSdk.sdkInitialize(activity.getApplicationContext());
 			mInstance = new SimpleFacebook();
-			mSessionManager = new SessionManager(activity, mConfiguration);
+			mSessionManager = new SessionManager(mConfiguration);
 		}
-		mActivity = activity;
 		SessionManager.activity = activity;
 	}
 
@@ -144,10 +144,10 @@ public class SimpleFacebook {
 	 */
 	public static SimpleFacebook getInstance(Activity activity) {
 		if (mInstance == null) {
+            FacebookSdk.sdkInitialize(activity.getApplicationContext());
 			mInstance = new SimpleFacebook();
-			mSessionManager = new SessionManager(activity, mConfiguration);
+			mSessionManager = new SessionManager(mConfiguration);
 		}
-		mActivity = activity;
 		SessionManager.activity = activity;
 		return mInstance;
 	}
@@ -1848,20 +1848,18 @@ public class SimpleFacebook {
 	 * Call this inside your activity in {@link android.app.Activity#onActivityResult}
 	 * method
 	 * 
-	 * @param activity
 	 * @param requestCode
 	 * @param resultCode
 	 * @param data
 	 */
-	public boolean onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-		return mSessionManager.onActivityResult(activity, requestCode, resultCode, data);
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		mSessionManager.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
 	 * Clean all references like Activity to prevent memory leaks
 	 */
 	public void clean() {
-		mActivity = null;
 		SessionManager.activity = null;
 	}
 

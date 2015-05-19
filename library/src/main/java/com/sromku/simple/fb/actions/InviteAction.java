@@ -67,7 +67,7 @@ public class InviteAction extends AbstractAction {
 			else if (mSuggestions != null) {
 				params.putString(PARAM_SUGGESTIONS, TextUtils.join(",", mSuggestions));
 			}
-			openInviteDialog(sessionManager.getActivity(), params, mOnInviteListener);
+			openInviteDialog(sessionManager.activity, params, mOnInviteListener);
 		}
 		else {
 			String reason = Errors.getError(ErrorMsg.LOGIN);

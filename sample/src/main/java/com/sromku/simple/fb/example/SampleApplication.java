@@ -2,6 +2,7 @@ package com.sromku.simple.fb.example;
 
 import android.app.Application;
 
+import com.facebook.login.DefaultAudience;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
@@ -30,7 +31,7 @@ public class SampleApplication extends Application {
 			.setAppId(APP_ID)
 			.setNamespace(APP_NAMESPACE)
 			.setPermissions(permissions)
-//			.setDefaultAudience(SessionDefaultAudience.FRIENDS)
+			.setDefaultAudience(DefaultAudience.FRIENDS)
 			.setAskForAllPermissionsAtOnce(false)
 			.build();
 
