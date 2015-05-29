@@ -10,3 +10,9 @@ build/
 *.orig
 
 .gradle/
+
+local.properties
+
+build.xml
+
+.project
