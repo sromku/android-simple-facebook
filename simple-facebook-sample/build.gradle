@@ -1,16 +1,21 @@
-apply plugin: 'android'
-
-dependencies {
-    compile project(':Simple Facebook')
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+    }
 }
 
+apply plugin: 'com.android.application'
+
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 19
+        minSdkVersion 9
+        targetSdkVersion 22
     }
 
     lintOptions {
@@ -28,4 +33,12 @@ android {
             assets.srcDirs = ['assets']
         }
     }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile project(':simple-facebook')
 }
