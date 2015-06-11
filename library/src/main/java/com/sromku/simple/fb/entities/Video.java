@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Logger;
+import com.sromku.simple.fb.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -71,7 +72,7 @@ public class Video implements Publishable {
 	private static final String PRIVACY = "privacy";
 
     @SerializedName(COMMENTS)
-	private List<Comment> mComments;
+	private Utils.DataResult<Comment> mComments;
 
     @SerializedName(CREATED_TIME)
 	private Date mCreatedTime = null;
@@ -101,7 +102,7 @@ public class Video implements Publishable {
 	private String mSource = null;
 
     @SerializedName(TAGS)
-	private List<User> mTags = null;
+	private Utils.DataResult<User> mTags = null;
 
     @SerializedName(UPDATED_TIME)
 	private Date mUpdatedTime = null;
@@ -113,53 +114,6 @@ public class Video implements Publishable {
 	private Parcelable mParcelable = null;
 	private byte[] mBytes = null;
 
-//	private Video(GraphObject graphObject) {
-//		// comments
-//		mComments = Utils.createList(graphObject, COMMENTS, "data", new Converter<Comment>() {
-//			@Override
-//			public Comment convert(GraphObject graphObject) {
-//				return Comment.create(graphObject);
-//			}
-//		});
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// embed html
-//		mEmbedHtml = Utils.getPropertyString(graphObject, EMBED_HTML);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// icon
-//		mIcon = Utils.getPropertyString(graphObject, ICON);
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// picture
-//		mPicture = Utils.getPropertyString(graphObject, PICTURE);
-//
-//		// source
-//		mSource = Utils.getPropertyString(graphObject, SOURCE);
-//
-//		// tags
-//		mTags = Utils.createList(graphObject, TAGS, "data", new Converter<User>() {
-//			@Override
-//			public User convert(GraphObject graphObject) {
-//				return Utils.createUser(graphObject);
-//			}
-//		});
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//	}
 
 	private Video(Builder builder) {
 		mDescription = builder.mDescription;
@@ -169,10 +123,6 @@ public class Video implements Publishable {
 		mParcelable = builder.mParcelable;
 		mBytes = builder.mBytes;
 	}
-
-//	public static Video create(GraphObject graphObject) {
-//		return new Video(graphObject);
-//	}
 
 	@Override
 	public String getPath() {
@@ -217,7 +167,7 @@ public class Video implements Publishable {
 	 * All of the comments on this video
 	 */
 	public List<Comment> getComments() {
-		return mComments;
+		return mComments.data;
 	}
 
 	/**
@@ -287,7 +237,7 @@ public class Video implements Publishable {
 	 * The users who are tagged in this video
 	 */
 	public List<User> getTags() {
-		return mTags;
+		return mTags.data;
 	}
 
 	/**

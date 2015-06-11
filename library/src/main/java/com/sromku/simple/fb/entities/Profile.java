@@ -19,15 +19,7 @@ import java.util.Set;
  * @author sromku
  * // @see https://developers.facebook.com/docs/graph-api/reference/user
  */
-public class Profile implements User {
-
-//	private final GraphObject mGraphObject;
-
-    @SerializedName(Properties.ID)
-	private String mId;
-
-    @SerializedName(Properties.NAME)
-	private String mName;
+public class Profile extends User {
 
     @SerializedName(Properties.FIRST_NAME)
 	private String mFirstName;
@@ -87,7 +79,7 @@ public class Profile implements User {
 	private String mEmail;
 
     @SerializedName(Properties.HOMETOWN)
-	private String mHometown;
+	private IdName mHometown;
 
     @SerializedName(Properties.LOCATION)
 	private Location mLocation;
@@ -119,158 +111,6 @@ public class Profile implements User {
     @SerializedName(Properties.WORK)
 	private List<Work> mWorks;
 
-//	private Profile(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//
-//		// id
-//		mId = Utils.getPropertyString(mGraphObject, Properties.ID);
-//
-//		// name
-//		mName = Utils.getPropertyString(mGraphObject, Properties.NAME);
-//
-//		// first name
-//		mFirstName = Utils.getPropertyString(mGraphObject, Properties.FIRST_NAME);
-//
-//		// middle name
-//		mMiddleName = Utils.getPropertyString(mGraphObject, Properties.MIDDLE_NAME);
-//
-//		// last name
-//		mLastName = Utils.getPropertyString(mGraphObject, Properties.LAST_NAME);
-//
-//		// gender
-//		mGender = Utils.getPropertyString(mGraphObject, Properties.GENDER);
-//
-//		// locale
-//		mLocale = Utils.getPropertyString(mGraphObject, Properties.LOCALE);
-//
-//		// languages
-//		mLanguages = Utils.createList(mGraphObject, Properties.LANGUAGE, new Converter<Language>() {
-//			@Override
-//			public Language convert(GraphObject graphObject) {
-//				Language language = new Language();
-//				language.setId(Utils.getPropertyString(graphObject, "id"));
-//				language.setName(Utils.getPropertyString(graphObject, "name"));
-//				return language;
-//			}
-//		});
-//
-//		// link
-//		mLink = Utils.getPropertyString(mGraphObject, Properties.LINK);
-//
-//		// age range
-//		GraphObject ageRangeGraphObject = Utils.getPropertyGraphObject(mGraphObject, Properties.AGE_RANGE);
-//		if (ageRangeGraphObject != null) {
-//			mAgeRange = new AgeRange(Utils.getPropertyString(ageRangeGraphObject, "min"), Utils.getPropertyString(ageRangeGraphObject, "max"));
-//		}
-//
-//		// third party id
-//		mThirdPartyId = Utils.getPropertyString(mGraphObject, Properties.THIRD_PARTY_ID);
-//
-//		// installed
-//		mIsInstalled = Utils.getPropertyBoolean(mGraphObject, Properties.INSTALLED);
-//
-//		// time zone
-//		mTimeZone = Utils.getPropertyInteger(mGraphObject, Properties.TIMEZONE);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyString(mGraphObject, Properties.UPDATED_TIME);
-//
-//		// verified
-//		mVerified = Utils.getPropertyBoolean(mGraphObject, Properties.VERIFIED);
-//
-//		// bio
-//		mBio = Utils.getPropertyString(mGraphObject, Properties.BIO);
-//
-//		// birthday
-//		mBirthday = Utils.getPropertyString(mGraphObject, Properties.BIRTHDAY);
-//
-//		// cover
-//		mCover = Photo.create(Utils.getPropertyGraphObject(mGraphObject, Properties.COVER));
-//
-//		// currency
-//		mCurrency = Utils.getPropertyInsideProperty(mGraphObject, Properties.CURRENCY, "user_currency");
-//
-//		// education
-//		mEducation = Utils.createList(mGraphObject, Properties.EDUCATION, new Converter<Education>() {
-//			@Override
-//			public Education convert(GraphObject graphObject) {
-//				return Education.create(graphObject);
-//			}
-//		});
-//
-//		// email
-//		mEmail = Utils.getPropertyString(mGraphObject, Properties.EMAIL);
-//
-//		// hometown
-//		mHometown = Utils.getPropertyString(mGraphObject, Properties.HOMETOWN);
-//
-//		// location
-//		mLocation = Location.create(Utils.getPropertyGraphObject(mGraphObject, Properties.LOCATION));
-//
-//		// political
-//		mPolitical = Utils.getPropertyString(mGraphObject, Properties.POLITICAL);
-//
-//		// favorite athletes
-//		mFavoriteAthletess = Utils.createList(mGraphObject, Properties.FAVORITE_ATHLETES, new Converter<String>() {
-//			@Override
-//			public String convert(GraphObject graphObject) {
-//				return Utils.getPropertyString(graphObject, Properties.NAME);
-//			}
-//		});
-//
-//		// favorite teams
-//		mFavoriteTeams = Utils.createList(mGraphObject, Properties.FAVORITE_TEAMS, new Converter<String>() {
-//			@Override
-//			public String convert(GraphObject graphObject) {
-//				return Utils.getPropertyString(graphObject, Properties.NAME);
-//			}
-//		});
-//
-//		// picture
-//		GraphObject data = Utils.getPropertyGraphObject(mGraphObject, Properties.PICTURE);
-//		mPicture = Utils.getPropertyInsideProperty(data, "data", "url");
-//
-//		// quotes
-//		mQuotes = Utils.getPropertyString(mGraphObject, Properties.QUOTES);
-//
-//		// relationship status
-//		mRelationshipStatus = Utils.getPropertyString(mGraphObject, Properties.RELATIONSHIP_STATUS);
-//
-//		// religion
-//		mReligion = Utils.getPropertyString(mGraphObject, Properties.RELIGION);
-//
-//		// website
-//		mWebsite = Utils.getPropertyString(mGraphObject, Properties.WEBSITE);
-//
-//		// work
-//		mWorks = Utils.createList(mGraphObject, Properties.WORK, new Converter<Work>() {
-//			@Override
-//			public Work convert(GraphObject graphObject) {
-//				return Work.create(graphObject);
-//			}
-//		});
-//	}
-
-	/**
-//	 * Create new profile based on {@link GraphUser} instance.
-//	 *
-//	 * @param graphObject
-//	 *            The {@link GraphObject} instance
-//	 * @return {@link com.sromku.simple.fb.entities.Profile} of the user
-//	 */
-//	public static Profile create(GraphObject graphObject) {
-//		return new Profile(graphObject);
-//	}
-//
-//	/**
-//	 * Return the graph object
-//	 *
-//	 * @return The graph object
-//	 */
-//	public GraphObject getGraphObject() {
-//		return mGraphObject;
-//	}
-
 	/**
 	 * Returns the ID of the user. <br>
 	 * <br>
@@ -280,7 +120,7 @@ public class Profile implements User {
 	 * @return the ID of the user
 	 */
 	public String getId() {
-		return mId;
+		return super.getId();
 	}
 
 	/**
@@ -292,7 +132,7 @@ public class Profile implements User {
 	 * @return the name of the user
 	 */
 	public String getName() {
-		return mName;
+		return super.getName();
 	}
 
 	/**
@@ -553,7 +393,7 @@ public class Profile implements User {
 	 * @return The user's hometown
 	 */
 	public String getHometown() {
-		return mHometown;
+		return mHometown.getName();
 	}
 
 	/**

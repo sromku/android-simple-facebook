@@ -11,10 +11,12 @@ import android.os.Parcelable;
 import android.util.Base64;
 
 import com.facebook.GraphResponse;
-import com.google.gson.Gson;
+import com.facebook.share.model.SharePhoto;
 import com.google.gson.reflect.TypeToken;
+import com.sromku.simple.fb.entities.IdName;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Story;
+import com.sromku.simple.fb.entities.User;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -187,288 +189,47 @@ public class Utils {
 		return buf.toString();
 	}
 
-//	public static <T> List<T> convert(JSONArray jsonArray, StringConverter<T> converter) {
-//		List<T> list = new ArrayList<T>();
-//		if (jsonArray == null || jsonArray.length() == 0) {
-//			return list;
-//		}
-//
-//		for (int i = 0; i < jsonArray.length(); i++) {
-//			list.add(converter.convert(jsonArray.optString(i)));
-//		}
-//
-//		return list;
-//	}
+    public static List<String> extract(List<IdName> idNames) {
+        List<String> names = new ArrayList<String>();
+        for (IdName idName : idNames) {
+            names.add(idName.getName());
+        }
+        return names;
+    }
+
+    public static List<User> extractUsers(List<IdName> idNames) {
+        List<User> users = new ArrayList<User>();
+        for (final IdName idName : idNames) {
+            users.add(new User(idName));
+        }
+        return users;
+    }
 
 	public static <T> List<T> typedListFromResponse(GraphResponse response /*, Class<T> cls */) {
-        Gson gson = new Gson();
-        return gson.fromJson(response.getRawResponse(), new TypeToken<List<T>>() {}.getType());
-//		GraphMultiResult multiResult = response.getGraphObjectAs(GraphMultiResult.class);
-//		if (multiResult == null) {
-//			return null;
-//		}
-//		GraphObjectList<GraphObject> data = multiResult.getData();
-//		if (data == null) {
-//			return null;
-//		}
-//		return data.castToListOf(clazz);
+        return JsonUtils.fromJson(response.getRawResponse(), new TypeToken<List<T>>() {}.getType());
 	}
+
+    public static <T> List<T> typedListFromResponse(String raw) {
+        return JsonUtils.fromJson(raw, new TypeToken<List<T>>() {
+        }.getType());
+    }
+
+    public static class DataResult<T> {
+        public List<T> data;
+    }
+
 
 	public static <T> T convert(GraphResponse response, Type type) {
-        Gson gson = new Gson();
-        return gson.fromJson(response.getRawResponse(), type);
-//		try {
-//			if (type instanceof ParameterizedType) {
-//				ParameterizedType parameterizedType = (ParameterizedType) type;
-//				Class<?> rawType = (Class<?>) parameterizedType.getRawType();
-//				if (rawType.getName().equals(List.class.getName())) {
-//					// if the T is of List type
-//					List<GraphObject> graphObjects = Utils.typedListFromResponse(response, GraphObject.class);
-//					Class<?> actualType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-//					Method method = actualType.getMethod("create", GraphObject.class);
-//					List<Object> list = ArrayList.class.newInstance();
-//					for (GraphObject graphObject : graphObjects) {
-//						Object object = method.invoke(null, graphObject);
-//						list.add(object);
-//					}
-//					return (T) list;
-//				}
-//			} else {
-//				Class<?> rawType = (Class<?>) type;
-//				GraphObject graphObject = response.getGraphObject();
-//				Method method = rawType.getMethod("create", GraphObject.class);
-//				Object object = method.invoke(null, graphObject);
-//				return (T) object;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
+        return JsonUtils.fromJson(response.getRawResponse(), type);
 	}
 
-	public static <T> List<T> createList(/* GraphObject graphObject, String property, Converter<T> converter */) {
-//		List<T> result = new ArrayList<T>();
-//		if (graphObject == null) {
-//			return result;
-//		}
-//
-//		GraphObjectList<GraphObject> graphObjects = graphObject.getPropertyAsList(property, GraphObject.class);
-//		if (graphObjects == null || graphObjects.size() == 0) {
-//			return result;
-//		}
-//
-//		ListIterator<GraphObject> iterator = graphObjects.listIterator();
-//		while (iterator.hasNext()) {
-//			GraphObject graphObjectItr = iterator.next();
-//			T t = converter.convert(graphObjectItr);
-//			result.add(t);
-//		}
-//		return result;
-        return null;
-	}
+    public static User convert(final IdName idName) {
+        return new User(idName.getId(), idName.getName());
+    }
 
-//	public static <T> List<T> createList(/*GraphObject graphObject, String property, String rootCollectionJsonProperty, Converter<T> converter*/) {
-//		List<T> result = new ArrayList<T>();
-//		if (graphObject == null) {
-//			return result;
-//		}
-//
-//		GraphObject collectionGraph = getPropertyGraphObject(graphObject, property);
-//		if (collectionGraph == null) {
-//			return result;
-//		}
-//
-//		GraphObjectList<GraphObject> graphObjects = collectionGraph.getPropertyAsList(rootCollectionJsonProperty, GraphObject.class);
-//		if (graphObjects == null || graphObjects.size() == 0) {
-//			return result;
-//		}
-//
-//		ListIterator<GraphObject> iterator = graphObjects.listIterator();
-//		while (iterator.hasNext()) {
-//			GraphObject graphObjectItr = iterator.next();
-//			T t = converter.convert(graphObjectItr);
-//			result.add(t);
-//		}
-//		return result;
-//        return null;
-//	}
-
-//	public static <T> List<T> createListAggregateValues(GraphObject graphObject, String property, Converter<T> converter) {
-//		List<T> result = new ArrayList<T>();
-//		if (graphObject == null) {
-//			return result;
-//		}
-//
-//		GraphObject mapGraph = graphObject.getPropertyAs(property, GraphObject.class);
-//		if (mapGraph == null) {
-//			return result;
-//		}
-//
-//		// get the map of objects and have them in ordered way
-//		Map<String, Object> map = mapGraph.asMap();
-//		Set<String> keySet = map.keySet();
-//		SortedSet<String> keys = new TreeSet<String>(new Comparator<String>() {
-//			@Override
-//			public int compare(String lhs, String rhs) {
-//				return Integer.valueOf(lhs) - Integer.valueOf(rhs);
-//			}
-//		});
-//		keys.addAll(keySet);
-//
-//		// iterate and create entity
-//		for (String key : keys) {
-//			GraphObjectList<GraphObject> graphObjects = mapGraph.getPropertyAsList(key, GraphObject.class);
-//			if (graphObjects == null || graphObjects.size() == 0) {
-//				continue;
-//			}
-//
-//			ListIterator<GraphObject> iterator = graphObjects.listIterator();
-//			while (iterator.hasNext()) {
-//				GraphObject graphObjectItr = iterator.next();
-//				T t = converter.convert(graphObjectItr);
-//				result.add(t);
-//			}
-//		}
-//
-//		return result;
-//	}
-
-//	public interface GeneralConverter<T, E> {
-//		T convert(E e);
-//	}
-//
-//	public interface Converter<T> extends GeneralConverter<T, GraphObject> {
-//	}
-//
-//	public interface StringConverter<T> extends GeneralConverter<T, String> {
-//	}
-//
 	public interface Process<T> {
 		String process(T t);
 	}
-//
-//	public static String getPropertyInsideProperty(GraphObject graphObject, String parent, String child) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//
-//		JSONObject jsonObject = (JSONObject) graphObject.getProperty(parent);
-//		if (jsonObject != null) {
-//			return String.valueOf(jsonObject.opt(child));
-//		}
-//		return null;
-//	}
-//
-//	public static String getPropertyString(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		return String.valueOf(graphObject.getProperty(property));
-//	}
-//
-//	public static Long getPropertyLong(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		Object value = graphObject.getProperty(property);
-//		if (value == null || value.equals(EMPTY)) {
-//			return null;
-//		}
-//
-//		try {
-//			return Long.valueOf(String.valueOf(value));
-//		} catch (NumberFormatException e) {
-//			return null;
-//		}
-//	}
-//
-//	public static Boolean getPropertyBoolean(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		Object value = graphObject.getProperty(property);
-//		if (value == null || value.equals(EMPTY)) {
-//			return null;
-//		}
-//		return Boolean.valueOf(String.valueOf(value));
-//	}
-//
-//	public static Integer getPropertyInteger(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		Object value = graphObject.getProperty(property);
-//		if (value == null || value.equals(EMPTY)) {
-//			return null;
-//		}
-//
-//		try {
-//			return Integer.valueOf(String.valueOf(value));
-//		} catch (NumberFormatException e) {
-//			return null;
-//		}
-//
-//	}
-//
-//	public static Double getPropertyDouble(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		Object value = graphObject.getProperty(property);
-//		if (value == null || value.equals(EMPTY)) {
-//			return null;
-//		}
-//		return Double.valueOf(String.valueOf(value));
-//	}
-//
-//	public static JSONArray getPropertyJsonArray(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		Object value = graphObject.getProperty(property);
-//		if (value instanceof JSONArray) {
-//			return (JSONArray) value;
-//		}
-//
-//		return null;
-//	}
-//
-//	public static GraphObject getPropertyGraphObject(GraphObject graphObject, String property) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		return graphObject.getPropertyAs(property, GraphObject.class);
-//	}
-//
-//	public static User createUser(GraphObject graphObject, String parent) {
-//		if (graphObject == null) {
-//			return null;
-//		}
-//		GraphObject userGraphObject = getPropertyGraphObject(graphObject, parent);
-//		if (userGraphObject == null) {
-//			return null;
-//		}
-//		return createUser(userGraphObject);
-//	}
-//
-//	public static User createUser(GraphObject graphObject) {
-//		final String id = String.valueOf(graphObject.getProperty("id"));
-//		final String name = String.valueOf(graphObject.getProperty("name"));
-//
-//		User user = new User() {
-//			@Override
-//			public String getName() {
-//				return name;
-//			}
-//
-//			@Override
-//			public String getId() {
-//				return id;
-//			}
-//		};
-//
-//		return user;
-//	}
 
 	public static String encodeUrl(Bundle parameters) {
 		if (parameters == null) {
@@ -516,12 +277,13 @@ public class Utils {
 		}
 	}
 	
-	public static List<Bitmap> extractBitmaps(List<Photo> photos) {
-		List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+	public static List<SharePhoto> extractBitmaps(List<Photo> photos) {
+		List<SharePhoto> bitmaps = new ArrayList<SharePhoto>();
 		for (Photo photo : photos) {
 			Parcelable parcelable = photo.getParcelable();
 			if (parcelable instanceof Bitmap) {
-				bitmaps.add((Bitmap) parcelable);
+                SharePhoto sharePhoto = new SharePhoto.Builder().setBitmap((Bitmap) parcelable).build();
+                bitmaps.add(sharePhoto);
 			}
 		}
 		return bitmaps;

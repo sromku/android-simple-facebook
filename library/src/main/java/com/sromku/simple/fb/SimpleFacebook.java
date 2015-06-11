@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
@@ -89,6 +90,7 @@ import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Simple Facebook SDK which wraps original Facebook SDK
@@ -120,7 +122,7 @@ public class SimpleFacebook {
 			mInstance = new SimpleFacebook();
 			mSessionManager = new SessionManager(mConfiguration);
 		}
-		SessionManager.activity = activity;
+        mSessionManager.setActivity(activity);
 	}
 
 	/**
@@ -148,7 +150,7 @@ public class SimpleFacebook {
 			mInstance = new SimpleFacebook();
 			mSessionManager = new SessionManager(mConfiguration);
 		}
-		SessionManager.activity = activity;
+        mSessionManager.setActivity(activity);
 		return mInstance;
 	}
 
@@ -207,7 +209,7 @@ public class SimpleFacebook {
 	 * @return <code>True</code> if we have active and open session to facebook
 	 */
 	public boolean isLogin() {
-		return mSessionManager.isLogin(true);
+		return mSessionManager.isLogin();
 	}
 
 	/**
@@ -1813,8 +1815,8 @@ public class SimpleFacebook {
 	 * 
 	 * @return List of granted permissions
 	 */
-	public List<String> getGrantedPermissions() {
-		return mSessionManager.getActiveSessionPermissions();
+	public Set<String> getGrantedPermissions() {
+		return mSessionManager.getAcceptedPermissions();
 	}
 
 	/**
@@ -1830,9 +1832,9 @@ public class SimpleFacebook {
 	 * 
 	 * @return Active session or null.
 	 */
-//	public Session getSession() {
-//		return mSessionManager.getActiveSession();
-//	}
+	public AccessToken getAccessToken() {
+		return mSessionManager.getAccessToken();
+	}
 
 	/**
 	 * Install report to facebook. Notifies the events system that the app has
@@ -1860,7 +1862,7 @@ public class SimpleFacebook {
 	 * Clean all references like Activity to prevent memory leaks
 	 */
 	public void clean() {
-		SessionManager.activity = null;
+		mSessionManager.clean();
 	}
 
 }

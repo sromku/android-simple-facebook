@@ -2,6 +2,10 @@ package com.sromku.simple.fb;
 
 import com.sromku.simple.fb.entities.Profile;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * All facebook permissions.
  * 
@@ -347,5 +351,15 @@ public enum Permission {
 		}
 		return null;
 	}
+
+    public static List<Permission> convert(Collection<String> rawPermissions) {
+        List<Permission> permissions = new ArrayList<Permission>();
+        for (Permission permission : values()) {
+            if (rawPermissions.contains(permission.getValue())) {
+                permissions.add(permission);
+            }
+        }
+        return permissions;
+    }
 
 }

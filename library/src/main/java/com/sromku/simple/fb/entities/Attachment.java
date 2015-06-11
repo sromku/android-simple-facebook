@@ -45,50 +45,6 @@ public class Attachment {
     @SerializedName(URL)
 	private String mUrl;
 
-//	private Attachment(GraphObject graphObject) {
-//
-//		if (graphObject == null)
-//			return;
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// description_tags
-//		mDescriptionTags = Utils.createList(graphObject, DESCRIPTION_TAGS, DATA, new Converter<Profile>() {
-//			@Override
-//			public Profile convert(GraphObject graphObject) {
-//				return Profile.create(graphObject);
-//			}
-//		});
-//
-//		// media
-//		mMedia = StoryAttachmentMedia.create(Utils.getPropertyGraphObject(graphObject, MEDIA));
-//
-//		// target
-//		mTarget = StoryAttachmentTarget.create(Utils.getPropertyGraphObject(graphObject, TARGET));
-//
-//		// subattachments
-//		mSubAttachments = Utils.createList(graphObject, SUBATTACHMENTS, DATA, new Converter<Attachment>() {
-//			@Override
-//			public Attachment convert(GraphObject graphObject) {
-//				return Attachment.create(graphObject);
-//			}
-//		});
-//
-//		// type
-//		mTitle = Utils.getPropertyString(graphObject, TITLE);
-//
-//		// type
-//		mType = Utils.getPropertyString(graphObject, TYPE);
-//
-//		// type
-//		mUrl = Utils.getPropertyString(graphObject, URL);
-//	}
-//
-//	public static Attachment create(GraphObject graphObject) {
-//		return new Attachment(graphObject);
-//	}
-
 	public String getDescription() {
 		return mDescription;
 	}
@@ -124,14 +80,6 @@ public class Attachment {
         @SerializedName(IMAGE)
 		private Image mImage;
 
-//		private StoryAttachmentMedia(GraphObject graphObject) {
-//			mImage = Image.create(Utils.getPropertyGraphObject(graphObject, IMAGE));
-//		}
-//
-//		public static StoryAttachmentMedia create(GraphObject graphObject) {
-//			return new StoryAttachmentMedia(graphObject);
-//		}
-
 		public Image getImage() {
 			return mImage;
 		}
@@ -147,15 +95,6 @@ public class Attachment {
 
         @SerializedName(URL)
 		private String mUrl;
-
-//		private StoryAttachmentTarget(GraphObject graphObject) {
-//			mId = Utils.getPropertyString(graphObject, ID);
-//			mUrl = Utils.getPropertyString(graphObject, URL);
-//		}
-//
-//		public static StoryAttachmentTarget create(GraphObject graphObject) {
-//			return new StoryAttachmentTarget(graphObject);
-//		}
 
 		public String getId() {
 			return mId;

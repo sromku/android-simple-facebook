@@ -19,19 +19,6 @@ public class Image {
     @SerializedName(WIDTH)
 	private Integer mWidth;
 
-//	private Image(GraphObject graphObject) {
-//		mHeight = Utils.getPropertyInteger(graphObject, HEIGHT);
-//		mSource = Utils.getPropertyString(graphObject, SOURCE);
-//		if (mSource == null || NULL.equalsIgnoreCase(mSource)) {
-//			mSource = Utils.getPropertyString(graphObject, SRC);
-//		}
-//		mWidth = Utils.getPropertyInteger(graphObject, WIDTH);
-//	}
-//
-//	public static Image create(GraphObject graphObject) {
-//		return new Image(graphObject);
-//	}
-
 	public Integer getHeight() {
 		return mHeight;
 	}

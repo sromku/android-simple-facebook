@@ -30,7 +30,7 @@ public class DeleteRequestAction extends AbstractAction {
 
 	@Override
 	protected void executeImpl() {
-		if (sessionManager.isLogin(true)) {
+		if (sessionManager.isLogin()) {
 			AccessToken accessToken = sessionManager.getAccessToken();
 			GraphRequest request = new GraphRequest(accessToken, mRequestId, null, HttpMethod.DELETE, new GraphRequest.Callback() {
 				@Override

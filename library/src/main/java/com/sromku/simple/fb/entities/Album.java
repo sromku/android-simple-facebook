@@ -31,8 +31,6 @@ public class Album implements Publishable {
 	private static final String UPDATED_TIME = "updated_time";
 	private static final String CAN_UPLOAD = "can_upload";
 
-//	private final GraphObject mGraphObject;
-
     @SerializedName(ID)
 	private String mId = null;
 
@@ -74,76 +72,11 @@ public class Album implements Publishable {
 
     private Privacy mPublishPrivacy = null;
 
-//	private Album(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//		if (graphObject == null) {
-//			return;
-//		}
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// location
-//		mLocation = Utils.getPropertyString(graphObject, LOCATION);
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, LINK);
-//
-//		// count
-//		mCount = Utils.getPropertyInteger(graphObject, COUNT);
-//
-//		// privacy
-//		mPrivacy = Utils.getPropertyString(graphObject, PRIVACY);
-//
-//		// cover photo
-//		mCoverPhotoId = Utils.getPropertyString(graphObject, COVER_PHOTO);
-//
-//		// type
-//		mType = Utils.getPropertyString(graphObject, TYPE);
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//		// can upload
-//		mCanUpload = Utils.getPropertyBoolean(graphObject, CAN_UPLOAD);
-//	}
-
 	private Album(Builder builder) {
-//		mGraphObject = null;
 		mName = builder.mName;
 		mDescription = builder.mMessage;
 		mPublishPrivacy = builder.mPublishPrivacy;
 	}
-
-//	/**
-//	 * Create new album based on {@link GraphObject} instance.
-//	 *
-//	 * @param graphObject
-//	 *            The {@link GraphObject} instance
-//	 * @return {@link com.sromku.simple.fb.entities.Album}
-//	 */
-//	public static Album create(GraphObject graphObject) {
-//		return new Album(graphObject);
-//	}
-//
-//	/**
-//	 * Return the graph object.
-//	 */
-//	public GraphObject getGraphObject() {
-//		return mGraphObject;
-//	}
 
 	/**
 	 * The album id.

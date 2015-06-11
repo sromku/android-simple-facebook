@@ -30,32 +30,6 @@ public class Work {
     @SerializedName(END_DATE)
 	private String mEndDate;
 
-//	private Work(GraphObject graphObject) {
-//
-//		// employer
-//		mEmployer = Utils.createUser(graphObject, EMPLOYER);
-//
-//		// location
-//		GraphObject location = Utils.getPropertyGraphObject(graphObject, LOCATION);
-//		mLocation = Location.create(location);
-//
-//		// position
-//		mPosition = Utils.getPropertyInsideProperty(graphObject, POSITION, NAME);
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// start date
-//		mStartDate = Utils.getPropertyString(graphObject, START_DATE);
-//
-//		// end date
-//		mEndDate = Utils.getPropertyString(graphObject, END_DATE);
-//	}
-//
-//	public static Work create(GraphObject graphObject) {
-//		return new Work(graphObject);
-//	}
-
 	public User getEmployer() {
 		return mEmployer;
 	}

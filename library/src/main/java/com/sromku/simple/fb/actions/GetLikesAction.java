@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Like;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -21,7 +22,8 @@ public class GetLikesAction extends GetAction<List<Like>> {
 
 	@Override
 	protected List<Like> processResponse(GraphResponse response) {
-		List<Like> likes = Utils.typedListFromResponse(response);
-		return likes;
+        Utils.DataResult<Like> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Like>>() {
+        }.getType());
+        return dataResult.data;
 	}
 }

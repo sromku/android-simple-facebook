@@ -57,7 +57,7 @@ public class Comment implements Publishable {
 	private String mMessage;
 
     @SerializedName(MESSAGE_TAGS)
-	private List<String> mMessageTags;
+	private List<Post.InlineTag> mMessageTags;
 
     @SerializedName(PARENT)
 	private Comment mParent;
@@ -68,60 +68,10 @@ public class Comment implements Publishable {
     @SerializedName(ATTACHMENT_URL)
 	private String mAttachmentUrl;
 
-//	private Comment(GraphObject graphObject) {
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// attachment
-//		mAttachment = Attachment.create(Utils.getPropertyGraphObject(graphObject, ATTACHMENT));
-//
-//		// can comment
-//		mCanComment = Utils.getPropertyBoolean(graphObject, CAN_COMMENT);
-//
-//		// can remove
-//		mCanRemove = Utils.getPropertyBoolean(graphObject, CAN_REMOVE);
-//
-//		// comment count
-//		mCommentCount = Utils.getPropertyInteger(graphObject, COMMENT_COUNT);
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// like count
-//		mLikeCount = Utils.getPropertyInteger(graphObject, LIKE_COUNT);
-//
-//		// message
-//		mMessage = Utils.getPropertyString(graphObject, MESSAGE);
-//
-//		// message tags
-//		mMessageTags = Utils.createList(graphObject, MESSAGE_TAGS, new Converter<String>() {
-//			@Override
-//			public String convert(GraphObject graphObject) {
-//				return graphObject.toString();
-//			}
-//		});
-//
-//		// parent
-//		GraphObject commentGraph = Utils.getPropertyGraphObject(graphObject, PARENT);
-//		if (commentGraph != null) {
-//			mParent = Comment.create(commentGraph);
-//		}
-//
-//		// user likes
-//		mUserLikes = Utils.getPropertyBoolean(graphObject, USER_LIKES);
-//	}
-
 	private Comment(Builder builder) {
 		mMessage = builder.mMessage;
 		mAttachmentUrl = builder.mAttachmentUrl;
 	}
-
-//	public static Comment create(GraphObject graphObject) {
-//		return new Comment(graphObject);
-//	}
 
 	@Override
 	public Bundle getBundle() {
@@ -216,7 +166,7 @@ public class Comment implements Publishable {
 	/**
 	 * Profiles tagged in mentions in the message.
 	 */
-	public List<String> getMessageTags() {
+	public List<Post.InlineTag> getMessageTags() {
 		return mMessageTags;
 	}
 

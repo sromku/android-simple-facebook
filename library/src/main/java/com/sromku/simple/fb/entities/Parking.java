@@ -17,22 +17,6 @@ public class Parking {
     @SerializedName(VALET)
 	private Integer mValet;
 
-//	private Parking(GraphObject graphObject) {
-//
-//		// street
-//		mStreet = Utils.getPropertyInteger(graphObject, STREET);
-//
-//		// lot
-//		mLot = Utils.getPropertyInteger(graphObject, LOT);
-//
-//		// valet
-//		mValet = Utils.getPropertyInteger(graphObject, VALET);
-//	}
-//
-//	public static Parking create(GraphObject graphObject) {
-//		return new Parking(graphObject);
-//	}
-
 	/**
 	 * Indicates street parking is available.
 	 * 

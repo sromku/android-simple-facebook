@@ -97,70 +97,6 @@ public class Photo implements Publishable {
 	private byte[] mBytes = null;
 	private Privacy mPrivacy = null;
 
-//	private Photo(GraphObject graphObject) {
-//
-//		if (graphObject == null)
-//			return;
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// album
-//		mAlbum = Album.create(graphObject.getPropertyAs(ALBUM, GraphObject.class));
-//
-//		// back date time
-//		mBackDatetime = Utils.getPropertyLong(graphObject, BACKDATED_TIME);
-//
-//		// back date time granularity
-//		String granularity = Utils.getPropertyString(graphObject, BACKDATED_TIME_GRANULARITY);
-//		mBackDatetimeGranularity = BackDatetimeGranularity.fromValue(granularity);
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// height
-//		mHeight = Utils.getPropertyInteger(graphObject, HEIGHT);
-//
-//		// icon
-//		mIcon = Utils.getPropertyString(graphObject, ICON);
-//
-//		// image sources
-//		mImages = Utils.createList(graphObject, IMAGES, new Converter<Image>() {
-//			@Override
-//			public Image convert(GraphObject graphObject) {
-//				return Image.create(graphObject);
-//			}
-//		});
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, LINK);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// page story id
-//		mPageStoryId = Utils.getPropertyString(graphObject, PAGE_STORY_ID);
-//
-//		// picture
-//		mPicture = Utils.getPropertyString(graphObject, PICTURE);
-//
-//		// source
-//		mSource = Utils.getPropertyString(graphObject, SOURCE);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//		// width
-//		mWidth = Utils.getPropertyInteger(graphObject, WIDTH);
-//
-//		// place
-//		mPlace = Place.create(graphObject.getPropertyAs(PLACE, GraphObject.class));
-//
-//	}
-
 	private Photo(Builder builder) {
 		mName = builder.mName;
 		mPlaceId = builder.mPlaceId;
@@ -168,10 +104,6 @@ public class Photo implements Publishable {
 		mBytes = builder.mBytes;
 		mPrivacy = builder.mPrivacy;
 	}
-
-//	public static Photo create(GraphObject graphObject) {
-//		return new Photo(graphObject);
-//	}
 
 	@Override
 	public String getPath() {

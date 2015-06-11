@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.FacebookException;
 import com.facebook.share.widget.LikeView;
 import com.sromku.simple.fb.example.R;
 
@@ -27,13 +28,13 @@ public class PublishLikeButtonFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_like_view, container, false);
 		mResult = (TextView) view.findViewById(R.id.result);
 		mLikeView = (LikeView) view.findViewById(R.id.like_view);
-//		mLikeView.setObjectId("1501124800143936");
-//		mLikeView.setOnErrorListener(new OnErrorListener() {
-//			@Override
-//			public void onError(Bundle errorBundle) {
-//				mResult.setText("Some error happened");
-//			}
-//		});
+		mLikeView.setObjectIdAndType("1501124800143936", LikeView.ObjectType.PAGE);
+		mLikeView.setOnErrorListener(new LikeView.OnErrorListener() {
+            @Override
+            public void onError(FacebookException e) {
+                mResult.setText("Some error happened");
+            }
+		});
 		return view;
 	}
 

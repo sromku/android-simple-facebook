@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.FamilyUser;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -25,7 +26,8 @@ public class GetFamilyAction extends GetAction<List<FamilyUser>> {
 
 	@Override
 	protected List<FamilyUser> processResponse(GraphResponse response) {
-		List<FamilyUser> familyUsers = Utils.typedListFromResponse(response);
-		return familyUsers;
+        Utils.DataResult<FamilyUser> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<FamilyUser>>() {
+        }.getType());
+        return dataResult.data;
 	}
 }

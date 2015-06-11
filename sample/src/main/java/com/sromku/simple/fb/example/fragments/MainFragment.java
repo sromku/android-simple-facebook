@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,15 +13,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.sromku.simple.fb.Permission;
+import com.facebook.login.LoginResult;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.Example;
 import com.sromku.simple.fb.example.ExamplesAdapter;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
+
+import java.util.ArrayList;
 
 public class MainFragment extends Fragment implements OnItemClickListener {
 
@@ -166,25 +165,19 @@ public class MainFragment extends Fragment implements OnItemClickListener {
 			}
 
 			@Override
-			public void onThinking() {
-				// show progress bar or something to the user while login is
-				// happening
-				mTextStatus.setText("Thinking...");
-			}
-
-			@Override
-			public void onLogin() {
+			public void onLogin(LoginResult loginResult) {
 				// change the state of the button or do whatever you want
 				mTextStatus.setText("Logged in");
 				loggedInUIState();
 			}
 
-			@Override
-			public void onNotAcceptingPermissions(Permission.Type type) {
-				mTextStatus.setText("Logged out");
-				Toast.makeText(getActivity(), String.format("You didn't accept %s permissions", type.name()), Toast.LENGTH_SHORT).show();
-			}
-		};
+            @Override
+            public void onCancel() {
+                mTextStatus.setText("Canceled");
+                Log.w(TAG, "Canceled the login");
+            }
+
+        };
 
 		mButtonLogin.setOnClickListener(new View.OnClickListener() {
 			@Override

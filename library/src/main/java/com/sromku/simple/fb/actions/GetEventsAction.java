@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Event;
 import com.sromku.simple.fb.entities.Event.EventDecision;
@@ -46,8 +47,9 @@ public class GetEventsAction extends GetAction<List<Event>> {
 
 	@Override
 	protected List<Event> processResponse(GraphResponse response) {
-		List<Event> events = Utils.typedListFromResponse(response);
-		return events;
+        Utils.DataResult<Event> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Event>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

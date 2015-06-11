@@ -1,10 +1,21 @@
 package com.sromku.simple.fb.actions;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookRequestError;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginResult;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Publishable;
+import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
+import com.sromku.simple.fb.utils.Errors;
+import com.sromku.simple.fb.utils.Logger;
 
-// TODO - REVIVE
+import org.json.JSONObject;
+
 public class PublishAction extends AbstractAction {
 
 	private OnPublishListener mOnPublishListener;
@@ -29,110 +40,110 @@ public class PublishAction extends AbstractAction {
 
 	@Override
 	protected void executeImpl() {
-//		if (sessionManager.isLogin(true)) {
-//			if (sessionManager.canMakeAdditionalRequest()) {
-//				// if we defined the publish permission
-//
-//				/*
-//				 * We need also add one more check of next case: - if we gave
-//				 * extended permissions in runtime, but we don't have these
-//				 * permissions in the configuration
-//				 */
-//				if (configuration.getPublishPermissions().contains(mPublishable.getPermission().getValue())
-//						|| sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
-//					if (mOnPublishListener != null) {
-//						mOnPublishListener.onThinking();
-//					}
-//
-//					/*
-//					 * Check if session to facebook has needed publish
-//					 * permission. If not, we will ask user for this permission.
-//					 */
-//					if (!sessionManager.getActiveSessionPermissions().contains(mPublishable.getPermission().getValue())) {
-//						sessionManager.getSessionStatusCallback().setOnReopenSessionListener(new OnReopenSessionListener() {
-//							@Override
-//							public void onSuccess() {
-//								publishImpl(mPublishable, mOnPublishListener);
-//							}
-//
-//							@Override
-//							public void onNotAcceptingPermissions(Permission.Type type) {
-//								String reason = Errors.getError(ErrorMsg.CANCEL_PERMISSIONS_PUBLISH, String.valueOf(configuration.getPublishPermissions()));
-//								Logger.logError(PublishAction.class, reason, null);
-//								if (mOnPublishListener != null) {
-//									mOnPublishListener.onFail(reason);
-//								}
-//							}
-//						});
-//						sessionManager.extendPublishPermissions();
-//					} else {
-//						publishImpl(mPublishable, mOnPublishListener);
-//					}
-//				} else {
-//					String reason = Errors.getError(ErrorMsg.PERMISSIONS_PUBLISH, mPublishable.getPermission().getValue());
-//					Logger.logError(PublishAction.class, reason, null);
-//					if (mOnPublishListener != null) {
-//						mOnPublishListener.onFail(reason);
-//					}
-//				}
-//			} else {
-//				return;
-//			}
-//		} else {
-//			if (mOnPublishListener != null) {
-//				String reason = Errors.getError(ErrorMsg.LOGIN);
-//				Logger.logError(PublishAction.class, reason, null);
-//				mOnPublishListener.onFail(reason);
-//			}
-//		}
+		if (sessionManager.isLogin()) {
+			if (!sessionManager.hasPendingRequest()) {
+				// if we defined the publish permission
+
+				/*
+				 * We need also add one more check of next case: - if we gave
+				 * extended permissions in runtime, but we don't have these
+				 * permissions in the configuration
+				 */
+                final String neededPermission = mPublishable.getPermission().getValue();
+                if (configuration.getPublishPermissions().contains(neededPermission)
+                        || sessionManager.hasAccepted(neededPermission)) {
+
+					if (mOnPublishListener != null) {
+						mOnPublishListener.onThinking();
+					}
+
+					/*
+					 * Check if session to facebook has needed publish
+					 * permission. If not, we will ask user for this permission.
+					 */
+					if (!sessionManager.hasAccepted(neededPermission)) {
+						sessionManager.getLoginCallback().setLoginListener(new OnLoginListener() {
+
+                            @Override
+                            public void onException(Throwable throwable) {
+                                returnFail(throwable != null ? String.valueOf(throwable.getMessage()) : "Got exception on asking for publish permissions");
+                            }
+
+                            @Override
+                            public void onFail(String reason) {
+                                returnFail(reason);
+                            }
+
+                            @Override
+                            public void onLogin(LoginResult loginResult) {
+                                if (sessionManager.hasAccepted(neededPermission)) {
+                                    publishImpl(mPublishable, mOnPublishListener);
+                                }
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                returnFail("User canceled the publish dialog");
+                            }
+
+                            private void returnFail(String reason) {
+                                Logger.logError(PublishAction.class, reason, null);
+                                if (mOnPublishListener != null) {
+                                    mOnPublishListener.onFail(reason);
+                                }
+                            }
+
+                        });
+						sessionManager.requestPublishPermissions();
+					} else {
+						publishImpl(mPublishable, mOnPublishListener);
+					}
+				} else {
+					String reason = Errors.getError(Errors.ErrorMsg.PERMISSIONS_PUBLISH, neededPermission);
+					Logger.logError(PublishAction.class, reason, null);
+					if (mOnPublishListener != null) {
+						mOnPublishListener.onFail(reason);
+					}
+				}
+			} else {
+				return;
+			}
+		} else {
+			if (mOnPublishListener != null) {
+				String reason = Errors.getError(Errors.ErrorMsg.LOGIN);
+				Logger.logError(PublishAction.class, reason, null);
+				mOnPublishListener.onFail(reason);
+			}
+		}
 	}
 
 	private void publishImpl(Publishable publishable, final OnPublishListener onPublishListener) {
-//		Session session = sessionManager.getActiveSession();
-//		Request request = new Request(session, mTarget + "/" + publishable.getPath(), publishable.getBundle(), HttpMethod.POST, new Request.Callback() {
-//			@Override
-//			public void onCompleted(Response response) {
-//				GraphObject graphObject = response.getGraphObject();
-//				if (graphObject != null) {
-//					JSONObject graphResponse = graphObject.getInnerJSONObject();
-//					String postId = null;
-//					try {
-//						postId = graphResponse.getString("id");
-//					} catch (JSONException e) {
-//						Logger.logError(PublishAction.class, "JSON error", e);
-//						postId = "no_id";
-//						try {
-//							postId = "success: " + graphResponse.getString("success");
-//						} catch (JSONException e1) {
-//						}
-//					}
-//					FacebookRequestError error = response.getError();
-//					if (error != null) {
-//						Logger.logError(PublishAction.class, "Failed to publish", error.getException());
-//						if (onPublishListener != null) {
-//							onPublishListener.onException(error.getException());
-//						}
-//					} else {
-//						if (onPublishListener != null) {
-//							onPublishListener.onComplete(postId);
-//						}
-//					}
-//				} else {
-//					Logger.logError(PublishAction.class, "The GraphObject in Response of publish action has null value. Response=" + response.toString(), null);
-//					FacebookRequestError error = response.getError();
-//					if (error != null) {
-//						Logger.logError(PublishAction.class, "Failed to publish", error.getException());
-//						if (onPublishListener != null) {
-//							onPublishListener.onException(error.getException());
-//						}
-//					} else if (onPublishListener != null) {
-//						onPublishListener.onFail("The returned value is null");
-//					}
-//				}
-//			}
-//		});
-//		RequestAsyncTask task = new RequestAsyncTask(request);
-//		task.execute();
+
+        AccessToken accessToken = sessionManager.getAccessToken();
+        GraphRequest request = new GraphRequest(accessToken, mTarget + "/" + publishable.getPath(), publishable.getBundle(), HttpMethod.POST, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                FacebookRequestError error = response.getError();
+                if (error != null) {
+                    Logger.logError(GetAction.class, "Failed to publish", error.getException());
+                    if (onPublishListener != null) {
+                        onPublishListener.onException(error.getException());
+                    }
+                } else {
+                    if (response.getRawResponse() == null) {
+                        Logger.logError(GetAction.class, "The response GraphObject has null value. Response=" + response.toString(), null);
+                    } else {
+                        if (onPublishListener != null) {
+                            JSONObject jsonObject = response.getJSONObject();
+                            String id = jsonObject.optString("id");
+                            onPublishListener.onComplete(id);
+                        }
+                    }
+                }
+            }
+        });
+        GraphRequestAsyncTask task = new GraphRequestAsyncTask(request);
+        task.execute();
 	}
 
 }

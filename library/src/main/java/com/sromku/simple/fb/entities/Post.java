@@ -1,12 +1,13 @@
 package com.sromku.simple.fb.entities;
 
-import android.util.Pair;
-
 import com.google.gson.annotations.SerializedName;
 import com.sromku.simple.fb.utils.GraphPath;
+import com.sromku.simple.fb.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An individual entry in a profile's feed as represented in the Graph API.
@@ -69,7 +70,7 @@ public class Post {
 	private static final String OBJECT_ID = "object_id";
 	private static final String PICTURE = "picture";
 	private static final String PLACE = "place";
-	// private static final String PRIVACY = "privacy";
+    // private static final String PRIVACY = "privacy";
 	private static final String PROPERTIES = "properties";
 	private static final String SHARES = "shares";
 	private static final String SOURCE = "source";
@@ -94,10 +95,10 @@ public class Post {
 	private String mCaption;
 
     @SerializedName(COMMENTS)
-	private List<Comment> mComments;
+	private Utils.DataResult<Comment> mComments;
 
     @SerializedName(LIKES)
-	private List<Like> mLikes;
+	private Utils.DataResult<Like> mLikes;
 
     @SerializedName(CREATED_TIME)
 	private Date mCreatedTime;
@@ -124,7 +125,7 @@ public class Post {
 	private String mMessage;
 
     @SerializedName(MESSAGE_TAGS)
-	private List<InlineTag> mMessageTags;
+	private Map<String, List<InlineTag>> mMessageTags;
 
     @SerializedName(NAME)
 	private String mName;
@@ -137,13 +138,15 @@ public class Post {
 
     @SerializedName(PLACE)
 	private Place mPlace;
-	// private Privacy mPrivacy;
+
+//    @SerializedName(PRIVACY)
+//    private Privacy mPrivacy;
 
     @SerializedName(PROPERTIES)
 	private List<Property> mProperties;
 
     @SerializedName(SHARES)
-	private Integer mShares;
+	private Shares mShares;
 
     @SerializedName(SOURCE)
 	private String mSource;
@@ -155,10 +158,10 @@ public class Post {
 	private String mStory;
 
     @SerializedName(STORY_TAGS)
-	private List<InlineTag> mStoryTags;
+	private Map<String, List<InlineTag>> mStoryTags;
 
     @SerializedName(TO)
-	private List<User> mTo;
+	private Utils.DataResult<User> mTo;
 
     @SerializedName(TYPE)
 	private String mType;
@@ -167,149 +170,11 @@ public class Post {
 	private Date mUpdatedTime;
 
     @SerializedName(WITH_TAGS)
-	private List<User> mWithTags;
+	private Utils.DataResult<User> mWithTags;
 
-//	private Post(GraphObject graphObject) {
-//
-//		// actions
-//		mActions = Utils.createList(graphObject, ACTIONS, new Converter<Action>() {
-//			@Override
-//			public Action convert(GraphObject graphObject) {
-//				String name = Utils.getPropertyString(graphObject, NAME);
-//				String link = Utils.getPropertyString(graphObject, LINK);
-//				return new Action(name, link);
-//			}
-//		});
-//
-//		// application
-//		mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//
-//		// attachments
-//		mAttachment = Attachment.create(Utils.getPropertyGraphObject(graphObject, ATTACHMENTS));
-//
-//		// caption
-//		mCaption = Utils.getPropertyString(graphObject, CAPTION);
-//
-//		// comments
-//		mComments = Utils.createList(graphObject, COMMENTS, "data", new Converter<Comment>() {
-//			@Override
-//			public Comment convert(GraphObject graphObject) {
-//				return Comment.create(graphObject);
-//			}
-//		});
-//
-//		// likes
-//		mLikes = Utils.createList(graphObject, LIKES, "data", new Converter<Like>() {
-//			@Override
-//			public Like convert(GraphObject graphObject) {
-//				return Like.create(graphObject);
-//			}
-//		});
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// icon
-//		mIcon = Utils.getPropertyString(graphObject, ICON);
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// is hidden
-//		mIsHidden = Utils.getPropertyBoolean(graphObject, IS_HIDDEN);
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, LINK);
-//
-//		// message
-//		mMessage = Utils.getPropertyString(graphObject, MESSAGE);
-//
-//		// message tags
-//		mMessageTags = Utils.createListAggregateValues(graphObject, MESSAGE_TAGS, new Converter<InlineTag>() {
-//			@Override
-//			public InlineTag convert(GraphObject graphObject) {
-//				return InlineTag.create(graphObject);
-//			}
-//		});
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// object id
-//		mObjectId = Utils.getPropertyString(graphObject, OBJECT_ID);
-//
-//		// picture
-//		mPicture = Utils.getPropertyString(graphObject, PICTURE);
-//
-//		// place
-//		mPlace = Place.create(Utils.getPropertyGraphObject(graphObject, PLACE));
-//
-//		// privacy
-//		// mPrivacy = Privacy.create(Utils.getPropertyGraphObject(graphObject,
-//		// PRIVACY));
-//
-//		// properties
-//		mProperties = Utils.createList(graphObject, PROPERTIES, new Converter<Property>() {
-//			@Override
-//			public Property convert(GraphObject graphObject) {
-//				String name = Utils.getPropertyString(graphObject, NAME);
-//				String text = Utils.getPropertyString(graphObject, "text");
-//				return new Property(name, text);
-//			}
-//		});
-//
-//		// shares
-//		mShares = Utils.getPropertyInteger(graphObject, SHARES);
-//
-//		// source
-//		mSource = Utils.getPropertyString(graphObject, SOURCE);
-//
-//		// status_type
-//		mStatusType = Utils.getPropertyString(graphObject, STATUS_TYPE);
-//
-//		// story
-//		mStory = Utils.getPropertyString(graphObject, STORY);
-//
-//		// story tags
-//		mStoryTags = Utils.createListAggregateValues(graphObject, STORY_TAGS, new Converter<InlineTag>() {
-//			@Override
-//			public InlineTag convert(GraphObject graphObject) {
-//				return InlineTag.create(graphObject);
-//			}
-//		});
-//
-//		// to
-//		mTo = Utils.createList(graphObject, TO, "data", new Converter<User>() {
-//			@Override
-//			public User convert(GraphObject graphObject) {
-//				return null;
-//			}
-//		});
-//
-//		// type
-//		mType = Utils.getPropertyString(graphObject, TYPE);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//		// with tags
-//		mWithTags = Utils.createList(graphObject, WITH_TAGS, "data", new Converter<User>() {
-//			@Override
-//			public User convert(GraphObject graphObject) {
-//				return Utils.createUser(graphObject);
-//			}
-//		});
-//	}
-//
-//	public static Post create(GraphObject graphObject) {
-//		return new Post(graphObject);
-//	}
+    private static class Shares {
+        Integer count;
+    }
 
 	/**
 	 * A list of available actions on the post (including commenting, liking,
@@ -344,14 +209,14 @@ public class Post {
 	 * Comments for this post.
 	 */
 	public List<Comment> getComments() {
-		return mComments;
+		return mComments.data;
 	}
 
 	/**
 	 * Likes of this post
 	 */
 	public List<Like> getLikes() {
-		return mLikes;
+		return mLikes.data;
 	}
 
 	/**
@@ -372,7 +237,7 @@ public class Post {
 	 * Information about the user who posted the message.
 	 */
 	public User getFrom() {
-		return mFrom;
+        return mFrom;
 	}
 
 	/**
@@ -415,7 +280,11 @@ public class Post {
 	 * Objects tagged in the message (Users, Pages, etc).
 	 */
 	public List<InlineTag> getMessageTags() {
-		return mMessageTags;
+        List<InlineTag> inlineTags = new ArrayList<InlineTag>();
+        for (Map.Entry<String, List<InlineTag>> entry : mMessageTags.entrySet()) {
+            inlineTags.addAll(entry.getValue());
+        }
+		return inlineTags;
 	}
 
 	/**
@@ -465,7 +334,7 @@ public class Post {
 	 * The number of times this post has been shared.
 	 */
 	public Integer getShares() {
-		return mShares;
+		return mShares != null ? mShares.count : 0;
 	}
 
 	/**
@@ -508,14 +377,18 @@ public class Post {
 	 * Objects (Users, Pages, etc) tagged in a non-intentional story.
 	 */
 	public List<InlineTag> getStoryTags() {
-		return mStoryTags;
+        List<InlineTag> inlineTags = new ArrayList<InlineTag>();
+        for (Map.Entry<String, List<InlineTag>> entry : mStoryTags.entrySet()) {
+            inlineTags.addAll(entry.getValue());
+        }
+        return inlineTags;
 	}
 
 	/**
 	 * Profiles mentioned or targeted in this post.
 	 */
 	public List<User> getTo() {
-		return mTo;
+        return mTo.data;
 	}
 
 	/**
@@ -538,36 +411,46 @@ public class Post {
 	 * post ('Who are you with?' on Facebook).
 	 */
 	public List<User> getWithTags() {
-		return mWithTags;
+		return mWithTags.data;
 	}
 
-	public static class Action extends Pair<String, String> {
+	public static class Action  {
 
-		public Action(String name, String link) {
-			super(name, link);
-		}
+        private static final String NAME = "name";
+        private static final String LINK = "link";
+
+        @SerializedName(NAME)
+        private String mName;
+
+        @SerializedName(LINK)
+        private String mLink;
 
 		public String getName() {
-			return first;
+			return mName;
 		}
 
 		public String getLink() {
-			return second;
+			return mLink;
 		}
 	}
 
-	public static class Property extends Pair<String, String> {
+	public static class Property {
 
-		public Property(String name, String text) {
-			super(name, text);
-		}
+        private static final String NAME = "name";
+        private static final String TEXT = "text";
+
+        @SerializedName(NAME)
+        private String mName;
+
+        @SerializedName(TEXT)
+        private String mText;
 
 		public String getName() {
-			return first;
+			return mName;
 		}
 
 		public String getText() {
-			return second;
+			return mText;
 		}
 	}
 
@@ -593,28 +476,6 @@ public class Post {
 
         @SerializedName(TYPE)
 		private String mType;
-
-//		private InlineTag(GraphObject graphObject) {
-//
-//			// id
-//			mId = Utils.getPropertyString(graphObject, ID);
-//
-//			// name
-//			mName = Utils.getPropertyString(graphObject, NAME);
-//
-//			// offset
-//			mOffset = Utils.getPropertyInteger(graphObject, "offset");
-//
-//			// length
-//			mLength = Utils.getPropertyInteger(graphObject, "length");
-//
-//			// type
-//			mType = Utils.getPropertyString(graphObject, "type");
-//		}
-
-//		public static InlineTag create(GraphObject graphObject) {
-//			return new InlineTag(graphObject);
-//		}
 
 		public String getId() {
 			return mId;

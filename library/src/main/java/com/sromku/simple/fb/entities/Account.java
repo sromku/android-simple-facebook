@@ -28,33 +28,6 @@ public class Account {
     @SerializedName(ID)
 	private String mId;
 
-//	private Account(GraphObject graphObject) {
-//
-//		// category
-//		mCategory = Utils.getPropertyString(graphObject, CATEGORY);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// access token
-//		mAccessToken = Utils.getPropertyString(graphObject, ACCESS_TOKEN);
-//
-//		// roles
-//		mRoles = Utils.convert(Utils.getPropertyJsonArray(graphObject, PERMS), new StringConverter<Role>() {
-//			@Override
-//			public Role convert(String str) {
-//				return Role.valueOf(str);
-//			}
-//		});
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//	}
-
-//	public static Account create(GraphObject graphObject) {
-//		return new Account(graphObject);
-//	}
-
 	public String getCategory() {
 		return mCategory;
 	}

@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Post;
 import com.sromku.simple.fb.entities.Post.PostType;
@@ -27,8 +28,9 @@ public class GetPostsAction extends GetAction<List<Post>> {
 
 	@Override
 	protected List<Post> processResponse(GraphResponse response) {
-		List<Post> posts = Utils.typedListFromResponse(response);
-		return posts;
+        Utils.DataResult<Post> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Post>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

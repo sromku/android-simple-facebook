@@ -18,7 +18,6 @@ import java.util.Set;
  */
 public class Page {
 
-//	private final GraphObject mGraphObject;
     @SerializedName(Properties.ID)
 	private String mId;
 
@@ -31,8 +30,11 @@ public class Page {
     @SerializedName(Properties.BAND_MEMBERS)
 	private String mBandMembers;
 
-    @SerializedName(Properties.BIRTHDAY)
-	private String mBirthday;
+    @SerializedName(Properties.BIO)
+	private String mBio;
+
+    @SerializedName(Properties.BIO)
+    private String mBirthday;
 
     @SerializedName(Properties.BOOKING_AGENT)
 	private String mBookingAgent;
@@ -50,7 +52,7 @@ public class Page {
 	private String mCompanyOverview;
 
     @SerializedName(Properties.COVER)
-	private String mCover;
+	private Cover mCover;
 
     @SerializedName(Properties.CREATED_TIME)
 	private Date mCreatedTime;
@@ -137,142 +139,6 @@ public class Page {
 
     @SerializedName(Properties.WERE_HERE_COUNT)
 	private Integer mWereHereCount;
-
-//	private Page(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, Properties.ID);
-//
-//		// about
-//		mAbout = Utils.getPropertyString(graphObject, Properties.ABOUT);
-//
-//		// attire
-//		mAttire = Utils.getPropertyString(graphObject, Properties.ATTIRE);
-//
-//		// band member
-//		mBandMembers = Utils.getPropertyString(graphObject, Properties.BAND_MEMBERS);
-//
-//		// birthday
-//		mBirthday = Utils.getPropertyString(graphObject, Properties.BIRTHDAY);
-//
-//		// booking agent
-//		mBookingAgent = Utils.getPropertyString(graphObject, Properties.BOOKING_AGENT);
-//
-//		// can post
-//		mCanPost = Utils.getPropertyBoolean(graphObject, Properties.CAN_POST);
-//
-//		// category
-//		mCategory = Utils.getPropertyString(graphObject, Properties.CATEGORY);
-//
-//		// create time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, Properties.CREATED_TIME);
-//
-//		// num checkins
-//		mNumCheckins = Utils.getPropertyInteger(graphObject, Properties.CHECKINS);
-//
-//		// company overview
-//		mCompanyOverview = Utils.getPropertyString(graphObject, Properties.COMPANY_OVERVIEW);
-//
-//		// cover
-//		mCover = Utils.getPropertyInsideProperty(graphObject, Properties.COVER, "source");
-//
-//		// current location
-//		mCurrentLocation = Utils.getPropertyString(graphObject, Properties.CURRENT_LOCATION);
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, Properties.DESCRIPTION);
-//
-//		// directed by
-//		mDirectedBy = Utils.getPropertyString(graphObject, Properties.DIRECTED_BY);
-//
-//		// founded
-//		mFounded = Utils.getPropertyString(graphObject, Properties.FOUNDED);
-//
-//		// general info
-//		mGeneralInfo = Utils.getPropertyString(graphObject, Properties.GENERAL_INFO);
-//
-//		// general manager
-//		mGeneralManager = Utils.getPropertyString(graphObject, Properties.GENERAL_MANAGER);
-//
-//		// hometown
-//		mHometown = Utils.getPropertyString(graphObject, Properties.HOMETOWN);
-//
-//		// hours
-//
-//		// is permanently closed
-//		mIsPermanetlyClosed = Utils.getPropertyBoolean(graphObject, Properties.IS_PERMANENTLY_CLOSED);
-//
-//		// is published
-//		mIsPublished = Utils.getPropertyBoolean(graphObject, Properties.IS_PUBLISHED);
-//
-//		// is unclaimed
-//		mIsUnclaimed = Utils.getPropertyBoolean(graphObject, Properties.IS_UNCLAIMED);
-//
-//		// likes
-//		mLikes = Utils.getPropertyInteger(graphObject, Properties.LIKES);
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, Properties.LINK);
-//
-//		// location
-//		GraphObject location = Utils.getPropertyGraphObject(graphObject, Properties.LOCATION);
-//		mLocation = Location.create(location);
-//
-//		// mission
-//		mMission = Utils.getPropertyString(graphObject, Properties.MISSION);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, Properties.NAME);
-//
-//		// parking
-//		GraphObject parking = Utils.getPropertyGraphObject(graphObject, Properties.PARKING);
-//		mParking = Parking.create(parking);
-//
-//		// picture
-//		GraphObject data = Utils.getPropertyGraphObject(mGraphObject, Properties.PICTURE);
-//		mPicture = Utils.getPropertyInsideProperty(data, "data", "url");
-//
-//		// phone
-//		mPhone = Utils.getPropertyString(graphObject, Properties.PHONE);
-//
-//		// press contact
-//		mPressContact = Utils.getPropertyString(graphObject, Properties.PRESS_CONTACT);
-//
-//		// price range
-//		mPriceRange = Utils.getPropertyString(graphObject, Properties.PRICE_RANGE);
-//
-//		// product
-//		mProduct = Utils.getPropertyString(graphObject, Properties.PRODUCTS);
-//
-//		// restaurant service
-//		GraphObject service = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SERVICES);
-//		mRestaurantService = RestaurantService.create(service);
-//
-//		// restaurant specialties
-//		GraphObject specialties = Utils.getPropertyGraphObject(graphObject, Properties.RESTAURANT_SPECIALTIES);
-//		mRestaurantSpecialties = RestaurantSpecialties.create(specialties);
-//
-//		// talking about count
-//		mTalkingAboutCount = Utils.getPropertyInteger(graphObject, Properties.TALKING_ABOUT_COUNT);
-//
-//		// username
-//		mUsername = Utils.getPropertyString(graphObject, Properties.USERNAME);
-//
-//		// website
-//		mWebsite = Utils.getPropertyString(graphObject, Properties.WEBSITE);
-//
-//		// were here count
-//		mWereHereCount = Utils.getPropertyInteger(graphObject, Properties.WERE_HERE_COUNT);
-//	}
-//
-//	public static Page create(GraphObject graphObject) {
-//		return new Page(graphObject);
-//	}
-//
-//	public GraphObject getGraphObject() {
-//		return mGraphObject;
-//	}
 
 	/**
 	 * The Page ID
@@ -378,7 +244,7 @@ public class Page {
 	 * 
 	 * @return
 	 */
-	public String getCover() {
+	public Cover getCover() {
 		return mCover;
 	}
 
@@ -691,6 +557,11 @@ public class Page {
 		 * Birthday of this person. Applicable to Pages representing people
 		 */
 		public static final String BIRTHDAY = "birthday";
+
+        /**
+         * Bio of the page
+         */
+        public static final String BIO = "bio";
 
 		/**
 		 * Booking agent of the band. Applicable to Bands

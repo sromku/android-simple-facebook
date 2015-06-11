@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Story.StoryObject;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -28,8 +29,9 @@ public class GetStoryObjectsAction extends GetAction<List<StoryObject>> {
 
 	@Override
 	protected List<StoryObject> processResponse(GraphResponse response) {
-		List<StoryObject> storyObjects = Utils.typedListFromResponse(response);
-		return storyObjects;
+        Utils.DataResult<StoryObject> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<StoryObject>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

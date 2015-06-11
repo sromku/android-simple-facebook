@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -14,6 +12,8 @@ import android.widget.Toast;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.utils.Utils;
+
+import java.util.Set;
 
 public class GrantedPermissionsFragment extends BaseFragment {
 
@@ -40,7 +40,7 @@ public class GrantedPermissionsFragment extends BaseFragment {
 			public void onClick(View v) {
 
 				String res = "";
-				List<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
+				Set<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
 				res += Utils.join(grantedPermissions.iterator(), "<br>", new Utils.Process<String>() {
 					@Override
 					public String process(String permission) {

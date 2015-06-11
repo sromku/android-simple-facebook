@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.List;
-
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,6 +15,8 @@ import com.sromku.simple.fb.entities.Notification;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnNotificationsListener;
 import com.sromku.simple.fb.utils.Utils;
+
+import java.util.List;
 
 public class GetNotificationsFragment extends BaseFragment{
 
@@ -74,7 +74,7 @@ public class GetNotificationsFragment extends BaseFragment{
 						mAllPages += Utils.join(response.iterator(), "<br>", new Utils.Process<Notification>() {
 							@Override
 							public String process(Notification notification) {
-								return "\u25CF " + "From: " + notification.getFromName() + ", Title: " + notification.getTitle() + " \u25CF";
+								return "\u25CF " + "From: " + notification.getFrom().getName() + ", Title: " + notification.getTitle() + " \u25CF";
 							}
 						});
 						mAllPages += "<br>";

@@ -22,21 +22,6 @@ public class Application {
     @SerializedName(NAMESPACE)
 	private String mAppNamespace = null;
 
-//	private Application(GraphObject graphObject) {
-//		// application name
-//		mAppName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// application namespace
-//		mAppNamespace = Utils.getPropertyString(graphObject, NAMESPACE);
-//
-//		// application id
-//		mAppId = Utils.getPropertyString(graphObject, ID);
-//	}
-//
-//	public static Application create(GraphObject graphObject) {
-//		return new Application(graphObject);
-//	}
-
 	/**
 	 * @return Application id
 	 */

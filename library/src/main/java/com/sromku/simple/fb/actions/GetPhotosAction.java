@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -21,8 +22,9 @@ public class GetPhotosAction extends GetAction<List<Photo>> {
 
 	@Override
 	protected List<Photo> processResponse(GraphResponse response) {
-		List<Photo> photos = Utils.typedListFromResponse(response);
-		return photos;
+        Utils.DataResult<Photo> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Photo>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

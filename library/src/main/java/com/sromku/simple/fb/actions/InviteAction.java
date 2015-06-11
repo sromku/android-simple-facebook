@@ -53,7 +53,7 @@ public class InviteAction extends AbstractAction {
 
 	@Override
 	protected void executeImpl() {
-		if (sessionManager.isLogin(true)) {
+		if (sessionManager.isLogin()) {
 			Bundle params = new Bundle();
 			if (mMessage != null) {
 				params.putString(PARAM_MESSAGE, mMessage);
@@ -67,7 +67,7 @@ public class InviteAction extends AbstractAction {
 			else if (mSuggestions != null) {
 				params.putString(PARAM_SUGGESTIONS, TextUtils.join(",", mSuggestions));
 			}
-			openInviteDialog(sessionManager.activity, params, mOnInviteListener);
+			openInviteDialog(sessionManager.getActivity(), params, mOnInviteListener);
 		}
 		else {
 			String reason = Errors.getError(ErrorMsg.LOGIN);

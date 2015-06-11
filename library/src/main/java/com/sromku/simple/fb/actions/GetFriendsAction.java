@@ -3,6 +3,7 @@ package com.sromku.simple.fb.actions;
 import android.os.Bundle;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.entities.Profile.Properties;
@@ -38,8 +39,9 @@ public class GetFriendsAction extends GetAction<List<Profile>> {
 
 	@Override
 	protected List<Profile> processResponse(GraphResponse response) {
-		List<Profile> profiles = Utils.typedListFromResponse(response);
-		return profiles;
+        Utils.DataResult<Profile> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Profile>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

@@ -1,8 +1,17 @@
 package com.sromku.simple.fb.entities;
 
-public interface User {
+public class User extends IdName {
 
-	String getId();
+    public User() {
+    }
 
-	String getName();
+    public User(String id, String name) {
+        mId = id;
+        mName = name;
+    }
+
+    public User(IdName idName) {
+        mId = idName.mId;
+        mName = idName.mName;
+    }
 }

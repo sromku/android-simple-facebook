@@ -5,23 +5,10 @@ import android.os.Bundle;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.utils.GraphPath;
 
-public class Like implements Publishable {
-
-	private User mUser;
-
-//	private Like() {
-//	}
-//
-//	private Like(GraphObject graphObject) {
-//		mUser = Utils.createUser(graphObject);
-//	}
-//
-//	public static Like create(GraphObject graphObject) {
-//		return new Like(graphObject);
-//	}
+public class Like extends User implements Publishable {
 
 	public User getUser() {
-		return mUser;
+		return this;
 	}
 
 	@Override

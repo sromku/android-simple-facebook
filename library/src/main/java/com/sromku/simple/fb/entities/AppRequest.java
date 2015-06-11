@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Application request that is sent by one user to another.
  */
-public class AppRequest {
+public class  AppRequest {
 
 	private static final String ID = "id";
 	private static final String APPLICATION = "application";
@@ -16,8 +16,6 @@ public class AppRequest {
 	private static final String DATA = "data";
 	private static final String MESSAGE = "message";
 	private static final String CREATED_TIME = "created_time";
-
-//	private final GraphObject mGraphObject;
 
     @SerializedName(ID)
 	private String mRequestId;
@@ -39,39 +37,6 @@ public class AppRequest {
 
     @SerializedName(CREATED_TIME)
 	private Date mCreatedTime;
-
-//	private AppRequest(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//
-//		// request id
-//		mRequestId = Utils.getPropertyString(graphObject, ID);
-//
-//		// create application
-//		mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//
-//		// to
-//		mTo = Utils.createUser(graphObject, TO);
-//
-//		// from
-//		mFrom = Utils.createUser(graphObject, FROM);
-//
-//		// data
-//		mData = Utils.getPropertyString(graphObject, DATA);
-//
-//		// message
-//		mMessage = Utils.getPropertyString(graphObject, MESSAGE);
-//
-//		// create time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//	}
-
-//	public static AppRequest create(GraphObject graphObject) {
-//		return new AppRequest(graphObject);
-//	}
-//
-//	public GraphObject getGraphObject() {
-//		return mGraphObject;
-//	}
 
 	public String getRequestId() {
 		return mRequestId;

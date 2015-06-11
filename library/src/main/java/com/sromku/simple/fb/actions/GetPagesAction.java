@@ -3,6 +3,7 @@ package com.sromku.simple.fb.actions;
 import android.os.Bundle;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Page;
 import com.sromku.simple.fb.entities.Page.Properties;
@@ -32,8 +33,9 @@ public class GetPagesAction extends GetAction<List<Page>> {
 
 	@Override
 	protected List<Page> processResponse(GraphResponse response) {
-		List<Page> pages = Utils.typedListFromResponse(response);
-		return pages;
+        Utils.DataResult<Page> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Page>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

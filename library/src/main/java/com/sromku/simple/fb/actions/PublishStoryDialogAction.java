@@ -4,7 +4,6 @@ import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
-// TODO - REVIVE
 public class PublishStoryDialogAction extends AbstractAction {
 
 	private OnPublishListener mOnPublishListener;
@@ -24,6 +23,9 @@ public class PublishStoryDialogAction extends AbstractAction {
 
 	@Override
 	protected void executeImpl() {
+
+        // TODO - REVIVE
+
 //		if (FacebookDialog.canPresentOpenGraphActionDialog(sessionManager.getActivity(), OpenGraphActionDialogFeature.OG_ACTION_DIALOG)) {
 //
 //			FacebookDialog shareDialog = null;

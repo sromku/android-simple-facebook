@@ -75,7 +75,7 @@ public class GetAction<T> extends AbstractAction {
 	@Override
 	protected void executeImpl() {
 		OnActionListener<T> actionListener = getActionListener();
-		if (sessionManager.isLogin(true)) {
+		if (sessionManager.isLogin()) {
 			AccessToken accessToken = sessionManager.getAccessToken();
 			Bundle bundle = updateAppSecretProof(getBundle());
 			GraphRequest request = new GraphRequest(accessToken, getGraphPath(), bundle, HttpMethod.GET);
@@ -119,9 +119,7 @@ public class GetAction<T> extends AbstractAction {
 	}
 
 	protected Bundle getBundle() {
-		Bundle bundle = new Bundle();
-		bundle.putString("date_format", "U");
-		return bundle;
+        return null;
 	}
 
 	protected OnActionListener<T> getActionListener() {

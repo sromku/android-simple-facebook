@@ -1,5 +1,6 @@
 package com.sromku.simple.fb.entities;
 
+import com.google.gson.annotations.SerializedName;
 import com.sromku.simple.fb.utils.Logger;
 import com.sromku.simple.fb.utils.Utils;
 
@@ -17,15 +18,24 @@ import java.util.Collection;
  * // @see https://developers.facebook.com/docs/reference/api/privacy-parameter/
  */
 public class Privacy {
-	// private static final String DESCRIPTION = "description";
+
 	private static final String PRIVACY = "value";
 	private static final String ALLOW = "allow";
 	private static final String DENY = "deny";
+    private static final String DESCRIPTION = "description";
+    // private static final String FRIENDS = "friends";
 
-	// private String mDescription;
+    @SerializedName(PRIVACY)
 	private PrivacySettings mPrivacySetting = null;
+
+    @SerializedName(ALLOW)
 	private ArrayList<String> mAllowedUsers = new ArrayList<String>();
+
+    @SerializedName(DENY)
 	private ArrayList<String> mDeniedUsers = new ArrayList<String>();
+
+    @SerializedName(DESCRIPTION)
+    private String mDescription;
 
 	public enum PrivacySettings {
 		EVERYONE,
@@ -40,14 +50,6 @@ public class Privacy {
 		mAllowedUsers = builder.mAllowedUsers;
 		mDeniedUsers = builder.mDeniedUsers;
 	}
-
-//	private Privacy(GraphObject graphObject) {
-//		// not supported currently. It is used as output in 'Post' entity
-//	}
-//
-//	public static Privacy create(GraphObject graphObject) {
-//		return new Privacy(graphObject);
-//	}
 
 	public static class Builder {
 		private PrivacySettings mPrivacySetting = null;

@@ -45,47 +45,6 @@ public class RestaurantService {
     @SerializedName(TAKEOUT)
 	private Integer mTakeout;
 
-//	private final GraphObject mGraphObject;
-//
-//	private RestaurantService(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//
-//		// kids
-//		mKids = Utils.getPropertyInteger(graphObject, KIDS);
-//
-//		// delivery
-//		mDelivery = Utils.getPropertyInteger(graphObject, DELIVERY);
-//
-//		// walkins
-//		mWalkins = Utils.getPropertyInteger(graphObject, WALKINS);
-//
-//		// category
-//		mCatering = Utils.getPropertyInteger(graphObject, CATERING);
-//
-//		// reserver
-//		mReserve = Utils.getPropertyInteger(graphObject, RESERVE);
-//
-//		// groups
-//		mGroups = Utils.getPropertyInteger(graphObject, GROUPS);
-//
-//		// waiters
-//		mWaiter = Utils.getPropertyInteger(graphObject, WAITER);
-//
-//		// outdoor
-//		mOutdoor = Utils.getPropertyInteger(graphObject, OUTDOOR);
-//
-//		// takeout
-//		mTakeout = Utils.getPropertyInteger(graphObject, TAKEOUT);
-//	}
-//
-//	public static RestaurantService create(GraphObject graphObject) {
-//		return new RestaurantService(graphObject);
-//	}
-//
-//	public GraphObject getGraphObject() {
-//		return mGraphObject;
-//	}
-
 	/**
 	 * Whether the restaurant is kids-friendly
 	 */

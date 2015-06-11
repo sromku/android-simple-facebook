@@ -47,41 +47,6 @@ public class Group {
     @SerializedName(UPDATED_TIME)
 	private Date mUpdatedTime;
 
-//	private Group(GraphObject graphObject) {
-//
-//		// cover
-//		mCover = Utils.getPropertyInsideProperty(graphObject, COVER, "source");
-//
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// icon
-//		mIcon = Utils.getPropertyString(graphObject, ICON);
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, LINK);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// user
-//		mOwner = Utils.createUser(graphObject, OWNER);
-//
-//		// privacy
-//		String privacy = Utils.getPropertyString(graphObject, PRIVACY);
-//		mPrivacy = GroupPrivacy.fromValue(privacy);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//	}
-//
-//	public static Group create(GraphObject graphObject) {
-//		return new Group(graphObject);
-//	}
-
 	/**
 	 * The URL for the group's cover photo.
 	 */

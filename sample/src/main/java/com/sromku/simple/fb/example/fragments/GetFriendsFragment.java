@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.List;
-
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Html;
@@ -18,6 +16,8 @@ import com.sromku.simple.fb.entities.Profile.Properties;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.utils.Utils;
+
+import java.util.List;
 
 public class GetFriendsFragment extends BaseFragment{
 
@@ -52,6 +52,7 @@ public class GetFriendsFragment extends BaseFragment{
 					.add(Properties.ID)
 					.add(Properties.FIRST_NAME)
 					.add(Properties.LAST_NAME)
+                    .add(Properties.NAME)
 					.add(Properties.BIRTHDAY)
 					.add(Properties.AGE_RANGE)
 					.add(Properties.EMAIL)

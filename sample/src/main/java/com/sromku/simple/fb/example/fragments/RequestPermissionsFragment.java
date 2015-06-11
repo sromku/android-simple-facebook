@@ -1,8 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,6 +17,10 @@ import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class RequestPermissionsFragment extends BaseFragment {
 
@@ -105,7 +106,7 @@ public class RequestPermissionsFragment extends BaseFragment {
 
 	private void showGrantedPermissions() {
 		String res = "Granted permissions<br>";
-		List<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
+		Set<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
 		res += Utils.join(grantedPermissions.iterator(), "<br>", new Utils.Process<String>() {
 			@Override
 			public String process(String permission) {

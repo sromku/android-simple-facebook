@@ -17,11 +17,11 @@
         android:text="***"
         tools:ignore="HardcodedText" />
 
-    <com.facebook.widget.LikeView
+    <com.facebook.share.widget.LikeView
         android:id="@+id/like_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-    </com.facebook.widget.LikeView>
+    </com.facebook.share.widget.LikeView>
 
     <ScrollView
         android:layout_width="match_parent"

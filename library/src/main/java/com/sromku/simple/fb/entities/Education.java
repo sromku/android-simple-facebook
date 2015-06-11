@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.entities;
 
 import com.google.gson.annotations.SerializedName;
+import com.sromku.simple.fb.utils.Utils;
 
 import java.util.List;
 
@@ -15,20 +16,19 @@ public class Education {
 	private static final String YEAR = "year";
 	private static final String CONCENTRATION = "concentration";
 	private static final String TYPE = "type";
-//	private static final String NAME = "name";
 	private static final String WITH = "with";
 
     @SerializedName(SCHOOL)
-	private String mSchool;
+	private IdName mSchool;
 
     @SerializedName(DEGREE)
 	private String mDegree;
 
     @SerializedName(YEAR)
-	private String mYear;
+	private IdName mYear;
 
     @SerializedName(CONCENTRATION)
-	private List<String> mConcentration;
+	private List<IdName> mConcentration;
 
     @SerializedName(WITH)
 	private List<User> mWith;
@@ -36,45 +36,8 @@ public class Education {
     @SerializedName(TYPE)
 	private String mType;
 
-//	private Education(GraphObject graphObject) {
-//
-//		// school
-//		mSchool = Utils.getPropertyInsideProperty(graphObject, SCHOOL, NAME);
-//
-//		// degree
-//		mDegree = Utils.getPropertyInsideProperty(graphObject, DEGREE, NAME);
-//
-//		// year
-//		mYear = Utils.getPropertyInsideProperty(graphObject, YEAR, NAME);
-//
-//		/*
-//		 * concentration
-//		 */
-//		mConcentration = Utils.createList(graphObject, CONCENTRATION, new Converter<String>() {
-//			@Override
-//			public String convert(GraphObject graphObject) {
-//				return Utils.getPropertyString(graphObject, NAME);
-//			}
-//		});
-//
-//		// with
-//		mWith = Utils.createList(graphObject, WITH, new Converter<User>() {
-//			@Override
-//			public User convert(GraphObject graphObject) {
-//				return Utils.createUser(graphObject);
-//			}
-//		});
-//
-//		// type
-//		mType = Utils.getPropertyString(graphObject, TYPE);
-//	}
-//
-//	public static Education create(GraphObject graphObject) {
-//		return new Education(graphObject);
-//	}
-
 	public String getSchool() {
-		return mSchool;
+		return mSchool.getName();
 	}
 
 	public String getDegree() {
@@ -82,11 +45,11 @@ public class Education {
 	}
 
 	public String getYear() {
-		return mYear;
+		return mYear.getName();
 	}
 
 	public List<String> getConcentrations() {
-		return mConcentration;
+		return Utils.extract(mConcentration);
 	}
 
 	public List<User> getWith() {

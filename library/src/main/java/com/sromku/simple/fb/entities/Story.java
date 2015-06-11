@@ -8,6 +8,7 @@ import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.utils.GraphPath;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Open graph story
@@ -166,8 +167,10 @@ public class Story implements Publishable {
         @SerializedName(URL)
 		private String mUrl;
 
-        @SerializedName(IMAGE)
 		private String mImage;
+
+        @SerializedName(IMAGE)
+        private List<ImageUrl> mImageUrl;
 
         @SerializedName(DESCRIPTION)
 		private String mDescription;
@@ -189,47 +192,9 @@ public class Story implements Publishable {
 		private String mNoun;
 		private String mHostedUrl;
 
-//		private StoryObject(GraphObject graphObject) {
-//
-//			// id
-//			mId = Utils.getPropertyString(graphObject, ID);
-//
-//			// type
-//			mType = Utils.getPropertyString(graphObject, TYPE);
-//			if (mType != null) {
-//				String[] split = mType.split(":");
-//				if (split.length > 0) {
-//					mNoun = split[1];
-//				}
-//			}
-//
-//			// title
-//			mTitle = Utils.getPropertyString(graphObject, TITLE);
-//
-//			// url
-//			mUrl = Utils.getPropertyString(graphObject, URL);
-//
-//			// image
-//			JSONArray jsonArray = Utils.getPropertyJsonArray(graphObject, IMAGE);
-//			if (jsonArray.length() > 0) {
-//				mImage = jsonArray.optJSONObject(0).optString(URL);
-//			}
-//
-//			// description
-//			mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//			// updated time
-//			mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//			// created time
-//			mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//			// application
-//			mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//
-//			// data
-//			mData = Utils.getPropertyGraphObject(graphObject, DATA);
-//		}
+        private static class ImageUrl {
+            String url;
+        }
 
 		private StoryObject(Builder builder) {
 			String namespace = SimpleFacebook.getConfiguration().getNamespace();
@@ -311,7 +276,10 @@ public class Story implements Publishable {
 		}
 
 		public String getImage() {
-			return mImage;
+            if (mImageUrl != null && mImageUrl.size() > 0) {
+                return mImageUrl.get(0).url;
+            }
+            return null;
 		}
 
 		public String getDescription() {

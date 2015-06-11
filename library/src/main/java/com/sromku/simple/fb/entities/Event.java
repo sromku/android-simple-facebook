@@ -63,49 +63,6 @@ public class Event {
     @SerializedName(VENUE)
 	private Place mVenue;
 
-//	private Event(GraphObject graphObject) {
-//		// description
-//		mDescription = Utils.getPropertyString(graphObject, DESCRIPTION);
-//
-//		// end time
-//		mEndTime = Utils.getPropertyLong(graphObject, END_TIME);
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// location
-//		mLocation = Utils.getPropertyString(graphObject, LOCATION);
-//
-//		// name
-//		mName = Utils.getPropertyString(graphObject, NAME);
-//
-//		// owner
-//		mOwner = Utils.createUser(graphObject, OWNER);
-//
-//		// picture
-//		mPicture = Utils.getPropertyString(graphObject, PICTURE);
-//
-//		// private
-//		String privacy = Utils.getPropertyString(graphObject, PRIVACY);
-//		mPrivacy = EventPrivacy.fromValue(privacy);
-//
-//		// start time
-//		mStartTime = Utils.getPropertyLong(graphObject, START_TIME);
-//
-//		// ticket uri
-//		mTicketUri = Utils.getPropertyString(graphObject, TICKET_URI);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//		// venue
-//		mVenue = Place.create(Utils.getPropertyGraphObject(graphObject, VENUE));
-//	}
-//
-//	public static Event create(GraphObject graphObject) {
-//		return new Event(graphObject);
-//	}
-
 	/**
 	 * The attendance options of the user. He can accept and <b>attend</b> the
 	 * event, or say <b>maybe</b>, or totally <b>decline</b> the invitation.

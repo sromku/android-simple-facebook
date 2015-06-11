@@ -27,21 +27,6 @@ public class Score implements Publishable {
 	private Score(Builder builder) {
 		mScore = builder.mScore;
 	}
-	
-//	private Score(GraphObject graphObject) {
-//		// profile
-//		mUser = Utils.createUser(graphObject, USER);
-//
-//		// score
-//		mScore = Utils.getPropertyInteger(graphObject, SCORE);
-//
-//		// application
-//		mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//	}
-//
-//	public static Score create(GraphObject graphObject) {
-//		return new Score(graphObject);
-//	}
 
 	/**
 	 * The person associated with the scores.

@@ -22,8 +22,6 @@ public class Checkin {
 	private static final String PLACE = "place";
 	private static final String TAGS = "tags";
 
-//	private final GraphObject mGraphObject;
-
     @SerializedName(ID)
     private String mId;
 
@@ -50,60 +48,6 @@ public class Checkin {
 
     @SerializedName(TAGS)
 	private List<User> mTags;
-
-//	private Checkin(GraphObject graphObject) {
-//		mGraphObject = graphObject;
-//
-//		if (mGraphObject != null) {
-//
-//			// create application
-//			mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//
-//			// create comments
-//			mComments = Utils.createList(mGraphObject, COMMENTS, "data", new Converter<Comment>() {
-//				@Override
-//				public Comment convert(GraphObject graphObject) {
-//					return Comment.create(graphObject);
-//				}
-//			});
-//
-//			// created time
-//			mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//			// from
-//			mFrom = Utils.createUser(graphObject, FROM);
-//
-//			// id
-//			mId = Utils.getPropertyString(graphObject, ID);
-//
-//			// create likes
-//			mLikes = Utils.createList(mGraphObject, LIKES, "data", new Converter<Like>() {
-//				@Override
-//				public Like convert(GraphObject graphObject) {
-//					return Like.create(graphObject);
-//				}
-//			});
-//
-//			// message
-//			mMessage = Utils.getPropertyString(graphObject, MESSAGE);
-//
-//			// place
-//			mPlace = Place.create(Utils.getPropertyGraphObject(graphObject, PLACE));
-//
-//			// create tags
-//			mTags = Utils.createList(mGraphObject, TAGS, "data", new Converter<User>() {
-//				@Override
-//				public User convert(GraphObject graphObject) {
-//					return Utils.createUser(graphObject);
-//				}
-//			});
-//
-//		}
-//	}
-//
-//	public static Checkin create(GraphObject graphObject) {
-//		return new Checkin(graphObject);
-//	}
 
 	/**
 	 * Information about the application that made the checkin.

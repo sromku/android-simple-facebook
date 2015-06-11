@@ -21,10 +21,7 @@ public class Notification {
 	private String mId;
 
     @SerializedName(FROM)
-	private String mFromId;
-
-    @SerializedName(FROM)
-	private String mFromName;
+	private User mFrom;
 
     @SerializedName(TO)
 	private User mTo;
@@ -47,48 +44,6 @@ public class Notification {
     @SerializedName(UNREAD)
 	private Boolean mIsUnread;
 
-//	private GraphObject mObject;
-
-//	private Notification(GraphObject graphObject) {
-//
-//		// id
-//		mId = Utils.getPropertyString(graphObject, ID);
-//
-//		// from id, name
-//		User userFrom = Utils.createUser(graphObject, FROM);
-//		mFromId = userFrom.getId();
-//		mFromName = userFrom.getName();
-//
-//		// to id, name
-//		mTo = Utils.createUser(graphObject, TO);
-//
-//		// created time
-//		mCreatedTime = Utils.getPropertyLong(graphObject, CREATED_TIME);
-//
-//		// updated time
-//		mUpdatedTime = Utils.getPropertyLong(graphObject, UPDATED_TIME);
-//
-//		// title
-//		mTitle = Utils.getPropertyString(graphObject, TITLE);
-//
-//		// link
-//		mLink = Utils.getPropertyString(graphObject, LINK);
-//
-//		// application
-//		mApplication = Application.create(Utils.getPropertyGraphObject(graphObject, APPLICATION));
-//
-//		// unread
-//		Integer unread = Utils.getPropertyInteger(graphObject, UNREAD);
-//		mIsUnread = unread == 1 ? true : false;
-//
-//		// object
-//		mObject = Utils.getPropertyGraphObject(graphObject, OBJECT);
-//	}
-//
-//	public static Notification create(GraphObject graphObject) {
-//		return new Notification(graphObject);
-//	}
-
 	/**
 	 * The notification's id.
 	 */
@@ -100,23 +55,15 @@ public class Notification {
 	 * The entity (user, page, app, etc.) that 'sent', or is the source of the
 	 * notification.
 	 */
-	public String getFromId() {
-		return mFromId;
-	}
-
-	/**
-	 * The entity (user, page, app, etc.) that 'sent', or is the source of the
-	 * notification.
-	 */
-	public String getFromName() {
-		return mFromName;
+	public User getFrom() {
+		return mFrom;
 	}
 
 	/**
 	 * The entity that received the notification.
 	 */
 	public User getTo() {
-		return mTo;
+        return mTo;
 	}
 
 	/**
@@ -164,12 +111,5 @@ public class Notification {
 		return mIsUnread;
 	}
 
-	/**
-	 * The object (this can be a post, a photo, a comment, etc.) that was the
-	 * subject of the notification.
-	 */
-//	public GraphObject getObject() {
-//		return mObject;
-//	}
 
 }

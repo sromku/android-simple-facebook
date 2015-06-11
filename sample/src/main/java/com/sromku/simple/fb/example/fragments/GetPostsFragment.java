@@ -1,7 +1,5 @@
 package com.sromku.simple.fb.example.fragments;
 
-import java.util.List;
-
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,6 +15,8 @@ import com.sromku.simple.fb.entities.Post;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnPostsListener;
 import com.sromku.simple.fb.utils.Utils;
+
+import java.util.List;
 
 public class GetPostsFragment extends BaseFragment {
 
@@ -74,7 +74,7 @@ public class GetPostsFragment extends BaseFragment {
 						mAllPages += Utils.join(response.iterator(), "<br>", new Utils.Process<Post>() {
 							@Override
 							public String process(Post post) {
-								return "\u25CF " + post.getStory() == null || post.getStory().equalsIgnoreCase("null") ? post.getId() : post.getStory() + " \u25CF";
+								return "\u25CF " + post.getMessage() == null || "null".equalsIgnoreCase(post.getMessage()) ? post.getId() : post.getMessage() + " \u25CF";
 							}
 						});
 						mAllPages += "<br>";

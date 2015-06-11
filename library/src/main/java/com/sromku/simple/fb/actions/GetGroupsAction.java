@@ -1,6 +1,7 @@
 package com.sromku.simple.fb.actions;
 
 import com.facebook.GraphResponse;
+import com.google.gson.reflect.TypeToken;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Group;
 import com.sromku.simple.fb.utils.GraphPath;
@@ -21,8 +22,9 @@ public class GetGroupsAction extends GetAction<List<Group>> {
 
 	@Override
 	protected List<Group> processResponse(GraphResponse response) {
-		List<Group> groups = Utils.typedListFromResponse(response);
-		return groups;
+        Utils.DataResult<Group> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Group>>() {
+        }.getType());
+        return dataResult.data;
 	}
 
 }

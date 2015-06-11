@@ -1,24 +1,16 @@
 package com.sromku.simple.fb.listeners;
 
-import android.app.Activity;
-
-import com.sromku.simple.fb.Permission;
+import com.facebook.login.LoginResult;
 
 /**
  * On login/logout actions listener
  * 
  * @author sromku
  */
-public interface OnLoginListener extends OnThinkingListetener {
-	/**
-	 * If user performed {@link FacebookTools#login(android.app.Activity)} action, this
-	 * callback method will be invoked
-	 */
-	void onLogin();
+public interface OnLoginListener extends OnErrorListener {
 
-	/**
-	 * If user pressed 'cancel' in one of the permissions dialog (READ or
-	 * PUBLISH)
-	 */
-	void onNotAcceptingPermissions(Permission.Type type);
+    void onLogin(LoginResult loginResult);
+
+    void onCancel();
+
 }

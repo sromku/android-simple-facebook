@@ -253,7 +253,7 @@ public class SimpleFacebookConfiguration {
 		 * <b>Note:</b>Facebook requests not to ask the user for read and then
 		 * publish permissions at once, thus the default value will be
 		 * <code>false</code> for this flag.
-		 * 
+		 *
 		 * @param allAtOnce
 		 * @return {@link com.sromku.simple.fb.SimpleFacebookConfiguration.Builder}
 		 */
