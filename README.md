@@ -17,6 +17,7 @@ To revive:
 - Invite
 - Publish with dialogs
 - Extend permissions
+
 ---
 
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
