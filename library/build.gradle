@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.0.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.2.+'
     // compile project(':facebook')
     compile 'com.google.code.gson:gson:1.7.2'
 }
