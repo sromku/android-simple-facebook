@@ -12,7 +12,6 @@ import com.sromku.simple.fb.utils.Utils;
 
 import java.util.List;
 
-// TODO - REVIVE
 public class PublishPhotoDialogAction extends AbstractAction {
 
 	private OnPublishListener mOnPublishListener;

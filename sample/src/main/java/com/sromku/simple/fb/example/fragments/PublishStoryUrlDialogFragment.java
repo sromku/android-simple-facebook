@@ -42,7 +42,7 @@ public class PublishStoryUrlDialogFragment extends BaseFragment {
 				// set object to be shared
 				StoryObject storyObject = new StoryObject.Builder()
 					.setNoun("food")
-					.setHostedUrl("http://romkuapps.com/github/simple-facebook/object-apple.html")
+					.setHostedUrl("http://code.sromku.com/static/fb/og-apple.html")
 					.build();
 				
 				// set action to be done 

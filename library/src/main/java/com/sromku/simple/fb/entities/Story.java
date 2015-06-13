@@ -7,6 +7,9 @@ import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.utils.GraphPath;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +20,6 @@ import java.util.List;
  * // @see http://ogp.me/
  */
 
-// TODO - RELIVE THIS BACK
 public class Story implements Publishable {
 
 	private StoryObject mStoryObject;
@@ -181,8 +183,6 @@ public class Story implements Publishable {
         @SerializedName(CREATED_TIME)
 		private Date mCreatedTime;
 
-//		private GraphObject mData;
-
         @SerializedName(APPLICATION)
 		private Application mApplication;
 
@@ -191,6 +191,7 @@ public class Story implements Publishable {
 
 		private String mNoun;
 		private String mHostedUrl;
+        private JSONObject mData;
 
         private static class ImageUrl {
             String url;
@@ -204,31 +205,31 @@ public class Story implements Publishable {
 			mId = builder.id;
 			mUrl = builder.url;
 			mDescription = builder.description;
-//			mData = builder.data;
+			mData = builder.data;
 			mImage = builder.image;
 			mPrivacy = builder.privacy;
 			mHostedUrl = builder.hostedUrl;
 		}
 
-//		public static StoryObject create(GraphObject graphObject) {
-//			return new StoryObject(graphObject);
-//		}
-
 		@Override
 		public Bundle getBundle() {
 			Bundle bundle = new Bundle();
-//			GraphObject object = GraphObject.Factory.create();
-//			object.setProperty(URL, mUrl);
-//			object.setProperty(IMAGE, mImage);
-//			object.setProperty(TITLE, mTitle);
-//			object.setProperty(DESCRIPTION, mDescription);
-//			if (mData != null) {
-//				object.setProperty(DATA, mData);
-//			}
-//			bundle.putString(OBJECT, object.getInnerJSONObject().toString());
-//			if (mPrivacy != null) {
-//				bundle.putString(PRIVACY, mPrivacy.getJSONString());
-//			}
+            JSONObject object = new JSONObject();
+            try {
+                object.put(URL, mUrl);
+                object.put(IMAGE, mImage);
+                object.put(TITLE, mTitle);
+                object.put(DESCRIPTION, mDescription);
+                if (mData != null) {
+                    object.put(DATA, mData);
+                }
+            } catch (Exception e) {
+                // do nothing
+            }
+			bundle.putString(OBJECT, object.toString());
+			if (mPrivacy != null) {
+				bundle.putString(PRIVACY, mPrivacy.getJSONString());
+			}
 			return bundle;
 		}
 
@@ -243,7 +244,7 @@ public class Story implements Publishable {
 		}
 
 		public Bundle getObjectProperties() {
-			Bundle bundle = new Bundle();
+            Bundle bundle = new Bundle();
 			bundle.putString(URL, mUrl);
 			bundle.putString(IMAGE, mImage);
 			bundle.putString(TITLE, mTitle);
@@ -298,9 +299,9 @@ public class Story implements Publishable {
 			return mApplication;
 		}
 
-//		public GraphObject getData() {
-//			return mData;
-//		}
+		public JSONObject getData() {
+			return mData;
+		}
 
 		/**
 		 * Get your custom parameter of your object, as you defined in Open
@@ -310,9 +311,7 @@ public class Story implements Publishable {
 		 * @return The value of your custom parameter
 		 */
 		public Object getCustomData(String param) {
-//			return mData.getProperty(param);
-            // TODO TODO
-            return null;
+			return mData.opt(param);
 		}
 
 		public static class Builder {
@@ -323,9 +322,9 @@ public class Story implements Publishable {
 			private String image;
 			private String title;
 			private String description;
-//			private GraphObject data = null;
 			private Privacy privacy;
 			private String hostedUrl;
+            private JSONObject data = null;
 
 			public Builder() {
 			}
@@ -440,11 +439,15 @@ public class Story implements Publishable {
 			 * @return {@link com.sromku.simple.fb.entities.Story.StoryObject.Builder}
 			 */
 			public Builder addProperty(String param, Object value) {
-//				if (data == null) {
-//					data = GraphObject.Factory.create();
-//				}
-//				data.setProperty(param, value);
-				return this;
+				if (data == null) {
+					data = new JSONObject();
+				}
+                try {
+                    data.put(param, value);
+                } catch (JSONException e) {
+                    // do nothing
+                }
+                return this;
 			}
 
 			public StoryObject build() {

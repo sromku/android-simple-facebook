@@ -1,8 +1,21 @@
 package com.sromku.simple.fb.actions;
 
+import android.os.Bundle;
+
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareOpenGraphAction;
+import com.facebook.share.model.ShareOpenGraphContent;
+import com.facebook.share.model.ShareOpenGraphObject;
+import com.facebook.share.widget.ShareDialog;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Story;
 import com.sromku.simple.fb.listeners.OnPublishListener;
+
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 public class PublishStoryDialogAction extends AbstractAction {
 
@@ -24,111 +37,131 @@ public class PublishStoryDialogAction extends AbstractAction {
 	@Override
 	protected void executeImpl() {
 
-        // TODO - REVIVE
+        /*
+         * Publishing open graph can be in 2 ways:
+         *
+         * 1. Publish actions on app-owned objects Means, you as developer of the app define Open
+         * Graph Object on your server with <meta> tags or you have
+         * published object to facebook server. This is predefined Object
+         * and user can't change it.
+         *
+         * 2. Publish actions on user-owned objects You didn't add anything to server,
+         * but you give the user the option to define Object Graph properties from the app and
+         * publish it.
+         *
+         */
 
-//		if (FacebookDialog.canPresentOpenGraphActionDialog(sessionManager.getActivity(), OpenGraphActionDialogFeature.OG_ACTION_DIALOG)) {
-//
-//			FacebookDialog shareDialog = null;
-//
-//			/*
-//			 * Publishing open graph can be in 2 ways: 1. Publish actions on
-//			 * app-owned objects Means, you as developer of the app define Open
-//			 * Graph Object on your server with <meta> tags or you have
-//			 * published object to facebook server. This is predefined Object
-//			 * and user can't change it. 2. Publish actions on user-owned
-//			 * objects You didn't add anything to server, but you give the user
-//			 * the option to define Object Graph properties from the app and
-//			 * publish it.
-//			 */
-//
-//			String objectId = mStory.getStoryObject().getId();
-//			String objectUrl = mStory.getStoryObject().getHostedUrl();
-//			final boolean predefineObject;
-//			if (objectId != null || objectUrl != null) {
-//				predefineObject = true;
-//			} else {
-//				predefineObject = false;
-//			}
-//
-//			// set the option 1
-//			if (predefineObject) {
-//				OpenGraphAction action = OpenGraphAction.Factory.createForPost(mStory.getPath());
-//				action.setProperty(mStory.getStoryObject().getNoun(), objectId != null ? objectId : objectUrl);
-//				Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
-//				while (actionProperties.hasNext()) {
-//					String property = actionProperties.next();
-//					action.setProperty(property, mStory.getStoryAction().getParams().get(property));
-//				}
-//
-//				// set share dialog
-//				shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(sessionManager.getActivity(), action, mStory.getStoryObject().getNoun()).build();
-//
-//			} else {
-//				// set the option 2
-//				OpenGraphObject object = OpenGraphObject.Factory.createForPost(mStory.getObjectType());
-//				Iterator<String> objectProperties = mStory.getStoryObject().getObjectProperties().keySet().iterator();
-//				while (objectProperties.hasNext()) {
-//					String property = objectProperties.next();
-//					object.setProperty(property, mStory.getStoryObject().getObjectProperties().get(property));
-//				}
-//
-//				// set custom object properties
-//				GraphObject data = mStory.getStoryObject().getData();
-//				if (data != null) {
-//					for (Entry<String, Object> property : data.asMap().entrySet()) {
-//						object.getData().setProperty(property.getKey(), property.getValue());
-//					}
-//				}
-//
-//				OpenGraphAction action = OpenGraphAction.Factory.createForPost(mStory.getPath());
-//				action.setProperty(mStory.getStoryObject().getNoun(), object);
-//
-//				// set custom action properties
-//				Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
-//				while (actionProperties.hasNext()) {
-//					String property = actionProperties.next();
-//					action.setProperty(property, mStory.getStoryAction().getParams().get(property));
-//				}
-//
-//				shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(sessionManager.getActivity(), action, mStory.getStoryObject().getNoun()).build();
-//			}
-//
-//			PendingCall pendingCall = shareDialog.present();
-//			sessionManager.trackFacebookDialogPendingCall(pendingCall, new FacebookDialog.Callback() {
-//
-//				@Override
-//				public void onError(PendingCall pendingCall, Exception error, Bundle data) {
-//					sessionManager.untrackPendingCall();
-//					Logger.logError(PublishStoryDialogAction.class, "Failed to share by using native dialog", error);
-//					if ("".equals(error.getMessage())) {
-//						Logger.logError(PublishStoryDialogAction.class, "Make sure to have 'app_id' meta data value in your manifest", error);
-//					}
-//					mOnPublishListener.onFail("Have you added com.facebook.NativeAppCallContentProvider to your manifest? " + error.getMessage());
-//				}
-//
-//				@Override
-//				public void onComplete(PendingCall pendingCall, Bundle data) {
-//					sessionManager.untrackPendingCall();
-//					boolean didComplete = FacebookDialog.getNativeDialogDidComplete(data);
-//					String postId = FacebookDialog.getNativeDialogPostId(data);
-//					String completeGesture = FacebookDialog.getNativeDialogCompletionGesture(data);
-//					if (completeGesture != null) {
-//						if (completeGesture.equals("post")) {
-//							mOnPublishListener.onComplete(postId != null ? postId : "no postId return");
-//						} else {
-//							mOnPublishListener.onFail("Canceled by user");
-//						}
-//					} else if (didComplete) {
-//						mOnPublishListener.onComplete(postId != null ? postId : "published successfully. (post id is not availaible if you are not logged in)");
-//					} else {
-//						mOnPublishListener.onFail("Canceled by user");
-//					}
-//
-//				}
-//			});
-//		} else {
-//			mOnPublishListener.onFail("Open graph sharing dialog isn't supported");
-//		}
+        ShareDialog shareDialog = new ShareDialog(sessionManager.getActivity());
+        ShareOpenGraphContent.Builder builder = new ShareOpenGraphContent.Builder();
+
+        // build the content
+        String objectId = mStory.getStoryObject().getId();
+        String objectUrl = mStory.getStoryObject().getHostedUrl();
+        final boolean predefineObject;
+        if (objectId != null || objectUrl != null) {
+            predefineObject = true;
+        } else {
+            predefineObject = false;
+        }
+
+        String objectType = mStory.getObjectType();
+        String storyPath = mStory.getPath();
+
+        // set the option 1
+        if (predefineObject) {
+
+            // action
+            ShareOpenGraphAction.Builder actionBuilder = new ShareOpenGraphAction.Builder();
+
+            actionBuilder.putString(objectType, objectId != null ? objectId : objectUrl);
+            Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
+            while (actionProperties.hasNext()) {
+                String property = actionProperties.next();
+                actionBuilder.putString(property, String.valueOf(mStory.getStoryAction().getParams().get(property)));
+            }
+
+            actionBuilder.setActionType(storyPath);
+            builder.setAction(actionBuilder.build());
+
+        } else {
+
+            // object
+            ShareOpenGraphObject.Builder objectBuilder = new ShareOpenGraphObject.Builder();
+
+            // set the option 2
+            Bundle objectProperties = mStory.getStoryObject().getObjectProperties();
+            Iterator<String> iterator = objectProperties.keySet().iterator();
+            String OG = "og:";
+            while (iterator.hasNext()) {
+                String property = iterator.next();
+                objectBuilder.putString(OG + property, String.valueOf(objectProperties.get(property)));
+            }
+
+            // set type
+            objectBuilder.putString(OG + "type", objectType);
+
+            // set custom object properties
+            JSONObject data = mStory.getStoryObject().getData();
+            String OG_CUSTOM = configuration.getNamespace() + ":";
+            if (data != null) {
+                Iterator<String> keys = data.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    objectBuilder.putString(OG_CUSTOM + key, String.valueOf(data.opt(key)));
+                }
+            }
+
+            ShareOpenGraphObject object = objectBuilder.build();
+
+            // action
+            ShareOpenGraphAction.Builder actionBuilder = new ShareOpenGraphAction.Builder();
+            actionBuilder.putObject(objectType, object);
+
+            // set custom action properties
+            Iterator<String> actionProperties = mStory.getStoryAction().getParams().keySet().iterator();
+            while (actionProperties.hasNext()) {
+                String property = actionProperties.next();
+                actionBuilder.putString(property, String.valueOf(mStory.getStoryAction().getParams().get(property)));
+            }
+
+            actionBuilder.setActionType(storyPath);
+            builder.setAction(actionBuilder.build());
+
+        }
+
+        // build sharable content
+        builder.setPreviewPropertyName(objectType);
+        ShareOpenGraphContent content = builder.build();
+
+        if (shareDialog.canShow(content)) {
+            shareDialog.registerCallback(sessionManager.getCallbackManager(), new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result) {
+                    String postId = result.getPostId();
+                    if (mOnPublishListener != null) {
+                        mOnPublishListener.onComplete(postId);
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    if (mOnPublishListener != null) {
+                        mOnPublishListener.onFail("Canceled by user");
+                    }
+                }
+
+                @Override
+                public void onError(FacebookException e) {
+                    if (mOnPublishListener != null) {
+                        mOnPublishListener.onFail(e.getMessage());
+                    }
+                }
+            });
+            shareDialog.show(content);
+        } else {
+			mOnPublishListener.onFail("Open graph sharing dialog isn't supported");
+		}
+
 	}
 
 }
