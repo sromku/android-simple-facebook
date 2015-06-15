@@ -1804,7 +1804,7 @@ public class SimpleFacebook {
 	 * @param onNewPermissionsListener
 	 *            The listener for the requesting new permission action.
 	 */
-	public void requestNewPermissions(Permission[] permissions, boolean showPublish, OnNewPermissionsListener onNewPermissionsListener) {
+	public void requestNewPermissions(Permission[] permissions, OnNewPermissionsListener onNewPermissionsListener) {
 		mSessionManager.requestNewPermissions(permissions, onNewPermissionsListener);
 	}
 

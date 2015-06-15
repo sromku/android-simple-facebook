@@ -62,7 +62,7 @@ public class PublishAction extends AbstractAction {
 					 * permission. If not, we will ask user for this permission.
 					 */
 					if (!sessionManager.hasAccepted(neededPermission)) {
-						sessionManager.getLoginCallback().setLoginListener(new OnLoginListener() {
+						sessionManager.getLoginCallback().loginListener = new OnLoginListener() {
 
                             @Override
                             public void onException(Throwable throwable) {
@@ -93,7 +93,7 @@ public class PublishAction extends AbstractAction {
                                 }
                             }
 
-                        });
+                        };
 						sessionManager.requestPublishPermissions();
 					} else {
 						publishImpl(mPublishable, mOnPublishListener);

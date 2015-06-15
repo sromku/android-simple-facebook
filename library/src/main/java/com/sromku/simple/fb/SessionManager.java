@@ -33,29 +33,41 @@ public class SessionManager {
 
     public class LoginCallback implements FacebookCallback<LoginResult> {
 
-        private OnLoginListener mOnLoginListener;
-
-        public void setLoginListener(OnLoginListener listener) {
-            mOnLoginListener = listener;
-        }
+        public OnLoginListener loginListener;
+        boolean doOnLogin = false;
+        boolean askPublishPermissions = false;
 
         @Override
         public void onSuccess(LoginResult loginResult) {
-            if (mOnLoginListener != null) {
-                mOnLoginListener.onLogin(loginResult);
+            if (loginListener != null) {
+
+                if (doOnLogin) {
+                    doOnLogin = false;
+                    loginListener.onLogin(loginResult);
+                    return;
+                }
+
+                if (askPublishPermissions) {
+                    doOnLogin = true;
+                    askPublishPermissions = false;
+                    requestPublishPermissions();
+                } else {
+                    loginListener.onLogin(loginResult);
+                }
+
             }
         }
 
         @Override
         public void onCancel() {
-            mOnLoginListener.onFail("User canceled the permissions dialog");
+            loginListener.onFail("User canceled the permissions dialog");
         }
 
         @Override
         public void onError(FacebookException e) {
-            mOnLoginListener.onException(e);
+            loginListener.onException(e);
         }
-    };
+    }
 
 	public SessionManager(SimpleFacebookConfiguration configuration) {
 		SessionManager.configuration = configuration;
@@ -64,6 +76,10 @@ public class SessionManager {
         mLoginManager.setDefaultAudience(configuration.getDefaultAudience());
         mLoginManager.setLoginBehavior(configuration.getLoginBehavior());
 	}
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
 	/**
 	 * Login to Facebook
@@ -78,33 +94,34 @@ public class SessionManager {
 
         if (isLogin()) {
 			Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
-			onLoginListener.onLogin(createLastLoginResult());
+            LoginResult loginResult = createLastLoginResult();
+            onLoginListener.onLogin(loginResult);
 			return;
 		}
 
 		if (hasPendingRequest()) {
 			Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
+            onLoginListener.onFail("Already has pending login request");
 			return;
 		}
 
-        mLoginCallback.setLoginListener(onLoginListener);
-        Set<String> permissions = null;
-        AccessToken accessToken = getAccessToken();
-        if (accessToken != null) {
-            permissions = getAccessToken().getPermissions();
-        }
-
-        // check what exactly we need to request
-        List<String> readPermissions = configuration.getReadPermissions();
-        if (permissions == null || !permissions.containsAll(readPermissions)) {
-
-            // user hasn't the access token with all read permissions we need, thus we ask him to login
-            mLoginManager.logInWithReadPermissions(getActivity(), readPermissions);
-
-        } else {
-            onLoginListener.onLogin(createLastLoginResult());
-        }
+        // just do the login
+        loginImpl(onLoginListener);
 	}
+
+    private void loginImpl(OnLoginListener onLoginListener) {
+
+        // user hasn't the access token with all read acceptedPermissions we need, thus we ask him to login
+        mLoginCallback.loginListener = onLoginListener;
+
+        // in case of marking in configuration the option of getting publish permission, just after read permissions
+        if (configuration.hasPublishPermissions() && configuration.isAllPermissionsAtOnce()) {
+            mLoginCallback.askPublishPermissions = true;
+        }
+
+        // login please, with all read permissions
+        requestReadPermissions();
+    }
 
     public void requestReadPermissions() {
         mLoginManager.logInWithReadPermissions(mActivity.get(), configuration.getReadPermissions());
@@ -127,10 +144,9 @@ public class SessionManager {
 			return;
 		}
 
-        mLoginCallback.setLoginListener(null);
         mLoginManager.logOut();
         onLogoutListener.onLogout();
-	}
+    }
 
 	/**
 	 * Indicate if you are logged in or not.
@@ -206,7 +222,7 @@ public class SessionManager {
 	 * permissions (possibly to pass back to your backend).
 	 *
 	 * <br>
-	 * <b>Must be logged to use.</b>
+	 * <b>Must be logged in to use.</b>
 	 *
 	 * @param permissions
 	 *            New permissions you want to have. This array can include READ
@@ -217,11 +233,56 @@ public class SessionManager {
 	 *            action.
 	 */
 	public void requestNewPermissions(final Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
-        // TODO - REVIVE
-	}
 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        if (onNewPermissionListener == null) {
+            Logger.logWarning(TAG, "Must pass listener");
+            return;
+        }
+
+        int flag = configuration.addNewPermissions(permissions);
+        flag |= getNotGrantedReadPermissions().size() > 0 ? 1 : 0;
+        flag |= getNotGrantedPublishPermissions().size() > 0 ? 2 : 0;
+        if (flag == 0) {
+            onNewPermissionListener.onFail("There is no new permissions in your request");
+            return;
+        }
+
+        // in case of marking in configuration the option of getting publish permission, just after read permissions
+        if (configuration.hasPublishPermissions() && configuration.isAllPermissionsAtOnce()) {
+            mLoginCallback.askPublishPermissions = true;
+        }
+
+        mLoginCallback.loginListener = new OnLoginListener() {
+
+            @Override
+            public void onLogin(LoginResult loginResult) {
+                onNewPermissionListener.onSuccess(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                onNewPermissionListener.onFail("Canceled by user");
+            }
+
+            @Override
+            public void onFail(String reason) {
+                onNewPermissionListener.onFail(reason);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                onNewPermissionListener.onException(throwable);
+            }
+
+        };
+
+        if (flag == 1 || flag == 3) {
+            // if new permissions have only READ or both READ & PUBLISH, then start from read
+            requestReadPermissions();
+        } else if (flag == 2) {
+            // if new permissions have only PUBLISH then, request only publish
+            requestPublishPermissions();
+        }
 	}
 
 	public boolean hasPendingRequest() {

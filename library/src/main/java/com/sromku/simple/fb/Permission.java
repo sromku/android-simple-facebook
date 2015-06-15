@@ -343,23 +343,23 @@ public enum Permission {
 		return mType;
 	}
 
-	public static Permission fromValue(String pemissionValue) {
+	public static Permission fromValue(String permissionValue) {
 		for (Permission permission : values()) {
-			if (permission.mValue.equals(pemissionValue)) {
+			if (permission.mValue.equals(permissionValue)) {
 				return permission;
 			}
 		}
 		return null;
 	}
 
-    public static List<Permission> convert(Collection<String> rawPermissions) {
+    public static Permission[] convert(Collection<String> rawPermissions) {
         List<Permission> permissions = new ArrayList<Permission>();
         for (Permission permission : values()) {
             if (rawPermissions.contains(permission.getValue())) {
                 permissions.add(permission);
             }
         }
-        return permissions;
+        return permissions.toArray(new Permission[permissions.size()]);
     }
 
 }

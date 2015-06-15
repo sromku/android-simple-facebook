@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginResult;
 import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.Permission.Type;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
@@ -68,7 +68,7 @@ public class RequestPermissionsFragment extends BaseFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
-				SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, false, new OnNewPermissionsListener() {
+				SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, new OnNewPermissionsListener() {
 
 					@Override
 					public void onFail(String reason) {
@@ -85,18 +85,14 @@ public class RequestPermissionsFragment extends BaseFragment {
 					}
 
 					@Override
-					public void onSuccess(String accessToken, List<Permission> permissions) {
+					public void onSuccess(LoginResult loginResult) {
 						showGrantedPermissions();
-						if (permissions.size() > 0) {
-							Toast.makeText(getActivity(), "User declined few permissions: " + permissions.toString(), Toast.LENGTH_SHORT).show();
+                        Set<String> recentlyDeniedPermissions = loginResult.getRecentlyDeniedPermissions();
+                        if (recentlyDeniedPermissions != null && recentlyDeniedPermissions.size() > 0) {
+							Toast.makeText(getActivity(), "User declined few permissions: " + recentlyDeniedPermissions.toString(), Toast.LENGTH_SHORT).show();
 						}
 					}
 
-					@Override
-					public void onNotAcceptingPermissions(Type type) {
-						showGrantedPermissions();
-						Toast.makeText(getActivity(), String.format("You didn't accept %s permissions", type.name()), Toast.LENGTH_SHORT).show();
-					}
 				});
 			}
 		});
