@@ -15,7 +15,6 @@ import com.sromku.simple.fb.listeners.OnNewPermissionsListener;
 import com.sromku.simple.fb.utils.Logger;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -286,16 +285,17 @@ public class SessionManager {
 	}
 
 	public boolean hasPendingRequest() {
-		try {
-			Field f = mLoginManager.getClass().getDeclaredField("pendingLoginRequest");
-			f.setAccessible(true);
-            Object request = f.get(mLoginManager);
-            if (request != null) {
-				return true;
-			}
-		} catch (Exception e) {
-			// do nothing
-		}
+        // waiting for fix on FB side for pull request: https://github.com/facebook/facebook-android-sdk/pull/431
+        // try {
+        // 	Field f = mLoginManager.getClass().getDeclaredField("pendingLoginRequest");
+        // 	f.setAccessible(true);
+        //     Object request = f.get(mLoginManager);
+        //     if (request != null) {
+        // 		return true;
+        // 	}
+        // } catch (Exception e) {
+        // 	// do nothing
+        // }
 		return false;
 	}
 
