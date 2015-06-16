@@ -12,8 +12,6 @@ Feature that already working:
 - Most of additional features
 - Like button
 - Sample app
-
-To revive:
 - Invite
 - Publish with dialogs
 - Extend permissions
