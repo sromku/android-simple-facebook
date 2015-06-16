@@ -15,6 +15,9 @@ import com.sromku.simple.fb.utils.Errors.ErrorMsg;
 import com.sromku.simple.fb.utils.Logger;
 import com.sromku.simple.fb.utils.Utils;
 
+import org.json.JSONException;
+
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class GetAction<T> extends AbstractAction {
@@ -132,6 +135,16 @@ public class GetAction<T> extends AbstractAction {
 	 */
 	protected T processResponse(GraphResponse response) {
 		Type type = mOnActionListener.getGenericType();
+        if (type instanceof ParameterizedType) {
+            Object arrayJson;
+            try {
+                arrayJson = response.getJSONObject().get("data");
+            } catch (JSONException e) {
+                return null;
+            }
+            T data = Utils.convert(String.valueOf(arrayJson), type);
+            return data;
+        }
 		return Utils.convert(response, type);
 	}
 

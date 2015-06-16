@@ -223,6 +223,10 @@ public class Utils {
         return JsonUtils.fromJson(response.getRawResponse(), type);
 	}
 
+    public static <T> T convert(String json, Type type) {
+        return JsonUtils.fromJson(json, type);
+    }
+
     public static User convert(final IdName idName) {
         return new User(idName.getId(), idName.getName());
     }
