@@ -68,45 +68,45 @@ public class SessionManager {
         }
     }
 
-	public SessionManager(SimpleFacebookConfiguration configuration) {
-		SessionManager.configuration = configuration;
+    public SessionManager(SimpleFacebookConfiguration configuration) {
+        SessionManager.configuration = configuration;
         mLoginManager = LoginManager.getInstance();
         mLoginManager.registerCallback(mCallbackManager, mLoginCallback);
         mLoginManager.setDefaultAudience(configuration.getDefaultAudience());
         mLoginManager.setLoginBehavior(configuration.getLoginBehavior());
-	}
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-	/**
-	 * Login to Facebook
-	 * 
-	 * @param onLoginListener
-	 */
-	public void login(OnLoginListener onLoginListener) {
-		if (onLoginListener == null) {
-			Logger.logError(TAG, "OnLoginListener can't be null in -> 'login(OnLoginListener onLoginListener)' method.");
-			return;
-		}
+    /**
+     * Login to Facebook
+     *
+     * @param onLoginListener
+     */
+    public void login(OnLoginListener onLoginListener) {
+        if (onLoginListener == null) {
+            Logger.logError(TAG, "OnLoginListener can't be null in -> 'login(OnLoginListener onLoginListener)' method.");
+            return;
+        }
 
         if (isLogin()) {
-			Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
+            Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
             LoginResult loginResult = createLastLoginResult();
             onLoginListener.onLogin(loginResult);
-			return;
-		}
+            return;
+        }
 
-		if (hasPendingRequest()) {
-			Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
+        if (hasPendingRequest()) {
+            Logger.logWarning(TAG, "You are trying to login one more time, before finishing the previous login call");
             onLoginListener.onFail("Already has pending login request");
-			return;
-		}
+            return;
+        }
 
         // just do the login
         loginImpl(onLoginListener);
-	}
+    }
 
     private void loginImpl(OnLoginListener onLoginListener) {
 
@@ -134,40 +134,40 @@ public class SessionManager {
         return new LoginResult(getAccessToken(), getAccessToken().getPermissions(), getAccessToken().getDeclinedPermissions());
     }
 
-	/**
-	 * Logout from Facebook
-	 */
-	public void logout(OnLogoutListener onLogoutListener) {
-		if (onLogoutListener == null) {
-			Logger.logError(TAG, "OnLogoutListener can't be null in -> 'logout(OnLogoutListener onLogoutListener)' method");
-			return;
-		}
+    /**
+     * Logout from Facebook
+     */
+    public void logout(OnLogoutListener onLogoutListener) {
+        if (onLogoutListener == null) {
+            Logger.logError(TAG, "OnLogoutListener can't be null in -> 'logout(OnLogoutListener onLogoutListener)' method");
+            return;
+        }
 
         mLoginManager.logOut();
         onLogoutListener.onLogout();
     }
 
-	/**
-	 * Indicate if you are logged in or not.
-	 * 
-	 * @return <code>True</code> if you is logged in, otherwise return
-	 *         <code>False</code>
-	 */
-	public boolean isLogin() {
+    /**
+     * Indicate if you are logged in or not.
+     *
+     * @return <code>True</code> if you is logged in, otherwise return
+     *         <code>False</code>
+     */
+    public boolean isLogin() {
         AccessToken accessToken = getAccessToken();
         if (accessToken == null) {
             return false;
         }
         return !accessToken.isExpired();
-	}
+    }
 
-	/**
-	 * Get access token of open session
-	 *
-	 */
-	public AccessToken getAccessToken() {
-		return AccessToken.getCurrentAccessToken();
-	}
+    /**
+     * Get access token of open session
+     *
+     */
+    public AccessToken getAccessToken() {
+        return AccessToken.getCurrentAccessToken();
+    }
 
     public Set<String> getAcceptedPermissions() {
         AccessToken accessToken = getAccessToken();
@@ -205,33 +205,33 @@ public class SessionManager {
      * This checks if user had accepted all publish permissions for being able to use PublishAction
      * @return
      */
-	public boolean hasAccepted(String permission) {
-		if (getAcceptedPermissions().contains(permission)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean hasAccepted(String permission) {
+        if (getAcceptedPermissions().contains(permission)) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Requests any new permission in a runtime. <br>
-	 * <br>
-	 *
-	 * Useful when you just want to request the action and won't be publishing
-	 * at the time, but still need the updated <b>access token</b> with the
-	 * permissions (possibly to pass back to your backend).
-	 *
-	 * <br>
-	 * <b>Must be logged in to use.</b>
-	 *
-	 * @param permissions
-	 *            New permissions you want to have. This array can include READ
-	 *            and PUBLISH permissions in the same time. Just ask what you
-	 *            need.<br>
-	 * @param onNewPermissionListener
-	 *            The callback listener for the requesting new permission
-	 *            action.
-	 */
-	public void requestNewPermissions(final Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
+    /**
+     * Requests any new permission in a runtime. <br>
+     * <br>
+     *
+     * Useful when you just want to request the action and won't be publishing
+     * at the time, but still need the updated <b>access token</b> with the
+     * permissions (possibly to pass back to your backend).
+     *
+     * <br>
+     * <b>Must be logged in to use.</b>
+     *
+     * @param permissions
+     *            New permissions you want to have. This array can include READ
+     *            and PUBLISH permissions in the same time. Just ask what you
+     *            need.<br>
+     * @param onNewPermissionListener
+     *            The callback listener for the requesting new permission
+     *            action.
+     */
+    public void requestNewPermissions(final Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
 
         if (onNewPermissionListener == null) {
             Logger.logWarning(TAG, "Must pass listener");
@@ -282,9 +282,9 @@ public class SessionManager {
             // if new permissions have only PUBLISH then, request only publish
             requestPublishPermissions();
         }
-	}
+    }
 
-	public boolean hasPendingRequest() {
+    public boolean hasPendingRequest() {
         // waiting for fix on FB side for pull request: https://github.com/facebook/facebook-android-sdk/pull/431
         // try {
         // 	Field f = mLoginManager.getClass().getDeclaredField("pendingLoginRequest");
@@ -296,29 +296,29 @@ public class SessionManager {
         // } catch (Exception e) {
         // 	// do nothing
         // }
-		return false;
-	}
+        return false;
+    }
 
-	private List<String> getNotGrantedReadPermissions() {
-		Set<String> grantedPermissions = getAcceptedPermissions();
-		List<String> readPermissions = new ArrayList<String>(configuration.getReadPermissions());
-		readPermissions.removeAll(grantedPermissions);
-		return readPermissions;
-	}
-
-	private List<String> getNotGrantedPublishPermissions() {
+    private List<String> getNotGrantedReadPermissions() {
         Set<String> grantedPermissions = getAcceptedPermissions();
-		List<String> publishPermissions = new ArrayList<String>(configuration.getPublishPermissions());
-		publishPermissions.removeAll(grantedPermissions);
-		return publishPermissions;
-	}
+        List<String> readPermissions = new ArrayList<String>(configuration.getReadPermissions());
+        readPermissions.removeAll(grantedPermissions);
+        return readPermissions;
+    }
 
-	public boolean isAllPermissionsGranted() {
-		if (getNotGrantedReadPermissions().size() > 0 || getNotGrantedPublishPermissions().size() > 0) {
-			return false;
-		}
-		return true;
-	}
+    private List<String> getNotGrantedPublishPermissions() {
+        Set<String> grantedPermissions = getAcceptedPermissions();
+        List<String> publishPermissions = new ArrayList<String>(configuration.getPublishPermissions());
+        publishPermissions.removeAll(grantedPermissions);
+        return publishPermissions;
+    }
+
+    public boolean isAllPermissionsGranted() {
+        if (getNotGrantedReadPermissions().size() > 0 || getNotGrantedPublishPermissions().size() > 0) {
+            return false;
+        }
+        return true;
+    }
 
     public void clean() {
         mActivity.clear();
