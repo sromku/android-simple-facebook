@@ -16,6 +16,7 @@ import com.sromku.simple.fb.utils.Logger;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,7 @@ public class SessionManager {
         public OnLoginListener loginListener;
         boolean doOnLogin = false;
         boolean askPublishPermissions = false;
+        List<String> publishPermissions;
 
         @Override
         public void onSuccess(LoginResult loginResult) {
@@ -42,14 +44,16 @@ public class SessionManager {
 
                 if (doOnLogin) {
                     doOnLogin = false;
+                    askPublishPermissions = false;
+                    publishPermissions = null;
                     loginListener.onLogin(loginResult.getAccessToken().getToken(), Permission.convert(getAcceptedPermissions()), Permission.convert(loginResult.getRecentlyDeniedPermissions()));
                     return;
                 }
 
-                if (askPublishPermissions) {
+                if (askPublishPermissions && publishPermissions != null) {
                     doOnLogin = true;
                     askPublishPermissions = false;
-                    requestPublishPermissions();
+                    requestPublishPermissions(publishPermissions);
                 } else {
                     loginListener.onLogin(loginResult.getAccessToken().getToken(), Permission.convert(getAcceptedPermissions()), Permission.convert(loginResult.getRecentlyDeniedPermissions()));
                 }
@@ -116,18 +120,19 @@ public class SessionManager {
         // in case of marking in configuration the option of getting publish permission, just after read permissions
         if (configuration.hasPublishPermissions() && configuration.isAllPermissionsAtOnce()) {
             mLoginCallback.askPublishPermissions = true;
+            mLoginCallback.publishPermissions = configuration.getPublishPermissions();
         }
 
         // login please, with all read permissions
-        requestReadPermissions();
+        requestReadPermissions(configuration.getReadPermissions());
     }
 
-    public void requestReadPermissions() {
-        mLoginManager.logInWithReadPermissions(mActivity.get(), configuration.getReadPermissions());
+    public void requestReadPermissions(List<String> permissions) {
+        mLoginManager.logInWithReadPermissions(mActivity.get(), permissions);
     }
 
-    public void requestPublishPermissions() {
-        mLoginManager.logInWithPublishPermissions(mActivity.get(), configuration.getPublishPermissions());
+    public void requestPublishPermissions(List<String> permissions) {
+        mLoginManager.logInWithPublishPermissions(mActivity.get(), permissions);
     }
 
     private LoginResult createLastLoginResult() {
@@ -223,7 +228,7 @@ public class SessionManager {
      * <br>
      * <b>Must be logged in to use.</b>
      *
-     * @param permissions
+     * @param perms
      *            New permissions you want to have. This array can include READ
      *            and PUBLISH permissions in the same time. Just ask what you
      *            need.<br>
@@ -231,24 +236,24 @@ public class SessionManager {
      *            The callback listener for the requesting new permission
      *            action.
      */
-    public void requestNewPermissions(final Permission[] permissions, final OnNewPermissionsListener onNewPermissionListener) {
+    public void requestNewPermissions(final Permission[] perms, final OnNewPermissionsListener onNewPermissionListener) {
 
         if (onNewPermissionListener == null) {
             Logger.logWarning(TAG, "Must pass listener");
             return;
         }
 
-        int flag = configuration.addNewPermissions(permissions);
-        flag |= getNotGrantedReadPermissions().size() > 0 ? 1 : 0;
-        flag |= getNotGrantedPublishPermissions().size() > 0 ? 2 : 0;
-        if (flag == 0) {
-            onNewPermissionListener.onFail("There is no new permissions in your request");
+        List<Permission> permissions = Arrays.asList(perms);
+
+        if (permissions == null || permissions.size() == 0) {
+            onNewPermissionListener.onFail("Empty permissions in request");
             return;
         }
 
-        // in case of marking in configuration the option of getting publish permission, just after read permissions
-        if (configuration.hasPublishPermissions() && configuration.isAllPermissionsAtOnce()) {
-            mLoginCallback.askPublishPermissions = true;
+        int flag = configuration.getType(permissions);
+        if (flag == 0) {
+            onNewPermissionListener.onFail("There is no new permissions in your request");
+            return;
         }
 
         mLoginCallback.loginListener = new OnLoginListener() {
@@ -275,13 +280,23 @@ public class SessionManager {
 
         };
 
-        if (flag == 1 || flag == 3) {
-            // if new permissions have only READ or both READ & PUBLISH, then start from read
-            requestReadPermissions();
-        } else if (flag == 2) {
-            // if new permissions have only PUBLISH then, request only publish
-            requestPublishPermissions();
+        switch (flag) {
+            case 1:
+                requestReadPermissions(Permission.convert(permissions));
+                break;
+            case 3:
+                // in case of marking in configuration the option of getting publish permission, just after read permissions
+                if (configuration.isAllPermissionsAtOnce()) {
+                    mLoginCallback.askPublishPermissions = true;
+                    mLoginCallback.publishPermissions = Permission.fetchPermissions(permissions, Permission.Type.PUBLISH);
+                }
+                requestReadPermissions(Permission.fetchPermissions(permissions, Permission.Type.READ));
+                break;
+            case 2:
+                requestPublishPermissions(Permission.convert(permissions));
+                break;
         }
+
     }
 
     public boolean hasPendingRequest() {

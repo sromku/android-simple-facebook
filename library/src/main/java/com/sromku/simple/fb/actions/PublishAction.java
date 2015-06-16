@@ -16,6 +16,7 @@ import com.sromku.simple.fb.utils.Logger;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublishAction extends AbstractAction {
@@ -96,7 +97,12 @@ public class PublishAction extends AbstractAction {
                             }
 
                         };
-						sessionManager.requestPublishPermissions();
+                        // build the needed permission for this action and request
+                        Permission permission = mPublishable.getPermission();
+                        List<String> permissions = new ArrayList<String>();
+                        permissions.add(permission.getValue());
+                        sessionManager.requestPublishPermissions(permissions);
+
 					} else {
 						publishImpl(mPublishable, mOnPublishListener);
 					}

@@ -366,4 +366,27 @@ public enum Permission {
         return permissions;
     }
 
+    public static List<String> convert(List<Permission> permissions) {
+        if (permissions == null) {
+            return null;
+        }
+
+        List<String> rawPermissions = new ArrayList<String>();
+        for (Permission permission : permissions) {
+            rawPermissions.add(permission.getValue());
+        }
+
+        return rawPermissions;
+    }
+
+    public static List<String> fetchPermissions(List<Permission> permissions, Permission.Type type) {
+        List<String> perms = new ArrayList<String>();
+        for (Permission permission : permissions) {
+            if (type.equals(permission.getType())) {
+                perms.add(permission.getValue());
+            }
+        }
+        return perms;
+    }
+
 }

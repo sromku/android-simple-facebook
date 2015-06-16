@@ -126,41 +126,29 @@ public class SimpleFacebookConfiguration {
     }
 
     /**
-     * Add new permissions in a runtime
-     *
-     * @param permissions
-     * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
-     *
-     */
-    int addNewPermissions(Permission[] permissions) {
-		/*
-		 * 0 = no new permissions were added
-		 * 1 = for read permissions
-		 * 2 = for write permissions
-		 */
+    * @param permissions
+    * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
+     * */
+    int getType(List<Permission> permissions) {
         int flag = 0;
+
+        if (permissions == null || permissions.size() == 0) {
+            return flag;
+        }
+
         for (Permission permission : permissions) {
             switch (permission.getType()) {
                 case READ:
-                    if (!mReadPermissions.contains(permission.getValue())) {
-                        mReadPermissions.add(permission.getValue());
-                        flag |= 1;
-                    }
+                    flag |= 1;
                     break;
                 case PUBLISH:
-                    if (!mPublishPermissions.contains(permission.getValue())) {
-                        mPublishPermissions.add(permission.getValue());
-                        flag |= 2;
-                    }
+                    flag |= 2;
                     break;
                 default:
                     break;
             }
         }
 
-        if (this.mPublishPermissions.size() > 0) {
-            this.mHasPublishPermissions = true;
-        }
         return flag;
     }
 
