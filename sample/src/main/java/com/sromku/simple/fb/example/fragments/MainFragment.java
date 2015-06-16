@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.facebook.login.LoginResult;
+import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.Example;
 import com.sromku.simple.fb.example.ExamplesAdapter;
@@ -23,6 +23,7 @@ import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.sromku.simple.fb.listeners.OnLogoutListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment implements OnItemClickListener {
 
@@ -164,12 +165,12 @@ public class MainFragment extends Fragment implements OnItemClickListener {
 				Log.e(TAG, "Bad thing happened", throwable);
 			}
 
-			@Override
-			public void onLogin(LoginResult loginResult) {
-				// change the state of the button or do whatever you want
-				mTextStatus.setText("Logged in");
-				loggedInUIState();
-			}
+            @Override
+            public void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
+                // change the state of the button or do whatever you want
+                mTextStatus.setText("Logged in");
+                loggedInUIState();
+            }
 
             @Override
             public void onCancel() {

@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginResult;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.example.R;
@@ -70,7 +69,7 @@ public class RequestPermissionsFragment extends BaseFragment {
 				Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
 				SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, new OnNewPermissionsListener() {
 
-					@Override
+                    @Override
 					public void onFail(String reason) {
 						mResult.setText(reason);
 					}
@@ -84,14 +83,13 @@ public class RequestPermissionsFragment extends BaseFragment {
 					public void onThinking() {
 					}
 
-					@Override
-					public void onSuccess(LoginResult loginResult) {
-						showGrantedPermissions();
-                        Set<String> recentlyDeniedPermissions = loginResult.getRecentlyDeniedPermissions();
-                        if (recentlyDeniedPermissions != null && recentlyDeniedPermissions.size() > 0) {
-							Toast.makeText(getActivity(), "User declined few permissions: " + recentlyDeniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-						}
-					}
+                    @Override
+                    public void onSuccess(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
+                        showGrantedPermissions();
+                        if (declinedPermissions != null && declinedPermissions.size() > 0) {
+                            Toast.makeText(getActivity(), "User declined few permissions: " + declinedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
 				});
 			}
@@ -100,7 +98,7 @@ public class RequestPermissionsFragment extends BaseFragment {
 		builder.create().show();
 	}
 
-	private void showGrantedPermissions() {
+    private void showGrantedPermissions() {
 		String res = "Granted permissions<br>";
 		Set<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
 		res += Utils.join(grantedPermissions.iterator(), "<br>", new Utils.Process<String>() {

@@ -352,14 +352,18 @@ public enum Permission {
         return null;
     }
 
-    public static Permission[] convert(Collection<String> rawPermissions) {
+    public static List<Permission> convert(Collection<String> rawPermissions) {
+        if (rawPermissions == null) {
+            return null;
+        }
+
         List<Permission> permissions = new ArrayList<Permission>();
         for (Permission permission : values()) {
             if (rawPermissions.contains(permission.getValue())) {
                 permissions.add(permission);
             }
         }
-        return permissions.toArray(new Permission[permissions.size()]);
+        return permissions;
     }
 
 }

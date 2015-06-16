@@ -6,7 +6,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.login.LoginResult;
+import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SessionManager;
 import com.sromku.simple.fb.entities.Publishable;
 import com.sromku.simple.fb.listeners.OnLoginListener;
@@ -15,6 +15,8 @@ import com.sromku.simple.fb.utils.Errors;
 import com.sromku.simple.fb.utils.Logger;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class PublishAction extends AbstractAction {
 
@@ -75,7 +77,7 @@ public class PublishAction extends AbstractAction {
                             }
 
                             @Override
-                            public void onLogin(LoginResult loginResult) {
+                            public void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
                                 if (sessionManager.hasAccepted(neededPermission)) {
                                     publishImpl(mPublishable, mOnPublishListener);
                                 }

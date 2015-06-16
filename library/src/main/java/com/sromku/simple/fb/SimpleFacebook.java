@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
@@ -1832,8 +1831,8 @@ public class SimpleFacebook {
      *
      * @return Active session or null.
      */
-    public AccessToken getAccessToken() {
-        return mSessionManager.getAccessToken();
+    public String getAccessToken() {
+        return mSessionManager.getAccessToken().getToken();
     }
 
     /**

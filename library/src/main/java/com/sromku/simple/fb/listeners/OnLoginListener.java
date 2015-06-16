@@ -1,6 +1,8 @@
 package com.sromku.simple.fb.listeners;
 
-import com.facebook.login.LoginResult;
+import com.sromku.simple.fb.Permission;
+
+import java.util.List;
 
 /**
  * On login/logout actions listener
@@ -9,7 +11,7 @@ import com.facebook.login.LoginResult;
  */
 public interface OnLoginListener extends OnErrorListener {
 
-    void onLogin(LoginResult loginResult);
+    void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions);
 
     void onCancel();
 

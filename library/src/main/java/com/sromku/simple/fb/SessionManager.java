@@ -42,7 +42,7 @@ public class SessionManager {
 
                 if (doOnLogin) {
                     doOnLogin = false;
-                    loginListener.onLogin(loginResult);
+                    loginListener.onLogin(loginResult.getAccessToken().getToken(), Permission.convert(getAcceptedPermissions()), Permission.convert(loginResult.getRecentlyDeniedPermissions()));
                     return;
                 }
 
@@ -51,7 +51,7 @@ public class SessionManager {
                     askPublishPermissions = false;
                     requestPublishPermissions();
                 } else {
-                    loginListener.onLogin(loginResult);
+                    loginListener.onLogin(loginResult.getAccessToken().getToken(), Permission.convert(getAcceptedPermissions()), Permission.convert(loginResult.getRecentlyDeniedPermissions()));
                 }
 
             }
@@ -94,7 +94,7 @@ public class SessionManager {
         if (isLogin()) {
             Logger.logInfo(TAG, "You were already logged in before calling 'login()' method.");
             LoginResult loginResult = createLastLoginResult();
-            onLoginListener.onLogin(loginResult);
+            onLoginListener.onLogin(loginResult.getAccessToken().getToken(), Permission.convert(getAcceptedPermissions()), null);
             return;
         }
 
@@ -254,8 +254,8 @@ public class SessionManager {
         mLoginCallback.loginListener = new OnLoginListener() {
 
             @Override
-            public void onLogin(LoginResult loginResult) {
-                onNewPermissionListener.onSuccess(loginResult);
+            public void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
+                onNewPermissionListener.onSuccess(accessToken, acceptedPermissions, declinedPermissions);
             }
 
             @Override
