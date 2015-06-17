@@ -218,6 +218,17 @@ public class Utils {
         public List<T> data;
     }
 
+    public static class SingleDataResult<T> {
+        public T data;
+
+        @Override
+        public String toString() {
+            if (data != null) {
+                return data.toString();
+            }
+            return super.toString();
+        }
+    }
 
 	public static <T> T convert(GraphResponse response, Type type) {
         return JsonUtils.fromJson(response.getRawResponse(), type);

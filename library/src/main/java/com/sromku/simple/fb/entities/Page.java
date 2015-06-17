@@ -108,7 +108,7 @@ public class Page {
 	private Parking mParking;
 
     @SerializedName(Properties.PICTURE)
-	private String mPicture;
+	private Utils.SingleDataResult<Image> mPicture;
 
     @SerializedName(Properties.PHONE)
 	private String mPhone;
@@ -416,7 +416,10 @@ public class Page {
 	 * The page 'profile' picture
 	 */
 	public String getPicture() {
-		return mPicture;
+        if (mPicture == null || mPicture.data == null) {
+            return null;
+        }
+		return mPicture.data.getUrl();
 	}
 	
 	/**

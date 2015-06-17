@@ -345,4 +345,8 @@ public class Photo implements Publishable {
 		}
 	}
 
+    @Override
+    public String toString() {
+        return mSource;
+    }
 }

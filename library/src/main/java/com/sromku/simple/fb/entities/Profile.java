@@ -94,7 +94,7 @@ public class Profile extends User {
 	private List<String> mFavoriteTeams;
 
     @SerializedName(Properties.PICTURE)
-	private String mPicture;
+	private Utils.SingleDataResult<Image> mPicture;
 
     @SerializedName(Properties.QUOTES)
 	private String mQuotes;
@@ -453,7 +453,10 @@ public class Profile extends User {
 	 * @return The user's profile pic
 	 */
 	public String getPicture() {
-		return mPicture;
+        if (mPicture == null || mPicture.data == null) {
+            return null;
+        }
+		return mPicture.data.getUrl();
 	}
 
 	/**
