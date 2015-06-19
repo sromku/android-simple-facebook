@@ -1,36 +1,19 @@
 android-simple-facebook
 =======================
 
-**Currently in development to support latest FB SDK 4.+ and better gradle support**
-https://developers.facebook.com/docs/android/change-log-4.x
-
-Feature that already working:
-- Login / logout
-- All get actions
-- All publish actions without dialog
-- Publish feed with dialog
-- Most of additional features
-- Like button
-- Sample app
-- Invite
-- Publish with dialogs
-- Extend permissions
-
----
-
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
-For support of older versions of facebook SDK 3.8 and below, go to [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) branch.
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
 
-Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this API in my applications and maintain the code.
+Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this library in my applications and maintain the code.
 
 <img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
 
 ## Releases
 Library jar | Branch | Supported Facebook SDK
 ------------|--------|------------------------
-[simple-facebook-2.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.2/simple.facebook-2.2.jar) | [master](https://github.com/sromku/android-simple-facebook) | 3.14 > 
+[simple-facebook-4.0.jar](https://github.com/sromku/android-simple-facebook/releases/download/4.0/simple.facebook-4.0.jar) | [master](https://github.com/sromku/android-simple-facebook) | 4 > 
+[simple-facebook-2.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.2/simple.facebook-2.2.jar) | [v2.0](https://github.com/sromku/android-simple-facebook) | 3.14 - 3.23 
 [simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) | 3.0 - 3.8
 
 ## Sample App
@@ -101,7 +84,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 	- [LikeView](https://github.com/sromku/android-simple-facebook/wiki/LikeView)
 
 *And,*
-* Based on latest Facebook SDK and Graph API v2.1
+* Based on latest Facebook SDK and Graph API v2.3
 * Permission strings are predefined
 * No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
@@ -112,6 +95,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 Everything is explained in [**wiki**](https://github.com/sromku/android-simple-facebook/wiki)
 
 ## Contributors
+
 
 - [Rony Lutsky](https://github.com/ronlut)
 - [Martín Marconcini](https://github.com/Gryzor)
