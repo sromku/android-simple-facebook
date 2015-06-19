@@ -16,54 +16,54 @@ import java.util.ArrayList;
 
 public class InviteAction extends AbstractAction {
 
-	private OnInviteListener mOnInviteListener;
-	private String mMessage;
-	private String mData;
-	private String mTo;
-	private String[] mSuggestions;
+    private OnInviteListener mOnInviteListener;
+    private String mMessage;
+    private String mData;
+    private String mTo;
+    private String[] mSuggestions;
 
-	private static final String PARAM_MESSAGE = "message";
-	private static final String PARAM_DATA = "data";
-	private static final String PARAM_TO = "to";
-	private static final String PARAM_SUGGESTIONS = "suggestions";
+    private static final String PARAM_MESSAGE = "message";
+    private static final String PARAM_DATA = "data";
+    private static final String PARAM_TO = "to";
+    private static final String PARAM_SUGGESTIONS = "suggestions";
 
-	public InviteAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public InviteAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setMessage(String message) {
-		mMessage = message;
-	}
+    public void setMessage(String message) {
+        mMessage = message;
+    }
 
-	public void setData(String data) {
-		mData = data;
-	}
+    public void setData(String data) {
+        mData = data;
+    }
 
-	public void setTo(String to) {
-		mTo = to;
-	}
+    public void setTo(String to) {
+        mTo = to;
+    }
 
-	public void setSuggestions(String[] suggestions) {
-		mSuggestions = suggestions;
-	}
+    public void setSuggestions(String[] suggestions) {
+        mSuggestions = suggestions;
+    }
 
-	public void setOnInviteListener(OnInviteListener onInviteListener) {
-		mOnInviteListener = onInviteListener;
-	}
+    public void setOnInviteListener(OnInviteListener onInviteListener) {
+        mOnInviteListener = onInviteListener;
+    }
 
-	@Override
-	protected void executeImpl() {
-		if (sessionManager.isLogin()) {
-			openInviteDialog(sessionManager.getActivity(), mOnInviteListener);
-		}
-		else {
-			String reason = Errors.getError(ErrorMsg.LOGIN);
-			Logger.logError(InviteAction.class, reason, null);
-			mOnInviteListener.onFail(reason);
-		}
-	}
+    @Override
+    protected void executeImpl() {
+        if (sessionManager.isLogin()) {
+            openInviteDialog(sessionManager.getActivity(), mOnInviteListener);
+        }
+        else {
+            String reason = Errors.getError(ErrorMsg.LOGIN);
+            Logger.logError(InviteAction.class, reason, null);
+            mOnInviteListener.onFail(reason);
+        }
+    }
 
-	private void openInviteDialog(Activity activity, final OnInviteListener onInviteListener) {
+    private void openInviteDialog(Activity activity, final OnInviteListener onInviteListener) {
 
         // build request
         GameRequestContent.Builder builder = new GameRequestContent.Builder();
@@ -110,6 +110,6 @@ public class InviteAction extends AbstractAction {
             dialog.show(gameRequestContent);
         }
 
-	}
+    }
 
 }

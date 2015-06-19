@@ -11,26 +11,26 @@ import java.util.List;
 
 public class GetPostsAction extends GetAction<List<Post>> {
 
-	private PostType mPostType = PostType.ALL; // default
+    private PostType mPostType = PostType.ALL; // default
 
-	public GetPostsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetPostsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setPostType(PostType postType) {
-		mPostType = postType;
-	}
+    public void setPostType(PostType postType) {
+        mPostType = postType;
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + mPostType.getGraphPath();
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + mPostType.getGraphPath();
+    }
 
-	@Override
-	protected List<Post> processResponse(GraphResponse response) {
+    @Override
+    protected List<Post> processResponse(GraphResponse response) {
         Utils.DataResult<Post> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Post>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

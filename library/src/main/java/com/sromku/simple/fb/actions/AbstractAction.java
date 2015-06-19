@@ -6,16 +6,16 @@ import com.sromku.simple.fb.SimpleFacebookConfiguration;
 
 public abstract class AbstractAction {
 
-	protected SessionManager sessionManager;
-	protected SimpleFacebookConfiguration configuration = SimpleFacebook.getConfiguration();
+    protected SessionManager sessionManager;
+    protected SimpleFacebookConfiguration configuration = SimpleFacebook.getConfiguration();
 
-	public AbstractAction(SessionManager sessionManager) {
-		this.sessionManager = sessionManager;
-	}
+    public AbstractAction(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
-	public void execute() {
-		executeImpl();
-	}
+    public void execute() {
+        executeImpl();
+    }
 
-	protected abstract void executeImpl();
+    protected abstract void executeImpl();
 }

@@ -11,18 +11,18 @@ import java.util.List;
 
 public class GetAccountsAction extends GetAction<List<Account>> {
 
-	public GetAccountsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetAccountsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.ACCOUNTS;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.ACCOUNTS;
+    }
 
-	@Override
-	protected List<Account> processResponse(GraphResponse response) {
+    @Override
+    protected List<Account> processResponse(GraphResponse response) {
         Utils.DataResult<Account> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Account>>() {}.getType());
         return dataResult.data;
-	}
+    }
 }

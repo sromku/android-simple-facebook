@@ -7,18 +7,18 @@ import com.sromku.simple.fb.utils.JsonUtils;
 
 public class GetPhotoAction extends GetAction<Photo> {
 
-	public GetPhotoAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetPhotoAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget();
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget();
+    }
 
-	@Override
-	protected Photo processResponse(GraphResponse response) {
-		return JsonUtils.fromJson(response.getRawResponse(), Photo.class);
-	}
+    @Override
+    protected Photo processResponse(GraphResponse response) {
+        return JsonUtils.fromJson(response.getRawResponse(), Photo.class);
+    }
 
 }

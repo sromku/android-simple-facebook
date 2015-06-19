@@ -14,61 +14,61 @@ import com.sromku.simple.fb.listeners.OnPublishListener;
 
 public class PublishCommentFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Publish comment - text";
+    private final static String EXAMPLE = "Publish comment - text";
 
-	private TextView mResult;
-	private Button mButton;
+    private TextView mResult;
+    private Button mButton;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getActivity().setTitle(EXAMPLE);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().setTitle(EXAMPLE);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_example_action, container, false);
-		mResult = (TextView) view.findViewById(R.id.result);
-		view.findViewById(R.id.load_more).setVisibility(View.GONE);
-		mButton = (Button) view.findViewById(R.id.button);
-		mButton.setText(EXAMPLE);
-		mButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_example_action, container, false);
+        mResult = (TextView) view.findViewById(R.id.result);
+        view.findViewById(R.id.load_more).setVisibility(View.GONE);
+        mButton = (Button) view.findViewById(R.id.button);
+        mButton.setText(EXAMPLE);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-				Comment comment = new Comment.Builder()
-					.setMessage("Test comment")
-					.build();
+                Comment comment = new Comment.Builder()
+                        .setMessage("Test comment")
+                        .build();
 
-				SimpleFacebook.getInstance().publish("977576802258070_977578808924536", comment, new OnPublishListener() {
+                SimpleFacebook.getInstance().publish("977576802258070_977578808924536", comment, new OnPublishListener() {
 
-					@Override
-					public void onException(Throwable throwable) {
-						hideDialog();
-						mResult.setText(throwable.getMessage());
-					}
+                    @Override
+                    public void onException(Throwable throwable) {
+                        hideDialog();
+                        mResult.setText(throwable.getMessage());
+                    }
 
-					@Override
-					public void onFail(String reason) {
-						hideDialog();
-						mResult.setText(reason);
-					}
+                    @Override
+                    public void onFail(String reason) {
+                        hideDialog();
+                        mResult.setText(reason);
+                    }
 
-					@Override
-					public void onThinking() {
-						showDialog();
-					}
+                    @Override
+                    public void onThinking() {
+                        showDialog();
+                    }
 
-					@Override
-					public void onComplete(String response) {
-						hideDialog();
-						mResult.setText(response);
-					}
-				});
+                    @Override
+                    public void onComplete(String response) {
+                        hideDialog();
+                        mResult.setText(response);
+                    }
+                });
 
-			}
-		});
-		return view;
-	}
+            }
+        });
+        return view;
+    }
 
 }

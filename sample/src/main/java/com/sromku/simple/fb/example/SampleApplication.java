@@ -10,20 +10,20 @@ import com.sromku.simple.fb.example.utils.SharedObjects;
 import com.sromku.simple.fb.utils.Logger;
 
 public class SampleApplication extends Application {
-	private static final String APP_ID = "728615400528729";
-	private static final String APP_NAMESPACE = "sromkuapp_vtwo";
+    private static final String APP_ID = "728615400528729";
+    private static final String APP_NAMESPACE = "sromkuapp_vtwo";
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		SharedObjects.context = this;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SharedObjects.context = this;
 
-		// set log to true
-		Logger.DEBUG_WITH_STACKTRACE = true;
+        // set log to true
+        Logger.DEBUG_WITH_STACKTRACE = true;
 
-		// initialize facebook configuration
-		Permission[] permissions = new Permission[] { 
-				Permission.PUBLIC_PROFILE,
+        // initialize facebook configuration
+        Permission[] permissions = new Permission[] {
+                Permission.PUBLIC_PROFILE,
                 Permission.EMAIL,
                 Permission.USER_EVENTS,
                 Permission.USER_ACTIONS_MUSIC,
@@ -31,16 +31,16 @@ public class SampleApplication extends Application {
                 Permission.USER_GAMES_ACTIVITY,
                 Permission.USER_BIRTHDAY,
                 Permission.USER_GROUPS,
-				Permission.PUBLISH_ACTION };
+                Permission.PUBLISH_ACTION };
 
-		SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-			.setAppId(APP_ID)
-			.setNamespace(APP_NAMESPACE)
-			.setPermissions(permissions)
-			.setDefaultAudience(DefaultAudience.FRIENDS)
-			.setAskForAllPermissionsAtOnce(false)
-			.build();
+        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+                .setAppId(APP_ID)
+                .setNamespace(APP_NAMESPACE)
+                .setPermissions(permissions)
+                .setDefaultAudience(DefaultAudience.FRIENDS)
+                .setAskForAllPermissionsAtOnce(false)
+                .build();
 
-		SimpleFacebook.setConfiguration(configuration);
-	}
+        SimpleFacebook.setConfiguration(configuration);
+    }
 }

@@ -11,97 +11,97 @@ import java.util.List;
  */
 public class Attachment {
 
-	private static final String DATA = "data";
-	private static final String DESCRIPTION = "description";
-	private static final String DESCRIPTION_TAGS = "description_tags";
-	private static final String MEDIA = "media";
-	private static final String SUBATTACHMENTS = "subattachments";
-	private static final String TARGET = "target";
-	private static final String TITLE = "title";
-	private static final String TYPE = "type";
-	private static final String URL = "url";
+    private static final String DATA = "data";
+    private static final String DESCRIPTION = "description";
+    private static final String DESCRIPTION_TAGS = "description_tags";
+    private static final String MEDIA = "media";
+    private static final String SUBATTACHMENTS = "subattachments";
+    private static final String TARGET = "target";
+    private static final String TITLE = "title";
+    private static final String TYPE = "type";
+    private static final String URL = "url";
 
     @SerializedName(DESCRIPTION)
-	private String mDescription;
+    private String mDescription;
 
     @SerializedName(DESCRIPTION_TAGS)
-	private List<Profile> mDescriptionTags;
+    private List<Profile> mDescriptionTags;
 
     @SerializedName(MEDIA)
-	private StoryAttachmentMedia mMedia;
+    private StoryAttachmentMedia mMedia;
 
     @SerializedName(SUBATTACHMENTS)
-	private List<Attachment> mSubAttachments;
+    private List<Attachment> mSubAttachments;
 
     @SerializedName(TARGET)
-	private StoryAttachmentTarget mTarget;
+    private StoryAttachmentTarget mTarget;
 
     @SerializedName(TITLE)
-	private String mTitle;
+    private String mTitle;
 
     @SerializedName(TYPE)
-	private String mType;
+    private String mType;
 
     @SerializedName(URL)
-	private String mUrl;
+    private String mUrl;
 
-	public String getDescription() {
-		return mDescription;
-	}
+    public String getDescription() {
+        return mDescription;
+    }
 
-	public StoryAttachmentMedia getMedia() {
-		return mMedia;
-	}
+    public StoryAttachmentMedia getMedia() {
+        return mMedia;
+    }
 
-	public List<Attachment> getSubAttachments() {
-		return mSubAttachments;
-	}
+    public List<Attachment> getSubAttachments() {
+        return mSubAttachments;
+    }
 
-	public StoryAttachmentTarget getTarget() {
-		return mTarget;
-	}
+    public StoryAttachmentTarget getTarget() {
+        return mTarget;
+    }
 
-	public String getTitle() {
-		return mTitle;
-	}
+    public String getTitle() {
+        return mTitle;
+    }
 
-	public String getType() {
-		return mType;
-	}
+    public String getType() {
+        return mType;
+    }
 
-	public String getUrl() {
-		return mUrl;
-	}
+    public String getUrl() {
+        return mUrl;
+    }
 
-	public static class StoryAttachmentMedia {
+    public static class StoryAttachmentMedia {
 
-		private static final String IMAGE = "image";
+        private static final String IMAGE = "image";
 
         @SerializedName(IMAGE)
-		private Image mImage;
+        private Image mImage;
 
-		public Image getImage() {
-			return mImage;
-		}
-	}
+        public Image getImage() {
+            return mImage;
+        }
+    }
 
-	public static class StoryAttachmentTarget {
+    public static class StoryAttachmentTarget {
 
-		private static final String ID = "id";
-		private static final String URL = "url";
+        private static final String ID = "id";
+        private static final String URL = "url";
 
         @SerializedName(ID)
-		private String mId;
+        private String mId;
 
         @SerializedName(URL)
-		private String mUrl;
+        private String mUrl;
 
-		public String getId() {
-			return mId;
-		}
+        public String getId() {
+            return mId;
+        }
 
-		public String getUrl() {
-			return mUrl;
-		}
-	}
+        public String getUrl() {
+            return mUrl;
+        }
+    }
 }

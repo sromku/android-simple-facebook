@@ -11,19 +11,19 @@ import java.util.List;
 
 public class GetLikesAction extends GetAction<List<Like>> {
 
-	public GetLikesAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetLikesAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.LIKES;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.LIKES;
+    }
 
-	@Override
-	protected List<Like> processResponse(GraphResponse response) {
+    @Override
+    protected List<Like> processResponse(GraphResponse response) {
         Utils.DataResult<Like> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Like>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 }

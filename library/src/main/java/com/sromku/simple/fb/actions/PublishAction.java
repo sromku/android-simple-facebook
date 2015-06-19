@@ -21,31 +21,31 @@ import java.util.List;
 
 public class PublishAction extends AbstractAction {
 
-	private OnPublishListener mOnPublishListener;
-	private Publishable mPublishable;
-	private String mTarget = "me";
+    private OnPublishListener mOnPublishListener;
+    private Publishable mPublishable;
+    private String mTarget = "me";
 
-	public PublishAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public PublishAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setPublishable(Publishable publishable) {
-		mPublishable = publishable;
-	}
+    public void setPublishable(Publishable publishable) {
+        mPublishable = publishable;
+    }
 
-	public void setTarget(String target) {
-		mTarget = target;
-	}
+    public void setTarget(String target) {
+        mTarget = target;
+    }
 
-	public void setOnPublishListener(OnPublishListener onPublishListener) {
-		mOnPublishListener = onPublishListener;
-	}
+    public void setOnPublishListener(OnPublishListener onPublishListener) {
+        mOnPublishListener = onPublishListener;
+    }
 
-	@Override
-	protected void executeImpl() {
-		if (sessionManager.isLogin()) {
-			if (!sessionManager.hasPendingRequest()) {
-				// if we defined the publish permission
+    @Override
+    protected void executeImpl() {
+        if (sessionManager.isLogin()) {
+            if (!sessionManager.hasPendingRequest()) {
+                // if we defined the publish permission
 
 				/*
 				 * We need also add one more check of next case: - if we gave
@@ -56,16 +56,16 @@ public class PublishAction extends AbstractAction {
                 if (configuration.getPublishPermissions().contains(neededPermission)
                         || sessionManager.hasAccepted(neededPermission)) {
 
-					if (mOnPublishListener != null) {
-						mOnPublishListener.onThinking();
-					}
+                    if (mOnPublishListener != null) {
+                        mOnPublishListener.onThinking();
+                    }
 
 					/*
 					 * Check if session to facebook has needed publish
 					 * permission. If not, we will ask user for this permission.
 					 */
-					if (!sessionManager.hasAccepted(neededPermission)) {
-						sessionManager.getLoginCallback().loginListener = new OnLoginListener() {
+                    if (!sessionManager.hasAccepted(neededPermission)) {
+                        sessionManager.getLoginCallback().loginListener = new OnLoginListener() {
 
                             @Override
                             public void onException(Throwable throwable) {
@@ -103,29 +103,29 @@ public class PublishAction extends AbstractAction {
                         permissions.add(permission.getValue());
                         sessionManager.requestPublishPermissions(permissions);
 
-					} else {
-						publishImpl(mPublishable, mOnPublishListener);
-					}
-				} else {
-					String reason = Errors.getError(Errors.ErrorMsg.PERMISSIONS_PUBLISH, neededPermission);
-					Logger.logError(PublishAction.class, reason, null);
-					if (mOnPublishListener != null) {
-						mOnPublishListener.onFail(reason);
-					}
-				}
-			} else {
-				return;
-			}
-		} else {
-			if (mOnPublishListener != null) {
-				String reason = Errors.getError(Errors.ErrorMsg.LOGIN);
-				Logger.logError(PublishAction.class, reason, null);
-				mOnPublishListener.onFail(reason);
-			}
-		}
-	}
+                    } else {
+                        publishImpl(mPublishable, mOnPublishListener);
+                    }
+                } else {
+                    String reason = Errors.getError(Errors.ErrorMsg.PERMISSIONS_PUBLISH, neededPermission);
+                    Logger.logError(PublishAction.class, reason, null);
+                    if (mOnPublishListener != null) {
+                        mOnPublishListener.onFail(reason);
+                    }
+                }
+            } else {
+                return;
+            }
+        } else {
+            if (mOnPublishListener != null) {
+                String reason = Errors.getError(Errors.ErrorMsg.LOGIN);
+                Logger.logError(PublishAction.class, reason, null);
+                mOnPublishListener.onFail(reason);
+            }
+        }
+    }
 
-	private void publishImpl(Publishable publishable, final OnPublishListener onPublishListener) {
+    private void publishImpl(Publishable publishable, final OnPublishListener onPublishListener) {
 
         AccessToken accessToken = sessionManager.getAccessToken();
         GraphRequest request = new GraphRequest(accessToken, mTarget + "/" + publishable.getPath(), publishable.getBundle(), HttpMethod.POST, new GraphRequest.Callback() {
@@ -152,6 +152,6 @@ public class PublishAction extends AbstractAction {
         });
         GraphRequestAsyncTask task = new GraphRequestAsyncTask(request);
         task.execute();
-	}
+    }
 
 }

@@ -14,28 +14,28 @@ import java.util.List;
 
 public class PublishPhotoDialogAction extends AbstractAction {
 
-	private OnPublishListener mOnPublishListener;
-	private List<Photo> mPhotos;
-	private String mPlace;
+    private OnPublishListener mOnPublishListener;
+    private List<Photo> mPhotos;
+    private String mPlace;
 
-	public PublishPhotoDialogAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public PublishPhotoDialogAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setPhotos(List<Photo> photos) {
-		mPhotos = photos;
-	}
+    public void setPhotos(List<Photo> photos) {
+        mPhotos = photos;
+    }
 
-	public void setPlace(String place) {
-		mPlace = place;
-	}
+    public void setPlace(String place) {
+        mPlace = place;
+    }
 
-	public void setOnPublishListener(OnPublishListener onPublishListener) {
-		mOnPublishListener = onPublishListener;
-	}
+    public void setOnPublishListener(OnPublishListener onPublishListener) {
+        mOnPublishListener = onPublishListener;
+    }
 
-	@Override
-	protected void executeImpl() {
+    @Override
+    protected void executeImpl() {
 
         ShareDialog shareDialog = new ShareDialog(sessionManager.getActivity());
         SharePhotoContent content = new SharePhotoContent.Builder()
@@ -68,6 +68,6 @@ public class PublishPhotoDialogAction extends AbstractAction {
             });
             shareDialog.show(content);
         }
-	}
+    }
 
 }

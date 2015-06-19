@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetCommentsAction extends GetAction<List<Comment>> {
 
-	public GetCommentsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetCommentsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.COMMENTS;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.COMMENTS;
+    }
 
-	@Override
-	protected List<Comment> processResponse(GraphResponse response) {
+    @Override
+    protected List<Comment> processResponse(GraphResponse response) {
         Utils.DataResult<Comment> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Comment>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

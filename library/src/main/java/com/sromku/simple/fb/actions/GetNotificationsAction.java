@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetNotificationsAction extends GetAction<List<Notification>> {
 
-	public GetNotificationsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetNotificationsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return String.format("%s/%s", getTarget(), GraphPath.NOTIFICATIONS);
-	}
+    @Override
+    protected String getGraphPath() {
+        return String.format("%s/%s", getTarget(), GraphPath.NOTIFICATIONS);
+    }
 
-	@Override
-	protected List<Notification> processResponse(GraphResponse response) {
+    @Override
+    protected List<Notification> processResponse(GraphResponse response) {
         Utils.DataResult<Notification> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Notification>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

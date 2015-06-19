@@ -10,32 +10,32 @@ import com.sromku.simple.fb.utils.JsonUtils;
 
 public class GetPageAction extends GetAction<Page> {
 
-	private Properties mProperties;
+    private Properties mProperties;
 
-	public GetPageAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetPageAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setProperties(Properties properties) {
-		mProperties = properties;
-	}
+    public void setProperties(Properties properties) {
+        mProperties = properties;
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget();
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget();
+    }
 
-	@Override
-	protected Bundle getBundle() {
-		if (mProperties != null) {
-			return mProperties.getBundle();
-		}
-		return null;
-	}
+    @Override
+    protected Bundle getBundle() {
+        if (mProperties != null) {
+            return mProperties.getBundle();
+        }
+        return null;
+    }
 
-	@Override
-	protected Page processResponse(GraphResponse response) {
-		return JsonUtils.fromJson(response.getRawResponse(), Page.class);
-	}
+    @Override
+    protected Page processResponse(GraphResponse response) {
+        return JsonUtils.fromJson(response.getRawResponse(), Page.class);
+    }
 
 }

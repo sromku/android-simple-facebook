@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetPhotosAction extends GetAction<List<Photo>> {
 
-	public GetPhotosAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetPhotosAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.PHOTOS;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.PHOTOS;
+    }
 
-	@Override
-	protected List<Photo> processResponse(GraphResponse response) {
+    @Override
+    protected List<Photo> processResponse(GraphResponse response) {
         Utils.DataResult<Photo> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Photo>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

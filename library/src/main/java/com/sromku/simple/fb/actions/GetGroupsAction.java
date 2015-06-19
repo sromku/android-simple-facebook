@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetGroupsAction extends GetAction<List<Group>> {
 
-	public GetGroupsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetGroupsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.GROUPS;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.GROUPS;
+    }
 
-	@Override
-	protected List<Group> processResponse(GraphResponse response) {
+    @Override
+    protected List<Group> processResponse(GraphResponse response) {
         Utils.DataResult<Group> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Group>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

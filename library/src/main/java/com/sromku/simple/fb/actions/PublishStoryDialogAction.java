@@ -19,23 +19,23 @@ import java.util.Iterator;
 
 public class PublishStoryDialogAction extends AbstractAction {
 
-	private OnPublishListener mOnPublishListener;
-	private Story mStory;
+    private OnPublishListener mOnPublishListener;
+    private Story mStory;
 
-	public PublishStoryDialogAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public PublishStoryDialogAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setOnPublishListener(OnPublishListener onPublishListener) {
-		mOnPublishListener = onPublishListener;
-	}
-	
-	public void setStory(Story story) {
-		mStory = story;
-	}
+    public void setOnPublishListener(OnPublishListener onPublishListener) {
+        mOnPublishListener = onPublishListener;
+    }
 
-	@Override
-	protected void executeImpl() {
+    public void setStory(Story story) {
+        mStory = story;
+    }
+
+    @Override
+    protected void executeImpl() {
 
         /*
          * Publishing open graph can be in 2 ways:
@@ -159,9 +159,9 @@ public class PublishStoryDialogAction extends AbstractAction {
             });
             shareDialog.show(content);
         } else {
-			mOnPublishListener.onFail("Open graph sharing dialog isn't supported");
-		}
+            mOnPublishListener.onFail("Open graph sharing dialog isn't supported");
+        }
 
-	}
+    }
 
 }

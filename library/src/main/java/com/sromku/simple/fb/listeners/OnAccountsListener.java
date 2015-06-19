@@ -6,9 +6,8 @@ import java.util.List;
 
 /**
  * On accounts request listener
- * 
+ *
  * @author sromku
- * 
  */
 public abstract class OnAccountsListener extends OnActionListener<List<Account>> {
 }

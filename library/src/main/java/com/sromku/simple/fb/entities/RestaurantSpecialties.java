@@ -8,26 +8,26 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RestaurantSpecialties {
 
-	private static final String COFFEE = "coffee";
-	private static final String DRINKS = "drinks";
-	private static final String BREAKFAST = "breakfast";
-	private static final String DINNER = "dinner";
-	private static final String LUNCH = "lunch";
+    private static final String COFFEE = "coffee";
+    private static final String DRINKS = "drinks";
+    private static final String BREAKFAST = "breakfast";
+    private static final String DINNER = "dinner";
+    private static final String LUNCH = "lunch";
 
     @SerializedName(COFFEE)
-	private Integer mCoffee;
+    private Integer mCoffee;
 
     @SerializedName(DRINKS)
-	private Integer mDrinks;
+    private Integer mDrinks;
 
     @SerializedName(BREAKFAST)
-	private Integer mBreakfast;
+    private Integer mBreakfast;
 
     @SerializedName(DINNER)
-	private Integer mDinner;
+    private Integer mDinner;
 
     @SerializedName(LUNCH)
-	private Integer mLunch;
+    private Integer mLunch;
 
 //	private final GraphObject mGraphObject;
 //
@@ -58,40 +58,40 @@ public class RestaurantSpecialties {
 //		return mGraphObject;
 //	}
 
-	/**
-	 * Whether the restaurant serves coffee
-	 */
-	public Integer getCoffee() {
-		return mCoffee;
-	}
+    /**
+     * Whether the restaurant serves coffee
+     */
+    public Integer getCoffee() {
+        return mCoffee;
+    }
 
-	/**
-	 * Whether the restaurant serves drinks
-	 */
-	public Integer getDrinks() {
-		return mDrinks;
-	}
+    /**
+     * Whether the restaurant serves drinks
+     */
+    public Integer getDrinks() {
+        return mDrinks;
+    }
 
-	/**
-	 * Whether the restaurant serves breakfast
-	 * 
-	 * @return
-	 */
-	public Integer getBreakfast() {
-		return mBreakfast;
-	}
+    /**
+     * Whether the restaurant serves breakfast
+     *
+     * @return
+     */
+    public Integer getBreakfast() {
+        return mBreakfast;
+    }
 
-	/**
-	 * Whether the restaurant serves dinner
-	 */
-	public Integer getDinner() {
-		return mDinner;
-	}
+    /**
+     * Whether the restaurant serves dinner
+     */
+    public Integer getDinner() {
+        return mDinner;
+    }
 
-	/**
-	 * Whether the restaurant serves lunch
-	 */
-	public Integer getLunch() {
-		return mLunch;
-	}
+    /**
+     * Whether the restaurant serves lunch
+     */
+    public Integer getLunch() {
+        return mLunch;
+    }
 }

@@ -4,81 +4,81 @@ import com.google.gson.annotations.SerializedName;
 
 public class Place {
 
-	private static final String ID = "id";
-	private static final String NAME = "name";
-//	private static final String LOCATION = "location";
-	private static final String STREET = "street";
-	private static final String CITY = "city";
-	private static final String STATE = "state";
-	private static final String COUNTRY = "country";
-	private static final String ZIP = "zip";
-	private static final String LATITUDE = "latitude";
-	private static final String LONGITUDE = "longitude";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    //	private static final String LOCATION = "location";
+    private static final String STREET = "street";
+    private static final String CITY = "city";
+    private static final String STATE = "state";
+    private static final String COUNTRY = "country";
+    private static final String ZIP = "zip";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
 
     @SerializedName(ID)
-	private String mId;
+    private String mId;
 
     @SerializedName(NAME)
-	private String mName;
+    private String mName;
 
     @SerializedName(STREET)
-	private String mStreet;
+    private String mStreet;
 
     @SerializedName(CITY)
-	private String mCity;
+    private String mCity;
 
     @SerializedName(STATE)
-	private String mState;
+    private String mState;
 
     @SerializedName(COUNTRY)
-	private String mCountry;
+    private String mCountry;
 
     @SerializedName(ZIP)
-	private Integer mZip;
+    private Integer mZip;
 
     @SerializedName(LATITUDE)
-	private Double mLatitude;
+    private Double mLatitude;
 
     @SerializedName(LONGITUDE)
-	private Double mLongitude;
+    private Double mLongitude;
 
-	public String getStreet() {
-		return mStreet;
-	}
+    public String getStreet() {
+        return mStreet;
+    }
 
-	public String getCity() {
-		return mCity;
-	}
+    public String getCity() {
+        return mCity;
+    }
 
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return mState;
-	}
+    /**
+     * @return the state
+     */
+    public String getState() {
+        return mState;
+    }
 
-	public String getCountry() {
-		return mCountry;
-	}
+    public String getCountry() {
+        return mCountry;
+    }
 
-	public Integer getZip() {
-		return mZip;
-	}
+    public Integer getZip() {
+        return mZip;
+    }
 
-	public Double getLatitude() {
-		return mLatitude;
-	}
+    public Double getLatitude() {
+        return mLatitude;
+    }
 
-	public Double getLongitude() {
-		return mLongitude;
-	}
+    public Double getLongitude() {
+        return mLongitude;
+    }
 
-	public String getId() {
-		return mId;
-	}
+    public String getId() {
+        return mId;
+    }
 
-	public String getName() {
-		return mName;
-	}
+    public String getName() {
+        return mName;
+    }
 
 }

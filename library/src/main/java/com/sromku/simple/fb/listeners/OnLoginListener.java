@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * On login/logout actions listener
- * 
+ *
  * @author sromku
  */
 public interface OnLoginListener extends OnErrorListener {

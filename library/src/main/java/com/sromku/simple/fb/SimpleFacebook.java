@@ -97,6 +97,7 @@ import java.util.Set;
  * @author sromku
  */
 public class SimpleFacebook {
+
     private static SimpleFacebook mInstance = null;
     private static SimpleFacebookConfiguration mConfiguration = new SimpleFacebookConfiguration.Builder().build();
 

@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetVideosAction extends GetAction<List<Video>> {
 
-	public GetVideosAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetVideosAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.VIDEOS;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.VIDEOS;
+    }
 
-	@Override
-	protected List<Video> processResponse(GraphResponse response) {
+    @Override
+    protected List<Video> processResponse(GraphResponse response) {
         Utils.DataResult<Video> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Video>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

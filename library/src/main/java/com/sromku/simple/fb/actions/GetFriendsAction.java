@@ -14,34 +14,34 @@ import java.util.List;
 
 public class GetFriendsAction extends GetAction<List<Profile>> {
 
-	private Properties mProperties;
+    private Properties mProperties;
 
-	public GetFriendsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetFriendsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setProperties(Properties properties) {
-		mProperties = properties;
-	}
+    public void setProperties(Properties properties) {
+        mProperties = properties;
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return String.format("%s/%s", getTarget(), GraphPath.FRIENDS);
-	}
+    @Override
+    protected String getGraphPath() {
+        return String.format("%s/%s", getTarget(), GraphPath.FRIENDS);
+    }
 
-	@Override
-	protected Bundle getBundle() {
-		if (mProperties != null) {
-			return mProperties.getBundle();
-		}
-		return null;
-	}
+    @Override
+    protected Bundle getBundle() {
+        if (mProperties != null) {
+            return mProperties.getBundle();
+        }
+        return null;
+    }
 
-	@Override
-	protected List<Profile> processResponse(GraphResponse response) {
+    @Override
+    protected List<Profile> processResponse(GraphResponse response) {
         Utils.DataResult<Profile> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Profile>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

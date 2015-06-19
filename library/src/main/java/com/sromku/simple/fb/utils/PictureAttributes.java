@@ -1,39 +1,40 @@
 package com.sromku.simple.fb.utils;
 
 public class PictureAttributes extends Attributes {
-	private final static String HEIGHT = "height";
-	private final static String WIDTH = "width";
-	private final static String TYPE = "type";
 
-	PictureAttributes() {
-	}
+    private final static String HEIGHT = "height";
+    private final static String WIDTH = "width";
+    private final static String TYPE = "type";
 
-	public void setHeight(int pixels) {
-		attributes.put(HEIGHT, String.valueOf(pixels));
-	}
+    PictureAttributes() {
+    }
 
-	public void setWidth(int pixels) {
-		attributes.put(WIDTH, String.valueOf(pixels));
-	}
+    public void setHeight(int pixels) {
+        attributes.put(HEIGHT, String.valueOf(pixels));
+    }
 
-	public void setType(PictureType type) {
-		attributes.put(TYPE, type.getValue());
-	}
+    public void setWidth(int pixels) {
+        attributes.put(WIDTH, String.valueOf(pixels));
+    }
 
-	public static enum PictureType {
-		SMALL("small"),
-		NORMAL("normal"),
-		LARGE("large"),
-		SQUARE("square");
+    public void setType(PictureType type) {
+        attributes.put(TYPE, type.getValue());
+    }
 
-		private String mValue;
+    public static enum PictureType {
+        SMALL("small"),
+        NORMAL("normal"),
+        LARGE("large"),
+        SQUARE("square");
 
-		private PictureType(String value) {
-			mValue = value;
-		}
+        private String mValue;
 
-		public String getValue() {
-			return mValue;
-		}
-	}
+        private PictureType(String value) {
+            mValue = value;
+        }
+
+        public String getValue() {
+            return mValue;
+        }
+    }
 }

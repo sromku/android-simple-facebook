@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleFacebookConfiguration {
+
     private String mAppId;
     private String mNamespace;
     private List<String> mReadPermissions = null;
@@ -126,8 +127,8 @@ public class SimpleFacebookConfiguration {
     }
 
     /**
-    * @param permissions
-    * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
+     * @param permissions
+     * @return 0 - no new permissions, 1 - added only read, 2 - added only write, 3 - added both read and write
      * */
     int getType(List<Permission> permissions) {
         int flag = 0;

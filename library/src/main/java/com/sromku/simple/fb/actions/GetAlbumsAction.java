@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GetAlbumsAction extends GetAction<List<Album>> {
 
-	public GetAlbumsAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetAlbumsAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return String.format("%s/%s", getTarget(), GraphPath.ALBUMS);
-	}
+    @Override
+    protected String getGraphPath() {
+        return String.format("%s/%s", getTarget(), GraphPath.ALBUMS);
+    }
 
-	@Override
-	protected List<Album> processResponse(GraphResponse response) {
+    @Override
+    protected List<Album> processResponse(GraphResponse response) {
         Utils.DataResult<Album> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Album>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

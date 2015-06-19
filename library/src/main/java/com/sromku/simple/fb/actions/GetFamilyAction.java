@@ -15,19 +15,19 @@ import java.util.List;
  */
 public class GetFamilyAction extends GetAction<List<FamilyUser>> {
 
-	public GetFamilyAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetFamilyAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return getTarget() + "/" + GraphPath.FAMILY;
-	}
+    @Override
+    protected String getGraphPath() {
+        return getTarget() + "/" + GraphPath.FAMILY;
+    }
 
-	@Override
-	protected List<FamilyUser> processResponse(GraphResponse response) {
+    @Override
+    protected List<FamilyUser> processResponse(GraphResponse response) {
         Utils.DataResult<FamilyUser> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<FamilyUser>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 }

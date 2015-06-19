@@ -14,23 +14,23 @@ import com.sromku.simple.fb.listeners.OnPublishListener;
 
 public class PublishFeedDialogAction extends AbstractAction {
 
-	private OnPublishListener mOnPublishListener;
-	private Feed mFeed;
+    private OnPublishListener mOnPublishListener;
+    private Feed mFeed;
 
-	public PublishFeedDialogAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public PublishFeedDialogAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	public void setFeed(Feed feed) {
-		mFeed = feed;
-	}
+    public void setFeed(Feed feed) {
+        mFeed = feed;
+    }
 
-	public void setOnPublishListener(OnPublishListener onPublishListener) {
-		mOnPublishListener = onPublishListener;
-	}
+    public void setOnPublishListener(OnPublishListener onPublishListener) {
+        mOnPublishListener = onPublishListener;
+    }
 
-	@Override
-	protected void executeImpl() {
+    @Override
+    protected void executeImpl() {
 
         // build link content
         ShareLinkContent.Builder shareLinkContent = new ShareLinkContent.Builder()
@@ -72,6 +72,6 @@ public class PublishFeedDialogAction extends AbstractAction {
             });
             shareDialog.show(linkContent);
         }
-	}
+    }
 
 }

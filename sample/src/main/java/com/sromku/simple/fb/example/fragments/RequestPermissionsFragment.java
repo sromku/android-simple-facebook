@@ -23,65 +23,65 @@ import java.util.Set;
 
 public class RequestPermissionsFragment extends BaseFragment {
 
-	private final static String EXAMPLE = "Request new permissions";
+    private final static String EXAMPLE = "Request new permissions";
 
-	private TextView mResult;
-	private Button mButton;
+    private TextView mResult;
+    private Button mButton;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getActivity().setTitle(EXAMPLE);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().setTitle(EXAMPLE);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_example_action, container, false);
-		mResult = (TextView) view.findViewById(R.id.result);
-		view.findViewById(R.id.load_more).setVisibility(View.GONE);
-		mButton = (Button) view.findViewById(R.id.button);
-		mButton.setText(EXAMPLE);
-		mButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showPermissionsSelectDialog();
-			}
-		});
-		return view;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_example_action, container, false);
+        mResult = (TextView) view.findViewById(R.id.result);
+        view.findViewById(R.id.load_more).setVisibility(View.GONE);
+        mButton = (Button) view.findViewById(R.id.button);
+        mButton.setText(EXAMPLE);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPermissionsSelectDialog();
+            }
+        });
+        return view;
+    }
 
-	private void showPermissionsSelectDialog() {
-		final List<Permission> newPermissions = new ArrayList<Permission>();
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Select new permissions").setMultiChoiceItems(getAllPermissions(), null, new DialogInterface.OnMultiChoiceClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-				Permission permission = Permission.values()[which];
-				if (isChecked && !newPermissions.contains(permission)) {
-					newPermissions.add(permission);
-				} else if (!isChecked && newPermissions.contains(permission)) {
-					newPermissions.remove(permission);
-				}
-			}
-		}).setPositiveButton("Request", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
-				SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, new OnNewPermissionsListener() {
+    private void showPermissionsSelectDialog() {
+        final List<Permission> newPermissions = new ArrayList<Permission>();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select new permissions").setMultiChoiceItems(getAllPermissions(), null, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                Permission permission = Permission.values()[which];
+                if (isChecked && !newPermissions.contains(permission)) {
+                    newPermissions.add(permission);
+                } else if (!isChecked && newPermissions.contains(permission)) {
+                    newPermissions.remove(permission);
+                }
+            }
+        }).setPositiveButton("Request", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Permission[] permissionsArray = newPermissions.toArray(new Permission[newPermissions.size()]);
+                SimpleFacebook.getInstance().requestNewPermissions(permissionsArray, new OnNewPermissionsListener() {
 
                     @Override
-					public void onFail(String reason) {
-						mResult.setText(reason);
-					}
+                    public void onFail(String reason) {
+                        mResult.setText(reason);
+                    }
 
-					@Override
-					public void onException(Throwable throwable) {
-						mResult.setText(throwable.getMessage());
-					}
+                    @Override
+                    public void onException(Throwable throwable) {
+                        mResult.setText(throwable.getMessage());
+                    }
 
-					@Override
-					public void onThinking() {
-					}
+                    @Override
+                    public void onThinking() {
+                    }
 
                     @Override
                     public void onSuccess(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
@@ -91,32 +91,32 @@ public class RequestPermissionsFragment extends BaseFragment {
                         }
                     }
 
-				});
-			}
-		});
+                });
+            }
+        });
 
-		builder.create().show();
-	}
+        builder.create().show();
+    }
 
     private void showGrantedPermissions() {
-		String res = "Granted permissions<br>";
-		Set<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
-		res += Utils.join(grantedPermissions.iterator(), "<br>", new Utils.Process<String>() {
-			@Override
-			public String process(String permission) {
-				return "\u25CF " + permission + " \u25CF";
-			}
-		});
-		res += "<br>";
-		mResult.setText(Html.fromHtml(res));
-	}
+        String res = "Granted permissions<br>";
+        Set<String> grantedPermissions = SimpleFacebook.getInstance().getGrantedPermissions();
+        res += Utils.join(grantedPermissions.iterator(), "<br>", new Utils.Process<String>() {
+            @Override
+            public String process(String permission) {
+                return "\u25CF " + permission + " \u25CF";
+            }
+        });
+        res += "<br>";
+        mResult.setText(Html.fromHtml(res));
+    }
 
-	private CharSequence[] getAllPermissions() {
-		Permission[] permissions = Permission.values();
-		CharSequence[] charSequences = new String[permissions.length];
-		for (int i = 0; i < permissions.length; i++) {
-			charSequences[i] = permissions[i].getValue();
-		}
-		return charSequences;
-	}
+    private CharSequence[] getAllPermissions() {
+        Permission[] permissions = Permission.values();
+        CharSequence[] charSequences = new String[permissions.length];
+        for (int i = 0; i < permissions.length; i++) {
+            charSequences[i] = permissions[i].getValue();
+        }
+        return charSequences;
+    }
 }

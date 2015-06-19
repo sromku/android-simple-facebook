@@ -9,78 +9,78 @@ import java.util.Date;
  */
 public class  AppRequest {
 
-	private static final String ID = "id";
-	private static final String APPLICATION = "application";
-	private static final String TO = "to";
-	private static final String FROM = "from";
-	private static final String DATA = "data";
-	private static final String MESSAGE = "message";
-	private static final String CREATED_TIME = "created_time";
+    private static final String ID = "id";
+    private static final String APPLICATION = "application";
+    private static final String TO = "to";
+    private static final String FROM = "from";
+    private static final String DATA = "data";
+    private static final String MESSAGE = "message";
+    private static final String CREATED_TIME = "created_time";
 
     @SerializedName(ID)
-	private String mRequestId;
+    private String mRequestId;
 
     @SerializedName(APPLICATION)
-	private Application mApplication;
+    private Application mApplication;
 
     @SerializedName(TO)
-	private User mTo;
+    private User mTo;
 
     @SerializedName(FROM)
-	private User mFrom;
+    private User mFrom;
 
     @SerializedName(DATA)
-	private String mData;
+    private String mData;
 
     @SerializedName(MESSAGE)
-	private String mMessage;
+    private String mMessage;
 
     @SerializedName(CREATED_TIME)
-	private Date mCreatedTime;
+    private Date mCreatedTime;
 
-	public String getRequestId() {
-		return mRequestId;
-	}
+    public String getRequestId() {
+        return mRequestId;
+    }
 
-	/**
-	 * The application used to send the request.
-	 */
-	public Application getApplication() {
-		return mApplication;
-	}
+    /**
+     * The application used to send the request.
+     */
+    public Application getApplication() {
+        return mApplication;
+    }
 
-	/**
-	 * The user who got the request.
-	 */
-	public User getTo() {
-		return mTo;
-	}
+    /**
+     * The user who got the request.
+     */
+    public User getTo() {
+        return mTo;
+    }
 
-	/**
-	 * The user who sent the request.
-	 */
-	public User getFrom() {
-		return mFrom;
-	}
+    /**
+     * The user who sent the request.
+     */
+    public User getFrom() {
+        return mFrom;
+    }
 
-	/**
-	 * Optional data passed with the request for tracking purposes.
-	 */
-	public String getData() {
-		return mData;
-	}
+    /**
+     * Optional data passed with the request for tracking purposes.
+     */
+    public String getData() {
+        return mData;
+    }
 
-	/**
-	 * The message included with the request.
-	 */
-	public String getMessage() {
-		return mMessage;
-	}
+    /**
+     * The message included with the request.
+     */
+    public String getMessage() {
+        return mMessage;
+    }
 
-	/**
-	 * Timestamp that indicates when the request was sent.
-	 */
-	public Date getCreatedTime() {
-		return mCreatedTime;
-	}
+    /**
+     * Timestamp that indicates when the request was sent.
+     */
+    public Date getCreatedTime() {
+        return mCreatedTime;
+    }
 }

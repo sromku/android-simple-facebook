@@ -13,25 +13,25 @@ import java.util.List;
 
 public class GetScoresAction extends GetAction<List<Score>> {
 
-	public GetScoresAction(SessionManager sessionManager) {
-		super(sessionManager);
-	}
+    public GetScoresAction(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
-	@Override
-	protected String getGraphPath() {
-		return String.format("%s/%s", configuration.getAppId(), GraphPath.SCORES);
-	}
+    @Override
+    protected String getGraphPath() {
+        return String.format("%s/%s", configuration.getAppId(), GraphPath.SCORES);
+    }
 
-	@Override
-	protected Bundle getBundle() {
-		return null;
-	}
+    @Override
+    protected Bundle getBundle() {
+        return null;
+    }
 
-	@Override
-	protected List<Score> processResponse(GraphResponse response) {
+    @Override
+    protected List<Score> processResponse(GraphResponse response) {
         Utils.DataResult<Score> dataResult = Utils.convert(response, new TypeToken<Utils.DataResult<Score>>() {
         }.getType());
         return dataResult.data;
-	}
+    }
 
 }

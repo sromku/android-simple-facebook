@@ -17,65 +17,65 @@ import com.sromku.simple.fb.listeners.OnPageListener;
 
 public class GetPageFragment extends BaseFragment{
 
-	private final static String EXAMPLE = "Get page";
-	
-	private TextView mResult;
-	private Button mGetButton;
-	private TextView mMore;
+    private final static String EXAMPLE = "Get page";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getActivity().setTitle(EXAMPLE);
-	}
+    private TextView mResult;
+    private Button mGetButton;
+    private TextView mMore;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_example_action, container, false);
-		mResult = (TextView) view.findViewById(R.id.result);
-		mMore = (TextView) view.findViewById(R.id.load_more);
-		mMore.setPaintFlags(mMore.getPaint().getFlags() | Paint.UNDERLINE_TEXT_FLAG);
-		mGetButton = (Button) view.findViewById(R.id.button);
-		mGetButton.setText(EXAMPLE);
-		disableLoadMore();
-		mGetButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().setTitle(EXAMPLE);
+    }
 
-				String pageId = "117713628271096";
-				SimpleFacebook.getInstance().getPage(pageId, new OnPageListener() {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_example_action, container, false);
+        mResult = (TextView) view.findViewById(R.id.result);
+        mMore = (TextView) view.findViewById(R.id.load_more);
+        mMore.setPaintFlags(mMore.getPaint().getFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        mGetButton = (Button) view.findViewById(R.id.button);
+        mGetButton.setText(EXAMPLE);
+        disableLoadMore();
+        mGetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-					@Override
-					public void onThinking() {
-						showDialog();
-					}
+                String pageId = "117713628271096";
+                SimpleFacebook.getInstance().getPage(pageId, new OnPageListener() {
 
-					@Override
-					public void onException(Throwable throwable) {
-						hideDialog();
-						mResult.setText(throwable.getMessage());
-					}
+                    @Override
+                    public void onThinking() {
+                        showDialog();
+                    }
 
-					@Override
-					public void onFail(String reason) {
-						hideDialog();
-						mResult.setText(reason);
-					}
+                    @Override
+                    public void onException(Throwable throwable) {
+                        hideDialog();
+                        mResult.setText(throwable.getMessage());
+                    }
 
-					@Override
-					public void onComplete(Page response) {
-						hideDialog();
-						String str = Utils.toHtml(response);
-						mResult.setText(Html.fromHtml(str));
-					}
-				});
-			}
-		});
-		return view;
-	}
+                    @Override
+                    public void onFail(String reason) {
+                        hideDialog();
+                        mResult.setText(reason);
+                    }
 
-	private void disableLoadMore() {
-		mMore.setOnClickListener(null);
-		mMore.setVisibility(View.INVISIBLE);
-	}
+                    @Override
+                    public void onComplete(Page response) {
+                        hideDialog();
+                        String str = Utils.toHtml(response);
+                        mResult.setText(Html.fromHtml(str));
+                    }
+                });
+            }
+        });
+        return view;
+    }
+
+    private void disableLoadMore() {
+        mMore.setOnClickListener(null);
+        mMore.setVisibility(View.INVISIBLE);
+    }
 }
