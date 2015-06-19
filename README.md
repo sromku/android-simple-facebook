@@ -9,10 +9,16 @@ Since my feeling was that the usage of Facebook SDK was too complicated for simp
 
 <img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
 
-## Releases
+## Latest Release
+``` gradle
+dependencies {
+    compile 'com.sromku:simple-fb:4.0.0'
+}
+```
+
+## Old Versions
 Library jar | Branch | Supported Facebook SDK
 ------------|--------|------------------------
-[simple-facebook-4.0.jar](https://github.com/sromku/android-simple-facebook/releases/download/4.0/simple.facebook-4.0.jar) | [master](https://github.com/sromku/android-simple-facebook) | 4 > 
 [simple-facebook-2.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/2.2/simple.facebook-2.2.jar) | [v2.0](https://github.com/sromku/android-simple-facebook) | 3.14 - 3.23 
 [simple-facebook-1.2.jar](https://github.com/sromku/android-simple-facebook/releases/download/1.2/simple.facebook.jar) | [v1.0](https://github.com/sromku/android-simple-facebook/tree/v1.0) | 3.0 - 3.8
 
