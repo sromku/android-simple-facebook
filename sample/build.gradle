@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-  compile project(':library')
+  compile project(':simple-fb')
   // compile project(':facebook')
   compile 'com.facebook.android:facebook-android-sdk:4.0.+'
 }
