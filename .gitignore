@@ -8,6 +8,7 @@ gen
 build/
 .idea/
 *.orig
+*.asc
 
 .gradle/
 *.iml
