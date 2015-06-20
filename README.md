@@ -16,7 +16,7 @@ Since my feeling was that the usage of Facebook SDK was too complicated for simp
 ## Latest Release
 ``` gradle
 dependencies {
-    compile 'com.sromku:simple-fb:4.0.2'
+    compile 'com.sromku:simple-fb:4.0.3'
 }
 ```
 
