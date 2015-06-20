@@ -11,11 +11,12 @@ import java.util.List;
  * @author Gryzor
  *
  */
-public abstract class OnNewPermissionsListener implements OnThinkingListetener {
+public abstract class OnNewPermissionsListener implements OnErrorListener {
 
     /**
      * If the permission was granted, this callback is invoked.
      */
     public abstract void onSuccess(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions);
 
+    public abstract void onCancel();
 }

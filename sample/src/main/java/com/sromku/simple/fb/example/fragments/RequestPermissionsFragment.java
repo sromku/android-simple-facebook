@@ -80,7 +80,7 @@ public class RequestPermissionsFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onThinking() {
+                    public void onCancel() {
                     }
 
                     @Override

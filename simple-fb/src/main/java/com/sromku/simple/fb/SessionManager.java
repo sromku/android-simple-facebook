@@ -265,7 +265,7 @@ public class SessionManager {
 
             @Override
             public void onCancel() {
-                onNewPermissionListener.onFail("Canceled by user");
+                onNewPermissionListener.onCancel();
             }
 
             @Override
