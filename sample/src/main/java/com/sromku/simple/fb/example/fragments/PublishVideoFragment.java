@@ -45,7 +45,11 @@ public class PublishVideoFragment extends BaseFragment {
                 Privacy privacy = new Privacy.Builder().setPrivacySettings(PrivacySettings.SELF).build();
 
                 // create Photo instance and add some properties
-                Video video = new Video.Builder().setVideo("Sample video", videoBytes).setName("Screenshot from #android_simple_facebook sample application").setPrivacy(privacy).build();
+                Video video = new Video.Builder()
+                        .setVideo("Sample video", videoBytes)
+                        .setName("Screenshot from #android_simple_facebook sample application")
+                        .setPrivacy(privacy)
+                        .build();
 
                 SimpleFacebook.getInstance().publish(video, new OnPublishListener() {
 

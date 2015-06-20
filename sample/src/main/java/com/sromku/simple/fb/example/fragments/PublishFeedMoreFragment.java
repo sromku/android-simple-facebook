@@ -41,7 +41,7 @@ public class PublishFeedMoreFragment extends BaseFragment {
                         .setName("Simple Facebook SDK for Android")
                         .setCaption("Code less, do the same.")
                         .setDescription("Login, publish feeds and stories, invite friends and more....")
-                        .setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png")
+                        .setPicture("https://raw.githubusercontent.com/wiki/sromku/android-simple-facebook/images/android_facebook_sdk_logo.png")
                         .setLink("https://github.com/sromku/android-simple-facebook")
                         .addAction("Clone", "https://github.com/sromku/android-simple-facebook")
                         .addProperty("Full documentation", "sromku.com/simple/fb", "https://github.com/sromku/android-simple-facebook")

@@ -36,9 +36,13 @@ public class PublishFeedFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                final Feed feed = new Feed.Builder().setMessage("Clone it out...").setName("Simple Facebook SDK for Android").setCaption("Code less, do the same.")
+                final Feed feed = new Feed.Builder()
+                        .setMessage("Clone it out...")
+                        .setName("Simple Facebook SDK for Android")
+                        .setCaption("Code less, do the same.")
                         .setDescription("Login, publish feeds and stories, invite friends and more....")
-                        .setPicture("https://raw.github.com/sromku/android-simple-facebook/master/Refs/android_facebook_sdk_logo.png").setLink("https://github.com/sromku/android-simple-facebook")
+                        .setPicture("https://raw.githubusercontent.com/wiki/sromku/android-simple-facebook/images/android_facebook_sdk_logo.png")
+                        .setLink("https://github.com/sromku/android-simple-facebook")
                         .build();
 
                 SimpleFacebook.getInstance().publish(feed, new OnPublishListener() {
