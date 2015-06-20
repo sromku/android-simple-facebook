@@ -7,7 +7,11 @@ This is a library project which makes the life much easier by coding less code f
 
 Since my feeling was that the usage of Facebook SDK was too complicated for simple actions like login, I decided to create simpler API for the same actions. I use this library in my applications and maintain the code.
 
-<img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="24" width="24"/> Stack overflow **tag**: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)
+## Community & Issues
+
+<img src="https://fbstatic-a.akamaihd.net/rsrc.php/yl/r/H3nktOa7ZMg.ico" height="16" width="16"/> Facebook page: [`Library: simple-fb`](https://www.facebook.com/pages/Library-simple-fb/1501124800143936)<br>
+<img src="http://stackoverflow.com/content/stackoverflow/img/apple-touch-icon.png" height="16" width="16"/> Stack overflow: [`android-simple-facebook`](http://stackoverflow.com/tags/android-simple-facebook/info)<br>
+<img src="https://assets-cdn.github.com/favicon.ico" height="16" width="16"/> Issues: [`here`](https://github.com/sromku/android-simple-facebook/issues)
 
 ## Latest Release
 ``` gradle
