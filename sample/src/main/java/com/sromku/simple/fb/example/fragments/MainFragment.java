@@ -195,31 +195,11 @@ public class MainFragment extends Fragment implements OnItemClickListener {
         final OnLogoutListener onLogoutListener = new OnLogoutListener() {
 
             @Override
-            public void onFail(String reason) {
-                mTextStatus.setText(reason);
-                Log.w(TAG, "Failed to login");
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-                mTextStatus.setText("Exception: " + throwable.getMessage());
-                Log.e(TAG, "Bad thing happened", throwable);
-            }
-
-            @Override
-            public void onThinking() {
-                // show progress bar or something to the user while login is
-                // happening
-                mTextStatus.setText("Thinking...");
-            }
-
-            @Override
             public void onLogout() {
                 // change the state of the button or do whatever you want
                 mTextStatus.setText("Logged out");
                 loggedOutUIState();
             }
-
         };
 
         mButtonLogout.setOnClickListener(new View.OnClickListener() {

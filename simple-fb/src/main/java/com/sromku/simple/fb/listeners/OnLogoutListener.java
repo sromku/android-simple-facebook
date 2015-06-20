@@ -1,6 +1,6 @@
 package com.sromku.simple.fb.listeners;
 
-public interface OnLogoutListener extends OnThinkingListetener {
+public interface OnLogoutListener {
 
     void onLogout();
 }
