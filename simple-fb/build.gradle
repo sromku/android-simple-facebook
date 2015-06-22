@@ -9,7 +9,7 @@ android {
         targetSdkVersion 22
         versionName project.VERSION_NAME
         versionCode Integer.parseInt(project.VERSION_CODE)
-        consumerProguardFiles 'consumer-proguard-rules.pro'
+        consumerProguardFiles 'consumer-proguard-rules.pro', 'gson.pro', 'simple-fb.pro'
     }
 
     buildTypes {
