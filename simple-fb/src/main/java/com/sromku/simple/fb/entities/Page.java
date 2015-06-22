@@ -33,7 +33,7 @@ public class Page {
     @SerializedName(Properties.BIO)
     private String mBio;
 
-    @SerializedName(Properties.BIO)
+    @SerializedName(Properties.BIRTHDAY)
     private String mBirthday;
 
     @SerializedName(Properties.BOOKING_AGENT)
