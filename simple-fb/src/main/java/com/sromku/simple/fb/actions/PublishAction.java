@@ -53,66 +53,58 @@ public class PublishAction extends AbstractAction {
 				 * permissions in the configuration
 				 */
                 final String neededPermission = mPublishable.getPermission().getValue();
-                if (configuration.getPublishPermissions().contains(neededPermission)
-                        || sessionManager.hasAccepted(neededPermission)) {
 
-                    if (mOnPublishListener != null) {
-                        mOnPublishListener.onThinking();
-                    }
-
-					/*
-					 * Check if session to facebook has needed publish
-					 * permission. If not, we will ask user for this permission.
-					 */
-                    if (!sessionManager.hasAccepted(neededPermission)) {
-                        sessionManager.getLoginCallback().loginListener = new OnLoginListener() {
-
-                            @Override
-                            public void onException(Throwable throwable) {
-                                returnFail(throwable != null ? String.valueOf(throwable.getMessage()) : "Got exception on asking for publish permissions");
-                            }
-
-                            @Override
-                            public void onFail(String reason) {
-                                returnFail(reason);
-                            }
-
-                            @Override
-                            public void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
-                                if (sessionManager.hasAccepted(neededPermission)) {
-                                    publishImpl(mPublishable, mOnPublishListener);
-                                }
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                returnFail("User canceled the publish dialog");
-                            }
-
-                            private void returnFail(String reason) {
-                                Logger.logError(PublishAction.class, reason, null);
-                                if (mOnPublishListener != null) {
-                                    mOnPublishListener.onFail(reason);
-                                }
-                            }
-
-                        };
-                        // build the needed permission for this action and request
-                        Permission permission = mPublishable.getPermission();
-                        List<String> permissions = new ArrayList<String>();
-                        permissions.add(permission.getValue());
-                        sessionManager.requestPublishPermissions(permissions);
-
-                    } else {
-                        publishImpl(mPublishable, mOnPublishListener);
-                    }
-                } else {
-                    String reason = Errors.getError(Errors.ErrorMsg.PERMISSIONS_PUBLISH, neededPermission);
-                    Logger.logError(PublishAction.class, reason, null);
-                    if (mOnPublishListener != null) {
-                        mOnPublishListener.onFail(reason);
-                    }
+                if (mOnPublishListener != null) {
+                    mOnPublishListener.onThinking();
                 }
+
+                /*
+                 * Check if session to facebook has needed publish
+                 * permission. If not, we will ask user for this permission.
+                 */
+                if (!sessionManager.hasAccepted(neededPermission)) {
+                    sessionManager.getLoginCallback().loginListener = new OnLoginListener() {
+
+                        @Override
+                        public void onException(Throwable throwable) {
+                            returnFail(throwable != null ? String.valueOf(throwable.getMessage()) : "Got exception on asking for publish permissions");
+                        }
+
+                        @Override
+                        public void onFail(String reason) {
+                            returnFail(reason);
+                        }
+
+                        @Override
+                        public void onLogin(String accessToken, List<Permission> acceptedPermissions, List<Permission> declinedPermissions) {
+                            if (sessionManager.hasAccepted(neededPermission)) {
+                                publishImpl(mPublishable, mOnPublishListener);
+                            }
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            returnFail("User canceled the publish dialog");
+                        }
+
+                        private void returnFail(String reason) {
+                            Logger.logError(PublishAction.class, reason, null);
+                            if (mOnPublishListener != null) {
+                                mOnPublishListener.onFail(reason);
+                            }
+                        }
+
+                    };
+                    // build the needed permission for this action and request
+                    Permission permission = mPublishable.getPermission();
+                    List<String> permissions = new ArrayList<String>();
+                    permissions.add(permission.getValue());
+                    sessionManager.requestPublishPermissions(permissions);
+
+                } else {
+                    publishImpl(mPublishable, mOnPublishListener);
+                }
+
             } else {
                 return;
             }
