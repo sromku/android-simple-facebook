@@ -33,7 +33,7 @@ ext {
     siteUrl = 'https://github.com/sromku/android-simple-facebook'
     gitUrl = 'https://github.com/sromku/android-simple-facebook.git'
 
-    libraryVersion = '4.0.4'
+    libraryVersion = '4.0.5'
 
     developerId = 'sromku'
     developerName = 'Roman Kushnarenko'
