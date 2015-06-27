@@ -18,17 +18,19 @@ public class SimpleFacebookConfiguration {
     boolean mAllAtOnce = false;
     private boolean mUseAppsecretProof = false;
     private String mAppSecret = null;
+    private String mAccessToken = null;
 
     private SimpleFacebookConfiguration(Builder builder) {
-        this.mAppId = builder.mAppId;
-        this.mNamespace = builder.mNamespace;
-        this.mReadPermissions = builder.mReadPermissions;
-        this.mPublishPermissions = builder.mPublishPermissions;
-        this.mDefaultAudience = builder.mDefaultAudience;
-        this.mLoginBehavior = builder.mLoginBehavior;
-        this.mAllAtOnce = builder.mAllAtOnce;
-        this.mUseAppsecretProof = builder.mUseAppsecretProof;
-        this.mAppSecret = builder.mAppSecret;
+        mAppId = builder.mAppId;
+        mNamespace = builder.mNamespace;
+        mReadPermissions = builder.mReadPermissions;
+        mPublishPermissions = builder.mPublishPermissions;
+        mDefaultAudience = builder.mDefaultAudience;
+        mLoginBehavior = builder.mLoginBehavior;
+        mAllAtOnce = builder.mAllAtOnce;
+        mUseAppsecretProof = builder.mUseAppsecretProof;
+        mAppSecret = builder.mAppSecret;
+        mAccessToken = builder.mAccessToken;
 
         if (this.mPublishPermissions.size() > 0) {
             this.mHasPublishPermissions = true;
@@ -119,6 +121,13 @@ public class SimpleFacebookConfiguration {
     }
 
     /**
+     * Get predefined access token
+     */
+    public String getAccessToken() {
+        return mAccessToken;
+    }
+
+    /**
      * Return <code>True</code> if all permissions - read and publish should be
      * asked one after another in the same time after logging in.
      */
@@ -163,6 +172,7 @@ public class SimpleFacebookConfiguration {
         private boolean mAllAtOnce = false;
         private boolean mUseAppsecretProof = false;
         private String mAppSecret = null;
+        private String mAccessToken;
 
         public Builder() {
         }
@@ -273,6 +283,16 @@ public class SimpleFacebookConfiguration {
          */
         public Builder setAppSecret(String appSecret) {
             mAppSecret = appSecret;
+            return this;
+        }
+
+        /**
+         * This is useful when you already have the access token and you don't need to login
+         * @param accessToken
+         * @return
+         */
+        public Builder setAccessToken(String accessToken) {
+            mAccessToken = accessToken;
             return this;
         }
 
