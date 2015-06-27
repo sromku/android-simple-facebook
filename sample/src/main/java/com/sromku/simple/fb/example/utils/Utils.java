@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -105,6 +106,9 @@ public class Utils {
         try {
             for (Field field : object.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
                 Object val = field.get(object);
                 stringBuilder.append("<b>");
                 stringBuilder.append(field.getName().substring(1, field.getName().length()));
