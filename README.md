@@ -88,6 +88,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 	- [Get granted persmissions](https://github.com/sromku/android-simple-facebook/wiki/Get-granted-persmissions)
 	- [Misc](https://github.com/sromku/android-simple-facebook/wiki/Misc)
 	- [Debug](https://github.com/sromku/android-simple-facebook/wiki/Debug)
+	- [Connect Smart Device](https://github.com/sromku/android-simple-facebook/wiki/Connect-smart-device)
 
 * **Samples**
     - [Setup sample app](https://github.com/sromku/android-simple-facebook/wiki/Sample-App)
