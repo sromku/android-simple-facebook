@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.sromku.simple.fb.actions.ConnectDeviceAction;
 import com.sromku.simple.fb.actions.DeleteRequestAction;
 import com.sromku.simple.fb.actions.GetAccountsAction;
 import com.sromku.simple.fb.actions.GetAction;
@@ -33,6 +34,7 @@ import com.sromku.simple.fb.actions.GetStoryObjectsAction;
 import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
 import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
+import com.sromku.simple.fb.actions.PollDeviceAuthorizationAction;
 import com.sromku.simple.fb.actions.PublishAction;
 import com.sromku.simple.fb.actions.PublishFeedDialogAction;
 import com.sromku.simple.fb.actions.PublishPhotoDialogAction;
@@ -62,8 +64,10 @@ import com.sromku.simple.fb.listeners.OnAlbumListener;
 import com.sromku.simple.fb.listeners.OnAlbumsListener;
 import com.sromku.simple.fb.listeners.OnAppRequestsListener;
 import com.sromku.simple.fb.listeners.OnAttachmentListener;
+import com.sromku.simple.fb.listeners.OnAuthorizationDeviceListener;
 import com.sromku.simple.fb.listeners.OnCommentListener;
 import com.sromku.simple.fb.listeners.OnCommentsListener;
+import com.sromku.simple.fb.listeners.OnConnectDeviceListener;
 import com.sromku.simple.fb.listeners.OnCreateStoryObject;
 import com.sromku.simple.fb.listeners.OnDeleteListener;
 import com.sromku.simple.fb.listeners.OnEventsListener;
@@ -1826,6 +1830,32 @@ public class SimpleFacebook {
      */
     public boolean isAllPermissionsGranted() {
         return mSessionManager.isAllPermissionsGranted();
+    }
+
+    /**
+     * This is a new feature by facebook, that allows connecting devices and users like smart TV.
+     * https://developers.facebook.com/docs/facebook-login/for-devices. <br>
+     *
+     * This method will return code that user will have to insert in facebook.com/device. This code
+     * expires after 420 seconds. While waiting, poll for authorization each 5 seconds to see if user
+     * completed the login flow.
+     */
+    public void connectDevice(Permission[] permissions, OnConnectDeviceListener onConnectDeviceListener) {
+        ConnectDeviceAction connectDeviceAction = new ConnectDeviceAction(permissions);
+        connectDeviceAction.setActionListener(onConnectDeviceListener);
+        connectDeviceAction.execute();
+    }
+
+    /**
+     * This is a new feature by facebook, that allows connecting devices and users like smart TV.
+     * https://developers.facebook.com/docs/facebook-login/for-devices
+     *
+     * Check the #connectDevice method explanation.
+     */
+    public void pollDeviceAuthorization(String authorizationCode, OnAuthorizationDeviceListener onAuthorizationDeviceListener) {
+        PollDeviceAuthorizationAction pollDeviceAuthorizationAction = new PollDeviceAuthorizationAction(authorizationCode);
+        pollDeviceAuthorizationAction.setActionListener(onAuthorizationDeviceListener);
+        pollDeviceAuthorizationAction.execute();
     }
 
     /**
