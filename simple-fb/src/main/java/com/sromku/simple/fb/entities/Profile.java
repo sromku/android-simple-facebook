@@ -79,7 +79,7 @@ public class Profile extends User {
     private String mEmail;
 
     @SerializedName(Properties.HOMETOWN)
-    private IdName mHometown;
+    private Hometown mHometown;
 
     @SerializedName(Properties.LOCATION)
     private Location mLocation;
@@ -392,8 +392,8 @@ public class Profile extends User {
      *
      * @return The user's hometown
      */
-    public String getHometown() {
-        return mHometown.getName();
+    public Hometown getHometown() {
+        return mHometown;
     }
 
     /**
