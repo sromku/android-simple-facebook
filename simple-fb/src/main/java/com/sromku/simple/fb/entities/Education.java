@@ -22,7 +22,7 @@ public class Education {
     private IdName mSchool;
 
     @SerializedName(DEGREE)
-    private String mDegree;
+    private IdName mDegree;
 
     @SerializedName(YEAR)
     private IdName mYear;
@@ -41,7 +41,7 @@ public class Education {
     }
 
     public String getDegree() {
-        return mDegree;
+        return mDegree == null ? null : mDegree.getName();
     }
 
     public String getYear() {
@@ -59,4 +59,5 @@ public class Education {
     public String getType() {
         return mType;
     }
+
 }
