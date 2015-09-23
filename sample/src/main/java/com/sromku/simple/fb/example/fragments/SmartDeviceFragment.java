@@ -48,7 +48,7 @@ public class SmartDeviceFragment extends BaseFragment{
             public void onClick(View v) {
 
                 Permission[] permissions = new Permission[] {
-                        Permission.PUBLIC_PROFILE,
+                        Permission.USER_ABOUT_ME,
                         Permission.EMAIL
                 };
 

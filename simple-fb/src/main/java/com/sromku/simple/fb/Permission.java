@@ -15,24 +15,6 @@ import java.util.List;
 public enum Permission {
 
     /**
-     * Provides access to a subset of items that are part of a person's public
-     * profile. These {@link Profile} fields can be retrieved by using this
-     * permission:<br>
-     * <ul>
-     * <li>{@link Profile.Properties#ID ID}</li>
-     * <li>{@link Profile.Properties#NAME NAME}</li>
-     * <li>{@link Profile.Properties#FIRST_NAME FIRST_NAME}</li>
-     * <li>{@link Profile.Properties#LAST_NAME LAST_NAME}</li>
-     * <li>{@link Profile.Properties#LINK LINK}</li>
-     * <li>{@link Profile.Properties#GENDER GENDER}</li>
-     * <li>{@link Profile.Properties#LOCALE LOCALE}</li>
-     * <li>{@link Profile.Properties#AGE_RANGE AGE_RANGE}</li>
-     * </ul>
-     *
-     */
-    PUBLIC_PROFILE("public_profile", Type.READ),
-
-    /**
      * Provides access to {@link Profile.Properties#BIO BIO} property of the
      * {@link Profile}
      */
@@ -74,14 +56,6 @@ public enum Permission {
     USER_ACTIONS_VIDEO("user_actions.video", Type.READ),
 
     /**
-     * Provides access to a person's list of activities as listed on their
-     * Profile. This is a subset of the pages they have liked, where those pages
-     * represent particular interests. This information is accessed through the
-     * activities connection on the user node.
-     */
-    USER_ACTIVITIES("user_activities", Type.READ),
-
-    /**
      * Access the date and month of a person's birthday. This may or may not
      * include the person's year of birth, dependent upon their privacy settings
      * and the access token being used to query this field.
@@ -120,19 +94,13 @@ public enum Permission {
      * create groups on behalf of a person. It is not possible to create groups
      * via the Graph API
      */
-    USER_GROUPS("user_groups", Type.READ),
+    USER_MANAGED_GROUPS("user_managed_groups", Type.READ),
 
     /**
      * Provides access to a person's hometown location through the hometown
      * field on the User object. This is set by the user on the Profile.
      */
     USER_HOMETOWN("user_hometown", Type.READ),
-
-    /**
-     * Provides access to the list of interests in a person's Profile. This is a
-     * subset of the pages they have liked which represent particular interests.
-     */
-    USER_INTERESTS("user_interests", Type.READ),
 
     /**
      * Provides access to the list of all Facebook Pages and Open Graph objects
@@ -200,35 +168,20 @@ public enum Permission {
     USER_WORK_HISTORY("user_work_history", Type.READ),
 
     /**
-     * Provides access to the names of custom lists a person has created to
-     * organize their friends. This is useful for rendering an audience selector
-     * when someone is publishing stories to Facebook from your app. This
-     * permission does not give access to a list of person's friends. If you
-     * want to access a person's friends who also use your app, you should use
-     * the user_friends permission. This permission also does not give the list
-     * of friends who are part of a friendlist. It only gives access to the
-     * names of the lists.<br>
-     * <br>
+     * Provides access to the names of custom lists a person has created to organize their friends.
+     * This is useful for rendering an audience selector when someone is publishing stories
+     * to Facebook from your app.
      *
-     * <b>Note:</b><br>
-     * Extended Permissions give access to more sensitive information and give
-     * your app the ability to publish and delete data. All extended permissions
-     * appear on a separate screen during the login flow so a person can decide
-     * if they want to grant them.
+     * This permission does not give access to a list of person's friends. If you want to access
+     * a person's friends who also use your app, you should use the user_friends permission.
      */
-    READ_FRIENDLISTS("read_friendlists", Type.READ),
+    READ_CUSTOM_FRIENDLISTS("read_custom_friendlists", Type.READ),
 
     /**
      * Provides read-only access to the Insights data for Pages, Apps and web
      * domains the person owns.
      */
     READ_INSIGHTS("read_insights", Type.READ),
-
-    /**
-     * Provides the ability to read the messages in a person's Facebook Inbox
-     * through the inbox edge and the thread node
-     */
-    READ_MAILBOX("read_mailbox", Type.READ),
 
     /**
      * Provides the ability to read from the Page Inboxes of the Pages managed
@@ -241,12 +194,6 @@ public enum Permission {
     READ_PAGE_MAILBOX("read_page_mailboxes", Type.READ),
 
     /**
-     * Provides access to read the posts in a person's News Feed, or the posts
-     * on their Profile.
-     */
-    READ_STREAM("read_stream", Type.READ),
-
-    /**
      * Provides access to the person's primary email address via the
      * {@link Profile.Properties#EMAIL} property on the {@link Profile} object.<br>
      * <br>
@@ -256,6 +203,23 @@ public enum Permission {
      * a phone number instead of an email address, the email field may be empty.
      */
     EMAIL("email", Type.READ),
+
+    /**
+     * Provides access to the posts on a person's Timeline. Includes their own posts,
+     * posts they are tagged in, and posts other people make on their Timeline.
+     */
+    USER_POSTS("user_posts", Type.READ),
+
+    /**
+     * Provides the access to Ads Insights API to pull ads report information for ad
+     * accounts you have access to.
+     */
+    ADS_READ("ads_read", Type.READ),
+
+    /**
+     * Provides read-only access to the Audience Network Insights data for Apps the person owns.
+     */
+    READ_AUDIENCE_NETWORK_INSIGHTS("read_audience_network_insights", Type.READ),
 
     /**
      * Provides access to publish Posts, Open Graph actions, achievements,
@@ -273,18 +237,10 @@ public enum Permission {
     RSVP_EVENT("rsvp_event", Type.PUBLISH),
 
     /**
-     * Enables your app to read a person's notifications and mark them as read.
-     * This permission does not let you send notifications to a person.
-     */
-    MANAGE_NOTIFICATIONS("manage_notifications", Type.PUBLISH),
-
-    /**
      * Enables your app to retrieve Page Access Tokens for the Pages and Apps
      * that the person administrates.
      */
     MANAGE_PAGES("manage_pages", Type.PUBLISH);
-
-    // TODO - add support for new permission: 'user_actions:{app_namespace}'
 
     /**
      * Permission type enum: <li>READ</li> <li>PUBLISH</li><br>

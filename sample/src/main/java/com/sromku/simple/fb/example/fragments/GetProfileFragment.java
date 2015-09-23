@@ -14,6 +14,8 @@ import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.example.R;
 import com.sromku.simple.fb.example.utils.Utils;
 import com.sromku.simple.fb.listeners.OnProfileListener;
+import com.sromku.simple.fb.utils.Attributes;
+import com.sromku.simple.fb.utils.PictureAttributes;
 
 public class GetProfileFragment extends BaseFragment {
 
@@ -42,15 +44,17 @@ public class GetProfileFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                // PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
-                // pictureAttributes.setHeight(500);
-                // pictureAttributes.setWidth(500);
-                // pictureAttributes.setType(PictureType.SQUARE);
-                // Properties properties = new Properties.Builder()
-                //		.add(Properties.PICTURE, pictureAttributes)
-                //		.build();
+                PictureAttributes pictureAttributes = Attributes.createPictureAttributes();
+                pictureAttributes.setHeight(500);
+                pictureAttributes.setWidth(500);
+                pictureAttributes.setType(PictureAttributes.PictureType.SQUARE);
+                Profile.Properties properties = new Profile.Properties.Builder()
+                        .add(Profile.Properties.PICTURE, pictureAttributes)
+                        .add(Profile.Properties.FIRST_NAME)
+                        .add(Profile.Properties.LAST_NAME)
+                        .build();
 
-                SimpleFacebook.getInstance().getProfile(new OnProfileListener() {
+                SimpleFacebook.getInstance().getProfile(properties, new OnProfileListener() {
 
                     @Override
                     public void onThinking() {

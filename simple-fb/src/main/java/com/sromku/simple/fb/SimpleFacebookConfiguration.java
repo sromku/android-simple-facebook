@@ -159,7 +159,7 @@ public class SimpleFacebookConfiguration {
         private List<String> mReadPermissions = new ArrayList<String>();
         private List<String> mPublishPermissions = new ArrayList<String>();
         private DefaultAudience mDefaultAudience = DefaultAudience.FRIENDS;
-        private LoginBehavior mLoginBehavior = LoginBehavior.SSO_WITH_FALLBACK;
+        private LoginBehavior mLoginBehavior = LoginBehavior.NATIVE_WITH_FALLBACK;
         private boolean mAllAtOnce = false;
         private boolean mUseAppsecretProof = false;
         private String mAppSecret = null;
