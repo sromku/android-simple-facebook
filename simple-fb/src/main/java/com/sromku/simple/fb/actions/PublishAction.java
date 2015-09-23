@@ -142,6 +142,7 @@ public class PublishAction extends AbstractAction {
                 }
             }
         });
+        request.setVersion(configuration.getGraphVersion());
         GraphRequestAsyncTask task = new GraphRequestAsyncTask(request);
         task.execute();
     }

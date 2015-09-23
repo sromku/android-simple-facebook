@@ -23,7 +23,7 @@ public class SampleApplication extends Application {
 
         // initialize facebook configuration
         Permission[] permissions = new Permission[] {
-                Permission.USER_ABOUT_ME,
+                // Permission.PUBLIC_PROFILE,
                 Permission.EMAIL,
                 Permission.USER_EVENTS,
                 Permission.USER_ACTIONS_MUSIC,
@@ -39,6 +39,7 @@ public class SampleApplication extends Application {
                 .setPermissions(permissions)
                 .setDefaultAudience(DefaultAudience.FRIENDS)
                 .setAskForAllPermissionsAtOnce(false)
+                // .setGraphVersion("v2.3")
                 .build();
 
         SimpleFacebook.setConfiguration(configuration);

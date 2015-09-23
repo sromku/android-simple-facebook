@@ -1,5 +1,6 @@
 package com.sromku.simple.fb;
 
+import com.facebook.internal.ServerProtocol;
 import com.facebook.login.DefaultAudience;
 import com.facebook.login.LoginBehavior;
 
@@ -18,6 +19,7 @@ public class SimpleFacebookConfiguration {
     boolean mAllAtOnce = false;
     private boolean mUseAppsecretProof = false;
     private String mAppSecret = null;
+    private String mGraphVersion = null;
 
     private SimpleFacebookConfiguration(Builder builder) {
         this.mAppId = builder.mAppId;
@@ -29,6 +31,7 @@ public class SimpleFacebookConfiguration {
         this.mAllAtOnce = builder.mAllAtOnce;
         this.mUseAppsecretProof = builder.mUseAppsecretProof;
         this.mAppSecret = builder.mAppSecret;
+        this.mGraphVersion = builder.mGraphVersion;
 
         if (this.mPublishPermissions.size() > 0) {
             this.mHasPublishPermissions = true;
@@ -37,8 +40,6 @@ public class SimpleFacebookConfiguration {
 
     /**
      * Get facebook application id
-     *
-     * @return
      */
     public String getAppId() {
         return mAppId;
@@ -46,8 +47,6 @@ public class SimpleFacebookConfiguration {
 
     /**
      * Get application namespace
-     *
-     * @return
      */
     public String getNamespace() {
         return mNamespace;
@@ -55,8 +54,6 @@ public class SimpleFacebookConfiguration {
 
     /**
      * Get read permissions
-     *
-     * @return
      */
     public List<String> getReadPermissions() {
         return mReadPermissions;
@@ -64,17 +61,20 @@ public class SimpleFacebookConfiguration {
 
     /**
      * Get publish permissions
-     *
-     * @return
      */
     public List<String> getPublishPermissions() {
         return mPublishPermissions;
     }
 
     /**
+     * Get graph version
+     */
+    public String getGraphVersion() {
+        return mGraphVersion;
+    }
+
+    /**
      * Return <code>True</code> if 'PUBLISH' permissions are defined
-     *
-     * @return
      */
     boolean hasPublishPermissions() {
         return mHasPublishPermissions;
@@ -163,6 +163,7 @@ public class SimpleFacebookConfiguration {
         private boolean mAllAtOnce = false;
         private boolean mUseAppsecretProof = false;
         private String mAppSecret = null;
+        private String mGraphVersion = ServerProtocol.getAPIVersion();
 
         public Builder() {
         }
@@ -273,6 +274,15 @@ public class SimpleFacebookConfiguration {
          */
         public Builder setAppSecret(String appSecret) {
             mAppSecret = appSecret;
+            return this;
+        }
+
+        /**
+         * Set graph version if you want to use older versions.
+         * The format should be v{X.X} for example: v2.3, v2.4
+         */
+        public Builder setGraphVersion(String graphVersion) {
+            mGraphVersion = graphVersion;
             return this;
         }
 

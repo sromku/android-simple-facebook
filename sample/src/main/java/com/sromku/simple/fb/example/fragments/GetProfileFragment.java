@@ -54,6 +54,7 @@ public class GetProfileFragment extends BaseFragment {
                         .add(Profile.Properties.LAST_NAME)
                         .build();
 
+                // SimpleFacebook.getInstance().getProfile(new OnProfileListener() {
                 SimpleFacebook.getInstance().getProfile(properties, new OnProfileListener() {
 
                     @Override
