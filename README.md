@@ -95,8 +95,9 @@ The sample app includes examples for all actions. Check out this very short [wik
 	- [LikeView](https://github.com/sromku/android-simple-facebook/wiki/LikeView)
 
 *And,*
-* Based on latest Facebook SDK and Graph API v2.3
-* Permission strings are predefined
+* Based on latest Facebook SDK and Graph API v2.4.
+* Supports oldest Graph API versions.
+* Permission strings are predefined.
 * No need to use `LoginButton` view for being able to login/logout. You can use any `View`.
 * No need to care for correct login with `READ` and `PUBLISH` permissions. Just mention the permissions you need and this library will care for the rest.
 * Open graph support
