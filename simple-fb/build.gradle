@@ -33,7 +33,7 @@ ext {
     siteUrl = 'https://github.com/sromku/android-simple-facebook'
     gitUrl = 'https://github.com/sromku/android-simple-facebook.git'
 
-    libraryVersion = '4.0.6'
+    libraryVersion = '4.0.8'
 
     developerId = 'sromku'
     developerName = 'Roman Kushnarenko'
@@ -47,12 +47,6 @@ ext {
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -64,8 +58,14 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.3.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.+'
     // compile project(':facebook')
     compile 'com.google.code.gson:gson:1.7.2'
 }

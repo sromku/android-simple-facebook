@@ -10,11 +10,14 @@ import java.util.List;
  * All facebook permissions.
  *
  * @author sromku
- * @version Graph API v2.3
+ * @version Graph API v2.4
  */
 public enum Permission {
 
     /**
+     * This permission not longer in use in latest graph versions.
+     * Please us Permission#USER_ABOUT_ME instead.
+     *
      * Provides access to a subset of items that are part of a person's public
      * profile. These {@link Profile} fields can be retrieved by using this
      * permission:<br>
@@ -30,6 +33,7 @@ public enum Permission {
      * </ul>
      *
      */
+    @Deprecated
     PUBLIC_PROFILE("public_profile", Type.READ),
 
     /**
@@ -74,11 +78,14 @@ public enum Permission {
     USER_ACTIONS_VIDEO("user_actions.video", Type.READ),
 
     /**
+     * This permission not longer in use in latest graph versions.
+     *
      * Provides access to a person's list of activities as listed on their
      * Profile. This is a subset of the pages they have liked, where those pages
      * represent particular interests. This information is accessed through the
      * activities connection on the user node.
      */
+    @Deprecated
     USER_ACTIVITIES("user_activities", Type.READ),
 
     /**
@@ -115,12 +122,24 @@ public enum Permission {
     USER_GAMES_ACTIVITY("user_games_activity", Type.READ),
 
     /**
+     * This permission not longer in use in latest graph versions.
+     * Please us Permission#USER_MANAGED_GROUPS instead.
+     *
      * Enables your app to read the Groups a person is a member of through the
      * groups edge on the User object. This permission does not allow you to
      * create groups on behalf of a person. It is not possible to create groups
      * via the Graph API
      */
+    @Deprecated
     USER_GROUPS("user_groups", Type.READ),
+
+    /**
+     * Enables your app to read the Groups a person is a member of through the
+     * groups edge on the User object. This permission does not allow you to
+     * create groups on behalf of a person. It is not possible to create groups
+     * via the Graph API
+     */
+    USER_MANAGED_GROUPS("user_managed_groups", Type.READ),
 
     /**
      * Provides access to a person's hometown location through the hometown
@@ -129,9 +148,12 @@ public enum Permission {
     USER_HOMETOWN("user_hometown", Type.READ),
 
     /**
+     * This permission not longer in use in latest graph versions.
+     *
      * Provides access to the list of interests in a person's Profile. This is a
      * subset of the pages they have liked which represent particular interests.
      */
+    @Deprecated
     USER_INTERESTS("user_interests", Type.READ),
 
     /**
@@ -200,23 +222,28 @@ public enum Permission {
     USER_WORK_HISTORY("user_work_history", Type.READ),
 
     /**
-     * Provides access to the names of custom lists a person has created to
-     * organize their friends. This is useful for rendering an audience selector
-     * when someone is publishing stories to Facebook from your app. This
-     * permission does not give access to a list of person's friends. If you
-     * want to access a person's friends who also use your app, you should use
-     * the user_friends permission. This permission also does not give the list
-     * of friends who are part of a friendlist. It only gives access to the
-     * names of the lists.<br>
-     * <br>
+     * This permission not longer in use in latest graph versions.
+     * Please us Permission#READ_CUSTOM_FRIENDLISTS instead.
      *
-     * <b>Note:</b><br>
-     * Extended Permissions give access to more sensitive information and give
-     * your app the ability to publish and delete data. All extended permissions
-     * appear on a separate screen during the login flow so a person can decide
-     * if they want to grant them.
+     * Provides access to the names of custom lists a person has created to organize their friends.
+     * This is useful for rendering an audience selector when someone is publishing stories
+     * to Facebook from your app.
+     *
+     * This permission does not give access to a list of person's friends. If you want to access
+     * a person's friends who also use your app, you should use the user_friends permission.
      */
+    @Deprecated
     READ_FRIENDLISTS("read_friendlists", Type.READ),
+
+    /**
+     * Provides access to the names of custom lists a person has created to organize their friends.
+     * This is useful for rendering an audience selector when someone is publishing stories
+     * to Facebook from your app.
+     *
+     * This permission does not give access to a list of person's friends. If you want to access
+     * a person's friends who also use your app, you should use the user_friends permission.
+     */
+    READ_CUSTOM_FRIENDLISTS("read_custom_friendlists", Type.READ),
 
     /**
      * Provides read-only access to the Insights data for Pages, Apps and web
@@ -225,10 +252,23 @@ public enum Permission {
     READ_INSIGHTS("read_insights", Type.READ),
 
     /**
+     * This permission not longer in use in latest graph versions.
+     *
      * Provides the ability to read the messages in a person's Facebook Inbox
      * through the inbox edge and the thread node
      */
+    @Deprecated
     READ_MAILBOX("read_mailbox", Type.READ),
+
+    /**
+     * This permission not longer in use in latest graph versions.
+     * Please us Permission#USER_POSTS instead.
+     *
+     * Provides access to read the posts in a person's News Feed, or the posts
+     * on their Profile.
+     */
+    @Deprecated
+    READ_STREAM("read_stream", Type.READ),
 
     /**
      * Provides the ability to read from the Page Inboxes of the Pages managed
@@ -241,12 +281,6 @@ public enum Permission {
     READ_PAGE_MAILBOX("read_page_mailboxes", Type.READ),
 
     /**
-     * Provides access to read the posts in a person's News Feed, or the posts
-     * on their Profile.
-     */
-    READ_STREAM("read_stream", Type.READ),
-
-    /**
      * Provides access to the person's primary email address via the
      * {@link Profile.Properties#EMAIL} property on the {@link Profile} object.<br>
      * <br>
@@ -256,6 +290,23 @@ public enum Permission {
      * a phone number instead of an email address, the email field may be empty.
      */
     EMAIL("email", Type.READ),
+
+    /**
+     * Provides access to the posts on a person's Timeline. Includes their own posts,
+     * posts they are tagged in, and posts other people make on their Timeline.
+     */
+    USER_POSTS("user_posts", Type.READ),
+
+    /**
+     * Provides the access to Ads Insights API to pull ads report information for ad
+     * accounts you have access to.
+     */
+    ADS_READ("ads_read", Type.READ),
+
+    /**
+     * Provides read-only access to the Audience Network Insights data for Apps the person owns.
+     */
+    READ_AUDIENCE_NETWORK_INSIGHTS("read_audience_network_insights", Type.READ),
 
     /**
      * Provides access to publish Posts, Open Graph actions, achievements,
@@ -273,9 +324,12 @@ public enum Permission {
     RSVP_EVENT("rsvp_event", Type.PUBLISH),
 
     /**
+     * This permission not longer in use in latest graph versions.
+     *
      * Enables your app to read a person's notifications and mark them as read.
      * This permission does not let you send notifications to a person.
      */
+    @Deprecated
     MANAGE_NOTIFICATIONS("manage_notifications", Type.PUBLISH),
 
     /**
@@ -283,8 +337,6 @@ public enum Permission {
      * that the person administrates.
      */
     MANAGE_PAGES("manage_pages", Type.PUBLISH);
-
-    // TODO - add support for new permission: 'user_actions:{app_namespace}'
 
     /**
      * Permission type enum: <li>READ</li> <li>PUBLISH</li><br>

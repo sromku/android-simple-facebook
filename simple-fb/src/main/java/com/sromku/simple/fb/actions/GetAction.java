@@ -82,6 +82,7 @@ public class GetAction<T> extends AbstractAction {
             AccessToken accessToken = sessionManager.getAccessToken();
             Bundle bundle = updateAppSecretProof(getBundle());
             GraphRequest request = new GraphRequest(accessToken, getGraphPath(), bundle, HttpMethod.GET);
+            request.setVersion(configuration.getGraphVersion());
             runRequest(request);
         } else {
             String reason = Errors.getError(ErrorMsg.LOGIN);
