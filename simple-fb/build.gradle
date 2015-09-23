@@ -50,6 +50,7 @@ apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
     }
 }
 
@@ -65,7 +66,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.3.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.+'
     // compile project(':facebook')
     compile 'com.google.code.gson:gson:1.7.2'
 }

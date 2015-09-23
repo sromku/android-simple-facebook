@@ -6,7 +6,7 @@ android {
 
   defaultConfig {
     applicationId "com.sromku.simple.fb.example"
-    minSdkVersion 14
+    minSdkVersion 15
     targetSdkVersion 22
     versionCode 1
     versionName "1.0"
@@ -21,9 +21,16 @@ android {
   }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
+
 dependencies {
   compile project(':simple-fb')
   // compile project(':facebook')
   // compile 'com.sromku:simple-fb:4.0.+'
-  compile 'com.facebook.android:facebook-android-sdk:4.3.+'
+  compile 'com.facebook.android:facebook-android-sdk:4.6.+'
 }
