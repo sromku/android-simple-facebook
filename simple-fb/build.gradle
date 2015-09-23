@@ -47,13 +47,6 @@ ext {
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
-allprojects {
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -62,6 +55,12 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
     }
 }
 
