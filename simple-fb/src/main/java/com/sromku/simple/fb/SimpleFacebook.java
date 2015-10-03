@@ -1866,6 +1866,13 @@ public class SimpleFacebook {
     }
 
     /**
+     * Get string access token
+     */
+    public String getToken() {
+        return mSessionManager.getAccessToken().getToken();
+    }
+
+    /**
      * Call this inside your activity in {@link android.app.Activity#onActivityResult}
      * method
      *
