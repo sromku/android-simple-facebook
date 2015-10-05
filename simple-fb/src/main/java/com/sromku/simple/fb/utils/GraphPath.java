@@ -20,6 +20,7 @@ public class GraphPath {
     public static final String LINKS = "links";
     public static final String STATUSES = "statuses";
     public static final String TAGGED = "tagged";
+    public static final String TAGGED_PLACES = "tagged_places";
     public static final String ACCOUNTS = "accounts";
     public static final String BOOKS = "books";
     public static final String MUSIC = "music";
