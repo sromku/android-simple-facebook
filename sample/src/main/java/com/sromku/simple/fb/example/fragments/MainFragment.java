@@ -88,6 +88,7 @@ public class MainFragment extends Fragment implements OnItemClickListener {
         mExamples.add(new Example("Get posts", GetPostsFragment.class, true));
         mExamples.add(new Example("Get profile", GetProfileFragment.class, true));
         mExamples.add(new Example("Get scores", GetScoresFragment.class, true));
+        mExamples.add(new Example("Get tagged places", GetTaggedPlacesFragment.class, true));
         mExamples.add(new Example("Get television", GetTelevisionFragment.class, true));
         mExamples.add(new Example("Get videos", GetVideosFragment.class, true));
         mExamples.add(new Example("Open Graph Hosted Objects", null, false));
