@@ -30,6 +30,7 @@ public class SampleApplication extends Application {
                 Permission.USER_FRIENDS,
                 Permission.USER_GAMES_ACTIVITY,
                 Permission.USER_BIRTHDAY,
+                Permission.USER_TAGGED_PLACES,
                 Permission.USER_MANAGED_GROUPS,
                 Permission.PUBLISH_ACTION };
 

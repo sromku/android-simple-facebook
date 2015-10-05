@@ -32,6 +32,7 @@ import com.sromku.simple.fb.actions.GetProfileAction;
 import com.sromku.simple.fb.actions.GetScoresAction;
 import com.sromku.simple.fb.actions.GetStoryObjectsAction;
 import com.sromku.simple.fb.actions.GetTaggableFriendsAction;
+import com.sromku.simple.fb.actions.GetTaggedPlacesAction;
 import com.sromku.simple.fb.actions.GetVideosAction;
 import com.sromku.simple.fb.actions.InviteAction;
 import com.sromku.simple.fb.actions.PollDeviceAuthorizationAction;
@@ -89,6 +90,7 @@ import com.sromku.simple.fb.listeners.OnProfileListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 import com.sromku.simple.fb.listeners.OnScoresListener;
 import com.sromku.simple.fb.listeners.OnStoryObjectsListener;
+import com.sromku.simple.fb.listeners.OnTaggedPlacesListener;
 import com.sromku.simple.fb.listeners.OnVideosListener;
 import com.sromku.simple.fb.utils.GraphPath;
 import com.sromku.simple.fb.utils.Utils;
@@ -611,6 +613,12 @@ public class SimpleFacebook {
         getFriendsAction.setProperties(properties);
         getFriendsAction.setActionListener(onFriendsListener);
         getFriendsAction.execute();
+    }
+
+    public void getTaggedPlaces(OnTaggedPlacesListener onTaggedPlacesListener) {
+        GetTaggedPlacesAction getTaggedPlacesAction = new GetTaggedPlacesAction(mSessionManager);
+        getTaggedPlacesAction.setActionListener(onTaggedPlacesListener);
+        getTaggedPlacesAction.execute();
     }
 
     /**
@@ -1863,6 +1871,13 @@ public class SimpleFacebook {
      */
     public AccessToken getAccessToken() {
         return mSessionManager.getAccessToken();
+    }
+
+    /**
+     * Get string access token
+     */
+    public String getToken() {
+        return mSessionManager.getAccessToken().getToken();
     }
 
     /**
