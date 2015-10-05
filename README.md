@@ -76,6 +76,7 @@ The sample app includes examples for all actions. Check out this very short [wik
 	- [Get posts](https://github.com/sromku/android-simple-facebook/wiki/Get-posts)
 	- [Get profile](https://github.com/sromku/android-simple-facebook/wiki/Get-profile)
 	- [Get scores](https://github.com/sromku/android-simple-facebook/wiki/Get-scores)
+	- [Get tagged places](https://github.com/sromku/android-simple-facebook/wiki/Get-tagged-places)
 	- [Get television](https://github.com/sromku/android-simple-facebook/wiki/Get-television)
 	- [Get videos](https://github.com/sromku/android-simple-facebook/wiki/Get-videos)
 
