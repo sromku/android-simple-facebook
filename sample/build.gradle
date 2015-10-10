@@ -23,7 +23,7 @@ android {
 
 allprojects {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
@@ -31,5 +31,5 @@ dependencies {
   compile project(':simple-fb')
   // compile project(':facebook')
   // compile 'com.sromku:simple-fb:4.0.+'
-  compile 'com.facebook.android:facebook-android-sdk:4.6.+'
+  // compile 'com.facebook.android:facebook-android-sdk:4.6.+'
 }
