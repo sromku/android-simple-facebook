@@ -25,7 +25,7 @@ public class Location {
     private String mCountry;
 
     @SerializedName(ZIP)
-    private Integer mZip;
+    private String mZip;
 
     @SerializedName(LATITUDE)
     private Double mLatitude;
@@ -49,7 +49,7 @@ public class Location {
         return mCountry;
     }
 
-    public Integer getZip() {
+    public String getZip() {
         return mZip;
     }
 

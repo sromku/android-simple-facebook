@@ -5,6 +5,7 @@ import java.util.Locale;
 /**
  * Created by sromku on 7/3/15.
  */
+@Deprecated
 public class Hometown extends IdName {
 
     @Override

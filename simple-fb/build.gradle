@@ -65,7 +65,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.6.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.+'
     // compile project(':facebook')
     compile 'com.google.code.gson:gson:1.7.2'
 }
