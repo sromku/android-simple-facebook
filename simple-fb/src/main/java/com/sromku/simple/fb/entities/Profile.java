@@ -377,7 +377,7 @@ public class Profile extends User {
      * <br>
      * <b> Permissions:</b> <br>
      * {@link com.sromku.simple.fb.Permission#EMAIL}
-     *
+     * To get the details about the place, use GetPage with this id.
      * @return the email of the user
      */
     public String getEmail() {
@@ -389,7 +389,8 @@ public class Profile extends User {
      * <br>
      * <b> Permissions:</b><br>
      * {@link com.sromku.simple.fb.Permission#USER_HOMETOWN}<br>
-     *
+     * <br>
+     * To get the details about the place, use GetPage with this id.
      * @return The page id and name of the Place set as user's hometown
      */
     public IdName getHometown() {
