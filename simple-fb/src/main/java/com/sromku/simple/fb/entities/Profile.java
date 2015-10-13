@@ -79,16 +79,16 @@ public class Profile extends User {
     private String mEmail;
 
     @SerializedName(Properties.HOMETOWN)
-    private Hometown mHometown;
+    private IdName mHometown;
 
     @SerializedName(Properties.LOCATION)
-    private Location mLocation;
+    private IdName mCurrentLocation;
 
     @SerializedName(Properties.POLITICAL)
     private String mPolitical;
 
     @SerializedName(Properties.FAVORITE_ATHLETES)
-    private List<String> mFavoriteAthletess;
+    private List<String> mFavoriteAthletes;
 
     @SerializedName(Properties.FAVORITE_TEAMS)
     private List<String> mFavoriteTeams;
@@ -377,7 +377,7 @@ public class Profile extends User {
      * <br>
      * <b> Permissions:</b> <br>
      * {@link com.sromku.simple.fb.Permission#EMAIL}
-     *
+     * To get the details about the place, use GetPage with this id.
      * @return the email of the user
      */
     public String getEmail() {
@@ -389,23 +389,24 @@ public class Profile extends User {
      * <br>
      * <b> Permissions:</b><br>
      * {@link com.sromku.simple.fb.Permission#USER_HOMETOWN}<br>
-     *
-     * @return The user's hometown
+     * <br>
+     * To get the details about the place, use GetPage with this id.
+     * @return The page id and name of the Place set as user's hometown
      */
-    public Hometown getHometown() {
+    public IdName getHometown() {
         return mHometown;
     }
 
     /**
-     * Returns the current city of the user. <br>
+     * The user's currently "living" location <br>
      * <br>
      * <b> Permissions:</b><br>
      * {@link com.sromku.simple.fb.Permission#USER_LOCATION}<br>
      *
-     * @return the current city of the user
+     * @return The page id and name of the Place set as user's current location
      */
-    public Location getLocation() {
-        return mLocation;
+    public IdName getLocation() {
+        return mCurrentLocation;
     }
 
     /**
@@ -429,7 +430,7 @@ public class Profile extends User {
      * @return The user's favorite athletes
      */
     public List<String> getFavoriteAthletes() {
-        return mFavoriteAthletess;
+        return mFavoriteAthletes;
     }
 
     /**

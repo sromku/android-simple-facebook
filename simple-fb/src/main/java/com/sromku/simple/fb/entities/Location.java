@@ -2,7 +2,7 @@ package com.sromku.simple.fb.entities;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Location extends IdName {
+public class Location {
 
     private static final String STREET = "street";
     private static final String CITY = "city";
@@ -25,7 +25,7 @@ public class Location extends IdName {
     private String mCountry;
 
     @SerializedName(ZIP)
-    private Integer mZip;
+    private String mZip;
 
     @SerializedName(LATITUDE)
     private Double mLatitude;
@@ -49,7 +49,7 @@ public class Location extends IdName {
         return mCountry;
     }
 
-    public Integer getZip() {
+    public String getZip() {
         return mZip;
     }
 
