@@ -2,7 +2,7 @@ package com.sromku.simple.fb.entities;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Location extends IdName {
+public class Location {
 
     private static final String STREET = "street";
     private static final String CITY = "city";
