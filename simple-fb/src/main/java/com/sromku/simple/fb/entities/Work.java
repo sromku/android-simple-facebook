@@ -19,7 +19,7 @@ public class Work {
     private Location mLocation;
 
     @SerializedName(POSITION)
-    private String mPosition;
+    private IdName mPosition;
 
     @SerializedName(DESCRIPTION)
     private String mDescription;
@@ -38,7 +38,7 @@ public class Work {
         return mLocation;
     }
 
-    public String getPosition() {
+    public IdName getPosition() {
         return mPosition;
     }
 
