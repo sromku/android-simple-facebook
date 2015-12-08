@@ -14,6 +14,9 @@ Since my feeling was that the usage of Facebook SDK was too complicated for simp
 <img src="https://assets-cdn.github.com/favicon.ico" height="16" width="16"/> Issues: [`here`](https://github.com/sromku/android-simple-facebook/issues)
 
 ## Latest Release
+
+[ ![Download](https://api.bintray.com/packages/sromku/maven/simple-fb/images/download.svg) ](https://bintray.com/sromku/maven/simple-fb/_latestVersion)
+
 ``` gradle
 dependencies {
     compile 'com.sromku:simple-fb:4.1.1'
