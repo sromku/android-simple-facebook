@@ -63,12 +63,16 @@ public class SessionManager {
 
         @Override
         public void onCancel() {
-            loginListener.onFail("User canceled the permissions dialog");
+            if (loginListener != null) {
+                loginListener.onFail("User canceled the permissions dialog");
+            }
         }
 
         @Override
         public void onError(FacebookException e) {
-            loginListener.onException(e);
+            if (loginListener != null) {
+                loginListener.onException(e);
+            }
         }
     }
 
