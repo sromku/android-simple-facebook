@@ -10,7 +10,7 @@ import com.sromku.simple.fb.example.utils.SharedObjects;
 import com.sromku.simple.fb.utils.Logger;
 
 public class SampleApplication extends Application {
-    private static final String APP_ID = "728615400528729";
+    private static final String FACEBOOK_APP_ID = "728615400528729";
     private static final String APP_NAMESPACE = "sromkuapp_vtwo";
 
     @Override
@@ -35,7 +35,7 @@ public class SampleApplication extends Application {
                 Permission.PUBLISH_ACTION };
 
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-                .setAppId(APP_ID)
+                .setAppId(FACEBOOK_APP_ID)
                 .setNamespace(APP_NAMESPACE)
                 .setPermissions(permissions)
                 .setDefaultAudience(DefaultAudience.FRIENDS)
