@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 23
@@ -66,10 +67,11 @@ buildscript {
     }
 }
 
-task javadoc1(type: Javadoc) {
+task javadoc(type: Javadoc, overwrite: true) {
     failOnError  false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
 }
 
 allprojects {
