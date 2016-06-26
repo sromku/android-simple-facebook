@@ -65,6 +65,13 @@ buildscript {
     }
 }
 
+/*task javadoc(type: Javadoc, overwrite: true) {
+    failOnError  false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}*/
+
 allprojects {
     repositories {
         mavenCentral()
