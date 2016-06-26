@@ -44,13 +44,6 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-
-dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.13.1'
-    // compile project(':facebook')
-    compile 'com.google.code.gson:gson:2.4'
-}
-
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
@@ -76,5 +69,11 @@ allprojects {
     repositories {
         mavenCentral()
     }
+}
+
+dependencies {
+    compile 'com.facebook.android:facebook-android-sdk:4.13.1'
+    // compile project(':facebook')
+    compile 'com.google.code.gson:gson:2.4'
 }
 
