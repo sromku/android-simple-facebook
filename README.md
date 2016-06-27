@@ -1,6 +1,9 @@
 android-simple-facebook
 =======================
 
+#### Currently this lib was tested and works with graph api `v2.3` and below. In the future, I will make the needed changes to support latest changes on FB side. Currently, I don't have much time to maintain. PRs are welcomed. 
+
+
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
