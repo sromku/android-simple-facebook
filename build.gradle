@@ -13,4 +13,5 @@ allprojects {
     repositories {
         jcenter()
     }
+    tasks.withType(Javadoc).all { enabled = false }
 }
