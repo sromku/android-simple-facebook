@@ -5,6 +5,8 @@
 
 #### :mega: Thanks for everyone who was involved in making this project better over 3 years. A lot of apps used this project, which I am very proud of. Love you all :heart:
 
+-----
+
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
 
 This is a library project which makes the life much easier by coding less code for being able to login, publish feeds and open graph stories, invite friends and more. 
