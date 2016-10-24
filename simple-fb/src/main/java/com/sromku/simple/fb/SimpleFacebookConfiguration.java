@@ -163,7 +163,7 @@ public class SimpleFacebookConfiguration {
         private boolean mAllAtOnce = false;
         private boolean mUseAppsecretProof = false;
         private String mAppSecret = null;
-        private String mGraphVersion = ServerProtocol.getAPIVersion();
+        private String mGraphVersion = ServerProtocol.getDefaultAPIVersion();
 
         public Builder() {
         }
