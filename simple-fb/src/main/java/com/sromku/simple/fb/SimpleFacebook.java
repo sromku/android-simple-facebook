@@ -1491,18 +1491,18 @@ public class SimpleFacebook {
      * <br>
      *
      * For having the native dialog, you must add to your <b>manifest.xml</b>
-     * 'app_id' meta value:
+     * 'facebook_app_id' meta value:
      *
      * <pre>
      * {@code <}meta-data
      *      android:name="com.facebook.sdk.ApplicationId"
-     *      android:value="@string/app_id" /{@code >}
+     *      android:value="@string/facebook_app_id" /{@code >}
      * </pre>
      *
-     * And in your <b>string.xml</b> add your app_id. For example:
+     * And in your <b>string.xml</b> add your facebook_app_id. For example:
      *
      * <pre>
-     * {@code <}string name="app_id"{@code >}625994234086470{@code <}/string{@code >}
+     * {@code <}string name="facebook_app_id"{@code >}625994234086470{@code <}/string{@code >}
      * </pre>
      *
      * @param feed

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Simple Facebook Sample</string>
-    <string name="app_id">728615400528729</string>
+    <string name="facebook_app_id">728615400528729</string>
+    <string name="fb_login_protocol_scheme">fb728615400528729</string> <!--same as facebook_app_id, but with the "fb" prefix-->
     <string name="logout">Logout</string>
     <string name="login">Login</string>
     <string name="get_friends">Get friends</string>
