@@ -44,8 +44,8 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
 buildscript {
     repositories {
@@ -65,8 +65,8 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.7.+'
-    // compile project(':facebook')
-    compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+    compile 'com.google.code.gson:gson:2.4'
 }
 
