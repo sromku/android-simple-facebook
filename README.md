@@ -1,8 +1,11 @@
-android-simple-facebook
+[Deprecated] android-simple-facebook
 =======================
 
-#### Currently this lib was tested and works with graph api `v2.3` and below. In the future, I will make the needed changes to support latest changes on FB side. Currently, I don't have much time to maintain. PRs are welcomed. 
+#### Currently this lib was tested and works with graph api `v2.3` and below. For now, I don't have much time to maintain this library anymore. Beside this, Facebook made a lot of improvements on their side. Please, use their pure Android SDK. 
 
+#### :mega: Thanks for everyone who was involved in making this project better over 3 years. A lot of apps used this project, which I am very proud of. Love you all :heart:
+
+-----
 
 Simple Facebook SDK for Android which wraps original [**Facebook SDK**](https://github.com/facebook/facebook-android-sdk). <br>
 
