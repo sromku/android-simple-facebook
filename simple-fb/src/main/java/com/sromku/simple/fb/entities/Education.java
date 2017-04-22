@@ -37,7 +37,7 @@ public class Education {
     private String mType;
 
     public String getSchool() {
-        return mSchool.getName();
+        return mSchool == null ? null : mSchool.getName();
     }
 
     public String getDegree() {
@@ -45,7 +45,7 @@ public class Education {
     }
 
     public String getYear() {
-        return mYear.getName();
+        return mYear == null ? null : mYear.getName();
     }
 
     public List<String> getConcentrations() {

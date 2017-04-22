@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionName project.VERSION_NAME
         versionCode Integer.parseInt(project.VERSION_CODE)
         consumerProguardFiles 'consumer-proguard-rules.pro', 'gson.pro', 'simple-fb.pro'
@@ -33,7 +33,7 @@ ext {
     siteUrl = 'https://github.com/sromku/android-simple-facebook'
     gitUrl = 'https://github.com/sromku/android-simple-facebook.git'
 
-    libraryVersion = '4.1.1'
+    libraryVersion = '4.2.1'
 
     developerId = 'sromku'
     developerName = 'Roman Kushnarenko'
@@ -52,9 +52,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4'
     }
 }
 
@@ -65,8 +65,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.facebook.android:facebook-android-sdk:4.7.+'
-    // compile project(':facebook')
-    compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.facebook.android:facebook-android-sdk:4.22.0'
+    compile 'com.google.code.gson:gson:2.7'
 }
 
